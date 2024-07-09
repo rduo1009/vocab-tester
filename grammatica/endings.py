@@ -954,3 +954,18 @@ class Adjective3:
             return self.first < other.first
         except AttributeError:
             return NotImplemented
+
+
+# HACK  A whole new class has to be created for the relative pronoun because it's like a adjective but different
+#       kinda wack
+# TODO  finish this
+class RelativePronoun(Adjective212):
+    def __init__(
+        self,
+        *principle_parts: str,
+        termination=3,  # Termination doesnt matter
+        meaning: str,
+    ) -> None:
+        Adjective212.__init__(self, *principle_parts, termination, meaning)
+        self.endings = edge_cases.QUI_ENDINGS
+        pass

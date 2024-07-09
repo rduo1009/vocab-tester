@@ -36,7 +36,7 @@ class MultipleOptions:
         """Returns the best option as a respresentation of the MultipleOptions object."""
         return self.best_option
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         """If other_options is a string, convert it to a list."""
         if isinstance(self.other_options, str):
             self.other_options = [self.other_options]
