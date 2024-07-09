@@ -1,8 +1,10 @@
-import io
-from typing import Optional
+from io import StringIO
+from typing import Optional, Union
 from functools import total_ordering
+from dataclass import dataclass
 
 from . import edge_cases
+from .misc import MultipleOptions
 
 SHORTHAND = {
     # Verbs
@@ -34,16 +36,30 @@ SHORTHAND = {
 }
 
 
+@dataclass
+class Word:
+    word: str
+    meaning: Union[str, MultipleOptions]
+
+
 @total_ordering
 class LearningVerb:
     def __init__(
-        self, pre: str, inf: str, per: str, ppp: Optional[str], meaning: str
+        self,
+        pre: str,
+        inf: str,
+        per: str,
+        ppp: Optional[str],
+        meaning: Union[str, MultipleOptions],
     ) -> None:
         self.pre = pre
         self.inf = inf
         self.per = per
         self.ppp = ppp if ppp else False
-        self.meaning = meaning
+        if isinstance(meaning, MultipleOptions):
+            self.meaning = meaning
+        else:
+            self.meaning = MultipleOptions(meaning, [])
 
         self.first = pre
 
@@ -320,7 +336,7 @@ class LearningVerb:
         return f"LearningVerb({self.pre}, {self.inf}, {self.per}, {self.ppp}, {self.meaning})"
 
     def __str__(self) -> str:
-        output = io.StringIO()
+        output = StringIO()
         output.write(
             f"{self.meaning}: {self.pre}, {self.inf}, {self.per}, {self.ppp} ({self.conjugation})\n\n"
         )
@@ -359,14 +375,19 @@ class LearningVerb:
 
 @total_ordering
 class Noun:
-    def __init__(self, nom: str, gen: str, gender: str, meaning: str) -> None:
+    def __init__(
+        self, nom: str, gen: str, gender: str, meaning: Union[str, MultipleOptions]
+    ) -> None:
         if gender not in ("m", "f", "n"):
             raise ValueError("Gender not recognised")
 
         self.nom = nom
         self.gen = gen
         self.gender = gender
-        self.meaning = meaning
+        if isinstance(meaning, MultipleOptions):
+            self.meaning = meaning
+        else:
+            self.meaning = MultipleOptions(meaning, [])
 
         self.first = nom
 
@@ -578,7 +599,7 @@ class Noun:
         return f"Noun({self.nom}, {self.gen}, {self.declension}, {self.meaning})"
 
     def __str__(self) -> str:
-        output = io.StringIO()
+        output = StringIO()
         output.write(f"{self.meaning}: {self.nom}, {self.gen} ({self.declension})")
 
         for _, item in self.endings.items():
@@ -608,11 +629,20 @@ class Noun:
 
 @total_ordering
 class Adjective212:
-    def __init__(self, mascnom: str, femnom: str, neutnom: str, meaning: str) -> None:
+    def __init__(
+        self,
+        mascnom: str,
+        femnom: str,
+        neutnom: str,
+        meaning: Union[str, MultipleOptions],
+    ) -> None:
         self.mascnom = mascnom
         self.femnom = femnom
         self.neutnom = neutnom
-        self.meaning = meaning
+        if isinstance(meaning, MultipleOptions):
+            self.meaning = meaning
+        else:
+            self.meaning = MultipleOptions(meaning, [])
 
         self.first = mascnom
 
@@ -671,7 +701,7 @@ class Adjective212:
         return f"Adjective212({self.mascnom}, {self.femnom}, {self.neutnom}, {self.meaning})"
 
     def __str__(self) -> str:
-        output = io.StringIO()
+        output = StringIO()
         output.write(f"{self.meaning}: {self.mascnom}, {self.femnom}, {self.neutnom}")
 
         for _, item in self.endings.items():
@@ -702,10 +732,18 @@ class Adjective212:
 # HACK  Very messy, but third declension adjectives are complicated
 @total_ordering
 class Adjective3:
-    def __init__(self, *principle_parts: str, termination: int, meaning: str) -> None:
+    def __init__(
+        self,
+        *principle_parts: str,
+        termination: int,
+        meaning: Union[str, MultipleOptions],
+    ) -> None:
         self.principle_parts = principle_parts
-        self.meaning = meaning
         self.termination = termination
+        if isinstance(meaning, MultipleOptions):
+            self.meaning = meaning
+        else:
+            self.meaning = MultipleOptions(meaning, [])
 
         self.first = self.principle_parts[0]
 
@@ -881,7 +919,7 @@ class Adjective3:
         return f"Adjective3({", ".join(self.principle_parts)}, {self.termination}, {self.meaning})"
 
     def __str__(self) -> str:
-        output = io.StringIO()
+        output = StringIO()
         output.write(f"{self.meaning}: {self.nom}, {self.gen}\n")
         for _, item in self.endings.items():
             output.write(item + "\n")

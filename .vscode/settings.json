@@ -54,5 +54,6 @@
         "**/*.min.*",
         "**/*.map",
         "**/.next/**"
-    ]
+    ],
+    "autoDocstring.docstringFormat": "numpy",
 }
