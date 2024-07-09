@@ -1,0 +1,2 @@
+hear: audio, audire, audivi, auditus
+take: capio, capire, capivi,

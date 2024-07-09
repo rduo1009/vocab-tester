@@ -1,0 +1,58 @@
+{
+    "ruff.nativeServer": true,
+    "python.terminal.activateEnvironment": false,
+    "python.terminal.activateEnvInCurrentTerminal": false,
+    "editor.formatOnSave": true,
+    "editor.formatOnPaste": true,
+    "workbench.startupEditor": "none",
+    "[python]": {
+        "editor.defaultFormatter": "charliermarsh.ruff",
+    },
+    "[json]": {
+        "editor.defaultFormatter": "HookyQR.beautify"
+    },
+    "beautify.language": {
+        "js": {
+            "type": [
+                "json"
+            ],
+        }
+    },
+    "ruff.codeAction.disableRuleComment": {
+        "enable": false
+    },
+    "todohighlight.keywords": [
+        {
+            "text": " NOTE ",
+            "color": "#000",
+            "backgroundColor": "#a6e3a1",
+        },
+        {
+            "text": " FIXME ",
+            "color": "#000",
+            "backgroundColor": "#f38ba8",
+        },
+        {
+            "text": " TODO ",
+            "color": "#000",
+            "backgroundColor": "#89b4fa",
+        },
+        {
+            "text": " HACK ",
+            "color": "#000",
+            "backgroundColor": "#fab387",
+        }
+    ],
+    "todohighlight.exclude": [
+        "**/node_modules/**",
+        "**/bower_components/**",
+        "**/dist/**",
+        "**/build/**",
+        "**/.vscode/**",
+        "**/.github/**",
+        "**/_output/**",
+        "**/*.min.*",
+        "**/*.map",
+        "**/.next/**"
+    ]
+}

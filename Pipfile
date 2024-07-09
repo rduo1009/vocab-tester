@@ -1,0 +1,16 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+customtkinter = "*"
+
+[dev-packages]
+icecream = "*"
+mypy = "*"
+monkeytype = "*"
+bpython = "*"
+
+[requires]
+python_version = "3.12"
