@@ -18,6 +18,15 @@ class MultipleOptions:
     other_options : list[str], str
         Other options.
 
+    Notes
+    -----
+    This class allows for there to be several English definitions of one Latin word. This means for
+    translating-to-English questions, synonyms can be accepted, but not vice versa.
+
+    The other_options list is intended to be ordered from better to worse options.
+    For example, callidus -> MultipleOptions("clever", ["cunning", "callid"])
+    'Callid' is technically correct, but not a very commonly used word, so it is put later in the
+    list.
     """
 
     best_option: str

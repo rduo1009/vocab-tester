@@ -56,4 +56,7 @@
         "**/.next/**"
     ],
     "autoDocstring.docstringFormat": "numpy",
+    //"editor.rulers": [
+    //    100
+    //],
 }

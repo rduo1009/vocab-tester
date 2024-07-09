@@ -567,7 +567,7 @@ class Noun:
                 }
 
             # Fifth declension plural only
-            # NOTE  not sure if this actually exists
+            # NOTE  not sure if this actually exists, implemented anyway
             case 15:
                 self.endings = {
                     "Nnompl": self.stem + "es",
@@ -581,10 +581,22 @@ class Noun:
             case _:
                 raise ValueError("Declension not recognised")
 
-        # FIXME  Not correct for fourth and fifth declension
-        if gender == "n":
+        if self.gender == "n":
             self.endings["Naccsg"] = self.nom
             self.endings["Nvocsg"] = self.nom
+
+            if self.declension == 4:
+                self.endings["Nnompl"] = self.stem + "ua"  # cornua
+                self.endings["Naccpl"] = self.stem + "ua"  # cornua
+                self.endings["Nvocpl"] = self.stem + "ua"  # cornua
+                self.endings["Ndatpl"] = self.stem + "ua"  # cornua
+                return
+            elif self.declension == 5:
+                raise ValueError(
+                    f"Fifth declension nouns cannot be neuter (noun {self.nom})"
+                )
+
+            # For the other declensions
             self.endings["Nnompl"] = self.stem + "a"
             self.endings["Naccpl"] = self.stem + "a"
             self.endings["Nvocpl"] = self.stem + "a"
