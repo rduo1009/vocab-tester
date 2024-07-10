@@ -1062,7 +1062,52 @@ class Adjective3(Adjective):
         return hash((self.principle_parts, self.termination, self.meaning))
 
 
-# TODO  finish this
+@total_ordering
 class Pronoun:
-    def __init__(self):
-        pass
+    def __init__(self, pronoun: str, meaning: str):
+        try:
+            self.endings = edge_cases.PRONOUNS[pronoun]
+        except KeyError:
+            raise ValueError(f"Pronoun {pronoun} not recognised")
+
+        self.pronoun = pronoun
+        self.first = self.pronoun
+        self.meaning = meaning
+
+        self.mascnom = self.endings["Pmnomsg"]
+        self.femnom = self.endings["Pfnomsg"]
+        self.neutnom = self.endings["Pnnomsg"]
+
+    def get(self, gender: str, case: str, number: str):
+        try:
+            return self.endings[
+                f"P{SHORTHAND[gender]}{SHORTHAND[case]}{SHORTHAND[number]}"
+            ]
+        except KeyError:
+            raise ValueError(
+                f"No ending found for gender {gender}, case {case} or number {number}"
+            )
+
+    def __repr__(self) -> str:
+        return f"Pronoun({self.pronoun}, {self.meaning})"
+
+    def __str__(self) -> str:
+        output = StringIO()
+        output.write(f"{self.meaning}: {self.mascnom}, {self.femnom}, {self.neutnom}\n")
+        for _, item in self.endings.items():
+            output.write(item + "\n")
+        return output.getvalue()
+
+    def __hash__(self) -> int:
+        return hash((self.pronoun, self.meaning))
+
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, Pronoun):
+            return NotImplemented
+        return self.endings == other.endings
+
+    def __lt__(self, other: object) -> bool:
+        try:
+            return self.first < other.first
+        except AttributeError:
+            return NotImplemented
