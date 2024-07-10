@@ -33,6 +33,9 @@ SHORTHAND = {
     "masculine": "m",
     "feminine": "f",
     "neuter": "n",
+    "positive": "pos",
+    "comparative": "cmp",
+    "superlative": "spr",
 }
 
 
@@ -658,55 +661,92 @@ class Adjective212:
 
         self.first = mascnom
 
-        self.stem = self.femnom[:-1]  # bona -> bon-
+        self.pos_stem = self.femnom[:-1]  # cara -> car-
+        self.cmp_stem = self.pos_stem + "ior"  # car- -> carior-
 
         self.endings = {
-            "Amnomsg": self.mascnom,  # bonus
-            "Amvocsg": self.stem + "e",  # bone
-            "Amaccsg": self.stem + "um",  # bonum
-            "Amgensg": self.stem + "i",  # boni
-            "Amdatsg": self.stem + "o",  # bono
-            "Amablsg": self.stem + "o",  # bono
-            "Amnompl": self.stem + "i",  # boni
-            "Amvocpl": self.stem + "i",  # boni
-            "Amaccpl": self.stem + "i",  # bonos
-            "Amgenpl": self.stem + "orum",  # bonorum
-            "Amdatpl": self.stem + "is",  # bonis
-            "Amablpl": self.stem + "is",  # bonis
-            "Afnomsg": self.femnom,  # bona
-            "Afvocsg": self.femnom,  # bona
-            "Afaccsg": self.stem + "am",  # bonam
-            "Afgensg": self.stem + "ae",  # bonae
-            "Afdatsg": self.stem + "ae",  # bonae
-            "Afablsg": self.stem + "a",  # bona
-            "Afnompl": self.stem + "ae",  # bonae
-            "Afvocpl": self.stem + "ae",  # bonae
-            "Afaccpl": self.stem + "as",  # bonas
-            "Afgenpl": self.stem + "arum",  # bonarum
-            "Afdatpl": self.stem + "is",  # bonis
-            "Afablpl": self.stem + "is",  # bonis
-            "Annomsg": self.neutnom,  # bonum
-            "Anvocsg": self.neutnom,  # bonum
-            "Anaccsg": self.neutnom,  # bonum
-            "Angensg": self.stem + "i",  # boni
-            "Andatsg": self.stem + "o",  # bono
-            "Anablsg": self.stem + "o",  # bono
-            "Annompl": self.stem + "a",  # bona
-            "Anvocpl": self.stem + "a",  # bona
-            "Anaccpl": self.stem + "a",  # bona
-            "Angenpl": self.stem + "orum",  # bonorum
-            "Andatpl": self.stem + "is",  # bonis
-            "Anablpl": self.stem + "is",  # bonis
+            "Aposmnomsg": self.mascnom,  # carus
+            "Aposmvocsg": self.pos_stem + "e",  # care
+            "Aposmaccsg": self.pos_stem + "um",  # carum
+            "Aposmgensg": self.pos_stem + "i",  # cari
+            "Aposmdatsg": self.pos_stem + "o",  # caro
+            "Aposmablsg": self.pos_stem + "o",  # caro
+            "Aposmnompl": self.pos_stem + "i",  # cari
+            "Aposmvocpl": self.pos_stem + "i",  # cari
+            "Aposmaccpl": self.pos_stem + "i",  # caros
+            "Aposmgenpl": self.pos_stem + "orum",  # carorum
+            "Aposmdatpl": self.pos_stem + "is",  # caris
+            "Aposmablpl": self.pos_stem + "is",  # caris
+            "Aposfnomsg": self.femnom,  # cara
+            "Aposfvocsg": self.femnom,  # cara
+            "Aposfaccsg": self.pos_stem + "am",  # caram
+            "Aposfgensg": self.pos_stem + "ae",  # carae
+            "Aposfdatsg": self.pos_stem + "ae",  # carae
+            "Aposfablsg": self.pos_stem + "a",  # cara
+            "Aposfnompl": self.pos_stem + "ae",  # carae
+            "Aposfvocpl": self.pos_stem + "ae",  # carae
+            "Aposfaccpl": self.pos_stem + "as",  # caras
+            "Aposfgenpl": self.pos_stem + "arum",  # cararum
+            "Aposfdatpl": self.pos_stem + "is",  # caris
+            "Aposfablpl": self.pos_stem + "is",  # caris
+            "Aposnnomsg": self.neutnom,  # carum
+            "Aposnvocsg": self.neutnom,  # carum
+            "Aposnaccsg": self.neutnom,  # carum
+            "Aposngensg": self.pos_stem + "i",  # cari
+            "Aposndatsg": self.pos_stem + "o",  # caro
+            "Aposnablsg": self.pos_stem + "o",  # caro
+            "Aposnnompl": self.pos_stem + "a",  # cara
+            "Aposnvocpl": self.pos_stem + "a",  # cara
+            "Aposnaccpl": self.pos_stem + "a",  # cara
+            "Aposngenpl": self.pos_stem + "orum",  # carorum
+            "Aposndatpl": self.pos_stem + "is",  # caris
+            "Aposnablpl": self.pos_stem + "is",  # caris
+            "Acmpmnomsg": self.cmp_stem,  # carior
+            "Acmpmvocsg": self.cmp_stem,  # carior
+            "Acmpmaccsg": self.cmp_stem + "em",  # cariorem
+            "Acmpmgensg": self.cmp_stem + "is",  # carioris
+            "Acmpmdatsg": self.cmp_stem + "i",  # cariori
+            "Acmpmablsg": self.cmp_stem + "e",  # cariore
+            "Acmpmnompl": self.cmp_stem + "es",  # cariores
+            "Acmpmvocpl": self.cmp_stem + "es",  # cariores
+            "Acmpmaccpl": self.cmp_stem + "es",  # cariores
+            "Acmpmgenpl": self.cmp_stem + "um",  # cariorum
+            "Acmpmdatpl": self.cmp_stem + "ibus",  # carioribus
+            "Acmpmablpl": self.cmp_stem + "ibus",  # carioribus
+            "Acmpfnomsg": self.cmp_stem,  # carior
+            "Acmpfvocsg": self.cmp_stem,  # carior
+            "Acmpfaccsg": self.cmp_stem + "em",  # cariorem
+            "Acmpfgensg": self.cmp_stem + "is",  # carioris
+            "Acmpfdatsg": self.cmp_stem + "i",  # cariori
+            "Acmpfablsg": self.cmp_stem + "e",  # cariore
+            "Acmpfnompl": self.cmp_stem + "es",  # cariores
+            "Acmpfvocpl": self.cmp_stem + "es",  # cariores
+            "Acmpfaccpl": self.cmp_stem + "es",  # cariores
+            "Acmpfgenpl": self.cmp_stem + "um",  # cariorum
+            "Acmpfdatpl": self.cmp_stem + "ibus",  # carioribus
+            "Acmpfablpl": self.cmp_stem + "ibus",  # carioribus
+            "Acmpnnomsg": self.pos_stem + "ius",  # carius
+            "Acmpnvocsg": self.pos_stem + "ius",  # carius
+            "Acmpnaccsg": self.pos_stem + "ius",  # carius
+            "Acmpngensg": self.cmp_stem + "is",  # carioris
+            "Acmpndatsg": self.cmp_stem + "i",  # cariori
+            "Acmpnablsg": self.cmp_stem + "e",  # cariore
+            "Acmpnnompl": self.cmp_stem + "a",  # cariora
+            "Acmpnvocpl": self.cmp_stem + "a",  # cariora
+            "Acmpnaccpl": self.cmp_stem + "a",  # cariora
+            "Acmpngenpl": self.cmp_stem + "um",  # cariorum
+            "Acmpndatpl": self.cmp_stem + "ibus",  # carioribus
+            "Acmpnablpl": self.cmp_stem + "ibus",  # carioribus
         }
 
-    def get(self, gender: str, case: str, number: str) -> str:
+    def get(self, comparison: str, gender: str, case: str, number: str) -> str:
         try:
             return self.endings[
-                f"A{SHORTHAND[gender]}{SHORTHAND[case]}{SHORTHAND[number]}"
+                f"A{SHORTHAND[comparison]}{SHORTHAND[gender]}{SHORTHAND[case]}{SHORTHAND[number]}"
             ]
         except KeyError:
             raise ValueError(
-                f"No ending found for gender {gender}, case {case} or number {number}"
+                f"No ending found for comparison {comparison}, gender {gender}, case {case} or number {number}"
             )
 
     def __repr__(self) -> str:
@@ -770,45 +810,82 @@ class Adjective3:
 
                 self.nom = self.principle_parts[0]
                 self.gen = self.principle_parts[1]
-                self.stem = self.gen[:-2]  # ingentis -> ingent-
+                self.pos_stem = self.gen[:-2]  # ingentis -> ingent-
+                self.cmp_stem = self.pos_stem + "ior"  # ingent- > ingentior-
 
                 self.endings = {
-                    "Amnomsg": self.nom,  # ingens
-                    "Amvocsg": self.nom,  # ingens
-                    "Amaccsg": self.stem + "em",  # ingentem
-                    "Amgensg": self.gen,  # ingentis
-                    "Amdatsg": self.stem + "i",  # ingenti
-                    "Amablsg": self.stem + "i",  # ingenti  TODO  is this right?
-                    "Amnompl": self.stem + "es",  # ingentes
-                    "Amvocpl": self.stem + "es",  # ingentes
-                    "Amaccpl": self.stem + "es",  # ingentes
-                    "Amgenpl": self.stem + "ium",  # ingentium
-                    "Amdatpl": self.stem + "ibus",  # ingentibus
-                    "Amablpl": self.stem + "ibus",  # ingentibus
-                    "Afnomsg": self.nom,  # ingens
-                    "Afvocsg": self.nom,  # ingens
-                    "Afaccsg": self.stem + "em",  # ingentem
-                    "Afgensg": self.gen,  # ingentis
-                    "Afdatsg": self.stem + "i",  # ingenti
-                    "Afablsg": self.stem + "i",  # ingenti
-                    "Afnompl": self.stem + "es",  # ingentes
-                    "Afvocpl": self.stem + "es",  # ingentes
-                    "Afaccpl": self.stem + "es",  # ingentes
-                    "Afgenpl": self.stem + "ium",  # ingentium
-                    "Afdatpl": self.stem + "ibus",  # ingentibus
-                    "Afablpl": self.stem + "ibus",  # ingentibus
-                    "Annomsg": self.nom,  # ingens
-                    "Anvocsg": self.nom,  # ingens
-                    "Anaccsg": self.nom,  # ingens
-                    "Angensg": self.gen,  # ingentis
-                    "Andatsg": self.stem + "i",  # ingenti
-                    "Anablsg": self.stem + "i",  # ingenti
-                    "Annompl": self.stem + "a",  # ingentia
-                    "Anvocpl": self.stem + "a",  # ingentia
-                    "Anaccpl": self.stem + "a",  # ingentia
-                    "Angenpl": self.stem + "ium",  # ingentium
-                    "Andatpl": self.stem + "ibus",  # ingentibus
-                    "Anablpl": self.stem + "ibus",  # ingentibus
+                    "Aposmnomsg": self.nom,  # ingens
+                    "Aposmvocsg": self.nom,  # ingens
+                    "Aposmaccsg": self.pos_stem + "em",  # ingentem
+                    "Aposmgensg": self.gen,  # ingentis
+                    "Aposmdatsg": self.pos_stem + "i",  # ingenti
+                    "Aposmablsg": self.pos_stem + "i",  # ingenti
+                    "Aposmnompl": self.pos_stem + "es",  # ingentes
+                    "Aposmvocpl": self.pos_stem + "es",  # ingentes
+                    "Aposmaccpl": self.pos_stem + "es",  # ingentes
+                    "Aposmgenpl": self.pos_stem + "ium",  # ingentium
+                    "Aposmdatpl": self.pos_stem + "ibus",  # ingentibus
+                    "Aposmablpl": self.pos_stem + "ibus",  # ingentibus
+                    "Aposfnomsg": self.nom,  # ingens
+                    "Aposfvocsg": self.nom,  # ingens
+                    "Aposfaccsg": self.pos_stem + "em",  # ingentem
+                    "Aposfgensg": self.gen,  # ingentis
+                    "Aposfdatsg": self.pos_stem + "i",  # ingenti
+                    "Aposfablsg": self.pos_stem + "i",  # ingenti
+                    "Aposfnompl": self.pos_stem + "es",  # ingentes
+                    "Aposfvocpl": self.pos_stem + "es",  # ingentes
+                    "Aposfaccpl": self.pos_stem + "es",  # ingentes
+                    "Aposfgenpl": self.pos_stem + "ium",  # ingentium
+                    "Aposfdatpl": self.pos_stem + "ibus",  # ingentibus
+                    "Aposfablpl": self.pos_stem + "ibus",  # ingentibus
+                    "Aposnnomsg": self.nom,  # ingens
+                    "Aposnvocsg": self.nom,  # ingens
+                    "Aposnaccsg": self.nom,  # ingens
+                    "Aposngensg": self.gen,  # ingentis
+                    "Aposndatsg": self.pos_stem + "i",  # ingenti
+                    "Aposnablsg": self.pos_stem + "i",  # ingenti
+                    "Aposnnompl": self.pos_stem + "a",  # ingentia
+                    "Aposnvocpl": self.pos_stem + "a",  # ingentia
+                    "Aposnaccpl": self.pos_stem + "a",  # ingentia
+                    "Aposngenpl": self.pos_stem + "ium",  # ingentium
+                    "Aposndatpl": self.pos_stem + "ibus",  # ingentibus
+                    "Aposnablpl": self.pos_stem + "ibus",  # ingentibus
+                    "Acmpmnomsg": self.cmp_stem,  # ingentior
+                    "Acmpmvocsg": self.cmp_stem,  # ingentior
+                    "Acmpmaccsg": self.cmp_stem + "em",  # ingentiorem
+                    "Acmpmgensg": self.cmp_stem + "is",  # ingentioris
+                    "Acmpmdatsg": self.cmp_stem + "i",  # ingentiori
+                    "Acmpmablsg": self.cmp_stem + "e",  # ingentiore
+                    "Acmpmnompl": self.cmp_stem + "es",  # ingentiores
+                    "Acmpmvocpl": self.cmp_stem + "es",  # ingentiores
+                    "Acmpmaccpl": self.cmp_stem + "es",  # ingentiores
+                    "Acmpmgenpl": self.cmp_stem + "um",  # ingentiorum
+                    "Acmpmdatpl": self.cmp_stem + "ibus",  # ingentioribus
+                    "Acmpmablpl": self.cmp_stem + "ibus",  # ingentioribus
+                    "Acmpfnomsg": self.cmp_stem,  # ingentior
+                    "Acmpfvocsg": self.cmp_stem,  # ingentior
+                    "Acmpfaccsg": self.cmp_stem + "em",  # ingentiorem
+                    "Acmpfgensg": self.cmp_stem + "is",  # ingentioris
+                    "Acmpfdatsg": self.cmp_stem + "i",  # ingentiori
+                    "Acmpfablsg": self.cmp_stem + "e",  # ingentiore
+                    "Acmpfnompl": self.cmp_stem + "es",  # ingentiores
+                    "Acmpfvocpl": self.cmp_stem + "es",  # ingentiores
+                    "Acmpfaccpl": self.cmp_stem + "es",  # ingentiores
+                    "Acmpfgenpl": self.cmp_stem + "um",  # ingentiorum
+                    "Acmpfdatpl": self.cmp_stem + "ibus",  # ingentioribus
+                    "Acmpfablpl": self.cmp_stem + "ibus",  # ingentioribus
+                    "Acmpnnomsg": self.pos_stem + "ius",  # ingentius
+                    "Acmpnvocsg": self.pos_stem + "ius",  # ingentius
+                    "Acmpnaccsg": self.pos_stem + "ius",  # ingentius
+                    "Acmpngensg": self.cmp_stem + "is",  # ingentioris
+                    "Acmpndatsg": self.cmp_stem + "i",  # ingentiori
+                    "Acmpnablsg": self.cmp_stem + "e",  # ingentiore
+                    "Acmpnnompl": self.cmp_stem + "a",  # ingentiora
+                    "Acmpnvocpl": self.cmp_stem + "a",  # ingentiora
+                    "Acmpnaccpl": self.cmp_stem + "a",  # ingentiora
+                    "Acmpngenpl": self.cmp_stem + "um",  # ingentiorum
+                    "Acmpndatpl": self.cmp_stem + "ibus",  # ingentioribus
+                    "Acmpnablpl": self.cmp_stem + "ibus",  # ingentioribus
                 }
 
             # Second termination adjectives
@@ -821,45 +898,82 @@ class Adjective3:
 
                 self.mascnom = self.principle_parts[0]
                 self.neutnom = self.principle_parts[1]
-                self.stem = self.mascnom[:-2]  # fortis -> fort-
+                self.pos_stem = self.mascnom[:-2]  # fortis -> fort-
+                self.cmp_stem = self.pos_stem + "ior"  # fort- -> fortior-
 
                 self.endings = {
-                    "Amnomsg": self.mascnom,  # fortis
-                    "Amvocsg": self.mascnom,  # fortis
-                    "Amaccsg": self.stem + "em",  # fortem
-                    "Amgensg": self.stem + "is",  # fortis
-                    "Amdatsg": self.stem + "i",  # forti
-                    "Amablsg": self.stem + "i",  # forti
-                    "Amnompl": self.stem + "es",  # fortes
-                    "Amvocpl": self.stem + "es",  # fortes
-                    "Amaccpl": self.stem + "es",  # fortes
-                    "Amgenpl": self.stem + "ium",  # fortium
-                    "Amdatpl": self.stem + "ibus",  # fortibus
-                    "Amablpl": self.stem + "ibus",  # fortibus
-                    "Afnomsg": self.mascnom,  # fortis
-                    "Afvocsg": self.mascnom,  # fortis
-                    "Afaccsg": self.stem + "em",  # fortem
-                    "Afgensg": self.stem + "is",  # fortis
-                    "Afdatsg": self.stem + "i",  # forti
-                    "Afablsg": self.stem + "i",  # forti
-                    "Afnompl": self.stem + "es",  # fortes
-                    "Afvocpl": self.stem + "es",  # fortes
-                    "Afaccpl": self.stem + "es",  # fortes
-                    "Afgenpl": self.stem + "ium",  # fortium
-                    "Afdatpl": self.stem + "ibus",  # fortibus
-                    "Afablpl": self.stem + "ibus",  # fortibus
-                    "Annomsg": self.neutnom,  # forte
-                    "Anvocsg": self.neutnom,  # forte
-                    "Anaccsg": self.neutnom,  # forte
-                    "Angensg": self.stem + "ium",  # fortium
-                    "Andatsg": self.stem + "ibus",  # fortibus
-                    "Anablsg": self.stem + "ibus",  # fortibus
-                    "Annompl": self.stem + "ia",  # fortia
-                    "Anvocpl": self.stem + "ia",  # fortia
-                    "Anaccpl": self.stem + "ia",  # fortia
-                    "Angenpl": self.stem + "ium",  # fortium
-                    "Andatpl": self.stem + "ibus",  # fortibus
-                    "Anablpl": self.stem + "ibus",  # fortibus
+                    "Aposmnomsg": self.mascnom,  # fortis
+                    "Aposmvocsg": self.mascnom,  # fortis
+                    "Aposmaccsg": self.pos_stem + "em",  # fortem
+                    "Aposmgensg": self.pos_stem + "is",  # fortis
+                    "Aposmdatsg": self.pos_stem + "i",  # forti
+                    "Aposmablsg": self.pos_stem + "i",  # forti
+                    "Aposmnompl": self.pos_stem + "es",  # fortes
+                    "Aposmvocpl": self.pos_stem + "es",  # fortes
+                    "Aposmaccpl": self.pos_stem + "es",  # fortes
+                    "Aposmgenpl": self.pos_stem + "ium",  # fortium
+                    "Aposmdatpl": self.pos_stem + "ibus",  # fortibus
+                    "Aposmablpl": self.pos_stem + "ibus",  # fortibus
+                    "Aposfnomsg": self.mascnom,  # fortis
+                    "Aposfvocsg": self.mascnom,  # fortis
+                    "Aposfaccsg": self.pos_stem + "em",  # fortem
+                    "Aposfgensg": self.pos_stem + "is",  # fortis
+                    "Aposfdatsg": self.pos_stem + "i",  # forti
+                    "Aposfablsg": self.pos_stem + "i",  # forti
+                    "Aposfnompl": self.pos_stem + "es",  # fortes
+                    "Aposfvocpl": self.pos_stem + "es",  # fortes
+                    "Aposfaccpl": self.pos_stem + "es",  # fortes
+                    "Aposfgenpl": self.pos_stem + "ium",  # fortium
+                    "Aposfdatpl": self.pos_stem + "ibus",  # fortibus
+                    "Aposfablpl": self.pos_stem + "ibus",  # fortibus
+                    "Aposnnomsg": self.neutnom,  # forte
+                    "Aposnvocsg": self.neutnom,  # forte
+                    "Aposnaccsg": self.neutnom,  # forte
+                    "Aposngensg": self.pos_stem + "ium",  # fortium
+                    "Aposndatsg": self.pos_stem + "ibus",  # fortibus
+                    "Aposnablsg": self.pos_stem + "ibus",  # fortibus
+                    "Aposnnompl": self.pos_stem + "ia",  # fortia
+                    "Aposnvocpl": self.pos_stem + "ia",  # fortia
+                    "Aposnaccpl": self.pos_stem + "ia",  # fortia
+                    "Aposngenpl": self.pos_stem + "ium",  # fortium
+                    "Aposndatpl": self.pos_stem + "ibus",  # fortibus
+                    "Aposnablpl": self.pos_stem + "ibus",  # fortibus
+                    "Acmpmnomsg": self.cmp_stem,  # fortior
+                    "Acmpmvocsg": self.cmp_stem,  # fortior
+                    "Acmpmaccsg": self.cmp_stem + "em",  # fortiorem
+                    "Acmpmgensg": self.cmp_stem + "is",  # fortioris
+                    "Acmpmdatsg": self.cmp_stem + "i",  # fortiori
+                    "Acmpmablsg": self.cmp_stem + "e",  # fortiore
+                    "Acmpmnompl": self.cmp_stem + "es",  # fortiores
+                    "Acmpmvocpl": self.cmp_stem + "es",  # fortiores
+                    "Acmpmaccpl": self.cmp_stem + "es",  # fortiores
+                    "Acmpmgenpl": self.cmp_stem + "um",  # fortiorum
+                    "Acmpmdatpl": self.cmp_stem + "ibus",  # fortioribus
+                    "Acmpmablpl": self.cmp_stem + "ibus",  # fortioribus
+                    "Acmpfnomsg": self.cmp_stem,  # fortior
+                    "Acmpfvocsg": self.cmp_stem,  # fortior
+                    "Acmpfaccsg": self.cmp_stem + "em",  # fortiorem
+                    "Acmpfgensg": self.cmp_stem + "is",  # fortioris
+                    "Acmpfdatsg": self.cmp_stem + "i",  # fortiori
+                    "Acmpfablsg": self.cmp_stem + "e",  # fortiore
+                    "Acmpfnompl": self.cmp_stem + "es",  # fortiores
+                    "Acmpfvocpl": self.cmp_stem + "es",  # fortiores
+                    "Acmpfaccpl": self.cmp_stem + "es",  # fortiores
+                    "Acmpfgenpl": self.cmp_stem + "um",  # fortiorum
+                    "Acmpfdatpl": self.cmp_stem + "ibus",  # fortioribus
+                    "Acmpfablpl": self.cmp_stem + "ibus",  # fortioribus
+                    "Acmpnnomsg": self.pos_stem + "ius",  # fortius
+                    "Acmpnvocsg": self.pos_stem + "ius",  # fortius
+                    "Acmpnaccsg": self.pos_stem + "ius",  # fortius
+                    "Acmpngensg": self.cmp_stem + "is",  # fortioris
+                    "Acmpndatsg": self.cmp_stem + "i",  # fortiori
+                    "Acmpnablsg": self.cmp_stem + "e",  # fortiore
+                    "Acmpnnompl": self.cmp_stem + "a",  # fortiora
+                    "Acmpnvocpl": self.cmp_stem + "a",  # fortiora
+                    "Acmpnaccpl": self.cmp_stem + "a",  # fortiora
+                    "Acmpngenpl": self.cmp_stem + "um",  # fortiorum
+                    "Acmpndatpl": self.cmp_stem + "ibus",  # fortioribus
+                    "Acmpnablpl": self.cmp_stem + "ibus",  # fortioribus
                 }
 
             # Third termination adjectives
@@ -873,58 +987,95 @@ class Adjective3:
                 self.mascnom = self.principle_parts[0]
                 self.femnom = self.principle_parts[1]
                 self.neutnom = self.principle_parts[2]
-                self.stem = self.mascnom[:-2]  # acer -> ac-
+                self.pos_stem = self.femnom[:-2]  # acris -> acr-
+                self.cmp_stem = self.pos_stem + "ior"  # acr- -> acrior-
 
                 self.endings = {
-                    "Amnomsg": self.mascnom,  # acer
-                    "Amvocsg": self.mascnom,  # acer
-                    "Amaccsg": self.stem + "em",  # acrem
-                    "Amgensg": self.stem + "is",  # acris
-                    "Amdatsg": self.stem + "i",  # acri
-                    "Amablsg": self.stem + "i",  # acri
-                    "Amnompl": self.stem + "es",  # acres
-                    "Amvocpl": self.stem + "es",  # acres
-                    "Amaccpl": self.stem + "es",  # acres
-                    "Amgenpl": self.stem + "ium",  # acrium
-                    "Amdatpl": self.stem + "ibus",  # acribus
-                    "Amablpl": self.stem + "ibus",  # acribus
-                    "Afnomsg": self.femnom,  # acris
-                    "Afvocsg": self.femnom,  # acris
-                    "Afaccsg": self.stem + "em",  # acrem
-                    "Afgensg": self.stem + "is",  # acris
-                    "Afdatsg": self.stem + "i",  # acri
-                    "Afablsg": self.stem + "i",  # acri
-                    "Afnompl": self.stem + "es",  # acres
-                    "Afvocpl": self.stem + "es",  # acres
-                    "Afaccpl": self.stem + "es",  # acres
-                    "Afgenpl": self.stem + "ium",  # acrium
-                    "Afdatpl": self.stem + "ibus",  # acribus
-                    "Afablpl": self.stem + "ibus",  # acribus
-                    "Annomsg": self.neutnom,  # acre
-                    "Anvocsg": self.neutnom,  # acre
-                    "Anaccsg": self.neutnom,  # acre
-                    "Angensg": self.stem + "is",  # acris
-                    "Andatsg": self.stem + "i",  # acri
-                    "Anablsg": self.stem + "i",  # acri
-                    "Annompl": self.stem + "ia",  # acria
-                    "Anvocpl": self.stem + "ia",  # acria
-                    "Anaccpl": self.stem + "ia",  # acria
-                    "Angenpl": self.stem + "ium",  # acrium
-                    "Andatpl": self.stem + "ibus",  # acribus
-                    "Anablpl": self.stem + "ibus",  # acribus
+                    "Aposmnomsg": self.mascnom,  # acer
+                    "Aposmvocsg": self.mascnom,  # acer
+                    "Aposmaccsg": self.pos_stem + "em",  # acrem
+                    "Aposmgensg": self.pos_stem + "is",  # acris
+                    "Aposmdatsg": self.pos_stem + "i",  # acri
+                    "Aposmablsg": self.pos_stem + "i",  # acri
+                    "Aposmnompl": self.pos_stem + "es",  # acres
+                    "Aposmvocpl": self.pos_stem + "es",  # acres
+                    "Aposmaccpl": self.pos_stem + "es",  # acres
+                    "Aposmgenpl": self.pos_stem + "ium",  # acrium
+                    "Aposmdatpl": self.pos_stem + "ibus",  # acribus
+                    "Aposmablpl": self.pos_stem + "ibus",  # acribus
+                    "Aposfnomsg": self.femnom,  # acris
+                    "Aposfvocsg": self.femnom,  # acris
+                    "Aposfaccsg": self.pos_stem + "em",  # acrem
+                    "Aposfgensg": self.pos_stem + "is",  # acris
+                    "Aposfdatsg": self.pos_stem + "i",  # acri
+                    "Aposfablsg": self.pos_stem + "i",  # acri
+                    "Aposfnompl": self.pos_stem + "es",  # acres
+                    "Aposfvocpl": self.pos_stem + "es",  # acres
+                    "Aposfaccpl": self.pos_stem + "es",  # acres
+                    "Aposfgenpl": self.pos_stem + "ium",  # acrium
+                    "Aposfdatpl": self.pos_stem + "ibus",  # acribus
+                    "Aposfablpl": self.pos_stem + "ibus",  # acribus
+                    "Aposnnomsg": self.neutnom,  # acre
+                    "Aposnvocsg": self.neutnom,  # acre
+                    "Aposnaccsg": self.neutnom,  # acre
+                    "Aposngensg": self.pos_stem + "is",  # acris
+                    "Aposndatsg": self.pos_stem + "i",  # acri
+                    "Aposnablsg": self.pos_stem + "i",  # acri
+                    "Aposnnompl": self.pos_stem + "ia",  # acria
+                    "Aposnvocpl": self.pos_stem + "ia",  # acria
+                    "Aposnaccpl": self.pos_stem + "ia",  # acria
+                    "Aposngenpl": self.pos_stem + "ium",  # acrium
+                    "Aposndatpl": self.pos_stem + "ibus",  # acribus
+                    "Aposnablpl": self.pos_stem + "ibus",  # acribus
+                    "Acmpmnomsg": self.cmp_stem,  # acrior
+                    "Acmpmvocsg": self.cmp_stem,  # acrior
+                    "Acmpmaccsg": self.cmp_stem + "em",  # acriorem
+                    "Acmpmgensg": self.cmp_stem + "is",  # acrioris
+                    "Acmpmdatsg": self.cmp_stem + "i",  # acriori
+                    "Acmpmablsg": self.cmp_stem + "e",  # acriore
+                    "Acmpmnompl": self.cmp_stem + "es",  # acriores
+                    "Acmpmvocpl": self.cmp_stem + "es",  # acriores
+                    "Acmpmaccpl": self.cmp_stem + "es",  # acriores
+                    "Acmpmgenpl": self.cmp_stem + "um",  # acriorum
+                    "Acmpmdatpl": self.cmp_stem + "ibus",  # acrioribus
+                    "Acmpmablpl": self.cmp_stem + "ibus",  # acrioribus
+                    "Acmpfnomsg": self.cmp_stem,  # acrior
+                    "Acmpfvocsg": self.cmp_stem,  # acrior
+                    "Acmpfaccsg": self.cmp_stem + "em",  # acriorem
+                    "Acmpfgensg": self.cmp_stem + "is",  # acrioris
+                    "Acmpfdatsg": self.cmp_stem + "i",  # acriori
+                    "Acmpfablsg": self.cmp_stem + "e",  # acriore
+                    "Acmpfnompl": self.cmp_stem + "es",  # acriores
+                    "Acmpfvocpl": self.cmp_stem + "es",  # acriores
+                    "Acmpfaccpl": self.cmp_stem + "es",  # acriores
+                    "Acmpfgenpl": self.cmp_stem + "um",  # acriorum
+                    "Acmpfdatpl": self.cmp_stem + "ibus",  # acrioribus
+                    "Acmpfablpl": self.cmp_stem + "ibus",  # acrioribus
+                    "Acmpnnomsg": self.pos_stem + "ius",  # acrius
+                    "Acmpnvocsg": self.pos_stem + "ius",  # acrius
+                    "Acmpnaccsg": self.pos_stem + "ius",  # acrius
+                    "Acmpngensg": self.cmp_stem + "is",  # acrioris
+                    "Acmpndatsg": self.cmp_stem + "i",  # acriori
+                    "Acmpnablsg": self.cmp_stem + "e",  # acriore
+                    "Acmpnnompl": self.cmp_stem + "a",  # acriora
+                    "Acmpnvocpl": self.cmp_stem + "a",  # acriora
+                    "Acmpnaccpl": self.cmp_stem + "a",  # acriora
+                    "Acmpngenpl": self.cmp_stem + "um",  # acriorum
+                    "Acmpndatpl": self.cmp_stem + "ibus",  # acrioribus
+                    "Acmpnablpl": self.cmp_stem + "ibus",  # acrioribus
                 }
 
             case _:
                 raise ValueError("Termination must be 1, 2 or 3")
 
-    def get(self, gender: str, case: str, number: str) -> str:
+    def get(self, comparison: str, gender: str, case: str, number: str) -> str:
         try:
             return self.endings[
-                f"A{SHORTHAND[gender]}{SHORTHAND[case]}{SHORTHAND[number]}"
+                f"A{SHORTHAND[comparison]}{SHORTHAND[gender]}{SHORTHAND[case]}{SHORTHAND[number]}"
             ]
         except KeyError:
             raise ValueError(
-                f"No ending found for gender {gender}, case {case} or number {number}"
+                f"No ending found for comparison {comparison}, gender {gender}, case {case} or number {number}"
             )
 
     def __repr__(self) -> str:
