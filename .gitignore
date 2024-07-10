@@ -1,5 +1,5 @@
 .DS_Store
 /.venv
 /.mypy_cache
-/.vscode
+/.vscode/*
 .vscode/settings.json

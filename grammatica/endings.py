@@ -352,19 +352,7 @@ class LearningVerb:
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, LearningVerb):
             return NotImplemented
-        return (
-            self.pre,
-            self.inf,
-            self.per,
-            self.ppp,
-            self.meaning,
-        ) == (
-            other.pre,
-            other.inf,
-            other.per,
-            other.ppp,
-            other.meaning,
-        )
+        return self.endings == other.endings
 
     def __hash__(self) -> int:
         return hash((self.pre, self.inf, self.per, self.ppp, self.meaning))
@@ -623,14 +611,9 @@ class Noun:
         return output.getvalue()
 
     def __eq__(self, other: object) -> bool:
-        if not isinstance(other, LearningVerb):
+        if not isinstance(other, Noun):
             return NotImplemented
-        return (self.nom, self.gen, self.gender, self.meaning) == (
-            other.nom,
-            other.gen,
-            other.gender,
-            other.meaning,
-        )
+        return self.endings == other.endings
 
     def __hash__(self) -> int:
         return hash((self.nom, self.gen, self.gender, self.meaning))
@@ -642,8 +625,31 @@ class Noun:
             return NotImplemented
 
 
+class Adjective:
+    def get(self, comparison: str, gender: str, case: str, number: str) -> str:
+        try:
+            return self.endings[
+                f"A{SHORTHAND[comparison]}{SHORTHAND[gender]}{SHORTHAND[case]}{SHORTHAND[number]}"
+            ]
+        except KeyError:
+            raise ValueError(
+                f"No ending found for comparison {comparison}, gender {gender}, case {case} or number {number}"
+            )
+
+    def __lt__(self, other: object) -> bool:
+        try:
+            return self.first < other.first
+        except AttributeError:
+            return NotImplemented
+
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, Adjective):
+            return NotImplemented
+        return self.endings == other.endings
+
+
 @total_ordering
-class Adjective212:
+class Adjective212(Adjective):
     def __init__(
         self,
         mascnom: str,
@@ -739,16 +745,6 @@ class Adjective212:
             "Acmpnablpl": self.cmp_stem + "ibus",  # carioribus
         }
 
-    def get(self, comparison: str, gender: str, case: str, number: str) -> str:
-        try:
-            return self.endings[
-                f"A{SHORTHAND[comparison]}{SHORTHAND[gender]}{SHORTHAND[case]}{SHORTHAND[number]}"
-            ]
-        except KeyError:
-            raise ValueError(
-                f"No ending found for comparison {comparison}, gender {gender}, case {case} or number {number}"
-            )
-
     def __repr__(self) -> str:
         return f"Adjective212({self.mascnom}, {self.femnom}, {self.neutnom}, {self.meaning})"
 
@@ -761,29 +757,13 @@ class Adjective212:
 
         return output.getvalue()
 
-    def __eq__(self, other: object) -> bool:
-        if not isinstance(other, LearningVerb):
-            return NotImplemented
-        return (self.mascnom, self.femnom, self.neutnom, self.meaning) == (
-            other.mascnom,
-            other.femnom,
-            other.neutnom,
-            other.meaning,
-        )
-
     def __hash__(self) -> int:
         return hash((self.mascnom, self.femnom, self.neutnom, self.meaning))
-
-    def __lt__(self, other: object) -> bool:
-        try:
-            return self.first < other.first
-        except AttributeError:
-            return NotImplemented
 
 
 # HACK  Very messy, but third declension adjectives are complicated
 @total_ordering
-class Adjective3:
+class Adjective3(Adjective):
     def __init__(
         self,
         *principle_parts: str,
@@ -1068,55 +1048,21 @@ class Adjective3:
             case _:
                 raise ValueError("Termination must be 1, 2 or 3")
 
-    def get(self, comparison: str, gender: str, case: str, number: str) -> str:
-        try:
-            return self.endings[
-                f"A{SHORTHAND[comparison]}{SHORTHAND[gender]}{SHORTHAND[case]}{SHORTHAND[number]}"
-            ]
-        except KeyError:
-            raise ValueError(
-                f"No ending found for comparison {comparison}, gender {gender}, case {case} or number {number}"
-            )
-
     def __repr__(self) -> str:
         return f"Adjective3({", ".join(self.principle_parts)}, {self.termination}, {self.meaning})"
 
     def __str__(self) -> str:
         output = StringIO()
-        output.write(f"{self.meaning}: {self.nom}, {self.gen}\n")
+        output.write(f"{self.meaning}: {", ".join(self.principle_parts)}\n")
         for _, item in self.endings.items():
             output.write(item + "\n")
         return output.getvalue()
 
-    def __eq__(self, other: object) -> bool:
-        if not isinstance(other, Adjective3):
-            return NotImplemented
-        return (self.principle_parts, self.termination, self.meaning) == (
-            other.principle_parts,
-            other.termination,
-            other.meaning,
-        )
-
     def __hash__(self) -> int:
         return hash((self.principle_parts, self.termination, self.meaning))
 
-    def __lt__(self, other: object) -> bool:
-        try:
-            return self.first < other.first
-        except AttributeError:
-            return NotImplemented
 
-
-# HACK  A whole new class has to be created for the relative pronoun because it's like a adjective but different
-#       kinda wack
 # TODO  finish this
-class RelativePronoun(Adjective212):
-    def __init__(
-        self,
-        *principle_parts: str,
-        termination=3,  # Termination doesnt matter
-        meaning: str,
-    ) -> None:
-        Adjective212.__init__(self, *principle_parts, termination, meaning)
-        self.endings = edge_cases.QUI_ENDINGS
+class Pronoun:
+    def __init__(self):
         pass
