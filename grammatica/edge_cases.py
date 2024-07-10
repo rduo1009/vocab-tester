@@ -241,7 +241,6 @@ IRREGULAR_VERBS = {
     },
 }
 
-# TODO  finish this
 IRREGULAR_NOUNS = {
     "ego": {
         "Nnomsg": "ego",
@@ -283,7 +282,26 @@ IRREGULAR_NOUNS = {
     },
 }
 
-# TODO  finish this
+LIS_ADJECTIVES = [
+    "facilis",
+    "difficilis",
+    "similis",
+    "dissimilis",
+    "gracilis",
+    "humilis",
+]
+
+IRREGULAR_COMPARATIVES = {
+    "bonus": ["melior", "optim"],
+    "malus": ["peior", "pessim"],
+    "magnus": ["maior", "maxim"],
+    "parvus": ["minor", "minim"],
+    "multus": ["plus", "plurim"],
+    "nequam": ["nequior", "nequissim"],
+    "frugi": ["frugalior", "frugalissim"],
+    "dexter": ["dexterior", "dextim"],
+}
+
 PRONOUNS = {
     "hic": {
         "Pmnomsg": "hic",
