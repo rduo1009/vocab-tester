@@ -1,10 +1,14 @@
+# TODO  for tomorrow
+# - adverbs
+# - participles
+
 from io import StringIO
 from typing import Optional, Union
 from functools import total_ordering
 from dataclass import dataclass
 
 from . import edge_cases
-from .misc import MultipleOptions
+from .misc import MultipleMeanings
 
 SHORTHAND = {
     # Verbs
@@ -40,9 +44,9 @@ SHORTHAND = {
 
 
 @dataclass
-class Word:
+class BasicWord:
     word: str
-    meaning: Union[str, MultipleOptions]
+    meaning: Union[str, MultipleMeanings]
 
 
 @total_ordering
@@ -53,16 +57,13 @@ class LearningVerb:
         inf: str,
         per: str,
         ppp: Optional[str],
-        meaning: Union[str, MultipleOptions],
+        meaning: Union[str, MultipleMeanings],
     ) -> None:
         self.pre = pre
         self.inf = inf
         self.per = per
         self.ppp = ppp if ppp else False
-        if isinstance(meaning, MultipleOptions):
-            self.meaning = meaning
-        else:
-            self.meaning = MultipleOptions(meaning, [])
+        self.meaning = meaning
 
         self.first = pre
 
@@ -367,7 +368,7 @@ class LearningVerb:
 @total_ordering
 class Noun:
     def __init__(
-        self, nom: str, gen: str, gender: str, meaning: Union[str, MultipleOptions]
+        self, nom: str, gen: str, gender: str, meaning: Union[str, MultipleMeanings]
     ) -> None:
         if gender not in ("m", "f", "n"):
             raise ValueError("Gender not recognised")
@@ -375,10 +376,7 @@ class Noun:
         self.nom = nom
         self.gen = gen
         self.gender = gender
-        if isinstance(meaning, MultipleOptions):
-            self.meaning = meaning
-        else:
-            self.meaning = MultipleOptions(meaning, [])
+        self.meaning = meaning
 
         self.first = nom
 
@@ -655,15 +653,12 @@ class Adjective212(Adjective):
         mascnom: str,
         femnom: str,
         neutnom: str,
-        meaning: Union[str, MultipleOptions],
+        meaning: Union[str, MultipleMeanings],
     ) -> None:
         self.mascnom = mascnom
         self.femnom = femnom
         self.neutnom = neutnom
-        if isinstance(meaning, MultipleOptions):
-            self.meaning = meaning
-        else:
-            self.meaning = MultipleOptions(meaning, [])
+        self.meaning = meaning
 
         self.first = mascnom
 
@@ -814,14 +809,11 @@ class Adjective3(Adjective):
         self,
         *principle_parts: str,
         termination: int,
-        meaning: Union[str, MultipleOptions],
+        meaning: Union[str, MultipleMeanings],
     ) -> None:
         self.principle_parts = principle_parts
         self.termination = termination
-        if isinstance(meaning, MultipleOptions):
-            self.meaning = meaning
-        else:
-            self.meaning = MultipleOptions(meaning, [])
+        self.meaning = meaning
 
         self.first = self.principle_parts[0]
 
@@ -1253,7 +1245,7 @@ class Adjective3(Adjective):
 
 @total_ordering
 class Pronoun:
-    def __init__(self, pronoun: str, meaning: str):
+    def __init__(self, pronoun: str, meaning: Union[str, MultipleMeanings]):
         try:
             self.endings = edge_cases.PRONOUNS[pronoun]
         except KeyError:
