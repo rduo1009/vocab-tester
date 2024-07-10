@@ -5,7 +5,7 @@
 from io import StringIO
 from typing import Optional, Union
 from functools import total_ordering
-from dataclass import dataclass
+from dataclasses import dataclass
 
 from . import edge_cases
 from .misc import MultipleMeanings
@@ -68,12 +68,12 @@ class LearningVerb:
         self.first = pre
 
         # Conjugation edge cases
-        if pre in edge_cases.THIRD_IO_VERBS:
-            self.conjugation = 5
-        elif pre in edge_cases.IRREGULAR_VERBS:
+        if self.pre in edge_cases.IRREGULAR_VERBS:
             self.endings = edge_cases.IRREGULAR_VERBS[pre]
             self.conjugation = "irregular"
             return
+        elif edge_cases.check_io_verb(self.pre):
+            self.conjugation = 5
 
         # Find conjugation
         elif inf[-3:] == "are":

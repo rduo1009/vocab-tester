@@ -7,36 +7,40 @@ from typing import Union
 
 
 @dataclass(frozen=True, init=True)
-class MultipleOptions:
-    """Represents multiple options, with a best option and other options.
-    If there is only one option, the other_options list will be empty.
+class MultipleMeanings:
+    """Represents multiple meanings, with a best meaning and other meanings.
+    If there is only one meaning, the other_meanings list will be empty.
 
     Attributes
     ----------
-    best_option : str
-        The best option.
-    other_options : list[str], str
-        Other options.
+    best_meaning : str
+        The best meaning.
+    other_meanings : list[str], str
+        Other meanings.
 
     Notes
     -----
     This class allows for there to be several English definitions of one Latin word. This means for
     translating-to-English questions, synonyms can be accepted, but not vice versa.
 
-    The other_options list is intended to be ordered from better to worse options.
-    For example, callidus -> MultipleOptions("clever", ["cunning", "callid"])
+    The other_meanings list is intended to be ordered from better to worse meanings.
+    For example, callidus -> MultipleMeanings("clever", ["cunning", "callid"])
     'Callid' is technically correct, but not a very commonly used word, so it is put later in the
     list.
     """
 
-    best_option: str
-    other_options: Union[list[str], str] = field(default_factory=list)
+    best_meaning: str
+    other_meanings: Union[list[str], str] = field(default_factory=list)
+
+    def __str__(self) -> str:
+        """Returns the best meaning as a representation of the MultipleMeanings object."""
+        return self.best_meaning
 
     def __repr__(self) -> str:
-        """Returns the best option as a respresentation of the MultipleOptions object."""
-        return self.best_option
+        """Returns a representation of the MultipleMeanings object."""
+        return f"MultipleMeanings({self.best_meaning}, {self.other_meanings})"
 
     def __post_init__(self) -> None:
-        """If other_options is a string, convert it to a list."""
-        if isinstance(self.other_options, str):
-            self.other_options = [self.other_options]
+        """If other_meanings is a string, convert it to a list."""
+        if isinstance(self.other_meanings, str):
+            self.other_meanings = [self.other_meanings]

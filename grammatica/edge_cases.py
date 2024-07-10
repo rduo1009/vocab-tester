@@ -39,6 +39,14 @@ THIRD_IO_VERBS = [
     "traicio",
 ]
 
+
+def check_io_verb(pre: str) -> bool:
+    for io_verb in THIRD_IO_VERBS:
+        if pre.endswith(io_verb):
+            return True
+    return False
+
+
 IRREGULAR_VERBS = {
     "sum": {
         "Vpreactindsg1": "sum",
