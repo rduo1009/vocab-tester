@@ -1,0 +1,38 @@
+{
+    "files.exclude": {
+        "**/__pycache__": true,
+        "**/.mypy_cache": true,
+        "**/.pytest_cache": true,
+        "**/Pipfile": true,
+        "**/Pipfile.lock": true
+    },
+    "ruff.nativeServer": true,
+    "todohighlight.keywords": [
+        {
+            "text": " HACK: ",
+            "color": "#000",
+            "backgroundColor": "#fab387",
+        },
+        {
+            "text": " TODO:",
+            "color": "#000",
+            "backgroundColor": "#89b4fa"
+        },
+        {
+            "text": " FIXME:",
+            "color": "#000",
+            "backgroundColor": "#f38ba8"
+        },
+        {
+            "text": " NOTE:",
+            "color": "#000",
+            "backgroundColor": "#a6e3a1"
+        }
+    ],
+    "autoDocstring.docstringFormat": "numpy",
+    "python.testing.pytestEnabled": true,
+    "python.testing.pytestArgs": [
+        "."
+    ],
+    "python.testing.unittestEnabled": false,
+}

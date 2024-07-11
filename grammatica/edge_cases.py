@@ -1,4 +1,4 @@
-from .custom_exceptions import InvalidInputError
+from typing import Union
 
 # NOTE: I understand that there are deponents, but am keeping them for future
 # There also may be missing verbs
@@ -210,7 +210,7 @@ IRREGULAR_VERBS = {
     "eo": {
         "Vpreactindsg1": "eo",
         "Vpreactindsg2": "is",
-        "Vpreactindsg3": "t",
+        "Vpreactindsg3": "it",
         "Vpreactindpl1": "imus",
         "Vpreactindpl2": "itis",
         "Vpreactindpl3": "eunt",
@@ -249,6 +249,94 @@ IRREGULAR_VERBS = {
         "Vplpactsbjpl3": "iissent",
     },
 }
+
+DERIVED_IRREGULAR_VERBS = {
+    "eo": [
+        "abeo",
+        "adeo",
+        "ambeo",
+        "circumeo",
+        "coeo",
+        "deeo",
+        "dispereo",
+        "exeo",
+        "ineo",
+        "intereo",
+        "introeo",
+        "nequeo",
+        "obeo",
+        "pereo",
+        "praetereo",
+        "prodeo",
+        "queo",
+        "redeo",
+        "subeo",
+        "transabeo",
+        "transeo",
+        "veneo",
+    ],
+}
+
+DERIVED_IRREGULAR_ENDINGS = {
+    "eo": {
+        "Vpreactindsg1": "eo",
+        "Vpreactindsg2": "is",
+        "Vpreactindsg3": "it",
+        "Vpreactindpl1": "imus",
+        "Vpreactindpl2": "itis",
+        "Vpreactindpl3": "eunt",
+        "Vimpactindsg1": "ibam",
+        "Vimpactindsg2": "ibas",
+        "Vimpactindsg3": "ibat",
+        "Vimpactindpl1": "ibamus",
+        "Vimpactindpl2": "ibatis",
+        "Vimpactindpl3": "ibant",
+        "Vperactindsg1": "ii",
+        "Vperactindsg2": "isti",
+        "Vperactindsg3": "iit",
+        "Vperactindpl1": "iimus",
+        "Vperactindpl2": "istis",
+        "Vperactindpl3": "ierunt",
+        "Vplpactindsg1": "ieram",
+        "Vplpactindsg2": "ieras",
+        "Vplpactindsg3": "ierat",
+        "Vplpactindpl1": "ieramus",
+        "Vplpactindpl2": "ieratis",
+        "Vplpactindpl3": "ierant",
+        "Vpreactinf   ": "ire",
+        "Vpreactipesg2": "i",
+        "Vpreactipepl2": "ite",
+        "Vimpactsbjsg1": "irem",
+        "Vimpactsbjsg2": "ires",
+        "Vimpactsbjsg3": "iret",
+        "Vimpactsbjpl1": "iremus",
+        "Vimpactsbjpl2": "iretis",
+        "Vimpactsbjpl3": "irent",
+        "Vplpactsbjsg1": "issem",
+        "Vplpactsbjsg2": "isses",
+        "Vplpactsbjsg3": "isset",
+        "Vplpactsbjpl1": "issemus",
+        "Vplpactsbjpl2": "issetis",
+        "Vplpactsbjpl3": "issent",
+    },
+}
+
+
+def prefix(pre: str, endings: dict) -> dict:
+    return {key: pre + value for key, value in endings.items()}
+
+
+def find_irregular_endings(pre: str) -> Union[bool, str]:
+    if pre in IRREGULAR_VERBS:
+        return IRREGULAR_VERBS[pre]
+    for irregular_suffix, suffix_list in DERIVED_IRREGULAR_VERBS.items():
+        if pre in suffix_list:
+            return prefix(
+                pre.rstrip(irregular_suffix),
+                DERIVED_IRREGULAR_ENDINGS[irregular_suffix],
+            )
+    return False
+
 
 IRREGULAR_NOUNS = {
     "ego": {

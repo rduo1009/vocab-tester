@@ -1,7 +1,5 @@
 .DS_Store
 /.venv
 /.mypy_cache
-/.vscode/*
-.vscode/settings.json
 __pycache__/
 *.pyc
