@@ -68,11 +68,14 @@ class LearningVerb:
         self.meaning = meaning
 
         self.first = pre
+        print(self.pre)
 
         # Conjugation edge cases
-        if self.pre in edge_cases.IRREGULAR_VERBS:
-            self.endings = edge_cases.IRREGULAR_VERBS[pre]
-            self.conjugation = "irregular"
+        irregular_endings = edge_cases.find_irregular_endings(self.pre)
+        if irregular_endings:
+            print(irregular_endings)
+            self.endings = irregular_endings
+            self.conjugation = 0
             return
         elif edge_cases.check_io_verb(self.pre):
             self.conjugation = 5
@@ -388,7 +391,7 @@ class Noun:
         # Find declension
         if self.nom in edge_cases.IRREGULAR_NOUNS:
             self.endings = edge_cases.IRREGULAR_NOUNS[nom]
-            self.declension = "irregular"
+            self.declension = 0
             return
 
         if gen[-2:] == "ae":
