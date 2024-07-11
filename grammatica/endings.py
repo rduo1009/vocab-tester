@@ -384,6 +384,7 @@ class Noun:
         self.nom = nom
         self.gen = gen
         self.meaning = meaning
+        self.plurale_tantum = False
 
         self.first = nom
 
@@ -410,20 +411,25 @@ class Noun:
             self.stem = self.gen[:-2]  # diei > di-
 
         elif gen[-4:] == "arum":
-            self.declension = 11
+            self.declension = 1
             self.stem = self.gen[:-4]  # puellarum -> puell-
+            self.plurale_tantum = True
         elif gen[-4:] == "orum":
-            self.declension = 12
+            self.declension = 2
             self.stem = self.gen[:-4]  # servorum -> serv-
+            self.plurale_tantum = True
         elif gen[-2:] == "um":
-            self.declension = 13
+            self.declension = 3
             self.stem = self.gen[:-2]  # canum -> can-
+            self.plurale_tantum = True
         elif gen[-4:] == "uum":
-            self.declension = 14
+            self.declension = 4
             self.stem = self.gen[:-3]  # manuum -> man-
+            self.plurale_tantum = True
         elif gen[-4:] == "erum":
-            self.declension = 15
+            self.declension = 5
             self.stem = self.gen[:-4]  # dierum > di-
+            self.plurale_tantum = True
 
         else:
             raise InvalidInputError(f"Genitive form {self.gen} is not valid")
@@ -516,62 +522,6 @@ class Noun:
                     "Nablpl": self.stem + "ebus",  # rebus
                 }
 
-            # First declension plural only
-            case 11:
-                self.endings = {
-                    "Nnompl": self.stem + "ae",  # insidiae
-                    "Nvocpl": self.stem + "ae",  # insidiae
-                    "Naccpl": self.stem + "as",  # insidias
-                    "Ngenpl": self.stem + "arum",  # insidiarum
-                    "Ndatpl": self.stem + "is",  # insidiis
-                    "Nablpl": self.stem + "is",  # insidiis
-                }
-
-            # Second declension plural only
-            case 12:
-                self.endings = {
-                    "Nnompl": self.stem + "i",  # liberi
-                    "Nvocpl": self.stem + "i",  # liberi
-                    "Naccpl": self.stem + "os",  # liberos
-                    "Ngenpl": self.stem + "orum",  # liberorum
-                    "Ndatpl": self.stem + "is",  # liberis
-                    "Nablpl": self.stem + "is",  # liberis
-                }
-
-            # Third declension plural only
-            case 13:
-                self.endings = {
-                    "Nnompl": self.stem + "es",  # manes
-                    "Nvocpl": self.stem + "es",  # manes
-                    "Naccpl": self.stem + "es",  # manes
-                    "Ngenpl": self.stem + "um",  # manium
-                    "Ndatpl": self.stem + "ibus",  # manibus
-                    "Nablpl": self.stem + "ibus",  # manibus
-                }
-
-            # Fourth declension plural only
-            case 14:
-                self.endings = {
-                    "Nnompl": self.stem + "us",  # idus
-                    "Nvocpl": self.stem + "us",  # idus
-                    "Naccpl": self.stem + "us",  # idus
-                    "Ngenpl": self.stem + "uum",  # iduum
-                    "Ndatpl": self.stem + "ibus",  # idibus
-                    "Nablpl": self.stem + "ibus",  # idibus
-                }
-
-            # Fifth declension plural only
-            # NOTE:  not sure if this actually exists, implemented anyway
-            case 15:
-                self.endings = {
-                    "Nnompl": self.stem + "es",
-                    "Nvocpl": self.stem + "es",
-                    "Naccpl": self.stem + "es",
-                    "Ngenpl": self.stem + "erum",
-                    "Ndatpl": self.stem + "ebus",
-                    "Nablpl": self.stem + "ebus",
-                }
-
             case _:
                 raise ValueError("Declension not recognised")
 
@@ -594,6 +544,11 @@ class Noun:
             self.endings["Nnompl"] = self.stem + "a"
             self.endings["Naccpl"] = self.stem + "a"
             self.endings["Nvocpl"] = self.stem + "a"
+
+        if self.plurale_tantum:
+            self.endings = {
+                k: v for k, v in self.endings.items() if not k.endswith("sg")
+            }
 
     def get(self, case: str, number: str) -> str:
         try:
