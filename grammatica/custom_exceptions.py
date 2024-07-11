@@ -1,0 +1,22 @@
+class NoMeaningError(Exception):
+    """An error that is raised when no meaning is found for a given input to Word.get()
+
+    Parameters
+    ----------
+    error : str
+        The error message to be displayed
+    """
+
+    pass
+
+
+class InvalidInputError(Exception):
+    """An error that is raised when an invalid input is given to a grammatica class.
+
+    Parameters
+    ----------
+    error : str
+        The error message to be displayed
+    """
+
+    pass

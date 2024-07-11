@@ -1,5 +1,6 @@
-# Verbs
-# NOTE  I understand that there are deponents, but am keeping them for future
+from .custom_exceptions import InvalidInputError
+
+# NOTE: I understand that there are deponents, but am keeping them for future
 # There also may be missing verbs
 THIRD_IO_VERBS = [
     "abicio",
@@ -260,7 +261,7 @@ IRREGULAR_NOUNS = {
         "Nnompl": "nos",
         "Nvocpl": "nos",
         "Naccpl": "nos",
-        "Ngenpl": "nostri",  # FIXME  but nostrum is partitive genitive. will have to figure this out later
+        "Ngenpl": "nostri",  # FIXME: but nostrum is partitive genitive. will have to figure this out later
         "Ndatpl": "nobis",
         "Nablpl": "nobis",
     },
@@ -274,7 +275,7 @@ IRREGULAR_NOUNS = {
         "Nnompl": "vos",
         "Nvocpl": "vos",
         "Naccpl": "vos",
-        "Ngenpl": "vestri",  # FIXME  similar with vestrum
+        "Ngenpl": "vestri",  # FIXME: similar with vestrum
         "Ndatpl": "vobis",
         "Nablpl": "vobis",
     },

@@ -1,4 +1,4 @@
-# TODO  for tomorrow
+# TODO:  for tomorrow
 # - adverbs
 # - participles
 
@@ -9,6 +9,7 @@ from dataclasses import dataclass
 
 from . import edge_cases
 from .misc import MultipleMeanings
+from .custom_exceptions import NoMeaningError, InvalidInputError
 
 SHORTHAND = {
     # Verbs
@@ -49,6 +50,7 @@ class BasicWord:
     meaning: Union[str, MultipleMeanings]
 
 
+# FIXME: This breaks for verbs such as transeo, which is derived from the irregular verb eo.
 @total_ordering
 class LearningVerb:
     def __init__(
@@ -86,7 +88,7 @@ class LearningVerb:
             else:
                 self.conjugation = 3
         else:
-            raise Exception("The infinitive is not valid (must end in are, ire or ere)")
+            raise InvalidInputError(f"Infinitive '{self.inf}' is not valid")
 
         self.pre_stem = pre[:-1]
         self.inf_stem = inf[:-3]
@@ -277,7 +279,7 @@ class LearningVerb:
                     "Vpreactindsg3": self.inf_stem + "it",  # capit
                     "Vpreactindpl1": self.inf_stem + "imus",  # capimus
                     "Vpreactindpl2": self.inf_stem + "itis",  # capitis
-                    "Vpreactindpl3": self.inf_stem + "unt",  # capiunt
+                    "Vpreactindpl3": self.inf_stem + "iunt",  # capiunt
                     "Vimpactindsg1": self.inf_stem + "iebam",  # capiebam
                     "Vimpactindsg2": self.inf_stem + "iebas",  # capiebas
                     "Vimpactindsg3": self.inf_stem + "iebat",  # capiebat
@@ -314,7 +316,7 @@ class LearningVerb:
                 }
 
             case _:
-                raise ValueError("Conjugation not recognised")
+                raise ValueError(f"Conjugation '{self.conjugation}' not recognised")
 
     def get(
         self,
@@ -332,7 +334,7 @@ class LearningVerb:
             ]
 
         except KeyError:
-            raise ValueError(
+            raise NoMeaningError(
                 f"No ending found for {person} {number} {tense} {voice} {mood}"
             )
 
@@ -371,17 +373,20 @@ class Noun:
         self, nom: str, gen: str, gender: str, meaning: Union[str, MultipleMeanings]
     ) -> None:
         if gender not in ("m", "f", "n"):
-            raise ValueError("Gender not recognised")
+            if gender not in ("masculine", "feminine", "neuter"):
+                raise InvalidInputError(f"Gender '{self.gender}' not recognised")
+            self.gender = SHORTHAND[gender]
+        else:
+            self.gender = gender
 
         self.nom = nom
         self.gen = gen
-        self.gender = gender
         self.meaning = meaning
 
         self.first = nom
 
         # Find declension
-        if nom in edge_cases.IRREGULAR_NOUNS:
+        if self.nom in edge_cases.IRREGULAR_NOUNS:
             self.endings = edge_cases.IRREGULAR_NOUNS[nom]
             self.declension = "irregular"
             return
@@ -419,9 +424,7 @@ class Noun:
             self.stem = self.gen[:-4]  # dierum > di-
 
         else:
-            raise ValueError(
-                "The genitive form is not valid (must end in ae, i, is, us, ei, arum, orum, um, uum, or erum)"
-            )
+            raise InvalidInputError(f"Genitive form {self.gen} is not valid")
 
         match self.declension:
             # First declension
@@ -556,7 +559,7 @@ class Noun:
                 }
 
             # Fifth declension plural only
-            # NOTE  not sure if this actually exists, implemented anyway
+            # NOTE:  not sure if this actually exists, implemented anyway
             case 15:
                 self.endings = {
                     "Nnompl": self.stem + "es",
@@ -581,7 +584,7 @@ class Noun:
                 self.endings["Ndatpl"] = self.stem + "ua"  # cornua
                 return
             elif self.declension == 5:
-                raise ValueError(
+                raise InvalidInputError(
                     f"Fifth declension nouns cannot be neuter (noun {self.nom})"
                 )
 
@@ -594,7 +597,7 @@ class Noun:
         try:
             return self.endings[f"N{SHORTHAND[case]}{SHORTHAND[number]}"]
         except KeyError:
-            raise ValueError(f"No ending found for case {case} or number {number}")
+            raise NoMeaningError(f"No ending found for case {case} and number {number}")
 
     def __repr__(self) -> str:
         return f"Noun({self.nom}, {self.gen}, {self.declension}, {self.meaning})"
@@ -630,8 +633,8 @@ class Adjective:
                 f"A{SHORTHAND[degree]}{SHORTHAND[gender]}{SHORTHAND[case]}{SHORTHAND[number]}"
             ]
         except KeyError:
-            raise ValueError(
-                f"No ending found for degree {degree}, gender {gender}, case {case} or number {number}"
+            raise NoMeaningError(
+                f"No ending found for degree {degree}, gender {gender}, case {case} and number {number}"
             )
 
     def __lt__(self, other: object) -> bool:
@@ -822,8 +825,8 @@ class Adjective3(Adjective):
             case 1:
                 # ingens, ingentis
                 if len(self.principle_parts) != 2:
-                    raise ValueError(
-                        "First-termination adjectives must have 2 principle parts"
+                    raise InvalidInputError(
+                        f"First-termination adjectives must have 2 principle parts (adjective '{self.first}')"
                     )
 
                 self.nom = self.principle_parts[0]
@@ -959,8 +962,8 @@ class Adjective3(Adjective):
             case 2:
                 # fortis, forte
                 if len(self.principle_parts) != 2:
-                    raise ValueError(
-                        "Second-termination adjectives must have 2 principle parts"
+                    raise InvalidInputError(
+                        f"Second-termination adjectives must have 2 principle parts (adjective '{self.first}')"
                     )
 
                 self.mascnom = self.principle_parts[0]
@@ -1094,8 +1097,8 @@ class Adjective3(Adjective):
             case 3:
                 # acer, acris, acre
                 if len(self.principle_parts) != 3:
-                    raise ValueError(
-                        "Third-termination adjectives must have 3 principle parts"
+                    raise InvalidInputError(
+                        f"Third-termination adjectives must have 3 principle parts (adjective '{self.first}')"
                     )
 
                 self.mascnom = self.principle_parts[0]
@@ -1227,7 +1230,9 @@ class Adjective3(Adjective):
                 }
 
             case _:
-                raise ValueError("Termination must be 1, 2 or 3")
+                raise InvalidInputError(
+                    f"Termination must be 1, 2 or 3 (given {self.termination})"
+                )
 
     def __repr__(self) -> str:
         return f"Adjective3({", ".join(self.principle_parts)}, {self.termination}, {self.meaning})"
@@ -1249,7 +1254,7 @@ class Pronoun:
         try:
             self.endings = edge_cases.PRONOUNS[pronoun]
         except KeyError:
-            raise ValueError(f"Pronoun {pronoun} not recognised")
+            raise InvalidInputError(f"Pronoun {pronoun} not recognised")
 
         self.pronoun = pronoun
         self.first = self.pronoun
@@ -1265,7 +1270,7 @@ class Pronoun:
                 f"P{SHORTHAND[gender]}{SHORTHAND[case]}{SHORTHAND[number]}"
             ]
         except KeyError:
-            raise ValueError(
+            raise NoMeaningError(
                 f"No ending found for gender {gender}, case {case} or number {number}"
             )
 
