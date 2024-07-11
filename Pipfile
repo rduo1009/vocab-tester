@@ -11,6 +11,7 @@ icecream = "*"
 mypy = "*"
 monkeytype = "*"
 bpython = "*"
+autoimport = "*"
 
 [requires]
 python_version = "3.12"
