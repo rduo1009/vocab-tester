@@ -329,10 +329,23 @@ class LearningVerb:
         mood: str,
     ):
         try:
+            short_tense = SHORTHAND[tense]
+            short_voice = SHORTHAND[voice]
+            short_mood = SHORTHAND[mood]
+            short_number = SHORTHAND[number]
+        except KeyError:
+            raise InvalidInputError(
+                f"Tense '{tense}', voice '{voice}', mood '{mood}', or number '{number}' not recognised"
+            )
+
+        if person and person not in (1, 2, 3):
+            raise InvalidInputError(f"Person '{person}' not recognised")
+
+        try:
             if mood == "infinitive":
-                return self.endings[f"V{SHORTHAND[tense]}{SHORTHAND[voice]}inf   "]
+                return self.endings[f"V{short_tense}{short_voice}inf   "]
             return self.endings[
-                f"V{SHORTHAND[tense]}{SHORTHAND[voice]}{SHORTHAND[mood]}{SHORTHAND[number]}{person}"
+                f"V{short_tense}{short_voice}{short_mood}{short_number}{person}"
             ]
 
         except KeyError:
@@ -552,12 +565,18 @@ class Noun:
 
     def get(self, case: str, number: str) -> str:
         try:
-            return self.endings[f"N{SHORTHAND[case]}{SHORTHAND[number]}"]
+            short_case = SHORTHAND[case]
+            short_number = SHORTHAND[number]
+        except KeyError:
+            raise InvalidInputError(f"Case {case} or number {number} not recognised")
+
+        try:
+            return self.endings[f"N{short_case}{short_number}"]
         except KeyError:
             raise NoMeaningError(f"No ending found for case {case} and number {number}")
 
     def __repr__(self) -> str:
-        return f"Noun({self.nom}, {self.gen}, {self.declension}, {self.meaning})"
+        return f"Noun({self.nom}, {self.gen}, {self.gender}, {self.meaning})"
 
     def __str__(self) -> str:
         output = StringIO()
@@ -586,8 +605,18 @@ class Noun:
 class Adjective:
     def get(self, degree: str, gender: str, case: str, number: str) -> str:
         try:
+            short_degree = SHORTHAND[degree]
+            short_gender = SHORTHAND[gender]
+            short_case = SHORTHAND[case]
+            short_number = SHORTHAND[number]
+        except KeyError:
+            raise InvalidInputError(
+                f"Degree {degree}, gender {gender}, case {case} or number {number} not recognised"
+            )
+
+        try:
             return self.endings[
-                f"A{SHORTHAND[degree]}{SHORTHAND[gender]}{SHORTHAND[case]}{SHORTHAND[number]}"
+                f"A{short_degree}{short_gender}{short_case}{short_number}"
             ]
         except KeyError:
             raise NoMeaningError(
@@ -1223,12 +1252,19 @@ class Pronoun:
 
     def get(self, gender: str, case: str, number: str):
         try:
-            return self.endings[
-                f"P{SHORTHAND[gender]}{SHORTHAND[case]}{SHORTHAND[number]}"
-            ]
+            short_gender = SHORTHAND[gender]
+            short_case = SHORTHAND[case]
+            short_number = SHORTHAND[number]
+        except KeyError:
+            raise InvalidInputError(
+                f"Gender {gender}, case {case} or number {number} not recognised"
+            )
+
+        try:
+            return self.endings[f"P{short_gender}{short_case}{short_number}"]
         except KeyError:
             raise NoMeaningError(
-                f"No ending found for gender {gender}, case {case} or number {number}"
+                f"No ending found for gender {gender}, case {case} and number {number}"
             )
 
     def __repr__(self) -> str:
