@@ -1,8 +1,6 @@
-from typing import Union
-
 # NOTE: I understand that there are deponents, but am keeping them for future
 # There also may be missing verbs
-THIRD_IO_VERBS = [
+THIRD_IO_VERBS: list[str] = [
     "abicio",
     "adicio",
     "aggredior",
@@ -48,7 +46,7 @@ def check_io_verb(pre: str) -> bool:
     return False
 
 
-IRREGULAR_VERBS = {
+IRREGULAR_VERBS: dict[str, dict[str, str]] = {
     "sum": {
         "Vpreactindsg1": "sum",
         "Vpreactindsg2": "es",
@@ -250,7 +248,7 @@ IRREGULAR_VERBS = {
     },
 }
 
-DERIVED_IRREGULAR_VERBS = {
+DERIVED_IRREGULAR_VERBS: dict[str, list[str]] = {
     "eo": [
         "abeo",
         "adeo",
@@ -277,7 +275,7 @@ DERIVED_IRREGULAR_VERBS = {
     ],
 }
 
-DERIVED_IRREGULAR_ENDINGS = {
+DERIVED_IRREGULAR_ENDINGS: dict[str, dict[str, str]] = {
     "eo": {
         "Vpreactindsg1": "eo",
         "Vpreactindsg2": "is",
@@ -326,7 +324,7 @@ def prefix(pre: str, endings: dict) -> dict:
     return {key: pre + value for key, value in endings.items()}
 
 
-def find_irregular_endings(pre: str) -> Union[bool, str]:
+def find_irregular_endings(pre: str) -> dict:
     if pre in IRREGULAR_VERBS:
         return IRREGULAR_VERBS[pre]
     for irregular_suffix, suffix_list in DERIVED_IRREGULAR_VERBS.items():
@@ -335,10 +333,10 @@ def find_irregular_endings(pre: str) -> Union[bool, str]:
                 pre.rstrip(irregular_suffix),
                 DERIVED_IRREGULAR_ENDINGS[irregular_suffix],
             )
-    return False
+    return dict()
 
 
-IRREGULAR_NOUNS = {
+IRREGULAR_NOUNS: dict[str, dict[str, str]] = {
     "ego": {
         "Nnomsg": "ego",
         "Nvocsg": "ego",
@@ -379,7 +377,7 @@ IRREGULAR_NOUNS = {
     },
 }
 
-LIS_ADJECTIVES = [
+LIS_ADJECTIVES: list[str] = [
     "facilis",
     "difficilis",
     "similis",
@@ -388,7 +386,7 @@ LIS_ADJECTIVES = [
     "humilis",
 ]
 
-IRREGULAR_COMPARATIVES = {
+IRREGULAR_COMPARATIVES: dict[str, list[str]] = {
     "bonus": ["melior", "optim"],
     "malus": ["peior", "pessim"],
     "magnus": ["maior", "maxim"],
@@ -399,7 +397,7 @@ IRREGULAR_COMPARATIVES = {
     "dexter": ["dexterior", "dextim"],
 }
 
-PRONOUNS = {
+PRONOUNS: dict[str, dict[str, str]] = {
     "hic": {
         "Pmnomsg": "hic",
         "Pmaccsg": "hunc",

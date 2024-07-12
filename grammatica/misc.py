@@ -6,7 +6,7 @@ from dataclasses import dataclass, field
 from typing import Union
 
 
-@dataclass(frozen=True, init=True)
+@dataclass(frozen=False, init=True)
 class MultipleMeanings:
     """Represents multiple meanings, with a best meaning and other meanings.
     If there is only one meaning, the other_meanings list will be empty.
@@ -43,4 +43,4 @@ class MultipleMeanings:
     def __post_init__(self) -> None:
         """If other_meanings is a string, convert it to a list."""
         if isinstance(self.other_meanings, str):
-            self.other_meanings = [self.other_meanings]
+            self.other_meanings: list = [self.other_meanings]

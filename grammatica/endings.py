@@ -11,7 +11,7 @@ from . import edge_cases
 from .misc import MultipleMeanings
 from .custom_exceptions import NoMeaningError, InvalidInputError
 
-SHORTHAND = {
+SHORTHAND: dict[str, str] = {
     # Verbs
     "singular": "sg",
     "plural": "pl",
@@ -60,19 +60,19 @@ class LearningVerb:
         ppp: Optional[str],
         meaning: Union[str, MultipleMeanings],
     ) -> None:
-        self.pre = pre
-        self.inf = inf
-        self.per = per
-        self.ppp = ppp if ppp else False
-        self.meaning = meaning
+        self.pre: str = pre
+        self.inf: str = inf
+        self.per: str = per
+        self.ppp: Union[str, bool] = ppp if ppp else False
+        self.meaning: Union[str, MultipleMeanings] = meaning
 
-        self.first = pre
-        print(self.pre)
+        self.first: str = pre
+        self.conjugation: int
+        self.endings: dict[str, str]
 
         # Conjugation edge cases
-        irregular_endings = edge_cases.find_irregular_endings(self.pre)
+        irregular_endings: dict = edge_cases.find_irregular_endings(self.pre)
         if irregular_endings:
-            print(irregular_endings)
             self.endings = irregular_endings
             self.conjugation = 0
             return
@@ -92,9 +92,9 @@ class LearningVerb:
         else:
             raise InvalidInputError(f"Infinitive '{self.inf}' is not valid")
 
-        self.pre_stem = pre[:-1]
-        self.inf_stem = inf[:-3]
-        self.per_stem = per[:-1]
+        self.pre_stem: str = pre[:-1]
+        self.inf_stem: str = inf[:-3]
+        self.per_stem: str = per[:-1]
 
         match self.conjugation:
             # First conjugation
@@ -329,16 +329,17 @@ class LearningVerb:
         mood: str,
     ):
         try:
-            short_tense = SHORTHAND[tense]
-            short_voice = SHORTHAND[voice]
-            short_mood = SHORTHAND[mood]
-            short_number = SHORTHAND[number]
+            short_tense: str = SHORTHAND[tense]
+            short_voice: str = SHORTHAND[voice]
+            short_mood: str = SHORTHAND[mood]
+            if number:
+                short_number: str = SHORTHAND[number]
         except KeyError:
             raise InvalidInputError(
                 f"Tense '{tense}', voice '{voice}', mood '{mood}', or number '{number}' not recognised"
             )
 
-        if person and person not in (1, 2, 3):
+        if person and person not in {1, 2, 3}:
             raise InvalidInputError(f"Person '{person}' not recognised")
 
         try:
@@ -357,7 +358,7 @@ class LearningVerb:
         return f"LearningVerb({self.pre}, {self.inf}, {self.per}, {self.ppp}, {self.meaning})"
 
     def __str__(self) -> str:
-        output = StringIO()
+        output: StringIO = StringIO()
         output.write(
             f"{self.meaning}: {self.pre}, {self.inf}, {self.per}, {self.ppp} ({self.conjugation})\n\n"
         )
@@ -377,7 +378,7 @@ class LearningVerb:
 
     def __lt__(self, other: object) -> bool:
         try:
-            return self.first < other.first
+            return self.first < other.first  # type: ignore
         except AttributeError:
             return NotImplemented
 
@@ -387,19 +388,23 @@ class Noun:
     def __init__(
         self, nom: str, gen: str, gender: str, meaning: Union[str, MultipleMeanings]
     ) -> None:
-        if gender not in ("m", "f", "n"):
-            if gender not in ("masculine", "feminine", "neuter"):
+        self.gender: str
+        if gender not in {"m", "f", "n"}:
+            if gender not in {"masculine", "feminine", "neuter"}:
                 raise InvalidInputError(f"Gender '{self.gender}' not recognised")
             self.gender = SHORTHAND[gender]
         else:
             self.gender = gender
 
-        self.nom = nom
-        self.gen = gen
-        self.meaning = meaning
-        self.plurale_tantum = False
+        self.nom: str = nom
+        self.gen: str = gen
+        self.meaning: Union[str, MultipleMeanings] = meaning
+        self.plurale_tantum: bool = False
 
-        self.first = nom
+        self.first: str = nom
+        self.declension: int
+        self.stem: str
+        self.endings: dict[str, str]
 
         # Find declension
         if self.nom in edge_cases.IRREGULAR_NOUNS:
@@ -565,8 +570,8 @@ class Noun:
 
     def get(self, case: str, number: str) -> str:
         try:
-            short_case = SHORTHAND[case]
-            short_number = SHORTHAND[number]
+            short_case: str = SHORTHAND[case]
+            short_number: str = SHORTHAND[number]
         except KeyError:
             raise InvalidInputError(f"Case {case} or number {number} not recognised")
 
@@ -579,7 +584,7 @@ class Noun:
         return f"Noun({self.nom}, {self.gen}, {self.gender}, {self.meaning})"
 
     def __str__(self) -> str:
-        output = StringIO()
+        output: StringIO = StringIO()
         output.write(f"{self.meaning}: {self.nom}, {self.gen} ({self.declension})")
 
         for _, item in self.endings.items():
@@ -597,18 +602,21 @@ class Noun:
 
     def __lt__(self, other: object) -> bool:
         try:
-            return self.first < other.first
+            return self.first < other.first  # type: ignore
         except AttributeError:
             return NotImplemented
 
 
 class Adjective:
+    def __init__(self) -> None:
+        self.endings: dict[str, str] = {}
+
     def get(self, degree: str, gender: str, case: str, number: str) -> str:
         try:
-            short_degree = SHORTHAND[degree]
-            short_gender = SHORTHAND[gender]
-            short_case = SHORTHAND[case]
-            short_number = SHORTHAND[number]
+            short_degree: str = SHORTHAND[degree]
+            short_gender: str = SHORTHAND[gender]
+            short_case: str = SHORTHAND[case]
+            short_number: str = SHORTHAND[number]
         except KeyError:
             raise InvalidInputError(
                 f"Degree {degree}, gender {gender}, case {case} or number {number} not recognised"
@@ -625,7 +633,7 @@ class Adjective:
 
     def __lt__(self, other: object) -> bool:
         try:
-            return self.first < other.first
+            return self.first < other.first  # type: ignore
         except AttributeError:
             return NotImplemented
 
@@ -644,17 +652,20 @@ class Adjective212(Adjective):
         neutnom: str,
         meaning: Union[str, MultipleMeanings],
     ) -> None:
-        self.mascnom = mascnom
-        self.femnom = femnom
-        self.neutnom = neutnom
-        self.meaning = meaning
+        self.mascnom: str = mascnom
+        self.femnom: str = femnom
+        self.neutnom: str = neutnom
+        self.meaning: Union[str, MultipleMeanings] = meaning
 
-        self.first = mascnom
+        self.first: str = mascnom
 
-        self.pos_stem = self.femnom[:-1]  # cara -> car-
+        self.pos_stem: str = self.femnom[:-1]  # cara -> car-
+        self.cmp_stem: str
+        self.spr_stem: str
+
         if self.mascnom in edge_cases.IRREGULAR_COMPARATIVES:
             self.cmp_stem = edge_cases.IRREGULAR_COMPARATIVES[self.mascnom][0]
-            self.spr_stem = edge_cases.IRREGULAR_SUPERLATIVES[self.mascnom][1]
+            self.spr_stem = edge_cases.IRREGULAR_COMPARATIVES[self.mascnom][1]
         else:
             self.cmp_stem = self.pos_stem + "ior"  # car- -> carior-
             if self.mascnom[:2] == "er":
@@ -664,7 +675,7 @@ class Adjective212(Adjective):
             else:
                 self.spr_stem = self.pos_stem + "issim"  # car- -> carissim-
 
-        self.endings = {
+        self.endings: dict[str, str] = {
             "Aposmnomsg": self.mascnom,  # carus
             "Aposmvocsg": self.pos_stem + "e",  # care
             "Aposmaccsg": self.pos_stem + "um",  # carum
@@ -779,7 +790,7 @@ class Adjective212(Adjective):
         return f"Adjective212({self.mascnom}, {self.femnom}, {self.neutnom}, {self.meaning})"
 
     def __str__(self) -> str:
-        output = StringIO()
+        output: StringIO = StringIO()
         output.write(f"{self.meaning}: {self.mascnom}, {self.femnom}, {self.neutnom}")
 
         for _, item in self.endings.items():
@@ -800,13 +811,23 @@ class Adjective3(Adjective):
         termination: int,
         meaning: Union[str, MultipleMeanings],
     ) -> None:
-        self.principle_parts = principle_parts
-        self.termination = termination
-        self.meaning = meaning
+        self.principle_parts: tuple[str, ...] = principle_parts
+        self.termination: int = termination
+        self.meaning: Union[str, MultipleMeanings] = meaning
 
-        self.first = self.principle_parts[0]
+        self.first: str = self.principle_parts[0]
 
-        match termination:
+        self.nom: str
+        self.gen: str
+        self.mascnom: str
+        self.femnom: str
+        self.neutnom: str
+        self.pos_stem: str
+        self.cmp_stem: str
+        self.spr_stem: str
+        self.endings: dict[str, str]
+
+        match self.termination:
             # First termination adjectives
             case 1:
                 # ingens, ingentis
@@ -821,17 +842,19 @@ class Adjective3(Adjective):
                 self.pos_stem = self.gen[:-2]  # ingentis -> ingent-
                 if self.nom in edge_cases.IRREGULAR_COMPARATIVES:
                     self.cmp_stem = edge_cases.IRREGULAR_COMPARATIVES[self.nom][0]
-                    self.spr_stem = edge_cases.IRREGULAR_SUPERLATIVES[self.nom][1]
+                    self.spr_stem = edge_cases.IRREGULAR_COMPARATIVES[self.nom][1]
                 else:
                     self.cmp_stem = self.pos_stem + "ior"  # ingent- > ingentior-
                     if self.mascnom[:2] == "er":
                         self.spr_stem = self.nom + "rim"  # miser- -> miserrim-
                     elif self.mascnom in edge_cases.LIS_ADJECTIVES:
-                        self.spr_stem = self.pos_stem + "lim"  # facil- -> facillim-
+                        self.spr_stem = (
+                            self.pos_stem + "lim"  # facil- -> facillim-
+                        )
                     else:
                         self.spr_stem = (
-                            self.pos_stem + "issim"
-                        )  # ingent- -> ingentissim-
+                            self.pos_stem + "issim"  # ingent- -> ingentissim-
+                        )
 
                 self.endings = {
                     "Aposmnomsg": self.nom,  # ingens
@@ -958,15 +981,21 @@ class Adjective3(Adjective):
                 self.pos_stem = self.mascnom[:-2]  # fortis -> fort-
                 if self.mascnom in edge_cases.IRREGULAR_COMPARATIVES:
                     self.cmp_stem = edge_cases.IRREGULAR_COMPARATIVES[self.mascnom][0]
-                    self.spr_stem = edge_cases.IRREGULAR_SUPERLATIVES[self.mascnom][1]
+                    self.spr_stem = edge_cases.IRREGULAR_COMPARATIVES[self.mascnom][1]
                 else:
                     self.cmp_stem = self.pos_stem + "ior"  # fort- -> fortior-
                     if self.mascnom[:2] == "er":
-                        self.spr_stem = self.masc_nom + "rim"  # miser- -> miserrim-
+                        self.spr_stem = (
+                            self.mascnom + "rim"  # miser- -> miserrim-
+                        )
                     elif self.mascnom in edge_cases.LIS_ADJECTIVES:
-                        self.spr_stem = self.pos_stem + "lim"  # facil- -> facillim-
+                        self.spr_stem = (
+                            self.pos_stem + "lim"  # facil- -> facillim-
+                        )
                     else:
-                        self.spr_stem = self.pos_stem + "issim"  # fort- -> fortissim-
+                        self.spr_stem = (
+                            self.pos_stem + "issim"  # fort- -> fortissim-
+                        )
 
                 self.endings = {
                     "Aposmnomsg": self.mascnom,  # fortis
@@ -1094,15 +1123,19 @@ class Adjective3(Adjective):
                 self.pos_stem = self.femnom[:-2]  # acris -> acr-
                 if self.mascnom in edge_cases.IRREGULAR_COMPARATIVES:
                     self.cmp_stem = edge_cases.IRREGULAR_COMPARATIVES[self.mascnom][0]
-                    self.spr_stem = edge_cases.IRREGULAR_SUPERLATIVES[self.mascnom][1]
+                    self.spr_stem = edge_cases.IRREGULAR_COMPARATIVES[self.mascnom][1]
                 else:
                     self.cmp_stem = self.pos_stem + "ior"  # acr- -> acrior-
                     if self.mascnom[:2] == "er":
-                        self.spr_stem = self.masc_nom + "rim"  # acer- -> acerrim-
+                        self.spr_stem = self.mascnom + "rim"  # acer- -> acerrim-
                     elif self.mascnom in edge_cases.LIS_ADJECTIVES:
-                        self.spr_stem = self.pos_stem + "lim"  # facil- -> facillim-
+                        self.spr_stem = (
+                            self.pos_stem + "lim"  # facil- -> facillim-
+                        )
                     else:
-                        self.spr_stem = self.pos_stem + "issim"  # levis -> levissim-
+                        self.spr_stem = (
+                            self.pos_stem + "issim"  # levis -> levissim-
+                        )
 
                 self.endings = {
                     "Aposmnomsg": self.mascnom,  # acer
@@ -1224,7 +1257,7 @@ class Adjective3(Adjective):
         return f"Adjective3({", ".join(self.principle_parts)}, {self.termination}, {self.meaning})"
 
     def __str__(self) -> str:
-        output = StringIO()
+        output: StringIO = StringIO()
         output.write(f"{self.meaning}: {", ".join(self.principle_parts)}\n")
         for _, item in self.endings.items():
             output.write(item + "\n")
@@ -1238,23 +1271,23 @@ class Adjective3(Adjective):
 class Pronoun:
     def __init__(self, pronoun: str, meaning: Union[str, MultipleMeanings]):
         try:
-            self.endings = edge_cases.PRONOUNS[pronoun]
+            self.endings: dict[str, str] = edge_cases.PRONOUNS[pronoun]
         except KeyError:
             raise InvalidInputError(f"Pronoun {pronoun} not recognised")
 
-        self.pronoun = pronoun
-        self.first = self.pronoun
-        self.meaning = meaning
+        self.pronoun: str = pronoun
+        self.first: str = self.pronoun
+        self.meaning: Union[str, MultipleMeanings] = meaning
 
-        self.mascnom = self.endings["Pmnomsg"]
-        self.femnom = self.endings["Pfnomsg"]
-        self.neutnom = self.endings["Pnnomsg"]
+        self.mascnom: str = self.endings["Pmnomsg"]
+        self.femnom: str = self.endings["Pfnomsg"]
+        self.neutnom: str = self.endings["Pnnomsg"]
 
     def get(self, gender: str, case: str, number: str):
         try:
-            short_gender = SHORTHAND[gender]
-            short_case = SHORTHAND[case]
-            short_number = SHORTHAND[number]
+            short_gender: str = SHORTHAND[gender]
+            short_case: str = SHORTHAND[case]
+            short_number: str = SHORTHAND[number]
         except KeyError:
             raise InvalidInputError(
                 f"Gender {gender}, case {case} or number {number} not recognised"
@@ -1271,7 +1304,7 @@ class Pronoun:
         return f"Pronoun({self.pronoun}, {self.meaning})"
 
     def __str__(self) -> str:
-        output = StringIO()
+        output: StringIO = StringIO()
         output.write(f"{self.meaning}: {self.mascnom}, {self.femnom}, {self.neutnom}\n")
         for _, item in self.endings.items():
             output.write(item + "\n")
@@ -1287,6 +1320,6 @@ class Pronoun:
 
     def __lt__(self, other: object) -> bool:
         try:
-            return self.first < other.first
+            return self.first < other.first  # type: ignore
         except AttributeError:
             return NotImplemented
