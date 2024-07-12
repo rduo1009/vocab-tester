@@ -1,4 +1,20 @@
 {
+    "workbench.layoutControl.enabled": false, 
+    "explorer.openEditors.visible": 1,
+    "explorer.autoReveal": false,
+    "workbench.sideBar.location": "right",
+    "editor.minimap.enabled": false,
+    "workbench.tree.indent": 12,
+    "workbench.tree.renderIndentGuides": "none",
+    "breadcrumbs.enabled": false,
+    "editor.padding.bottom": 14,
+    "editor.padding.top": 14,
+    "editor.codeLens": false,
+    "zenMode.fullScreen": true,
+    "window.commandCenter": false,
+    "editor.scrollbar.horizontal": "hidden",
+    "editor.scrollbar.vertical": "hidden",
+
     "files.exclude": {
         "**/__pycache__": true,
         "**/.mypy_cache": true,
@@ -9,7 +25,7 @@
     "ruff.nativeServer": true,
     "todohighlight.keywords": [
         {
-            "text": " HACK: ",
+            "text": " HACK:",
             "color": "#000",
             "backgroundColor": "#fab387",
         },
@@ -35,4 +51,7 @@
         "."
     ],
     "python.testing.unittestEnabled": false,
+    "mypy-type-checker.preferDaemon":true,
+    "mypy-type-checker.importStrategy":"fromEnvironment",
+    
 }
