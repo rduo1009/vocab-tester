@@ -21,7 +21,11 @@ def test_errors2():
         match="Tense 'past', voice 'active', mood 'indicative', or number 'makinganerror' not recognised",
     ):
         word = LearningVerb(
-            pre="celo", inf="celare", per="celavi", ppp="celatus", meaning="hide"
+            present="celo",
+            infinitive="celare",
+            perfect="celavi",
+            ppp="celatus",
+            meaning="hide",
         )
         word.get(
             person=1,
@@ -38,7 +42,11 @@ def test_errors3():
         match="Person '123415' not recognised",
     ):
         word = LearningVerb(
-            pre="celo", inf="celare", per="celavi", ppp="celatus", meaning="hide"
+            present="celo",
+            infinitive="celare",
+            perfect="celavi",
+            ppp="celatus",
+            meaning="hide",
         )
         word.get(123415, "singular", "present", "active", "indicative")
 
@@ -63,7 +71,11 @@ def test_lt():
 
 def test_firstconjugation():
     word = LearningVerb(
-        pre="celo", inf="celare", per="celavi", ppp="celatus", meaning="hide"
+        present="celo",
+        infinitive="celare",
+        perfect="celavi",
+        ppp="celatus",
+        meaning="hide",
     )
 
     assert word.get(1, "singular", "present", "active", "indicative") == "celo"
@@ -126,7 +138,7 @@ def test_firstconjugation():
 
 def test_secondconjugation():
     word = LearningVerb(
-        pre="pareo", inf="parere", per="parui", ppp=None, meaning="hide"
+        present="pareo", infinitive="parere", perfect="parui", ppp=None, meaning="hide"
     )
 
     assert word.get(1, "singular", "present", "active", "indicative") == "pareo"
@@ -179,7 +191,11 @@ def test_secondconjugation():
 
 def test_thirdconjugation():
     word = LearningVerb(
-        pre="desero", inf="deserere", per="deserui", ppp="desertus", meaning="desert"
+        present="desero",
+        infinitive="deserere",
+        perfect="deserui",
+        ppp="desertus",
+        meaning="desert",
     )
     assert word.get(1, "singular", "present", "active", "indicative") == "desero"
     assert word.get(2, "singular", "present", "active", "indicative") == "deseris"
@@ -243,9 +259,9 @@ def test_thirdconjugation():
 
 def test_thirdioconjugation():
     word = LearningVerb(
-        pre="patefacio",
-        inf="patefacere",
-        per="patefeci",
+        present="patefacio",
+        infinitive="patefacere",
+        perfect="patefeci",
         ppp="patefactus",
         meaning="reveal",
     )
@@ -341,7 +357,11 @@ def test_thirdioconjugation():
 
 def test_fourthconjugation():
     word = LearningVerb(
-        pre="aperio", inf="aperire", per="aperui", ppp="apertus", meaning="open"
+        present="aperio",
+        infinitive="aperire",
+        perfect="aperui",
+        ppp="apertus",
+        meaning="open",
     )
 
     assert word.get(1, "singular", "present", "active", "indicative") == "aperio"
@@ -404,7 +424,11 @@ def test_fourthconjugation():
 
 def test_irregularverb_eo():
     word = LearningVerb(
-        pre="abeo", inf="abire", per="abii", ppp="abitum", meaning="depart"
+        present="abeo",
+        infinitive="abire",
+        perfect="abii",
+        ppp="abitum",
+        meaning="depart",
     )
 
     assert word.get(1, "singular", "present", "active", "indicative") == "abeo"
