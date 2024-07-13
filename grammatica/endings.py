@@ -609,11 +609,12 @@ class Noun:
             return NotImplemented
 
 
+@total_ordering
 class Adjective:
     def __init__(
         self,
         *principal_parts: str,
-        termination: Optional[int],
+        termination: Optional[int] = None,
         declension: str,
         meaning: Union[str, MultipleMeanings],
     ) -> None:
@@ -631,6 +632,7 @@ class Adjective:
         self.meaning: Union[str, MultipleMeanings] = meaning
         self.declension: str = declension
         self.termination: Optional[int] = termination
+        self.irregular_flag: bool = False
 
         self.endings: dict[str, str]
 
@@ -653,6 +655,7 @@ class Adjective:
                 if self.mascnom in edge_cases.IRREGULAR_COMPARATIVES:
                     self.cmp_stem = edge_cases.IRREGULAR_COMPARATIVES[self.mascnom][0]
                     self.spr_stem = edge_cases.IRREGULAR_COMPARATIVES[self.mascnom][1]
+                    self.irregular_flag = True
                 else:
                     self.cmp_stem = self.pos_stem + "ior"  # car- -> carior-
                     if self.mascnom[:2] == "er":
@@ -671,7 +674,7 @@ class Adjective:
                     "Aposmablsg": self.pos_stem + "o",  # caro
                     "Aposmnompl": self.pos_stem + "i",  # cari
                     "Aposmvocpl": self.pos_stem + "i",  # cari
-                    "Aposmaccpl": self.pos_stem + "i",  # caros
+                    "Aposmaccpl": self.pos_stem + "os",  # caros
                     "Aposmgenpl": self.pos_stem + "orum",  # carorum
                     "Aposmdatpl": self.pos_stem + "is",  # caris
                     "Aposmablpl": self.pos_stem + "is",  # caris
@@ -723,9 +726,9 @@ class Adjective:
                     "Acmpfgenpl": self.cmp_stem + "um",  # cariorum
                     "Acmpfdatpl": self.cmp_stem + "ibus",  # carioribus
                     "Acmpfablpl": self.cmp_stem + "ibus",  # carioribus
-                    "Acmpnnomsg": self.pos_stem + "ius",  # carius
-                    "Acmpnvocsg": self.pos_stem + "ius",  # carius
-                    "Acmpnaccsg": self.pos_stem + "ius",  # carius
+                    "Acmpnnomsg": self.cmp_stem[:-3] + "ius",  # carius
+                    "Acmpnvocsg": self.cmp_stem[:-3] + "ius",  # carius
+                    "Acmpnaccsg": self.cmp_stem[:-3] + "ius",  # carius
                     "Acmpngensg": self.cmp_stem + "is",  # carioris
                     "Acmpndatsg": self.cmp_stem + "i",  # cariori
                     "Acmpnablsg": self.cmp_stem + "e",  # cariore
@@ -743,7 +746,7 @@ class Adjective:
                     "Asprmablsg": self.spr_stem + "o",  # carrissimo
                     "Asprmnompl": self.spr_stem + "i",  # carrissimi
                     "Asprmvocpl": self.spr_stem + "i",  # carrissimi
-                    "Asprmaccpl": self.spr_stem + "i",  # carrissimi
+                    "Asprmaccpl": self.spr_stem + "os",  # carrissimos
                     "Asprmgenpl": self.spr_stem + "orum",  # carrissimorum
                     "Asprmdatpl": self.spr_stem + "is",  # carrissimis
                     "Asprmablpl": self.spr_stem + "is",  # carrissimis
@@ -847,9 +850,9 @@ class Adjective:
                             "Aposngensg": self.mascgen,  # ingentis
                             "Aposndatsg": self.pos_stem + "i",  # ingenti
                             "Aposnablsg": self.pos_stem + "i",  # ingenti
-                            "Aposnnompl": self.pos_stem + "a",  # ingentia
-                            "Aposnvocpl": self.pos_stem + "a",  # ingentia
-                            "Aposnaccpl": self.pos_stem + "a",  # ingentia
+                            "Aposnnompl": self.pos_stem + "ia",  # ingentia
+                            "Aposnvocpl": self.pos_stem + "ia",  # ingentia
+                            "Aposnaccpl": self.pos_stem + "ia",  # ingentia
                             "Aposngenpl": self.pos_stem + "ium",  # ingentium
                             "Aposndatpl": self.pos_stem + "ibus",  # ingentibus
                             "Aposnablpl": self.pos_stem + "ibus",  # ingentibus
@@ -877,9 +880,9 @@ class Adjective:
                             "Acmpfgenpl": self.cmp_stem + "um",  # ingentiorum
                             "Acmpfdatpl": self.cmp_stem + "ibus",  # ingentioribus
                             "Acmpfablpl": self.cmp_stem + "ibus",  # ingentioribus
-                            "Acmpnnomsg": self.pos_stem + "ius",  # ingentius
-                            "Acmpnvocsg": self.pos_stem + "ius",  # ingentius
-                            "Acmpnaccsg": self.pos_stem + "ius",  # ingentius
+                            "Acmpnnomsg": self.cmp_stem[:-3] + "ius",  # ingentius
+                            "Acmpnvocsg": self.cmp_stem[:-3] + "ius",  # ingentius
+                            "Acmpnaccsg": self.cmp_stem[:-3] + "ius",  # ingentius
                             "Acmpngensg": self.cmp_stem + "is",  # ingentioris
                             "Acmpndatsg": self.cmp_stem + "i",  # ingentiori
                             "Acmpnablsg": self.cmp_stem + "e",  # ingentiore
@@ -897,7 +900,7 @@ class Adjective:
                             "Asprmablsg": self.spr_stem + "o",  # ingentissimo
                             "Asprmnompl": self.spr_stem + "i",  # ingentissimi
                             "Asprmvocpl": self.spr_stem + "i",  # ingentissimi
-                            "Asprmaccpl": self.spr_stem + "i",  # ingentissimi
+                            "Asprmaccpl": self.spr_stem + "os",  # ingentissimos
                             "Asprmgenpl": self.spr_stem + "orum",  # ingentissimorum
                             "Asprmdatpl": self.spr_stem + "is",  # ingentissimis
                             "Asprmablpl": self.spr_stem + "is",  # ingentissimis
@@ -905,7 +908,7 @@ class Adjective:
                             "Asprfvocsg": self.spr_stem + "a",  # ingentissima
                             "Asprfaccsg": self.spr_stem + "am",  # ingentissimam
                             "Asprfgensg": self.spr_stem + "ae",  # ingentissimae
-                            "Asprfdatsg": self.spr_stem + "ae",  # crrissimae
+                            "Asprfdatsg": self.spr_stem + "ae",  # ingentissimae
                             "Asprfablsg": self.spr_stem + "a",  # ingentissima
                             "Asprfnompl": self.spr_stem + "ae",  # ingentissimae
                             "Asprfvocpl": self.spr_stem + "ae",  # ingentissimae
@@ -989,9 +992,9 @@ class Adjective:
                             "Aposnnomsg": self.neutnom,  # forte
                             "Aposnvocsg": self.neutnom,  # forte
                             "Aposnaccsg": self.neutnom,  # forte
-                            "Aposngensg": self.pos_stem + "ium",  # fortium
-                            "Aposndatsg": self.pos_stem + "ibus",  # fortibus
-                            "Aposnablsg": self.pos_stem + "ibus",  # fortibus
+                            "Aposngensg": self.pos_stem + "is",  # fortis
+                            "Aposndatsg": self.pos_stem + "i",  # fortibus
+                            "Aposnablsg": self.pos_stem + "i",  # fortibus
                             "Aposnnompl": self.pos_stem + "ia",  # fortia
                             "Aposnvocpl": self.pos_stem + "ia",  # fortia
                             "Aposnaccpl": self.pos_stem + "ia",  # fortia
@@ -1022,9 +1025,9 @@ class Adjective:
                             "Acmpfgenpl": self.cmp_stem + "um",  # fortiorum
                             "Acmpfdatpl": self.cmp_stem + "ibus",  # fortioribus
                             "Acmpfablpl": self.cmp_stem + "ibus",  # fortioribus
-                            "Acmpnnomsg": self.pos_stem + "ius",  # fortius
-                            "Acmpnvocsg": self.pos_stem + "ius",  # fortius
-                            "Acmpnaccsg": self.pos_stem + "ius",  # fortius
+                            "Acmpnnomsg": self.cmp_stem[:-3] + "ius",  # fortius
+                            "Acmpnvocsg": self.cmp_stem[:-3] + "ius",  # fortius
+                            "Acmpnaccsg": self.cmp_stem[:-3] + "ius",  # fortius
                             "Acmpngensg": self.cmp_stem + "is",  # fortioris
                             "Acmpndatsg": self.cmp_stem + "i",  # fortiori
                             "Acmpnablsg": self.cmp_stem + "e",  # fortiore
@@ -1042,7 +1045,7 @@ class Adjective:
                             "Asprmablsg": self.spr_stem + "o",  # fortissimo
                             "Asprmnompl": self.spr_stem + "i",  # fortissimi
                             "Asprmvocpl": self.spr_stem + "i",  # fortissimi
-                            "Asprmaccpl": self.spr_stem + "i",  # fortissimi
+                            "Asprmaccpl": self.spr_stem + "os",  # fortissimi
                             "Asprmgenpl": self.spr_stem + "orum",  # fortissimorum
                             "Asprmdatpl": self.spr_stem + "is",  # fortissimis
                             "Asprmablpl": self.spr_stem + "is",  # fortissimis
@@ -1094,7 +1097,7 @@ class Adjective:
                             ][1]
                         else:
                             self.cmp_stem = self.pos_stem + "ior"  # acr- -> acrior-
-                            if self.mascnom[:2] == "er":
+                            if self.mascnom[-2:] == "er":
                                 self.spr_stem = (
                                     self.mascnom + "rim"
                                 )  # acer- -> acerrim-
@@ -1168,9 +1171,9 @@ class Adjective:
                             "Acmpfgenpl": self.cmp_stem + "um",  # acriorum
                             "Acmpfdatpl": self.cmp_stem + "ibus",  # acrioribus
                             "Acmpfablpl": self.cmp_stem + "ibus",  # acrioribus
-                            "Acmpnnomsg": self.pos_stem + "ius",  # acrius
-                            "Acmpnvocsg": self.pos_stem + "ius",  # acrius
-                            "Acmpnaccsg": self.pos_stem + "ius",  # acrius
+                            "Acmpnnomsg": self.cmp_stem[:-3] + "ius",  # acrius
+                            "Acmpnvocsg": self.cmp_stem[:-3] + "ius",  # acrius
+                            "Acmpnaccsg": self.cmp_stem[:-3] + "ius",  # acrius
                             "Acmpngensg": self.cmp_stem + "is",  # acrioris
                             "Acmpndatsg": self.cmp_stem + "i",  # acriori
                             "Acmpnablsg": self.cmp_stem + "e",  # acriore
@@ -1188,7 +1191,7 @@ class Adjective:
                             "Asprmablsg": self.spr_stem + "o",  # acerrimo
                             "Asprmnompl": self.spr_stem + "i",  # acerrimi
                             "Asprmvocpl": self.spr_stem + "i",  # acerrimi
-                            "Asprmaccpl": self.spr_stem + "i",  # acerrimi
+                            "Asprmaccpl": self.spr_stem + "os",  # acerrimos
                             "Asprmgenpl": self.spr_stem + "orum",  # acerrimorum
                             "Asprmdatpl": self.spr_stem + "is",  # acerrimis
                             "Asprmablpl": self.spr_stem + "is",  # acerrimis
@@ -1254,7 +1257,7 @@ class Adjective:
         return output.getvalue()
 
     def __repr__(self) -> str:
-        return f"Adjective({self.principal_parts}, {self.termination}, {self.declension}, {self.meaning})"
+        return f"Adjective({", ".join(self.principal_parts)}, {self.termination}, {self.declension}, {self.meaning})"
 
     def __hash__(self) -> int:
         return hash(
