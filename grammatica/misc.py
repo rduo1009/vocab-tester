@@ -6,7 +6,7 @@ from dataclasses import dataclass, field
 from typing import Union
 
 
-@dataclass(frozen=False, init=True)
+@dataclass(init=True)
 class MultipleMeanings:
     """Represents multiple meanings, with a best meaning and other meanings.
     If there is only one meaning, the other_meanings list will be empty.
