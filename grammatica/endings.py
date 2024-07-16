@@ -504,10 +504,9 @@ class LearningVerb:
         )
 
     def __lt__(self, other: object) -> bool:
-        try:
+        if hasattr(other, "first"):
             return self.first < other.first  # type: ignore
-        except AttributeError:
-            return NotImplemented
+        return NotImplemented
 
 
 @total_ordering
@@ -733,10 +732,9 @@ class Noun:
         return hash((self.nom, self.gen, self.gender, self.meaning))
 
     def __lt__(self, other: object) -> bool:
-        try:
+        if hasattr(other, "first"):
             return self.first < other.first  # type: ignore
-        except AttributeError:
-            return NotImplemented
+        return NotImplemented
 
 
 @total_ordering
@@ -1394,16 +1392,15 @@ class Adjective:
             (self.principal_parts, self.termination, self.declension, self.meaning)
         )
 
-    def __lt__(self, other: object) -> bool:
-        try:
-            return self.first < other.first  # type: ignore
-        except AttributeError:
-            return NotImplemented
-
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, Adjective):
             return NotImplemented
         return self.endings == other.endings
+
+    def __lt__(self, other: object) -> bool:
+        if hasattr(other, "first"):
+            return self.first < other.first  # type: ignore
+        return NotImplemented
 
 
 @total_ordering
@@ -1458,7 +1455,7 @@ class Pronoun:
         return self.endings == other.endings
 
     def __lt__(self, other: object) -> bool:
-        try:
+        if hasattr(other, "first"):
             return self.first < other.first  # type: ignore
-        except AttributeError:
+        else:
             return NotImplemented
