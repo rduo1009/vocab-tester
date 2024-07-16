@@ -55,16 +55,17 @@ class BasicWord:
 class LearningVerb:
     def __init__(
         self,
+        *,
         present: str,
         infinitive: str,
         perfect: str,
-        ppp: Optional[str],
+        ppp: str = "",
         meaning: Union[str, MultipleMeanings],
     ) -> None:
         self.present: str = present
         self.infinitive: str = infinitive
         self.perfect: str = perfect
-        self.ppp: Union[str, bool] = ppp if ppp else False
+        self.ppp: str = ppp
         self.meaning: Union[str, MultipleMeanings] = meaning
 
         self.first: str = self.present
@@ -323,8 +324,9 @@ class LearningVerb:
 
     def get(
         self,
-        person: Optional[int],
-        number: Optional[str],
+        *,
+        person: Optional[int] = None,
+        number: Optional[str] = None,
         tense: str,
         voice: str,
         mood: str,
@@ -389,7 +391,12 @@ class LearningVerb:
 @total_ordering
 class Noun:
     def __init__(
-        self, nom: str, gen: str, gender: str, meaning: Union[str, MultipleMeanings]
+        self,
+        *,
+        nominative: str,
+        genitive: str,
+        gender: str,
+        meaning: Union[str, MultipleMeanings],
     ) -> None:
         self.gender: str
         if gender not in {"m", "f", "n"}:
@@ -399,8 +406,8 @@ class Noun:
         else:
             self.gender = gender
 
-        self.nom: str = nom
-        self.gen: str = gen
+        self.nom: str = nominative
+        self.gen: str = genitive
         self.meaning: Union[str, MultipleMeanings] = meaning
         self.plurale_tantum: bool = False
 
@@ -411,43 +418,43 @@ class Noun:
 
         # Find declension
         if self.nom in edge_cases.IRREGULAR_NOUNS:
-            self.endings = edge_cases.IRREGULAR_NOUNS[nom]
+            self.endings = edge_cases.IRREGULAR_NOUNS[nominative]
             self.declension = 0
             return
 
-        if gen[-2:] == "ae":
+        if genitive[-2:] == "ae":
             self.declension = 1
             self.stem = self.gen[:-2]  # puellae -> puell-
-        elif gen[-1:] == "i":
+        elif genitive[-1:] == "i":
             self.declension = 2
             self.stem = self.gen[:-1]  # servi -> serv-
-        elif gen[-2:] == "is":
+        elif genitive[-2:] == "is":
             self.declension = 3
             self.stem = self.gen[:-2]  # canis -> can-
-        elif gen[-2:] == "us":
+        elif genitive[-2:] == "us":
             self.declension = 4
             self.stem = self.gen[:-2]  # manus -> man-
-        elif gen[-2:] == "ei":
+        elif genitive[-2:] == "ei":
             self.declension = 5
             self.stem = self.gen[:-2]  # diei > di-
 
-        elif gen[-4:] == "arum":
+        elif genitive[-4:] == "arum":
             self.declension = 1
             self.stem = self.gen[:-4]  # puellarum -> puell-
             self.plurale_tantum = True
-        elif gen[-4:] == "orum":
+        elif genitive[-4:] == "orum":
             self.declension = 2
             self.stem = self.gen[:-4]  # servorum -> serv-
             self.plurale_tantum = True
-        elif gen[-2:] == "um":
+        elif genitive[-2:] == "um":
             self.declension = 3
             self.stem = self.gen[:-2]  # canum -> can-
             self.plurale_tantum = True
-        elif gen[-4:] == "uum":
+        elif genitive[-4:] == "uum":
             self.declension = 4
             self.stem = self.gen[:-3]  # manuum -> man-
             self.plurale_tantum = True
-        elif gen[-4:] == "erum":
+        elif genitive[-4:] == "erum":
             self.declension = 5
             self.stem = self.gen[:-4]  # dierum > di-
             self.plurale_tantum = True
@@ -571,7 +578,7 @@ class Noun:
                 k: v for k, v in self.endings.items() if not k.endswith("sg")
             }
 
-    def get(self, case: str, number: str) -> str:
+    def get(self, *, case: str, number: str) -> str:
         try:
             short_case: str = SHORTHAND[case]
             short_number: str = SHORTHAND[number]
@@ -1230,7 +1237,7 @@ class Adjective:
             case _:
                 raise InvalidInputError(f"Declension {self.declension} not recognised")
 
-    def get(self, degree: str, gender: str, case: str, number: str) -> str:
+    def get(self, *, degree: str, gender: str, case: str, number: str) -> str:
         try:
             short_degree: str = SHORTHAND[degree]
             short_gender: str = SHORTHAND[gender]

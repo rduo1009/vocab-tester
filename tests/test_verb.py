@@ -9,472 +9,340 @@ from grammatica.custom_exceptions import NoMeaningError, InvalidInputError
 
 # TODO: Finish error checks
 def test_errors1():
-    with pytest.raises(
-        InvalidInputError, match="Infinitive 'makinganerror' is not valid"
-    ):
-        word = LearningVerb("test1", "makinganerror", "test3", "test4", "test5")  # noqa: F841
+    with pytest.raises(InvalidInputError, match="Infinitive 'makinganerror' is not valid"):
+        word = LearningVerb(present="test1", infinitive="makinganerror", perfect="test3", ppp="test4", meaning="test5")  # noqa: F841
 
 
 def test_errors2():
-    with pytest.raises(
-        InvalidInputError,
-        match="Tense 'past', voice 'active', mood 'indicative', or number 'makinganerror' not recognised",
-    ):
-        word = LearningVerb(
-            present="celo",
-            infinitive="celare",
-            perfect="celavi",
-            ppp="celatus",
-            meaning="hide",
-        )
-        word.get(
-            person=1,
-            number="makinganerror",
-            tense="past",
-            voice="active",
-            mood="indicative",
-        )
+    with pytest.raises(InvalidInputError, match="Tense 'past', voice 'active', mood 'indicative', or number 'makinganerror' not recognised"):
+        word = LearningVerb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
+        word.get(person=1, number="makinganerror", tense="past", voice="active", mood="indicative")
 
 
 def test_errors3():
-    with pytest.raises(
-        InvalidInputError,
-        match="Person '123415' not recognised",
-    ):
-        word = LearningVerb(
-            present="celo",
-            infinitive="celare",
-            perfect="celavi",
-            ppp="celatus",
-            meaning="hide",
-        )
-        word.get(123415, "singular", "present", "active", "indicative")
+    with pytest.raises(InvalidInputError, match="Person '123415' not recognised"):
+        word = LearningVerb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
+        word.get(person=123415, number="singular", tense="present", voice="active", mood="indicative")
 
 
 def test_repr():
-    word = LearningVerb("test1", "testare", "test3", "test4", "test5")
+    word = LearningVerb(present="test1", infinitive="testare", perfect="test3", ppp="test4", meaning="test5")
     assert word.__repr__() == "LearningVerb(test1, testare, test3, test4, test5)"
 
 
 def test_eq():
-    word1 = LearningVerb("test1", "testare", "test3", "test4", "test5")
-    word2 = LearningVerb("test1", "testare", "test3", "test4", "test5")
+    word1 = LearningVerb(present="test1", infinitive="testare", perfect="test3", ppp="test4", meaning="test5")
+    word2 = LearningVerb(present="test1", infinitive="testare", perfect="test3", ppp="test4", meaning="test5")
     assert word1 == word2
 
 
 def test_lt():
-    word1 = LearningVerb("test1", "testare", "test3", "test4", "test5")
-    word2 = LearningVerb("aaatest1", "testare", "test3", "test4", "test5")
+    word1 = LearningVerb(present="test1", infinitive="testare", perfect="test3", ppp="test4", meaning="test5")
+    word2 = LearningVerb(present="aaatest1", infinitive="testare", perfect="test3", ppp="test4", meaning="test5")
     # word2 must be smaller than word1 as word1.first = "test1" and word2.first = "aaatest1"
     assert word1 > word2
 
 
 def test_firstconjugation():
-    word = LearningVerb(
-        present="celo",
-        infinitive="celare",
-        perfect="celavi",
-        ppp="celatus",
-        meaning="hide",
-    )
+    word = LearningVerb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
 
-    assert word.get(1, "singular", "present", "active", "indicative") == "celo"
-    assert word.get(2, "singular", "present", "active", "indicative") == "celas"
-    assert word.get(3, "singular", "present", "active", "indicative") == "celat"
-    assert word.get(1, "plural", "present", "active", "indicative") == "celamus"
-    assert word.get(2, "plural", "present", "active", "indicative") == "celatis"
-    assert word.get(3, "plural", "present", "active", "indicative") == "celant"
+    assert word.get(person=1, number="singular", tense="present", voice="active", mood="indicative") == "celo"
+    assert word.get(person=2, number="singular", tense="present", voice="active", mood="indicative") == "celas"
+    assert word.get(person=3, number="singular", tense="present", voice="active", mood="indicative") == "celat"
+    assert word.get(person=1, number="plural", tense="present", voice="active", mood="indicative") == "celamus"
+    assert word.get(person=2, number="plural", tense="present", voice="active", mood="indicative") == "celatis"
+    assert word.get(person=3, number="plural", tense="present", voice="active", mood="indicative") == "celant"
 
-    assert word.get(1, "singular", "imperfect", "active", "indicative") == "celabam"
-    assert word.get(2, "singular", "imperfect", "active", "indicative") == "celabas"
-    assert word.get(3, "singular", "imperfect", "active", "indicative") == "celabat"
-    assert word.get(1, "plural", "imperfect", "active", "indicative") == "celabamus"
-    assert word.get(2, "plural", "imperfect", "active", "indicative") == "celabatis"
-    assert word.get(3, "plural", "imperfect", "active", "indicative") == "celabant"
+    assert word.get(person=1, number="singular", tense="imperfect", voice="active", mood="indicative") == "celabam"
+    assert word.get(person=2, number="singular", tense="imperfect", voice="active", mood="indicative") == "celabas"
+    assert word.get(person=3, number="singular", tense="imperfect", voice="active", mood="indicative") == "celabat"
+    assert word.get(person=1, number="plural", tense="imperfect", voice="active", mood="indicative") == "celabamus"
+    assert word.get(person=2, number="plural", tense="imperfect", voice="active", mood="indicative") == "celabatis"
+    assert word.get(person=3, number="plural", tense="imperfect", voice="active", mood="indicative") == "celabant"
 
-    assert word.get(1, "singular", "perfect", "active", "indicative") == "celavi"
-    assert word.get(2, "singular", "perfect", "active", "indicative") == "celavisti"
-    assert word.get(3, "singular", "perfect", "active", "indicative") == "celavit"
-    assert word.get(1, "plural", "perfect", "active", "indicative") == "celavimus"
-    assert word.get(2, "plural", "perfect", "active", "indicative") == "celavistis"
-    assert word.get(3, "plural", "perfect", "active", "indicative") == "celaverunt"
+    assert word.get(person=1, number="singular", tense="perfect", voice="active", mood="indicative") == "celavi"
+    assert word.get(person=2, number="singular", tense="perfect", voice="active", mood="indicative") == "celavisti"
+    assert word.get(person=3, number="singular", tense="perfect", voice="active", mood="indicative") == "celavit"
+    assert word.get(person=1, number="plural", tense="perfect", voice="active", mood="indicative") == "celavimus"
+    assert word.get(person=2, number="plural", tense="perfect", voice="active", mood="indicative") == "celavistis"
+    assert word.get(person=3, number="plural", tense="perfect", voice="active", mood="indicative") == "celaverunt"
 
-    assert word.get(1, "singular", "pluperfect", "active", "indicative") == "celaveram"
-    assert word.get(2, "singular", "pluperfect", "active", "indicative") == "celaveras"
-    assert word.get(3, "singular", "pluperfect", "active", "indicative") == "celaverat"
-    assert word.get(1, "plural", "pluperfect", "active", "indicative") == "celaveramus"
-    assert word.get(2, "plural", "pluperfect", "active", "indicative") == "celaveratis"
-    assert word.get(3, "plural", "pluperfect", "active", "indicative") == "celaverant"
+    assert word.get(person=1, number="singular", tense="pluperfect", voice="active", mood="indicative") == "celaveram"
+    assert word.get(person=2, number="singular", tense="pluperfect", voice="active", mood="indicative") == "celaveras"
+    assert word.get(person=3, number="singular", tense="pluperfect", voice="active", mood="indicative") == "celaverat"
+    assert word.get(person=1, number="plural", tense="pluperfect", voice="active", mood="indicative") == "celaveramus"
+    assert word.get(person=2, number="plural", tense="pluperfect", voice="active", mood="indicative") == "celaveratis"
+    assert word.get(person=3, number="plural", tense="pluperfect", voice="active", mood="indicative") == "celaverant"
 
-    assert word.get(None, None, "present", "active", "infinitive") == "celare"
+    assert word.get(tense="present", voice="active", mood="infinitive") == "celare"
 
-    assert word.get(2, "singular", "present", "active", "imperative") == "cela"
-    assert word.get(2, "plural", "present", "active", "imperative") == "celate"
+    assert word.get(person=2, number="singular", tense="present", voice="active", mood="imperative") == "cela"
+    assert word.get(person=2, number="plural", tense="present", voice="active", mood="imperative") == "celate"
 
-    assert word.get(1, "singular", "imperfect", "active", "subjunctive") == "celarem"
-    assert word.get(2, "singular", "imperfect", "active", "subjunctive") == "celares"
-    assert word.get(3, "singular", "imperfect", "active", "subjunctive") == "celaret"
-    assert word.get(1, "plural", "imperfect", "active", "subjunctive") == "celaremus"
-    assert word.get(2, "plural", "imperfect", "active", "subjunctive") == "celaretis"
-    assert word.get(3, "plural", "imperfect", "active", "subjunctive") == "celarent"
+    assert word.get(person=1, number="singular", tense="imperfect", voice="active", mood="subjunctive") == "celarem"
+    assert word.get(person=2, number="singular", tense="imperfect", voice="active", mood="subjunctive") == "celares"
+    assert word.get(person=3, number="singular", tense="imperfect", voice="active", mood="subjunctive") == "celaret"
+    assert word.get(person=1, number="plural", tense="imperfect", voice="active", mood="subjunctive") == "celaremus"
+    assert word.get(person=2, number="plural", tense="imperfect", voice="active", mood="subjunctive") == "celaretis"
+    assert word.get(person=3, number="plural", tense="imperfect", voice="active", mood="subjunctive") == "celarent"
 
-    assert (
-        word.get(1, "singular", "pluperfect", "active", "subjunctive") == "celavissem"
-    )
-    assert (
-        word.get(2, "singular", "pluperfect", "active", "subjunctive") == "celavisses"
-    )
-    assert (
-        word.get(3, "singular", "pluperfect", "active", "subjunctive") == "celavisset"
-    )
-    assert (
-        word.get(1, "plural", "pluperfect", "active", "subjunctive") == "celavissemus"
-    )
-    assert (
-        word.get(2, "plural", "pluperfect", "active", "subjunctive") == "celavissetis"
-    )
-    assert word.get(3, "plural", "pluperfect", "active", "subjunctive") == "celavissent"
+    assert word.get(person=1, number="singular", tense="pluperfect", voice="active", mood="subjunctive") == "celavissem"
+    assert word.get(person=2, number="singular", tense="pluperfect", voice="active", mood="subjunctive") == "celavisses"
+    assert word.get(person=3, number="singular", tense="pluperfect", voice="active", mood="subjunctive") == "celavisset"
+    assert word.get(person=1, number="plural", tense="pluperfect", voice="active", mood="subjunctive") == "celavissemus"
+    assert word.get(person=2, number="plural", tense="pluperfect", voice="active", mood="subjunctive") == "celavissetis"
+    assert word.get(person=3, number="plural", tense="pluperfect", voice="active", mood="subjunctive") == "celavissent"
 
 
 def test_secondconjugation():
-    word = LearningVerb(
-        present="pareo", infinitive="parere", perfect="parui", ppp=None, meaning="hide"
-    )
+    word = LearningVerb(present="pareo", infinitive="parere", perfect="parui", meaning="hide")
 
-    assert word.get(1, "singular", "present", "active", "indicative") == "pareo"
-    assert word.get(2, "singular", "present", "active", "indicative") == "pares"
-    assert word.get(3, "singular", "present", "active", "indicative") == "paret"
-    assert word.get(1, "plural", "present", "active", "indicative") == "paremus"
-    assert word.get(2, "plural", "present", "active", "indicative") == "paretis"
-    assert word.get(3, "plural", "present", "active", "indicative") == "parent"
+    assert word.get(person=1, number="singular", tense="present", voice="active", mood="indicative") == "pareo"
+    assert word.get(person=2, number="singular", tense="present", voice="active", mood="indicative") == "pares"
+    assert word.get(person=3, number="singular", tense="present", voice="active", mood="indicative") == "paret"
+    assert word.get(person=1, number="plural", tense="present", voice="active", mood="indicative") == "paremus"
+    assert word.get(person=2, number="plural", tense="present", voice="active", mood="indicative") == "paretis"
+    assert word.get(person=3, number="plural", tense="present", voice="active", mood="indicative") == "parent"
 
-    assert word.get(1, "singular", "imperfect", "active", "indicative") == "parebam"
-    assert word.get(2, "singular", "imperfect", "active", "indicative") == "parebas"
-    assert word.get(3, "singular", "imperfect", "active", "indicative") == "parebat"
-    assert word.get(1, "plural", "imperfect", "active", "indicative") == "parebamus"
-    assert word.get(2, "plural", "imperfect", "active", "indicative") == "parebatis"
-    assert word.get(3, "plural", "imperfect", "active", "indicative") == "parebant"
+    assert word.get(person=1, number="singular", tense="imperfect", voice="active", mood="indicative") == "parebam"
+    assert word.get(person=2, number="singular", tense="imperfect", voice="active", mood="indicative") == "parebas"
+    assert word.get(person=3, number="singular", tense="imperfect", voice="active", mood="indicative") == "parebat"
+    assert word.get(person=1, number="plural", tense="imperfect", voice="active", mood="indicative") == "parebamus"
+    assert word.get(person=2, number="plural", tense="imperfect", voice="active", mood="indicative") == "parebatis"
+    assert word.get(person=3, number="plural", tense="imperfect", voice="active", mood="indicative") == "parebant"
 
-    assert word.get(1, "singular", "perfect", "active", "indicative") == "parui"
-    assert word.get(2, "singular", "perfect", "active", "indicative") == "paruisti"
-    assert word.get(3, "singular", "perfect", "active", "indicative") == "paruit"
-    assert word.get(1, "plural", "perfect", "active", "indicative") == "paruimus"
-    assert word.get(2, "plural", "perfect", "active", "indicative") == "paruistis"
-    assert word.get(3, "plural", "perfect", "active", "indicative") == "paruerunt"
+    assert word.get(person=1, number="singular", tense="perfect", voice="active", mood="indicative") == "parui"
+    assert word.get(person=2, number="singular", tense="perfect", voice="active", mood="indicative") == "paruisti"
+    assert word.get(person=3, number="singular", tense="perfect", voice="active", mood="indicative") == "paruit"
+    assert word.get(person=1, number="plural", tense="perfect", voice="active", mood="indicative") == "paruimus"
+    assert word.get(person=2, number="plural", tense="perfect", voice="active", mood="indicative") == "paruistis"
+    assert word.get(person=3, number="plural", tense="perfect", voice="active", mood="indicative") == "paruerunt"
 
-    assert word.get(1, "singular", "pluperfect", "active", "indicative") == "parueram"
-    assert word.get(2, "singular", "pluperfect", "active", "indicative") == "parueras"
-    assert word.get(3, "singular", "pluperfect", "active", "indicative") == "paruerat"
-    assert word.get(1, "plural", "pluperfect", "active", "indicative") == "parueramus"
-    assert word.get(2, "plural", "pluperfect", "active", "indicative") == "parueratis"
-    assert word.get(3, "plural", "pluperfect", "active", "indicative") == "paruerant"
+    assert word.get(person=1, number="singular", tense="pluperfect", voice="active", mood="indicative") == "parueram"
+    assert word.get(person=2, number="singular", tense="pluperfect", voice="active", mood="indicative") == "parueras"
+    assert word.get(person=3, number="singular", tense="pluperfect", voice="active", mood="indicative") == "paruerat"
+    assert word.get(person=1, number="plural", tense="pluperfect", voice="active", mood="indicative") == "parueramus"
+    assert word.get(person=2, number="plural", tense="pluperfect", voice="active", mood="indicative") == "parueratis"
+    assert word.get(person=3, number="plural", tense="pluperfect", voice="active", mood="indicative") == "paruerant"
 
-    assert word.get(None, None, "present", "active", "infinitive") == "parere"
+    assert word.get(tense="present", voice="active", mood="infinitive") == "parere"
 
-    assert word.get(2, "singular", "present", "active", "imperative") == "pare"
-    assert word.get(2, "plural", "present", "active", "imperative") == "parete"
+    assert word.get(person=2, number="singular", tense="present", voice="active", mood="imperative") == "pare"
+    assert word.get(person=2, number="plural", tense="present", voice="active", mood="imperative") == "parete"
 
-    assert word.get(1, "singular", "imperfect", "active", "subjunctive") == "parerem"
-    assert word.get(2, "singular", "imperfect", "active", "subjunctive") == "pareres"
-    assert word.get(3, "singular", "imperfect", "active", "subjunctive") == "pareret"
-    assert word.get(1, "plural", "imperfect", "active", "subjunctive") == "pareremus"
-    assert word.get(2, "plural", "imperfect", "active", "subjunctive") == "pareretis"
-    assert word.get(3, "plural", "imperfect", "active", "subjunctive") == "parerent"
+    assert word.get(person=1, number="singular", tense="imperfect", voice="active", mood="subjunctive") == "parerem"
+    assert word.get(person=2, number="singular", tense="imperfect", voice="active", mood="subjunctive") == "pareres"
+    assert word.get(person=3, number="singular", tense="imperfect", voice="active", mood="subjunctive") == "pareret"
+    assert word.get(person=1, number="plural", tense="imperfect", voice="active", mood="subjunctive") == "pareremus"
+    assert word.get(person=2, number="plural", tense="imperfect", voice="active", mood="subjunctive") == "pareretis"
+    assert word.get(person=3, number="plural", tense="imperfect", voice="active", mood="subjunctive") == "parerent"
 
-    assert word.get(1, "singular", "pluperfect", "active", "subjunctive") == "paruissem"
-    assert word.get(2, "singular", "pluperfect", "active", "subjunctive") == "paruisses"
-    assert word.get(3, "singular", "pluperfect", "active", "subjunctive") == "paruisset"
-    assert word.get(1, "plural", "pluperfect", "active", "subjunctive") == "paruissemus"
-    assert word.get(2, "plural", "pluperfect", "active", "subjunctive") == "paruissetis"
-    assert word.get(3, "plural", "pluperfect", "active", "subjunctive") == "paruissent"
+    assert word.get(person=1, number="singular", tense="pluperfect", voice="active", mood="subjunctive") == "paruissem"
+    assert word.get(person=2, number="singular", tense="pluperfect", voice="active", mood="subjunctive") == "paruisses"
+    assert word.get(person=3, number="singular", tense="pluperfect", voice="active", mood="subjunctive") == "paruisset"
+    assert word.get(person=1, number="plural", tense="pluperfect", voice="active", mood="subjunctive") == "paruissemus"
+    assert word.get(person=2, number="plural", tense="pluperfect", voice="active", mood="subjunctive") == "paruissetis"
+    assert word.get(person=3, number="plural", tense="pluperfect", voice="active", mood="subjunctive") == "paruissent"
 
 
 def test_thirdconjugation():
-    word = LearningVerb(
-        present="desero",
-        infinitive="deserere",
-        perfect="deserui",
-        ppp="desertus",
-        meaning="desert",
-    )
-    assert word.get(1, "singular", "present", "active", "indicative") == "desero"
-    assert word.get(2, "singular", "present", "active", "indicative") == "deseris"
-    assert word.get(3, "singular", "present", "active", "indicative") == "deserit"
-    assert word.get(1, "plural", "present", "active", "indicative") == "deserimus"
-    assert word.get(2, "plural", "present", "active", "indicative") == "deseritis"
-    assert word.get(3, "plural", "present", "active", "indicative") == "deserunt"
+    word = LearningVerb(present="desero", infinitive="deserere", perfect="deserui", ppp="desertus", meaning="desert")
 
-    assert word.get(1, "singular", "imperfect", "active", "indicative") == "deserebam"
-    assert word.get(2, "singular", "imperfect", "active", "indicative") == "deserebas"
-    assert word.get(3, "singular", "imperfect", "active", "indicative") == "deserebat"
-    assert word.get(1, "plural", "imperfect", "active", "indicative") == "deserebamus"
-    assert word.get(2, "plural", "imperfect", "active", "indicative") == "deserebatis"
-    assert word.get(3, "plural", "imperfect", "active", "indicative") == "deserebant"
+    assert word.get(person=1, number="singular", tense="present", voice="active", mood="indicative") == "desero"
+    assert word.get(person=2, number="singular", tense="present", voice="active", mood="indicative") == "deseris"
+    assert word.get(person=3, number="singular", tense="present", voice="active", mood="indicative") == "deserit"
+    assert word.get(person=1, number="plural", tense="present", voice="active", mood="indicative") == "deserimus"
+    assert word.get(person=2, number="plural", tense="present", voice="active", mood="indicative") == "deseritis"
+    assert word.get(person=3, number="plural", tense="present", voice="active", mood="indicative") == "deserunt"
 
-    assert word.get(1, "singular", "perfect", "active", "indicative") == "deserui"
-    assert word.get(2, "singular", "perfect", "active", "indicative") == "deseruisti"
-    assert word.get(3, "singular", "perfect", "active", "indicative") == "deseruit"
-    assert word.get(1, "plural", "perfect", "active", "indicative") == "deseruimus"
-    assert word.get(2, "plural", "perfect", "active", "indicative") == "deseruistis"
-    assert word.get(3, "plural", "perfect", "active", "indicative") == "deseruerunt"
+    assert word.get(person=1, number="singular", tense="imperfect", voice="active", mood="indicative") == "deserebam"
+    assert word.get(person=2, number="singular", tense="imperfect", voice="active", mood="indicative") == "deserebas"
+    assert word.get(person=3, number="singular", tense="imperfect", voice="active", mood="indicative") == "deserebat"
+    assert word.get(person=1, number="plural", tense="imperfect", voice="active", mood="indicative") == "deserebamus"
+    assert word.get(person=2, number="plural", tense="imperfect", voice="active", mood="indicative") == "deserebatis"
+    assert word.get(person=3, number="plural", tense="imperfect", voice="active", mood="indicative") == "deserebant"
 
-    assert word.get(1, "singular", "pluperfect", "active", "indicative") == "deserueram"
-    assert word.get(2, "singular", "pluperfect", "active", "indicative") == "deserueras"
-    assert word.get(3, "singular", "pluperfect", "active", "indicative") == "deseruerat"
-    assert word.get(1, "plural", "pluperfect", "active", "indicative") == "deserueramus"
-    assert word.get(2, "plural", "pluperfect", "active", "indicative") == "deserueratis"
-    assert word.get(3, "plural", "pluperfect", "active", "indicative") == "deseruerant"
+    assert word.get(person=1, number="singular", tense="perfect", voice="active", mood="indicative") == "deserui"
+    assert word.get(person=2, number="singular", tense="perfect", voice="active", mood="indicative") == "deseruisti"
+    assert word.get(person=3, number="singular", tense="perfect", voice="active", mood="indicative") == "deseruit"
+    assert word.get(person=1, number="plural", tense="perfect", voice="active", mood="indicative") == "deseruimus"
+    assert word.get(person=2, number="plural", tense="perfect", voice="active", mood="indicative") == "deseruistis"
+    assert word.get(person=3, number="plural", tense="perfect", voice="active", mood="indicative") == "deseruerunt"
 
-    assert word.get(None, None, "present", "active", "infinitive") == "deserere"
+    assert word.get(person=1, number="singular", tense="pluperfect", voice="active", mood="indicative") == "deserueram"
+    assert word.get(person=2, number="singular", tense="pluperfect", voice="active", mood="indicative") == "deserueras"
+    assert word.get(person=3, number="singular", tense="pluperfect", voice="active", mood="indicative") == "deseruerat"
+    assert word.get(person=1, number="plural", tense="pluperfect", voice="active", mood="indicative") == "deserueramus"
+    assert word.get(person=2, number="plural", tense="pluperfect", voice="active", mood="indicative") == "deserueratis"
+    assert word.get(person=3, number="plural", tense="pluperfect", voice="active", mood="indicative") == "deseruerant"
 
-    assert word.get(2, "singular", "present", "active", "imperative") == "desere"
-    assert word.get(2, "plural", "present", "active", "imperative") == "deserite"
+    assert word.get(tense="present", voice="active", mood="infinitive") == "deserere"
 
-    assert word.get(1, "singular", "imperfect", "active", "subjunctive") == "desererem"
-    assert word.get(2, "singular", "imperfect", "active", "subjunctive") == "desereres"
-    assert word.get(3, "singular", "imperfect", "active", "subjunctive") == "desereret"
-    assert word.get(1, "plural", "imperfect", "active", "subjunctive") == "desereremus"
-    assert word.get(2, "plural", "imperfect", "active", "subjunctive") == "desereretis"
-    assert word.get(3, "plural", "imperfect", "active", "subjunctive") == "desererent"
+    assert word.get(person=2, number="singular", tense="present", voice="active", mood="imperative") == "desere"
+    assert word.get(person=2, number="plural", tense="present", voice="active", mood="imperative") == "deserite"
 
-    assert (
-        word.get(1, "singular", "pluperfect", "active", "subjunctive") == "deseruissem"
-    )
-    assert (
-        word.get(2, "singular", "pluperfect", "active", "subjunctive") == "deseruisses"
-    )
-    assert (
-        word.get(3, "singular", "pluperfect", "active", "subjunctive") == "deseruisset"
-    )
-    assert (
-        word.get(1, "plural", "pluperfect", "active", "subjunctive") == "deseruissemus"
-    )
-    assert (
-        word.get(2, "plural", "pluperfect", "active", "subjunctive") == "deseruissetis"
-    )
-    assert (
-        word.get(3, "plural", "pluperfect", "active", "subjunctive") == "deseruissent"
-    )
+    assert word.get(person=1, number="singular", tense="imperfect", voice="active", mood="subjunctive") == "desererem"
+    assert word.get(person=2, number="singular", tense="imperfect", voice="active", mood="subjunctive") == "desereres"
+    assert word.get(person=3, number="singular", tense="imperfect", voice="active", mood="subjunctive") == "desereret"
+    assert word.get(person=1, number="plural", tense="imperfect", voice="active", mood="subjunctive") == "desereremus"
+    assert word.get(person=2, number="plural", tense="imperfect", voice="active", mood="subjunctive") == "desereretis"
+    assert word.get(person=3, number="plural", tense="imperfect", voice="active", mood="subjunctive") == "desererent"
+
+    assert word.get(person=1, number="singular", tense="pluperfect", voice="active", mood="subjunctive") == "deseruissem"
+    assert word.get(person=2, number="singular", tense="pluperfect", voice="active", mood="subjunctive") == "deseruisses"
+    assert word.get(person=3, number="singular", tense="pluperfect", voice="active", mood="subjunctive") == "deseruisset"
+    assert word.get(person=1, number="plural", tense="pluperfect", voice="active", mood="subjunctive") == "deseruissemus"
+    assert word.get(person=2, number="plural", tense="pluperfect", voice="active", mood="subjunctive") == "deseruissetis"
+    assert word.get(person=3, number="plural", tense="pluperfect", voice="active", mood="subjunctive") == "deseruissent"
 
 
 def test_thirdioconjugation():
-    word = LearningVerb(
-        present="patefacio",
-        infinitive="patefacere",
-        perfect="patefeci",
-        ppp="patefactus",
-        meaning="reveal",
-    )
-    assert word.get(1, "singular", "present", "active", "indicative") == "patefacio"
-    assert word.get(2, "singular", "present", "active", "indicative") == "patefacis"
-    assert word.get(3, "singular", "present", "active", "indicative") == "patefacit"
-    assert word.get(1, "plural", "present", "active", "indicative") == "patefacimus"
-    assert word.get(2, "plural", "present", "active", "indicative") == "patefacitis"
-    assert word.get(3, "plural", "present", "active", "indicative") == "patefaciunt"
+    word = LearningVerb(present="patefacio", infinitive="patefacere", perfect="patefeci", ppp="patefactus", meaning="reveal")
 
-    assert (
-        word.get(1, "singular", "imperfect", "active", "indicative") == "patefaciebam"
-    )
-    assert (
-        word.get(2, "singular", "imperfect", "active", "indicative") == "patefaciebas"
-    )
-    assert (
-        word.get(3, "singular", "imperfect", "active", "indicative") == "patefaciebat"
-    )
-    assert (
-        word.get(1, "plural", "imperfect", "active", "indicative") == "patefaciebamus"
-    )
-    assert (
-        word.get(2, "plural", "imperfect", "active", "indicative") == "patefaciebatis"
-    )
-    assert word.get(3, "plural", "imperfect", "active", "indicative") == "patefaciebant"
+    assert word.get(person=1, number="singular", tense="present", voice="active", mood="indicative") == "patefacio"
+    assert word.get(person=2, number="singular", tense="present", voice="active", mood="indicative") == "patefacis"
+    assert word.get(person=3, number="singular", tense="present", voice="active", mood="indicative") == "patefacit"
+    assert word.get(person=1, number="plural", tense="present", voice="active", mood="indicative") == "patefacimus"
+    assert word.get(person=2, number="plural", tense="present", voice="active", mood="indicative") == "patefacitis"
+    assert word.get(person=3, number="plural", tense="present", voice="active", mood="indicative") == "patefaciunt"
 
-    assert word.get(1, "singular", "perfect", "active", "indicative") == "patefeci"
-    assert word.get(2, "singular", "perfect", "active", "indicative") == "patefecisti"
-    assert word.get(3, "singular", "perfect", "active", "indicative") == "patefecit"
-    assert word.get(1, "plural", "perfect", "active", "indicative") == "patefecimus"
-    assert word.get(2, "plural", "perfect", "active", "indicative") == "patefecistis"
-    assert word.get(3, "plural", "perfect", "active", "indicative") == "patefecerunt"
+    assert word.get(person=1, number="singular", tense="imperfect", voice="active", mood="indicative") == "patefaciebam"
+    assert word.get(person=2, number="singular", tense="imperfect", voice="active", mood="indicative") == "patefaciebas"
+    assert word.get(person=3, number="singular", tense="imperfect", voice="active", mood="indicative") == "patefaciebat"
+    assert word.get(person=1, number="plural", tense="imperfect", voice="active", mood="indicative") == "patefaciebamus"
+    assert word.get(person=2, number="plural", tense="imperfect", voice="active", mood="indicative") == "patefaciebatis"
+    assert word.get(person=3, number="plural", tense="imperfect", voice="active", mood="indicative") == "patefaciebant"
 
-    assert (
-        word.get(1, "singular", "pluperfect", "active", "indicative") == "patefeceram"
-    )
-    assert (
-        word.get(2, "singular", "pluperfect", "active", "indicative") == "patefeceras"
-    )
-    assert (
-        word.get(3, "singular", "pluperfect", "active", "indicative") == "patefecerat"
-    )
-    assert (
-        word.get(1, "plural", "pluperfect", "active", "indicative") == "patefeceramus"
-    )
-    assert (
-        word.get(2, "plural", "pluperfect", "active", "indicative") == "patefeceratis"
-    )
-    assert word.get(3, "plural", "pluperfect", "active", "indicative") == "patefecerant"
+    assert word.get(person=1, number="singular", tense="perfect", voice="active", mood="indicative") == "patefeci"
+    assert word.get(person=2, number="singular", tense="perfect", voice="active", mood="indicative") == "patefecisti"
+    assert word.get(person=3, number="singular", tense="perfect", voice="active", mood="indicative") == "patefecit"
+    assert word.get(person=1, number="plural", tense="perfect", voice="active", mood="indicative") == "patefecimus"
+    assert word.get(person=2, number="plural", tense="perfect", voice="active", mood="indicative") == "patefecistis"
+    assert word.get(person=3, number="plural", tense="perfect", voice="active", mood="indicative") == "patefecerunt"
 
-    assert word.get(None, None, "present", "active", "infinitive") == "patefacere"
+    assert word.get(person=1, number="singular", tense="pluperfect", voice="active", mood="indicative") == "patefeceram"
+    assert word.get(person=2, number="singular", tense="pluperfect", voice="active", mood="indicative") == "patefeceras"
+    assert word.get(person=3, number="singular", tense="pluperfect", voice="active", mood="indicative") == "patefecerat"
+    assert word.get(person=1, number="plural", tense="pluperfect", voice="active", mood="indicative") == "patefeceramus"
+    assert word.get(person=2, number="plural", tense="pluperfect", voice="active", mood="indicative") == "patefeceratis"
+    assert word.get(person=3, number="plural", tense="pluperfect", voice="active", mood="indicative") == "patefecerant"
 
-    assert word.get(2, "singular", "present", "active", "imperative") == "pateface"
-    assert word.get(2, "plural", "present", "active", "imperative") == "patefacite"
+    assert word.get(tense="present", voice="active", mood="infinitive") == "patefacere"
 
-    assert (
-        word.get(1, "singular", "imperfect", "active", "subjunctive") == "patefacerem"
-    )
-    assert (
-        word.get(2, "singular", "imperfect", "active", "subjunctive") == "patefaceres"
-    )
-    assert (
-        word.get(3, "singular", "imperfect", "active", "subjunctive") == "patefaceret"
-    )
-    assert (
-        word.get(1, "plural", "imperfect", "active", "subjunctive") == "patefaceremus"
-    )
-    assert (
-        word.get(2, "plural", "imperfect", "active", "subjunctive") == "patefaceretis"
-    )
-    assert word.get(3, "plural", "imperfect", "active", "subjunctive") == "patefacerent"
+    assert word.get(person=2, number="singular", tense="present", voice="active", mood="imperative") == "pateface"
+    assert word.get(person=2, number="plural", tense="present", voice="active", mood="imperative") == "patefacite"
 
-    assert (
-        word.get(1, "singular", "pluperfect", "active", "subjunctive") == "patefecissem"
-    )
-    assert (
-        word.get(2, "singular", "pluperfect", "active", "subjunctive") == "patefecisses"
-    )
-    assert (
-        word.get(3, "singular", "pluperfect", "active", "subjunctive") == "patefecisset"
-    )
-    assert (
-        word.get(1, "plural", "pluperfect", "active", "subjunctive") == "patefecissemus"
-    )
-    assert (
-        word.get(2, "plural", "pluperfect", "active", "subjunctive") == "patefecissetis"
-    )
-    assert (
-        word.get(3, "plural", "pluperfect", "active", "subjunctive") == "patefecissent"
-    )
+    assert word.get(person=1, number="singular", tense="imperfect", voice="active", mood="subjunctive") == "patefacerem"
+    assert word.get(person=2, number="singular", tense="imperfect", voice="active", mood="subjunctive") == "patefaceres"
+    assert word.get(person=3, number="singular", tense="imperfect", voice="active", mood="subjunctive") == "patefaceret"
+    assert word.get(person=1, number="plural", tense="imperfect", voice="active", mood="subjunctive") == "patefaceremus"
+    assert word.get(person=2, number="plural", tense="imperfect", voice="active", mood="subjunctive") == "patefaceretis"
+    assert word.get(person=3, number="plural", tense="imperfect", voice="active", mood="subjunctive") == "patefacerent"
 
+    assert word.get(person=1, number="singular", tense="pluperfect", voice="active", mood="subjunctive") == "patefecissem"
+    assert word.get(person=2, number="singular", tense="pluperfect", voice="active", mood="subjunctive") == "patefecisses"
+    assert word.get(person=3, number="singular", tense="pluperfect", voice="active", mood="subjunctive") == "patefecisset"
+    assert word.get(person=1, number="plural", tense="pluperfect", voice="active", mood="subjunctive") == "patefecissemus"
+    assert word.get(person=2, number="plural", tense="pluperfect", voice="active", mood="subjunctive") == "patefecissetis"
+    assert word.get(person=3, number="plural", tense="pluperfect", voice="active", mood="subjunctive") == "patefecissent"
 
 def test_fourthconjugation():
-    word = LearningVerb(
-        present="aperio",
-        infinitive="aperire",
-        perfect="aperui",
-        ppp="apertus",
-        meaning="open",
-    )
+    word = LearningVerb(present="aperio", infinitive="aperire", perfect="aperui", ppp="apertus", meaning="open")
 
-    assert word.get(1, "singular", "present", "active", "indicative") == "aperio"
-    assert word.get(2, "singular", "present", "active", "indicative") == "aperis"
-    assert word.get(3, "singular", "present", "active", "indicative") == "aperit"
-    assert word.get(1, "plural", "present", "active", "indicative") == "aperimus"
-    assert word.get(2, "plural", "present", "active", "indicative") == "aperitis"
-    assert word.get(3, "plural", "present", "active", "indicative") == "aperiunt"
+    assert word.get(person=1, number="singular", tense="present", voice="active", mood="indicative") == "aperio"
+    assert word.get(person=2, number="singular", tense="present", voice="active", mood="indicative") == "aperis"
+    assert word.get(person=3, number="singular", tense="present", voice="active", mood="indicative") == "aperit"
+    assert word.get(person=1, number="plural", tense="present", voice="active", mood="indicative") == "aperimus"
+    assert word.get(person=2, number="plural", tense="present", voice="active", mood="indicative") == "aperitis"
+    assert word.get(person=3, number="plural", tense="present", voice="active", mood="indicative") == "aperiunt"
 
-    assert word.get(1, "singular", "imperfect", "active", "indicative") == "aperiebam"
-    assert word.get(2, "singular", "imperfect", "active", "indicative") == "aperiebas"
-    assert word.get(3, "singular", "imperfect", "active", "indicative") == "aperiebat"
-    assert word.get(1, "plural", "imperfect", "active", "indicative") == "aperiebamus"
-    assert word.get(2, "plural", "imperfect", "active", "indicative") == "aperiebatis"
-    assert word.get(3, "plural", "imperfect", "active", "indicative") == "aperiebant"
+    assert word.get(person=1, number="singular", tense="imperfect", voice="active", mood="indicative") == "aperiebam"
+    assert word.get(person=2, number="singular", tense="imperfect", voice="active", mood="indicative") == "aperiebas"
+    assert word.get(person=3, number="singular", tense="imperfect", voice="active", mood="indicative") == "aperiebat"
+    assert word.get(person=1, number="plural", tense="imperfect", voice="active", mood="indicative") == "aperiebamus"
+    assert word.get(person=2, number="plural", tense="imperfect", voice="active", mood="indicative") == "aperiebatis"
+    assert word.get(person=3, number="plural", tense="imperfect", voice="active", mood="indicative") == "aperiebant"
 
-    assert word.get(1, "singular", "perfect", "active", "indicative") == "aperui"
-    assert word.get(2, "singular", "perfect", "active", "indicative") == "aperuisti"
-    assert word.get(3, "singular", "perfect", "active", "indicative") == "aperuit"
-    assert word.get(1, "plural", "perfect", "active", "indicative") == "aperuimus"
-    assert word.get(2, "plural", "perfect", "active", "indicative") == "aperuistis"
-    assert word.get(3, "plural", "perfect", "active", "indicative") == "aperuerunt"
+    assert word.get(person=1, number="singular", tense="perfect", voice="active", mood="indicative") == "aperui"
+    assert word.get(person=2, number="singular", tense="perfect", voice="active", mood="indicative") == "aperuisti"
+    assert word.get(person=3, number="singular", tense="perfect", voice="active", mood="indicative") == "aperuit"
+    assert word.get(person=1, number="plural", tense="perfect", voice="active", mood="indicative") == "aperuimus"
+    assert word.get(person=2, number="plural", tense="perfect", voice="active", mood="indicative") == "aperuistis"
+    assert word.get(person=3, number="plural", tense="perfect", voice="active", mood="indicative") == "aperuerunt"
 
-    assert word.get(1, "singular", "pluperfect", "active", "indicative") == "aperueram"
-    assert word.get(2, "singular", "pluperfect", "active", "indicative") == "aperueras"
-    assert word.get(3, "singular", "pluperfect", "active", "indicative") == "aperuerat"
-    assert word.get(1, "plural", "pluperfect", "active", "indicative") == "aperueramus"
-    assert word.get(2, "plural", "pluperfect", "active", "indicative") == "aperueratis"
-    assert word.get(3, "plural", "pluperfect", "active", "indicative") == "aperuerant"
+    assert word.get(person=1, number="singular", tense="pluperfect", voice="active", mood="indicative") == "aperueram"
+    assert word.get(person=2, number="singular", tense="pluperfect", voice="active", mood="indicative") == "aperueras"
+    assert word.get(person=3, number="singular", tense="pluperfect", voice="active", mood="indicative") == "aperuerat"
+    assert word.get(person=1, number="plural", tense="pluperfect", voice="active", mood="indicative") == "aperueramus"
+    assert word.get(person=2, number="plural", tense="pluperfect", voice="active", mood="indicative") == "aperueratis"
+    assert word.get(person=3, number="plural", tense="pluperfect", voice="active", mood="indicative") == "aperuerant"
 
-    assert word.get(None, None, "present", "active", "infinitive") == "aperire"
+    assert word.get(tense="present", voice="active", mood="infinitive") == "aperire"
 
-    assert word.get(2, "singular", "present", "active", "imperative") == "aperi"
-    assert word.get(2, "plural", "present", "active", "imperative") == "aperite"
+    assert word.get(person=2, number="singular", tense="present", voice="active", mood="imperative") == "aperi"
+    assert word.get(person=2, number="plural", tense="present", voice="active", mood="imperative") == "aperite"
 
-    assert word.get(1, "singular", "imperfect", "active", "subjunctive") == "aperirem"
-    assert word.get(2, "singular", "imperfect", "active", "subjunctive") == "aperires"
-    assert word.get(3, "singular", "imperfect", "active", "subjunctive") == "aperiret"
-    assert word.get(1, "plural", "imperfect", "active", "subjunctive") == "aperiremus"
-    assert word.get(2, "plural", "imperfect", "active", "subjunctive") == "aperiretis"
-    assert word.get(3, "plural", "imperfect", "active", "subjunctive") == "aperirent"
+    assert word.get(person=1, number="singular", tense="imperfect", voice="active", mood="subjunctive") == "aperirem"
+    assert word.get(person=2, number="singular", tense="imperfect", voice="active", mood="subjunctive") == "aperires"
+    assert word.get(person=3, number="singular", tense="imperfect", voice="active", mood="subjunctive") == "aperiret"
+    assert word.get(person=1, number="plural", tense="imperfect", voice="active", mood="subjunctive") == "aperiremus"
+    assert word.get(person=2, number="plural", tense="imperfect", voice="active", mood="subjunctive") == "aperiretis"
+    assert word.get(person=3, number="plural", tense="imperfect", voice="active", mood="subjunctive") == "aperirent"
 
-    assert (
-        word.get(1, "singular", "pluperfect", "active", "subjunctive") == "aperuissem"
-    )
-    assert (
-        word.get(2, "singular", "pluperfect", "active", "subjunctive") == "aperuisses"
-    )
-    assert (
-        word.get(3, "singular", "pluperfect", "active", "subjunctive") == "aperuisset"
-    )
-    assert (
-        word.get(1, "plural", "pluperfect", "active", "subjunctive") == "aperuissemus"
-    )
-    assert (
-        word.get(2, "plural", "pluperfect", "active", "subjunctive") == "aperuissetis"
-    )
-    assert word.get(3, "plural", "pluperfect", "active", "subjunctive") == "aperuissent"
+    assert word.get(person=1, number="singular", tense="pluperfect", voice="active", mood="subjunctive") == "aperuissem"
+    assert word.get(person=2, number="singular", tense="pluperfect", voice="active", mood="subjunctive") == "aperuisses"
+    assert word.get(person=3, number="singular", tense="pluperfect", voice="active", mood="subjunctive") == "aperuisset"
+    assert word.get(person=1, number="plural", tense="pluperfect", voice="active", mood="subjunctive") == "aperuissemus"
+    assert word.get(person=2, number="plural", tense="pluperfect", voice="active", mood="subjunctive") == "aperuissetis"
+    assert word.get(person=3, number="plural", tense="pluperfect", voice="active", mood="subjunctive") == "aperuissent"
 
 
 def test_irregularverb_eo():
-    word = LearningVerb(
-        present="abeo",
-        infinitive="abire",
-        perfect="abii",
-        ppp="abitum",
-        meaning="depart",
-    )
+    word = LearningVerb(present="abeo", infinitive="abire", perfect="abii", ppp="abitum", meaning="depart")
 
-    assert word.get(1, "singular", "present", "active", "indicative") == "abeo"
-    assert word.get(2, "singular", "present", "active", "indicative") == "abis"
-    assert word.get(3, "singular", "present", "active", "indicative") == "abit"
-    assert word.get(1, "plural", "present", "active", "indicative") == "abimus"
-    assert word.get(2, "plural", "present", "active", "indicative") == "abitis"
-    assert word.get(3, "plural", "present", "active", "indicative") == "abeunt"
+    assert word.get(person=1, number="singular", tense="present", voice="active", mood="indicative") == "abeo"
+    assert word.get(person=2, number="singular", tense="present", voice="active", mood="indicative") == "abis"
+    assert word.get(person=3, number="singular", tense="present", voice="active", mood="indicative") == "abit"
+    assert word.get(person=1, number="plural", tense="present", voice="active", mood="indicative") == "abimus"
+    assert word.get(person=2, number="plural", tense="present", voice="active", mood="indicative") == "abitis"
+    assert word.get(person=3, number="plural", tense="present", voice="active", mood="indicative") == "abeunt"
 
-    assert word.get(1, "singular", "imperfect", "active", "indicative") == "abibam"
+    assert word.get(person=1, number="singular", tense="imperfect", voice="active", mood="indicative") == "abibam"
+    assert word.get(person=2, number="singular", tense="imperfect", voice="active", mood="indicative") == "abibas"
+    assert word.get(person=3, number="singular", tense="imperfect", voice="active", mood="indicative") == "abibat"
+    assert word.get(person=1, number="plural", tense="imperfect", voice="active", mood="indicative") == "abibamus"
+    assert word.get(person=2, number="plural", tense="imperfect", voice="active", mood="indicative") == "abibatis"
+    assert word.get(person=3, number="plural", tense="imperfect", voice="active", mood="indicative") == "abibant"
 
-    assert word.get(2, "singular", "imperfect", "active", "indicative") == "abibas"
-    assert word.get(3, "singular", "imperfect", "active", "indicative") == "abibat"
-    assert word.get(1, "plural", "imperfect", "active", "indicative") == "abibamus"
-    assert word.get(2, "plural", "imperfect", "active", "indicative") == "abibatis"
-    assert word.get(3, "plural", "imperfect", "active", "indicative") == "abibant"
+    assert word.get(person=1, number="singular", tense="perfect", voice="active", mood="indicative") == "abii"
+    assert word.get(person=2, number="singular", tense="perfect", voice="active", mood="indicative") == "abisti"
+    assert word.get(person=3, number="singular", tense="perfect", voice="active", mood="indicative") == "abiit"
+    assert word.get(person=1, number="plural", tense="perfect", voice="active", mood="indicative") == "abiimus"
+    assert word.get(person=2, number="plural", tense="perfect", voice="active", mood="indicative") == "abistis"
+    assert word.get(person=3, number="plural", tense="perfect", voice="active", mood="indicative") == "abierunt"
 
-    assert word.get(1, "singular", "perfect", "active", "indicative") == "abii"
-    assert word.get(2, "singular", "perfect", "active", "indicative") == "abisti"
-    assert word.get(3, "singular", "perfect", "active", "indicative") == "abiit"
-    assert word.get(1, "plural", "perfect", "active", "indicative") == "abiimus"
-    assert word.get(2, "plural", "perfect", "active", "indicative") == "abistis"
-    assert word.get(3, "plural", "perfect", "active", "indicative") == "abierunt"
+    assert word.get(person=1, number="singular", tense="pluperfect", voice="active", mood="indicative") == "abieram"
+    assert word.get(person=2, number="singular", tense="pluperfect", voice="active", mood="indicative") == "abieras"
+    assert word.get(person=3, number="singular", tense="pluperfect", voice="active", mood="indicative") == "abierat"
+    assert word.get(person=1, number="plural", tense="pluperfect", voice="active", mood="indicative") == "abieramus"
+    assert word.get(person=2, number="plural", tense="pluperfect", voice="active", mood="indicative") == "abieratis"
+    assert word.get(person=3, number="plural", tense="pluperfect", voice="active", mood="indicative") == "abierant"
 
-    assert word.get(1, "singular", "pluperfect", "active", "indicative") == "abieram"
-    assert word.get(2, "singular", "pluperfect", "active", "indicative") == "abieras"
-    assert word.get(3, "singular", "pluperfect", "active", "indicative") == "abierat"
-    assert word.get(1, "plural", "pluperfect", "active", "indicative") == "abieramus"
-    assert word.get(2, "plural", "pluperfect", "active", "indicative") == "abieratis"
-    assert word.get(3, "plural", "pluperfect", "active", "indicative") == "abierant"
+    assert word.get(tense="present", voice="active", mood="infinitive") == "abire"
 
-    assert word.get(None, None, "present", "active", "infinitive") == "abire"
+    assert word.get(person=2, number="singular", tense="present", voice="active", mood="imperative") == "abi"
+    assert word.get(person=2, number="plural", tense="present", voice="active", mood="imperative") == "abite"
 
-    assert word.get(2, "singular", "present", "active", "imperative") == "abi"
-    assert word.get(2, "plural", "present", "active", "imperative") == "abite"
+    assert word.get(person=1, number="singular", tense="imperfect", voice="active", mood="subjunctive") == "abirem"
+    assert word.get(person=2, number="singular", tense="imperfect", voice="active", mood="subjunctive") == "abires"
+    assert word.get(person=3, number="singular", tense="imperfect", voice="active", mood="subjunctive") == "abiret"
+    assert word.get(person=1, number="plural", tense="imperfect", voice="active", mood="subjunctive") == "abiremus"
+    assert word.get(person=2, number="plural", tense="imperfect", voice="active", mood="subjunctive") == "abiretis"
+    assert word.get(person=3, number="plural", tense="imperfect", voice="active", mood="subjunctive") == "abirent"
 
-    assert word.get(1, "singular", "imperfect", "active", "subjunctive") == "abirem"
-    assert word.get(2, "singular", "imperfect", "active", "subjunctive") == "abires"
-    assert word.get(3, "singular", "imperfect", "active", "subjunctive") == "abiret"
-    assert word.get(1, "plural", "imperfect", "active", "subjunctive") == "abiremus"
-    assert word.get(2, "plural", "imperfect", "active", "subjunctive") == "abiretis"
-    assert word.get(3, "plural", "imperfect", "active", "subjunctive") == "abirent"
-
-    assert word.get(1, "singular", "pluperfect", "active", "subjunctive") == "abissem"
-    assert word.get(2, "singular", "pluperfect", "active", "subjunctive") == "abisses"
-    assert word.get(3, "singular", "pluperfect", "active", "subjunctive") == "abisset"
-    assert word.get(1, "plural", "pluperfect", "active", "subjunctive") == "abissemus"
-    assert word.get(2, "plural", "pluperfect", "active", "subjunctive") == "abissetis"
-    assert word.get(3, "plural", "pluperfect", "active", "subjunctive") == "abissent"
+    assert word.get(person=1, number="singular", tense="pluperfect", voice="active", mood="subjunctive") == "abissem"
+    assert word.get(person=2, number="singular", tense="pluperfect", voice="active", mood="subjunctive") == "abisses"
+    assert word.get(person=3, number="singular", tense="pluperfect", voice="active", mood="subjunctive") == "abisset"
+    assert word.get(person=1, number="plural", tense="pluperfect", voice="active", mood="subjunctive") == "abissemus"
+    assert word.get(person=2, number="plural", tense="pluperfect", voice="active", mood="subjunctive") == "abissetis"
+    assert word.get(person=3, number="plural", tense="pluperfect", voice="active", mood="subjunctive") == "abissent"
