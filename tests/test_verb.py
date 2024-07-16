@@ -346,3 +346,94 @@ def test_irregularverb_eo():
     assert word.get(person=1, number="plural", tense="pluperfect", voice="active", mood="subjunctive") == "abissemus"
     assert word.get(person=2, number="plural", tense="pluperfect", voice="active", mood="subjunctive") == "abissetis"
     assert word.get(person=3, number="plural", tense="pluperfect", voice="active", mood="subjunctive") == "abissent"
+
+def test_present_participle():
+    word = LearningVerb(present="porto", infinitive="portare", perfect="portavi", ppp="portatus", meaning="carry")
+
+    assert word.get(number="singular", tense="present", voice="active", mood="participle", participle_gender="masculine", participle_case="nominative") == "portans" 
+    assert word.get(number="singular", tense="present", voice="active", mood="participle", participle_gender="masculine", participle_case="vocative") == "portans"
+    assert word.get(number="singular", tense="present", voice="active", mood="participle", participle_gender="masculine", participle_case="accusative") == "portantem"
+    assert word.get(number="singular", tense="present", voice="active", mood="participle", participle_gender="masculine", participle_case="genitive") == "portantis"
+    assert word.get(number="singular", tense="present", voice="active", mood="participle", participle_gender="masculine", participle_case="dative") == "portanti"
+    assert word.get(number="singular", tense="present", voice="active", mood="participle", participle_gender="masculine", participle_case="ablative") == "portante"
+
+    assert word.get(number="plural", tense="present", voice="active", mood="participle", participle_gender="masculine", participle_case="nominative") == "portantes"
+    assert word.get(number="plural", tense="present", voice="active", mood="participle", participle_gender="masculine", participle_case="vocative") == "portantes"
+    assert word.get(number="plural", tense="present", voice="active", mood="participle", participle_gender="masculine", participle_case="accusative") == "portantes"
+    assert word.get(number="plural", tense="present", voice="active", mood="participle", participle_gender="masculine", participle_case="genitive") == "portantium"
+    assert word.get(number="plural", tense="present", voice="active", mood="participle", participle_gender="masculine", participle_case="dative") == "portantibus"
+    assert word.get(number="plural", tense="present", voice="active", mood="participle", participle_gender="masculine", participle_case="ablative") == "portantibus"
+
+    assert word.get(number="singular", tense="present", voice="active", mood="participle", participle_gender="feminine", participle_case="nominative") == "portans" 
+    assert word.get(number="singular", tense="present", voice="active", mood="participle", participle_gender="feminine", participle_case="vocative") == "portans"
+    assert word.get(number="singular", tense="present", voice="active", mood="participle", participle_gender="feminine", participle_case="accusative") == "portantem"
+    assert word.get(number="singular", tense="present", voice="active", mood="participle", participle_gender="feminine", participle_case="genitive") == "portantis"
+    assert word.get(number="singular", tense="present", voice="active", mood="participle", participle_gender="feminine", participle_case="dative") == "portanti"
+    assert word.get(number="singular", tense="present", voice="active", mood="participle", participle_gender="feminine", participle_case="ablative") == "portante"
+
+    assert word.get(number="plural", tense="present", voice="active", mood="participle", participle_gender="feminine", participle_case="nominative") == "portantes"
+    assert word.get(number="plural", tense="present", voice="active", mood="participle", participle_gender="feminine", participle_case="vocative") == "portantes"
+    assert word.get(number="plural", tense="present", voice="active", mood="participle", participle_gender="feminine", participle_case="accusative") == "portantes"
+    assert word.get(number="plural", tense="present", voice="active", mood="participle", participle_gender="feminine", participle_case="genitive") == "portantium"
+    assert word.get(number="plural", tense="present", voice="active", mood="participle", participle_gender="feminine", participle_case="dative") == "portantibus"
+    assert word.get(number="plural", tense="present", voice="active", mood="participle", participle_gender="feminine", participle_case="ablative") == "portantibus"
+
+    assert word.get(number="singular", tense="present", voice="active", mood="participle", participle_gender="neuter", participle_case="nominative") == "portans" 
+    assert word.get(number="singular", tense="present", voice="active", mood="participle", participle_gender="neuter", participle_case="vocative") == "portans"
+    assert word.get(number="singular", tense="present", voice="active", mood="participle", participle_gender="neuter", participle_case="accusative") == "portans"
+    assert word.get(number="singular", tense="present", voice="active", mood="participle", participle_gender="neuter", participle_case="genitive") == "portantis"
+    assert word.get(number="singular", tense="present", voice="active", mood="participle", participle_gender="neuter", participle_case="dative") == "portanti"
+    assert word.get(number="singular", tense="present", voice="active", mood="participle", participle_gender="neuter", participle_case="ablative") == "portante"
+
+    assert word.get(number="plural", tense="present", voice="active", mood="participle", participle_gender="neuter", participle_case="nominative") == "portantia"
+    assert word.get(number="plural", tense="present", voice="active", mood="participle", participle_gender="neuter", participle_case="vocative") == "portantia"
+    assert word.get(number="plural", tense="present", voice="active", mood="participle", participle_gender="neuter", participle_case="accusative") == "portantia"
+    assert word.get(number="plural", tense="present", voice="active", mood="participle", participle_gender="neuter", participle_case="genitive") == "portantium"
+    assert word.get(number="plural", tense="present", voice="active", mood="participle", participle_gender="neuter", participle_case="dative") == "portantibus"
+    assert word.get(number="plural", tense="present", voice="active", mood="participle", participle_gender="neuter", participle_case="ablative") == "portantibus"
+
+
+def test_ppp():
+    word = LearningVerb(present="porto", infinitive="portare", perfect="portavi", ppp="portatus", meaning="carry")
+
+    assert word.get(number="singular", tense="perfect", voice="passive", mood="participle", participle_gender="masculine", participle_case="nominative") == "portatus"
+    assert word.get(number="singular", tense="perfect", voice="passive", mood="participle", participle_gender="masculine", participle_case="vocative") == "portate"
+    assert word.get(number="singular", tense="perfect", voice="passive", mood="participle", participle_gender="masculine", participle_case="accusative") == "portatum"
+    assert word.get(number="singular", tense="perfect", voice="passive", mood="participle", participle_gender="masculine", participle_case="genitive") == "portati"
+    assert word.get(number="singular", tense="perfect", voice="passive", mood="participle", participle_gender="masculine", participle_case="dative") == "portato"
+    assert word.get(number="singular", tense="perfect", voice="passive", mood="participle", participle_gender="masculine", participle_case="ablative") == "portato"
+
+    assert word.get(number="plural", tense="perfect", voice="passive", mood="participle", participle_gender="masculine", participle_case="nominative") == "portati"
+    assert word.get(number="plural", tense="perfect", voice="passive", mood="participle", participle_gender="masculine", participle_case="vocative") == "portati"
+    assert word.get(number="plural", tense="perfect", voice="passive", mood="participle", participle_gender="masculine", participle_case="accusative") == "portatos"
+    assert word.get(number="plural", tense="perfect", voice="passive", mood="participle", participle_gender="masculine", participle_case="genitive") == "portatorum"
+    assert word.get(number="plural", tense="perfect", voice="passive", mood="participle", participle_gender="masculine", participle_case="dative") == "portatis"
+    assert word.get(number="plural", tense="perfect", voice="passive", mood="participle", participle_gender="masculine", participle_case="ablative") == "portatis"
+
+    assert word.get(number="singular", tense="perfect", voice="passive", mood="participle", participle_gender="feminine", participle_case="nominative") == "portata"
+    assert word.get(number="singular", tense="perfect", voice="passive", mood="participle", participle_gender="feminine", participle_case="vocative") == "portata"
+    assert word.get(number="singular", tense="perfect", voice="passive", mood="participle", participle_gender="feminine", participle_case="accusative") == "portatam"
+    assert word.get(number="singular", tense="perfect", voice="passive", mood="participle", participle_gender="feminine", participle_case="genitive") == "portatae"
+    assert word.get(number="singular", tense="perfect", voice="passive", mood="participle", participle_gender="feminine", participle_case="dative") == "portatae"
+    assert word.get(number="singular", tense="perfect", voice="passive", mood="participle", participle_gender="feminine", participle_case="ablative") == "portata"
+
+    assert word.get(number="plural", tense="perfect", voice="passive", mood="participle", participle_gender="feminine", participle_case="nominative") == "portatae"
+    assert word.get(number="plural", tense="perfect", voice="passive", mood="participle", participle_gender="feminine", participle_case="vocative") == "portatae"
+    assert word.get(number="plural", tense="perfect", voice="passive", mood="participle", participle_gender="feminine", participle_case="accusative") == "portatas"
+    assert word.get(number="plural", tense="perfect", voice="passive", mood="participle", participle_gender="feminine", participle_case="genitive") == "portatarum"
+    assert word.get(number="plural", tense="perfect", voice="passive", mood="participle", participle_gender="feminine", participle_case="dative") == "portatis"
+    assert word.get(number="plural", tense="perfect", voice="passive", mood="participle", participle_gender="feminine", participle_case="ablative") == "portatis"
+
+    assert word.get(number="singular", tense="perfect", voice="passive", mood="participle", participle_gender="neuter", participle_case="nominative") == "portatum"
+    assert word.get(number="singular", tense="perfect", voice="passive", mood="participle", participle_gender="neuter", participle_case="vocative") == "portatum"
+    assert word.get(number="singular", tense="perfect", voice="passive", mood="participle", participle_gender="neuter", participle_case="accusative") == "portatum"
+    assert word.get(number="singular", tense="perfect", voice="passive", mood="participle", participle_gender="neuter", participle_case="genitive") == "portati"
+    assert word.get(number="singular", tense="perfect", voice="passive", mood="participle", participle_gender="neuter", participle_case="dative") == "portato"
+    assert word.get(number="singular", tense="perfect", voice="passive", mood="participle", participle_gender="neuter", participle_case="ablative") == "portato"
+
+    assert word.get(number="plural", tense="perfect", voice="passive", mood="participle", participle_gender="neuter", participle_case="nominative") == "portata"
+    assert word.get(number="plural", tense="perfect", voice="passive", mood="participle", participle_gender="neuter", participle_case="vocative") == "portata"
+    assert word.get(number="plural", tense="perfect", voice="passive", mood="participle", participle_gender="neuter", participle_case="accusative") == "portata"
+    assert word.get(number="plural", tense="perfect", voice="passive", mood="participle", participle_gender="neuter", participle_case="genitive") == "portatorum"
+    assert word.get(number="plural", tense="perfect", voice="passive", mood="participle", participle_gender="neuter", participle_case="dative") == "portatis"
+    assert word.get(number="plural", tense="perfect", voice="passive", mood="participle", participle_gender="neuter", participle_case="ablative") == "portatis"

@@ -94,9 +94,9 @@ class LearningVerb:
         else:
             raise InvalidInputError(f"Infinitive '{self.infinitive}' is not valid")
 
-        self.pre_stem: str = present[:-1]
-        self.inf_stem: str = infinitive[:-3]
-        self.per_stem: str = perfect[:-1]
+        self.pre_stem: str = self.present[:-1]
+        self.inf_stem: str = self.infinitive[:-3]
+        self.per_stem: str = self.perfect[:-1]
 
         match self.conjugation:
             # First conjugation
@@ -322,6 +322,87 @@ class LearningVerb:
             case _:
                 raise ValueError(f"Conjugation '{self.conjugation}' not recognised")
 
+        # Participles
+        if self.ppp:
+            self.preptc_stem: str = self.infinitive[:-2]
+            self.ppp_stem: str = self.ppp[:-2]
+            self.endings.update(
+                {
+                    "Vpreactptcmnomsg": self.preptc_stem + "ns",
+                    "Vpreactptcmvocsg": self.preptc_stem + "ns",
+                    "Vpreactptcmaccsg": self.preptc_stem + "ntem",
+                    "Vpreactptcmgensg": self.preptc_stem + "ntis",
+                    "Vpreactptcmdatsg": self.preptc_stem + "nti",
+                    "Vpreactptcmablsg": self.preptc_stem + "nte",
+                    "Vpreactptcmnompl": self.preptc_stem + "ntes",
+                    "Vpreactptcmvocpl": self.preptc_stem + "ntes",
+                    "Vpreactptcmaccpl": self.preptc_stem + "ntes",
+                    "Vpreactptcmgenpl": self.preptc_stem + "ntium",
+                    "Vpreactptcmdatpl": self.preptc_stem + "ntibus",
+                    "Vpreactptcmablpl": self.preptc_stem + "ntibus",
+                    "Vpreactptcfnomsg": self.preptc_stem + "ns",
+                    "Vpreactptcfvocsg": self.preptc_stem + "ns",
+                    "Vpreactptcfaccsg": self.preptc_stem + "ntem",
+                    "Vpreactptcfgensg": self.preptc_stem + "ntis",
+                    "Vpreactptcfdatsg": self.preptc_stem + "nti",
+                    "Vpreactptcfablsg": self.preptc_stem + "nte",
+                    "Vpreactptcfnompl": self.preptc_stem + "ntes",
+                    "Vpreactptcfvocpl": self.preptc_stem + "ntes",
+                    "Vpreactptcfaccpl": self.preptc_stem + "ntes",
+                    "Vpreactptcfgenpl": self.preptc_stem + "ntium",
+                    "Vpreactptcfdatpl": self.preptc_stem + "ntibus",
+                    "Vpreactptcfablpl": self.preptc_stem + "ntibus",
+                    "Vpreactptcnnomsg": self.preptc_stem + "ns",
+                    "Vpreactptcnvocsg": self.preptc_stem + "ns",
+                    "Vpreactptcnaccsg": self.preptc_stem + "ns",
+                    "Vpreactptcngensg": self.preptc_stem + "ntis",
+                    "Vpreactptcndatsg": self.preptc_stem + "nti",
+                    "Vpreactptcnablsg": self.preptc_stem + "nte",
+                    "Vpreactptcnnompl": self.preptc_stem + "ntia",
+                    "Vpreactptcnvocpl": self.preptc_stem + "ntia",
+                    "Vpreactptcnaccpl": self.preptc_stem + "ntia",
+                    "Vpreactptcngenpl": self.preptc_stem + "ntium",
+                    "Vpreactptcndatpl": self.preptc_stem + "ntibus",
+                    "Vpreactptcnablpl": self.preptc_stem + "ntibus",
+                    "Vperpasptcmnomsg": self.ppp,
+                    "Vperpasptcmvocsg": self.ppp_stem + "e",
+                    "Vperpasptcmaccsg": self.ppp_stem + "um",
+                    "Vperpasptcmgensg": self.ppp_stem + "i",
+                    "Vperpasptcmdatsg": self.ppp_stem + "o",
+                    "Vperpasptcmablsg": self.ppp_stem + "o",
+                    "Vperpasptcmnompl": self.ppp_stem + "i",
+                    "Vperpasptcmvocpl": self.ppp_stem + "i",
+                    "Vperpasptcmaccpl": self.ppp_stem + "os",
+                    "Vperpasptcmgenpl": self.ppp_stem + "orum",
+                    "Vperpasptcmdatpl": self.ppp_stem + "is",
+                    "Vperpasptcmablpl": self.ppp_stem + "is",
+                    "Vperpasptcfnomsg": self.ppp_stem + "a",
+                    "Vperpasptcfvocsg": self.ppp_stem + "a",
+                    "Vperpasptcfaccsg": self.ppp_stem + "am",
+                    "Vperpasptcfgensg": self.ppp_stem + "ae",
+                    "Vperpasptcfdatsg": self.ppp_stem + "ae",
+                    "Vperpasptcfablsg": self.ppp_stem + "a",
+                    "Vperpasptcfnompl": self.ppp_stem + "ae",
+                    "Vperpasptcfvocpl": self.ppp_stem + "ae",
+                    "Vperpasptcfaccpl": self.ppp_stem + "as",
+                    "Vperpasptcfgenpl": self.ppp_stem + "arum",
+                    "Vperpasptcfdatpl": self.ppp_stem + "is",
+                    "Vperpasptcfablpl": self.ppp_stem + "is",
+                    "Vperpasptcnnomsg": self.ppp_stem + "um",
+                    "Vperpasptcnvocsg": self.ppp_stem + "um",
+                    "Vperpasptcnaccsg": self.ppp_stem + "um",
+                    "Vperpasptcngensg": self.ppp_stem + "i",
+                    "Vperpasptcndatsg": self.ppp_stem + "o",
+                    "Vperpasptcnablsg": self.ppp_stem + "o",
+                    "Vperpasptcnnompl": self.ppp_stem + "a",
+                    "Vperpasptcnvocpl": self.ppp_stem + "a",
+                    "Vperpasptcnaccpl": self.ppp_stem + "a",
+                    "Vperpasptcngenpl": self.ppp_stem + "orum",
+                    "Vperpasptcndatpl": self.ppp_stem + "is",
+                    "Vperpasptcnablpl": self.ppp_stem + "is",
+                }
+            )
+
     def get(
         self,
         *,
@@ -330,32 +411,73 @@ class LearningVerb:
         tense: str,
         voice: str,
         mood: str,
+        participle_gender: Optional[str] = None,
+        participle_case: Optional[str] = None,
     ):
-        try:
-            short_tense: str = SHORTHAND[tense]
-            short_voice: str = SHORTHAND[voice]
-            short_mood: str = SHORTHAND[mood]
-            if number:
-                short_number: str = SHORTHAND[number]
-        except KeyError:
-            raise InvalidInputError(
-                f"Tense '{tense}', voice '{voice}', mood '{mood}', or number '{number}' not recognised"
-            )
+        short_tense: str
+        short_voice: str
+        short_mood: str
+        short_number: str
 
-        if person and person not in {1, 2, 3}:
-            raise InvalidInputError(f"Person '{person}' not recognised")
+        if mood == "participle":
+            try:
+                short_tense = SHORTHAND[tense]
+                short_voice = SHORTHAND[voice]
+                if number:
+                    short_number = SHORTHAND[number]
+                else:
+                    raise InvalidInputError("Number not given")
+                if participle_case and participle_gender:
+                    short_gender: str = SHORTHAND[participle_gender]
+                    short_case: str = SHORTHAND[participle_case]
+                else:
+                    raise InvalidInputError("Gender or case not given")
+            except KeyError:
+                raise InvalidInputError(
+                    f"Tense '{tense}', voice '{voice}', gender '{participle_gender}', case '{participle_case}', or number '{number}' not recognised"
+                )
 
-        try:
-            if mood == "infinitive":
-                return self.endings[f"V{short_tense}{short_voice}inf   "]
-            return self.endings[
-                f"V{short_tense}{short_voice}{short_mood}{short_number}{person}"
-            ]
+            if person:
+                raise InvalidInputError(
+                    f"Participle cannot have a person (person '{person}')"
+                )
 
-        except KeyError:
-            raise NoMeaningError(
-                f"No ending found for {person} {number} {tense} {voice} {mood}"
-            )
+            try:
+                return self.endings[
+                    f"V{short_tense}{short_voice}ptc{short_gender}{short_case}{short_number}"
+                ]
+
+            except KeyError:
+                raise NoMeaningError(
+                    f"No ending found for {person} {number} {tense} {voice} {mood}"
+                )
+
+        else:
+            try:
+                short_tense = SHORTHAND[tense]
+                short_voice = SHORTHAND[voice]
+                short_mood = SHORTHAND[mood]
+                if number:
+                    short_number = SHORTHAND[number]
+            except KeyError:
+                raise InvalidInputError(
+                    f"Tense '{tense}', voice '{voice}', mood '{mood}', or number '{number}' not recognised"
+                )
+
+            if person and person not in {1, 2, 3}:
+                raise InvalidInputError(f"Person '{person}' not recognised")
+
+            try:
+                if mood == "infinitive":
+                    return self.endings[f"V{short_tense}{short_voice}inf   "]
+                return self.endings[
+                    f"V{short_tense}{short_voice}{short_mood}{short_number}{person}"
+                ]
+
+            except KeyError:
+                raise NoMeaningError(
+                    f"No ending found for {person} {number} {tense} {voice} {mood}"
+                )
 
     def __repr__(self) -> str:
         return f"LearningVerb({self.present}, {self.infinitive}, {self.perfect}, {self.ppp}, {self.meaning})"
@@ -1286,7 +1408,7 @@ class Adjective:
 
 @total_ordering
 class Pronoun:
-    def __init__(self, pronoun: str, meaning: Union[str, MultipleMeanings]):
+    def __init__(self, *, pronoun: str, meaning: Union[str, MultipleMeanings]):
         try:
             self.endings: dict[str, str] = edge_cases.PRONOUNS[pronoun]
         except KeyError:
