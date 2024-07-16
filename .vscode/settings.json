@@ -52,6 +52,11 @@
     ],
     "python.testing.unittestEnabled": false,
     "mypy-type-checker.preferDaemon":true,
-    "mypy-type-checker.importStrategy":"fromEnvironment",
+    "mypy-type-checker.importStrategy": "fromEnvironment",
+    "files.autoSave": "afterDelay",
+    "files.autoSaveDelay": 3000,
+    "ruff.exclude": [
+        "test_*.py"
+    ],
     
 }
