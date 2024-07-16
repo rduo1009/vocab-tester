@@ -414,31 +414,70 @@ class LearningVerb:
         participle_gender: Optional[str] = None,
         participle_case: Optional[str] = None,
     ):
-        try:
-            short_tense: str = SHORTHAND[tense]
-            short_voice: str = SHORTHAND[voice]
-            short_mood: str = SHORTHAND[mood]
-            if number:
-                short_number: str = SHORTHAND[number]
-        except KeyError:
-            raise InvalidInputError(
-                f"Tense '{tense}', voice '{voice}', mood '{mood}', or number '{number}' not recognised"
-            )
+        short_tense: str
+        short_voice: str
+        short_mood: str
+        short_number: str
 
-        if person and person not in {1, 2, 3}:
-            raise InvalidInputError(f"Person '{person}' not recognised")
+        if mood == "participle":
+            try:
+                short_tense = SHORTHAND[tense]
+                short_voice = SHORTHAND[voice]
+                if number:
+                    short_number = SHORTHAND[number]
+                else:
+                    raise InvalidInputError("Number not given")
+                if participle_case and participle_gender:
+                    short_gender: str = SHORTHAND[participle_gender]
+                    short_case: str = SHORTHAND[participle_case]
+                else:
+                    raise InvalidInputError("Gender or case not given")
+            except KeyError:
+                raise InvalidInputError(
+                    f"Tense '{tense}', voice '{voice}', gender '{participle_gender}', case '{participle_case}', or number '{number}' not recognised"
+                )
 
-        try:
-            if mood == "infinitive":
-                return self.endings[f"V{short_tense}{short_voice}inf   "]
-            return self.endings[
-                f"V{short_tense}{short_voice}{short_mood}{short_number}{person}"
-            ]
+            if person:
+                raise InvalidInputError(
+                    f"Participle cannot have a person (person '{person}')"
+                )
 
-        except KeyError:
-            raise NoMeaningError(
-                f"No ending found for {person} {number} {tense} {voice} {mood}"
-            )
+            try:
+                return self.endings[
+                    f"V{short_tense}{short_voice}ptc{short_gender}{short_case}{short_number}"
+                ]
+
+            except KeyError:
+                raise NoMeaningError(
+                    f"No ending found for {person} {number} {tense} {voice} {mood}"
+                )
+
+        else:
+            try:
+                short_tense = SHORTHAND[tense]
+                short_voice = SHORTHAND[voice]
+                short_mood = SHORTHAND[mood]
+                if number:
+                    short_number = SHORTHAND[number]
+            except KeyError:
+                raise InvalidInputError(
+                    f"Tense '{tense}', voice '{voice}', mood '{mood}', or number '{number}' not recognised"
+                )
+
+            if person and person not in {1, 2, 3}:
+                raise InvalidInputError(f"Person '{person}' not recognised")
+
+            try:
+                if mood == "infinitive":
+                    return self.endings[f"V{short_tense}{short_voice}inf   "]
+                return self.endings[
+                    f"V{short_tense}{short_voice}{short_mood}{short_number}{person}"
+                ]
+
+            except KeyError:
+                raise NoMeaningError(
+                    f"No ending found for {person} {number} {tense} {voice} {mood}"
+                )
 
     def __repr__(self) -> str:
         return f"LearningVerb({self.present}, {self.infinitive}, {self.perfect}, {self.ppp}, {self.meaning})"
