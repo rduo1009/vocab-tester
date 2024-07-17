@@ -23,6 +23,7 @@
         "**/Pipfile.lock": true
     },
     "ruff.nativeServer": true,
+    "ruff.lint.run": "onSave",
     "todohighlight.keywords": [
         {
             "text": " HACK:",
@@ -58,5 +59,9 @@
     "ruff.exclude": [
         "test_*.py"
     ],
+    "mypy-type-checker.args": [
+        "--enable-incomplete-feature=NewGenericSyntax"
+    ],
+    "mypy-type-checker.reportingScope": "workspace",
     
 }

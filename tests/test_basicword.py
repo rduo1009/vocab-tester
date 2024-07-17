@@ -13,5 +13,5 @@ def test_one_meaning():
 
 
 def test_multiple_meanings():
-    word = BasicWord("test1", MultipleMeanings("test2", ["test3", "test4"]))
+    word = BasicWord("test1", MultipleMeanings(["test2", "test3", "test4"]))
     assert word.meaning.__str__() == "test2"

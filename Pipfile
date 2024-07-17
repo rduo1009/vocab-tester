@@ -5,13 +5,14 @@ name = "pypi"
 
 [packages]
 customtkinter = "*"
+ruff = "*"
 
 [dev-packages]
 icecream = "*"
-mypy = "*"
 monkeytype = "*"
 bpython = "*"
 autoimport = "*"
+mypy = "*"
 
 [requires]
 python_version = "3.12"

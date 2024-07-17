@@ -8,11 +8,10 @@ from functools import total_ordering
 from dataclasses import dataclass
 
 from . import edge_cases
-from .misc import MultipleMeanings
+from .misc import MultipleMeanings, Endings
 from .custom_exceptions import NoMeaningError, InvalidInputError
 
 SHORTHAND: dict[str, str] = {
-    # Verbs
     "singular": "sg",
     "plural": "pl",
     "present": "pre",
@@ -28,14 +27,12 @@ SHORTHAND: dict[str, str] = {
     "imperative": "ipe",
     "subjunctive": "sbj",
     "participle": "ptc",
-    # Nouns
     "nominative": "nom",
     "vocative": "voc",
     "accusative": "acc",
     "genitive": "gen",
     "dative": "dat",
     "ablative": "abl",
-    # Adjectives
     "masculine": "m",
     "feminine": "f",
     "neuter": "n",
@@ -70,7 +67,7 @@ class LearningVerb:
 
         self.first: str = self.present
         self.conjugation: int
-        self.endings: dict[str, str]
+        self.endings: Endings
 
         # Conjugation edge cases
         irregular_endings: dict = edge_cases.find_irregular_endings(self.present)
@@ -535,7 +532,7 @@ class Noun:
         self.first: str = self.nom
         self.declension: int
         self.stem: str
-        self.endings: dict[str, str]
+        self.endings: Endings
 
         # Find declension
         if self.nom in edge_cases.IRREGULAR_NOUNS:
@@ -762,7 +759,7 @@ class Adjective:
         self.termination: Optional[int] = termination
         self.irregular_flag: bool = False
 
-        self.endings: dict[str, str]
+        self.endings: Endings
 
         match self.declension:
             case "212":
@@ -902,6 +899,9 @@ class Adjective:
                     "Asprngenpl": self.spr_stem + "orum",  # carrissimorum
                     "Asprndatpl": self.spr_stem + "is",  # carrissimis
                     "Asprnablpl": self.spr_stem + "is",  # carrissimis
+                    "Dpos": self.pos_stem + "e",
+                    "Dcmp": self.pos_stem + "ius",
+                    "Dspr": self.pos_stem + "issime",
                 }
 
             case "3":
@@ -1056,6 +1056,9 @@ class Adjective:
                             "Asprngenpl": self.spr_stem + "orum",  # ingentissimorum
                             "Asprndatpl": self.spr_stem + "is",  # ingentissimis
                             "Asprnablpl": self.spr_stem + "is",  # ingentissimis
+                            "Dpos": self.pos_stem + "er",
+                            "Dcmp": self.pos_stem + "ius",
+                            "Dspr": self.pos_stem + "issime",
                         }
 
                     # Second termination adjectives
@@ -1201,6 +1204,9 @@ class Adjective:
                             "Asprngenpl": self.spr_stem + "orum",  # fortissimorum
                             "Asprndatpl": self.spr_stem + "is",  # fortissimis
                             "Asprnablpl": self.spr_stem + "is",  # fortissimis
+                            "Dpos": self.pos_stem + "iter",
+                            "Dcmp": self.pos_stem + "ius",
+                            "Dspr": self.pos_stem + "issime",
                         }
 
                     # Third termination adjectives
@@ -1347,6 +1353,9 @@ class Adjective:
                             "Asprngenpl": self.spr_stem + "orum",  # acerrimorum
                             "Asprndatpl": self.spr_stem + "is",  # acerrimis
                             "Asprnablpl": self.spr_stem + "is",  # acerrimis
+                            "Dpos": self.pos_stem + "iter",
+                            "Dcmp": self.pos_stem + "ius",
+                            "Dspr": self.pos_stem + "issime",
                         }
 
                     case _:
@@ -1357,18 +1366,28 @@ class Adjective:
             case _:
                 raise InvalidInputError(f"Declension {self.declension} not recognised")
 
-    def get(self, *, degree: str, gender: str, case: str, number: str) -> str:
+    def get(
+        self,
+        *,
+        degree: str,
+        gender: Optional[str],
+        case: Optional[str],
+        number: Optional[str],
+        adverb: bool = False,
+    ) -> str:
         try:
             short_degree: str = SHORTHAND[degree]
-            short_gender: str = SHORTHAND[gender]
-            short_case: str = SHORTHAND[case]
-            short_number: str = SHORTHAND[number]
+            short_gender: str = SHORTHAND[gender] if gender else None
+            short_case: str = SHORTHAND[case] if case else None
+            short_number: str = SHORTHAND[number] if number else None
         except KeyError:
             raise InvalidInputError(
                 f"Degree {degree}, gender {gender}, case {case} or number {number} not recognised"
             )
 
         try:
+            if adverb:
+                return self.endings[f"D{short_degree}"]
             return self.endings[
                 f"A{short_degree}{short_gender}{short_case}{short_number}"
             ]
@@ -1407,7 +1426,7 @@ class Adjective:
 class Pronoun:
     def __init__(self, *, pronoun: str, meaning: Union[str, MultipleMeanings]):
         try:
-            self.endings: dict[str, str] = edge_cases.PRONOUNS[pronoun]
+            self.endings: Endings = edge_cases.PRONOUNS[pronoun]
         except KeyError:
             raise InvalidInputError(f"Pronoun {pronoun} not recognised")
 
