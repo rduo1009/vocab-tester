@@ -621,3 +621,27 @@ def test_declension3_3():
     assert word.get(degree="superlative", gender="neuter", case="genitive", number="plural") == "celerrimorum"
     assert word.get(degree="superlative", gender="neuter", case="dative", number="plural") == "celerrimis"
     assert word.get(degree="superlative", gender="neuter", case="ablative", number="plural") == "celerrimis"
+
+def test_adverb1():
+    word = Adjective("laetus", "laeta", "laetum", declension="212", meaning="happy")
+    assert word.get(degree="positive", adverb=True) == "laete"
+    assert word.get(degree="comparative", adverb=True) == "laetius"
+    assert word.get(degree="superlative", adverb=True) == "laetissime"
+
+def test_adverb2():
+    word = Adjective("prudens", "prudentis", termination=1, declension="3", meaning="wise")
+    assert word.get(degree="positive", adverb=True) == "prudenter"
+    assert word.get(degree="comparative", adverb=True) == "prudentius"
+    assert word.get(degree="superlative", adverb=True) == "prudentissime"
+
+def test_adverb3():
+    word = Adjective("fortis", "forte", termination=2, declension="3", meaning="strong")
+    assert word.get(degree="positive", adverb=True) == "fortiter"
+    assert word.get(degree="comparative", adverb=True) == "fortius"
+    assert word.get(degree="superlative", adverb=True) == "fortissime"
+
+def test_adverb4():
+    word = Adjective("celer", "celeris", "celere", termination=3, declension="3", meaning="quick")
+    assert word.get(degree="positive", adverb=True) == "celeriter"
+    assert word.get(degree="comparative", adverb=True) == "celerius"
+    assert word.get(degree="superlative", adverb=True) == "celerrime"

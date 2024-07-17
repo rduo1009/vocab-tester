@@ -1,9 +1,5 @@
-# TODO:  for tomorrow
-# - adverbs
-# - participles
-
 from io import StringIO
-from typing import Optional, Union
+from typing import Optional, Union, Self
 from functools import total_ordering
 from dataclasses import dataclass
 
@@ -901,7 +897,7 @@ class Adjective:
                     "Asprnablpl": self.spr_stem + "is",  # carrissimis
                     "Dpos": self.pos_stem + "e",
                     "Dcmp": self.pos_stem + "ius",
-                    "Dspr": self.pos_stem + "issime",
+                    "Dspr": self.spr_stem + "e",
                 }
 
             case "3":
@@ -1058,7 +1054,7 @@ class Adjective:
                             "Asprnablpl": self.spr_stem + "is",  # ingentissimis
                             "Dpos": self.pos_stem + "er",
                             "Dcmp": self.pos_stem + "ius",
-                            "Dspr": self.pos_stem + "issime",
+                            "Dspr": self.spr_stem + "e",
                         }
 
                     # Second termination adjectives
@@ -1206,7 +1202,7 @@ class Adjective:
                             "Asprnablpl": self.spr_stem + "is",  # fortissimis
                             "Dpos": self.pos_stem + "iter",
                             "Dcmp": self.pos_stem + "ius",
-                            "Dspr": self.pos_stem + "issime",
+                            "Dspr": self.spr_stem + "e",
                         }
 
                     # Third termination adjectives
@@ -1355,7 +1351,7 @@ class Adjective:
                             "Asprnablpl": self.spr_stem + "is",  # acerrimis
                             "Dpos": self.pos_stem + "iter",
                             "Dcmp": self.pos_stem + "ius",
-                            "Dspr": self.pos_stem + "issime",
+                            "Dspr": self.spr_stem + "e",
                         }
 
                     case _:
@@ -1370,9 +1366,9 @@ class Adjective:
         self,
         *,
         degree: str,
-        gender: Optional[str],
-        case: Optional[str],
-        number: Optional[str],
+        gender: Optional[str] = None,
+        case: Optional[str] = None,
+        number: Optional[str] = None,
         adverb: bool = False,
     ) -> str:
         try:

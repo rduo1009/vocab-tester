@@ -62,6 +62,6 @@
     "mypy-type-checker.args": [
         "--enable-incomplete-feature=NewGenericSyntax"
     ],
-    "mypy-type-checker.reportingScope": "workspace",
+    "mypy-type-checker.reportingScope": "file",
     
 }

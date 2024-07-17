@@ -2,8 +2,7 @@
 Contains miscellaneous functions and classes used by grammatica.
 """
 
-from dataclasses import dataclass, field
-from typing import Union
+from dataclasses import dataclass
 
 type Endings = dict[str, str]
 
