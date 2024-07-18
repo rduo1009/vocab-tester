@@ -1,4 +1,4 @@
-from .misc import Endings
+from .misc import Endings, MultipleEndings
 #  NOTE: I understand that there are deponents, but am keeping them for future
 # There also may be missing verbs
 
@@ -350,7 +350,7 @@ IRREGULAR_NOUNS: dict[str, Endings] = {
         "Nnompl": "nos",
         "Nvocpl": "nos",
         "Naccpl": "nos",
-        "Ngenpl": "nostri",  # FIXME: but nostrum is partitive genitive. will have to figure this out later
+        "Ngenpl": MultipleEndings(regular="nostri", partitive="nostrum"),
         "Ndatpl": "nobis",
         "Nablpl": "nobis",
     },
@@ -364,7 +364,7 @@ IRREGULAR_NOUNS: dict[str, Endings] = {
         "Nnompl": "vos",
         "Nvocpl": "vos",
         "Naccpl": "vos",
-        "Ngenpl": "vestri",  # FIXME: similar with vestrum
+        "Ngenpl": MultipleEndings(regular="vestri", partitive="vestrum"),
         "Ndatpl": "vobis",
         "Nablpl": "vobis",
     },
@@ -389,10 +389,11 @@ LIS_ADJECTIVES: list[str] = [
     "humilis",
 ]
 
+# TODO: this
 IRREGULAR_COMPARATIVES: dict[str, list[str]] = {
     "bonus": ["melior", "optim", "bene", "melius", "optime"],
-    "malus": ["peior", "pessim", "mal"],
-    "magnus": ["maior", "maxim"],
+    "malus": ["peior", "pessim", "male", "peius", "pessime"],
+    "magnus": ["maior", "maxim", ""],
     "parvus": ["minor", "minim"],
     "multus": ["plus", "plurim"],
     "nequam": ["nequior", "nequissim"],

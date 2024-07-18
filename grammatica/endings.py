@@ -5,7 +5,7 @@ from typing import Optional, Union
 
 from . import edge_cases
 from .custom_exceptions import InvalidInputError, NoMeaningError
-from .misc import Endings, MultipleMeanings
+from .misc import Endings, MultipleMeanings, MultipleEndings
 
 SHORTHAND: dict[str, str] = {
     "singular": "sg",
@@ -703,7 +703,7 @@ class Noun(Word):
                 k: v for k, v in self.endings.items() if not k.endswith("sg")
             }
 
-    def get(self, *, case: str, number: str) -> str:
+    def get(self, *, case: str, number: str) -> Union[str, MultipleEndings]:
         try:
             short_case: str = SHORTHAND[case]
             short_number: str = SHORTHAND[number]
@@ -753,6 +753,7 @@ class Adjective(Word):
         self.declension: str = declension
         self.termination: Optional[int] = termination
 
+        # FIXME: some adjectives don't have adverbs!
         self.irregular_posadv: Optional[str] = None
         self.irregular_cmpadv: Optional[str] = None
         self.irregular_spradv: Optional[str] = None
@@ -1434,7 +1435,7 @@ class Adjective(Word):
         case: Optional[str] = None,
         number: Optional[str] = None,
         adverb: bool = False,
-    ) -> str:
+    ) -> Union[str, MultipleEndings]:
         try:
             short_degree: str = SHORTHAND[degree]
             if gender and case and number:
@@ -1481,9 +1482,9 @@ class Pronoun(Word):
         self.first = self.pronoun
         self.meaning: Union[str, MultipleMeanings] = meaning
 
-        self.mascnom: str = self.endings["Pmnomsg"]
-        self.femnom: str = self.endings["Pfnomsg"]
-        self.neutnom: str = self.endings["Pnnomsg"]
+        self.mascnom: Union[str, MultipleEndings] = self.endings["Pmnomsg"]
+        self.femnom: Union[str, MultipleEndings] = self.endings["Pfnomsg"]
+        self.neutnom: Union[str, MultipleEndings] = self.endings["Pnnomsg"]
 
     def get(self, gender: str, case: str, number: str):
         try:

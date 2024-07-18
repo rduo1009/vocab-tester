@@ -6,5 +6,6 @@ import pytest
 from grammatica.endings import Pronoun
 from grammatica.edge_cases import PRONOUNS
 
+
 def test_pronoun():
     assert Pronoun(pronoun="hic", meaning="this").endings == PRONOUNS["hic"]

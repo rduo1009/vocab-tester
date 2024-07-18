@@ -8,7 +8,6 @@ from grammatica.custom_exceptions import NoMeaningError, InvalidInputError
 
 
 # fmt: off
-# TODO: Finish error checks
 def test_errors1():
     with pytest.raises(InvalidInputError, match="Infinitive 'makinganerror' is not valid"):
         word = LearningVerb(present="test1", infinitive="makinganerror", perfect="test3", ppp="test4", meaning="test5")  # noqa: F841
