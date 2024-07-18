@@ -6,6 +6,7 @@ import pytest
 from grammatica.endings import Noun
 
 
+# fmt: off
 def test_repr():
     word = Noun(nominative="puer", genitive="pueri", gender="m", meaning="boy")
     assert word.__repr__() == "Noun(puer, pueri, m, boy)"

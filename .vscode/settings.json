@@ -50,9 +50,6 @@
 
     "ruff.nativeServer": true,
     "ruff.lint.run": "onSave",
-    "ruff.exclude": [
-        "test_*.py"
-    ],
     "python.testing.pytestEnabled": true,
     "python.testing.pytestArgs": [
         "."

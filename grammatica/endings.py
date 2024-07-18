@@ -347,8 +347,7 @@ class LearningVerb(Word):
         if self.ppp:
             self.preptc_stem: str = self.infinitive[:-2]
             self.ppp_stem: str = self.ppp[:-2]
-            self.endings.update(
-                {
+            self.endings.update({
                     "Vpreactptcmnomsg": self.preptc_stem + "ns",
                     "Vpreactptcmvocsg": self.preptc_stem + "ns",
                     "Vpreactptcmaccsg": self.preptc_stem + "ntem",
@@ -421,8 +420,7 @@ class LearningVerb(Word):
                     "Vperpasptcngenpl": self.ppp_stem + "orum",
                     "Vperpasptcndatpl": self.ppp_stem + "is",
                     "Vperpasptcnablpl": self.ppp_stem + "is",
-                }
-            )
+            })  # fmt: skip
 
     def get(
         self,
@@ -754,6 +752,10 @@ class Adjective(Word):
         self.meaning: Union[str, MultipleMeanings] = meaning
         self.declension: str = declension
         self.termination: Optional[int] = termination
+
+        self.irregular_posadv: Optional[str] = None
+        self.irregular_cmpadv: Optional[str] = None
+        self.irregular_spradv: Optional[str] = None
         self.irregular_flag: bool = False
 
         match self.declension:
@@ -775,6 +777,15 @@ class Adjective(Word):
                 if self.mascnom in edge_cases.IRREGULAR_COMPARATIVES:
                     self.cmp_stem = edge_cases.IRREGULAR_COMPARATIVES[self.mascnom][0]
                     self.spr_stem = edge_cases.IRREGULAR_COMPARATIVES[self.mascnom][1]
+                    self.irregular_posadv = edge_cases.IRREGULAR_COMPARATIVES[
+                        self.mascnom
+                    ][2]
+                    self.irregular_cmpadv = edge_cases.IRREGULAR_COMPARATIVES[
+                        self.mascnom
+                    ][3]
+                    self.irregular_spradv = edge_cases.IRREGULAR_COMPARATIVES[
+                        self.mascnom
+                    ][4]
                     self.irregular_flag = True
                 else:
                     self.cmp_stem = self.pos_stem + "ior"  # car- -> carior-
@@ -894,9 +905,15 @@ class Adjective(Word):
                     "Asprngenpl": self.spr_stem + "orum",  # carrissimorum
                     "Asprndatpl": self.spr_stem + "is",  # carrissimis
                     "Asprnablpl": self.spr_stem + "is",  # carrissimis
-                    "Dpos": self.pos_stem + "e",
-                    "Dcmp": self.pos_stem + "ius",
-                    "Dspr": self.spr_stem + "e",
+                    "Dpos": self.irregular_posadv
+                    if self.irregular_posadv
+                    else self.pos_stem + "e",
+                    "Dcmp": self.irregular_cmpadv
+                    if self.irregular_cmpadv
+                    else self.pos_stem + "ius",
+                    "Dspr": self.irregular_spradv
+                    if self.irregular_spradv
+                    else self.spr_stem + "e",
                 }
 
             case "3":
@@ -925,6 +942,16 @@ class Adjective(Word):
                             self.spr_stem = edge_cases.IRREGULAR_COMPARATIVES[
                                 self.mascnom
                             ][1]
+                            self.irregular_posadv = edge_cases.IRREGULAR_COMPARATIVES[
+                                self.mascnom
+                            ][2]
+                            self.irregular_cmpadv = edge_cases.IRREGULAR_COMPARATIVES[
+                                self.mascnom
+                            ][3]
+                            self.irregular_spradv = edge_cases.IRREGULAR_COMPARATIVES[
+                                self.mascnom
+                            ][4]
+                            self.irregular_flag = True
                         else:
                             self.cmp_stem = (
                                 self.pos_stem + "ior"
@@ -1051,9 +1078,15 @@ class Adjective(Word):
                             "Asprngenpl": self.spr_stem + "orum",  # ingentissimorum
                             "Asprndatpl": self.spr_stem + "is",  # ingentissimis
                             "Asprnablpl": self.spr_stem + "is",  # ingentissimis
-                            "Dpos": self.pos_stem + "er",
-                            "Dcmp": self.pos_stem + "ius",
-                            "Dspr": self.spr_stem + "e",
+                            "Dpos": self.irregular_posadv
+                            if self.irregular_posadv
+                            else self.pos_stem + "er",
+                            "Dcmp": self.irregular_cmpadv
+                            if self.irregular_cmpadv
+                            else self.pos_stem + "ius",
+                            "Dspr": self.irregular_spradv
+                            if self.irregular_spradv
+                            else self.spr_stem + "e",
                         }
 
                     # Second termination adjectives
@@ -1075,6 +1108,16 @@ class Adjective(Word):
                             self.spr_stem = edge_cases.IRREGULAR_COMPARATIVES[
                                 self.mascnom
                             ][1]
+                            self.irregular_posadv = edge_cases.IRREGULAR_COMPARATIVES[
+                                self.mascnom
+                            ][2]
+                            self.irregular_cmpadv = edge_cases.IRREGULAR_COMPARATIVES[
+                                self.mascnom
+                            ][3]
+                            self.irregular_spradv = edge_cases.IRREGULAR_COMPARATIVES[
+                                self.mascnom
+                            ][4]
+                            self.irregular_flag = True
                         else:
                             self.cmp_stem = self.pos_stem + "ior"  # fort- -> fortior-
                             if self.mascnom[:2] == "er":
@@ -1199,9 +1242,15 @@ class Adjective(Word):
                             "Asprngenpl": self.spr_stem + "orum",  # fortissimorum
                             "Asprndatpl": self.spr_stem + "is",  # fortissimis
                             "Asprnablpl": self.spr_stem + "is",  # fortissimis
-                            "Dpos": self.pos_stem + "iter",
-                            "Dcmp": self.pos_stem + "ius",
-                            "Dspr": self.spr_stem + "e",
+                            "Dpos": self.irregular_posadv
+                            if self.irregular_posadv
+                            else self.pos_stem + "iter",
+                            "Dcmp": self.irregular_cmpadv
+                            if self.irregular_cmpadv
+                            else self.pos_stem + "ius",
+                            "Dspr": self.irregular_spradv
+                            if self.irregular_spradv
+                            else self.spr_stem + "e",
                         }
 
                     # Third termination adjectives
@@ -1224,6 +1273,16 @@ class Adjective(Word):
                             self.spr_stem = edge_cases.IRREGULAR_COMPARATIVES[
                                 self.mascnom
                             ][1]
+                            self.irregular_posadv = edge_cases.IRREGULAR_COMPARATIVES[
+                                self.mascnom
+                            ][2]
+                            self.irregular_cmpadv = edge_cases.IRREGULAR_COMPARATIVES[
+                                self.mascnom
+                            ][3]
+                            self.irregular_spradv = edge_cases.IRREGULAR_COMPARATIVES[
+                                self.mascnom
+                            ][4]
+                            self.irregular_flag = True
                         else:
                             self.cmp_stem = self.pos_stem + "ior"  # acr- -> acrior-
                             if self.mascnom[-2:] == "er":
@@ -1348,9 +1407,15 @@ class Adjective(Word):
                             "Asprngenpl": self.spr_stem + "orum",  # acerrimorum
                             "Asprndatpl": self.spr_stem + "is",  # acerrimis
                             "Asprnablpl": self.spr_stem + "is",  # acerrimis
-                            "Dpos": self.pos_stem + "iter",
-                            "Dcmp": self.pos_stem + "ius",
-                            "Dspr": self.spr_stem + "e",
+                            "Dpos": self.irregular_posadv
+                            if self.irregular_posadv
+                            else self.pos_stem + "iter",
+                            "Dcmp": self.irregular_cmpadv
+                            if self.irregular_cmpadv
+                            else self.pos_stem + "ius",
+                            "Dspr": self.irregular_spradv
+                            if self.irregular_spradv
+                            else self.spr_stem + "e",
                         }
 
                     case _:
@@ -1394,13 +1459,13 @@ class Adjective(Word):
 
     def __str__(self) -> str:
         output: StringIO = StringIO()
-        output.write(f"{self.meaning}: {", ".join(self.principal_parts)}\n")
+        output.write(f"{self.meaning}: {', '.join(self.principal_parts)}\n")
         for _, item in self.endings.items():
             output.write(item + "\n")
         return output.getvalue()
 
     def __repr__(self) -> str:
-        return f"Adjective({", ".join(self.principal_parts)}, {self.termination}, {self.declension}, {self.meaning})"
+        return f"Adjective({', '.join(self.principal_parts)}, {self.termination}, {self.declension}, {self.meaning})"
 
 
 @total_ordering

@@ -7,6 +7,7 @@ from grammatica.endings import LearningVerb
 from grammatica.custom_exceptions import NoMeaningError, InvalidInputError
 
 
+# fmt: off
 # TODO: Finish error checks
 def test_errors1():
     with pytest.raises(InvalidInputError, match="Infinitive 'makinganerror' is not valid"):

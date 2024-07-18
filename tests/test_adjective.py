@@ -6,6 +6,7 @@ import pytest
 from grammatica.endings import Adjective
 
 
+# fmt: off
 def test_repr():
     word = Adjective("laetus", "laeta", "laetum", declension="212", meaning="happy")
     assert word.__repr__() == "Adjective(laetus, laeta, laetum, None, 212, happy)"
@@ -645,3 +646,27 @@ def test_adverb4():
     assert word.get(degree="positive", adverb=True) == "celeriter"
     assert word.get(degree="comparative", adverb=True) == "celerius"
     assert word.get(degree="superlative", adverb=True) == "celerrime"
+
+def test_irregularadverb1():
+    word = Adjective("bonus", "bona", "bonum", declension="212", meaning="happy")
+    assert word.get(degree="positive", adverb=True) == "bene"
+    assert word.get(degree="comparative", adverb=True) == "melius"
+    assert word.get(degree="superlative", adverb=True) == "optime"
+
+def test_irregularadverb2():
+    word = Adjective("bonus", "bona", declension="3", termination=1, meaning="happy")
+    assert word.get(degree="positive", adverb=True) == "bene"
+    assert word.get(degree="comparative", adverb=True) == "melius"
+    assert word.get(degree="superlative", adverb=True) == "optime"
+
+def test_irregularadverb3():
+    word = Adjective("bonus", "bona", declension="3", termination=2, meaning="happy")
+    assert word.get(degree="positive", adverb=True) == "bene"
+    assert word.get(degree="comparative", adverb=True) == "melius"
+    assert word.get(degree="superlative", adverb=True) == "optime"
+
+def test_irregularadverb4():
+    word = Adjective("bonus", "bona", "bonum", declension="3", termination=3, meaning="happy")
+    assert word.get(degree="positive", adverb=True) == "bene"
+    assert word.get(degree="comparative", adverb=True) == "melius"
+    assert word.get(degree="superlative", adverb=True) == "optime"

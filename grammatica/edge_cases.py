@@ -390,8 +390,8 @@ LIS_ADJECTIVES: list[str] = [
 ]
 
 IRREGULAR_COMPARATIVES: dict[str, list[str]] = {
-    "bonus": ["melior", "optim"],
-    "malus": ["peior", "pessim"],
+    "bonus": ["melior", "optim", "bene", "melius", "optime"],
+    "malus": ["peior", "pessim", "mal"],
     "magnus": ["maior", "maxim"],
     "parvus": ["minor", "minim"],
     "multus": ["plus", "plurim"],
