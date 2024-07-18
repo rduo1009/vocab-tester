@@ -1,5 +1,8 @@
-# NOTE: I understand that there are deponents, but am keeping them for future
+from .misc import Endings
+#  NOTE: I understand that there are deponents, but am keeping them for future
 # There also may be missing verbs
+
+
 THIRD_IO_VERBS: list[str] = [
     "abicio",
     "adicio",
@@ -46,7 +49,7 @@ def check_io_verb(pre: str) -> bool:
     return False
 
 
-IRREGULAR_VERBS: dict[str, dict[str, str]] = {
+IRREGULAR_VERBS: dict[str, Endings] = {
     "sum": {
         "Vpreactindsg1": "sum",
         "Vpreactindsg2": "es",
@@ -275,7 +278,7 @@ DERIVED_IRREGULAR_VERBS: dict[str, list[str]] = {
     ],
 }
 
-DERIVED_IRREGULAR_ENDINGS: dict[str, dict[str, str]] = {
+DERIVED_IRREGULAR_ENDINGS: dict[str, Endings] = {
     "eo": {
         "Vpreactindsg1": "eo",
         "Vpreactindsg2": "is",
@@ -336,7 +339,7 @@ def find_irregular_endings(pre: str) -> dict:
     return dict()
 
 
-IRREGULAR_NOUNS: dict[str, dict[str, str]] = {
+IRREGULAR_NOUNS: dict[str, Endings] = {
     "ego": {
         "Nnomsg": "ego",
         "Nvocsg": "ego",
@@ -397,7 +400,7 @@ IRREGULAR_COMPARATIVES: dict[str, list[str]] = {
     "dexter": ["dexterior", "dextim"],
 }
 
-PRONOUNS: dict[str, dict[str, str]] = {
+PRONOUNS: dict[str, Endings] = {
     "hic": {
         "Pmnomsg": "hic",
         "Pmaccsg": "hunc",

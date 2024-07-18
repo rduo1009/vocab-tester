@@ -3,8 +3,9 @@ Contains miscellaneous functions and classes used by grammatica.
 """
 
 from dataclasses import dataclass
+from typing import TypeAlias
 
-type Endings = dict[str, str]
+Endings: TypeAlias = dict[str, str]
 
 
 @dataclass(init=True)

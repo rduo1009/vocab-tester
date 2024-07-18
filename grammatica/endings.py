@@ -1,11 +1,11 @@
-from io import StringIO
-from typing import Optional, Union, Self
-from functools import total_ordering
 from dataclasses import dataclass
+from functools import total_ordering
+from io import StringIO
+from typing import Optional, Union
 
 from . import edge_cases
-from .misc import MultipleMeanings, Endings
-from .custom_exceptions import NoMeaningError, InvalidInputError
+from .custom_exceptions import InvalidInputError, NoMeaningError
+from .misc import Endings, MultipleMeanings
 
 SHORTHAND: dict[str, str] = {
     "singular": "sg",
@@ -38,14 +38,40 @@ SHORTHAND: dict[str, str] = {
 }
 
 
+@total_ordering
+class Word:
+    def __init__(self) -> None:
+        self.endings: Endings
+        self.first: str
+
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, Word):
+            return NotImplemented
+        return self.endings == other.endings
+
+    def __lt__(self, other: object) -> bool:
+        if not isinstance(other, Word):
+            return NotImplemented
+        return self.first < other.first  # type: ignore
+
+    def __hash__(self) -> int:
+        return hash(self.endings)
+
+
 @dataclass
-class BasicWord:
+class BasicWord(Word):
     word: str
     meaning: Union[str, MultipleMeanings]
 
+    def __post_init__(self) -> None:
+        self.endings: Endings = {"": self.word}
+
+    def get(self) -> str:
+        return self.word
+
 
 @total_ordering
-class LearningVerb:
+class LearningVerb(Word):
     def __init__(
         self,
         *,
@@ -55,18 +81,20 @@ class LearningVerb:
         ppp: str = "",
         meaning: Union[str, MultipleMeanings],
     ) -> None:
+        super().__init__()
         self.present: str = present
         self.infinitive: str = infinitive
         self.perfect: str = perfect
         self.ppp: str = ppp
         self.meaning: Union[str, MultipleMeanings] = meaning
 
-        self.first: str = self.present
+        self.first = self.present
         self.conjugation: int
-        self.endings: Endings
 
         # Conjugation edge cases
-        irregular_endings: dict = edge_cases.find_irregular_endings(self.present)
+        irregular_endings: Union[dict, Endings] = edge_cases.find_irregular_endings(
+            self.present
+        )
         if irregular_endings:
             self.endings = irregular_endings
             self.conjugation = 0
@@ -486,24 +514,9 @@ class LearningVerb:
 
         return output.getvalue()
 
-    def __eq__(self, other: object) -> bool:
-        if not isinstance(other, LearningVerb):
-            return NotImplemented
-        return self.endings == other.endings
-
-    def __hash__(self) -> int:
-        return hash(
-            (self.present, self.infinitive, self.perfect, self.ppp, self.meaning)
-        )
-
-    def __lt__(self, other: object) -> bool:
-        if hasattr(other, "first"):
-            return self.first < other.first  # type: ignore
-        return NotImplemented
-
 
 @total_ordering
-class Noun:
+class Noun(Word):
     def __init__(
         self,
         *,
@@ -512,6 +525,7 @@ class Noun:
         gender: str,
         meaning: Union[str, MultipleMeanings],
     ) -> None:
+        super().__init__()
         self.gender: str
         if gender not in {"m", "f", "n"}:
             if gender not in {"masculine", "feminine", "neuter"}:
@@ -525,10 +539,9 @@ class Noun:
         self.meaning: Union[str, MultipleMeanings] = meaning
         self.plurale_tantum: bool = False
 
-        self.first: str = self.nom
+        self.first = self.nom
         self.declension: int
         self.stem: str
-        self.endings: Endings
 
         # Find declension
         if self.nom in edge_cases.IRREGULAR_NOUNS:
@@ -716,22 +729,9 @@ class Noun:
 
         return output.getvalue()
 
-    def __eq__(self, other: object) -> bool:
-        if not isinstance(other, Noun):
-            return NotImplemented
-        return self.endings == other.endings
-
-    def __hash__(self) -> int:
-        return hash((self.nom, self.gen, self.gender, self.meaning))
-
-    def __lt__(self, other: object) -> bool:
-        if hasattr(other, "first"):
-            return self.first < other.first  # type: ignore
-        return NotImplemented
-
 
 @total_ordering
-class Adjective:
+class Adjective(Word):
     def __init__(
         self,
         *principal_parts: str,
@@ -739,6 +739,7 @@ class Adjective:
         declension: str,
         meaning: Union[str, MultipleMeanings],
     ) -> None:
+        super().__init__()
         self.principal_parts: tuple[str, ...] = principal_parts
         self.mascnom: str
         self.femnom: str
@@ -749,13 +750,11 @@ class Adjective:
         self.cmp_stem: str
         self.spr_stem: str
 
-        self.first: str = self.principal_parts[0]
+        self.first = self.principal_parts[0]
         self.meaning: Union[str, MultipleMeanings] = meaning
         self.declension: str = declension
         self.termination: Optional[int] = termination
         self.irregular_flag: bool = False
-
-        self.endings: Endings
 
         match self.declension:
             case "212":
@@ -1373,9 +1372,10 @@ class Adjective:
     ) -> str:
         try:
             short_degree: str = SHORTHAND[degree]
-            short_gender: str = SHORTHAND[gender] if gender else None
-            short_case: str = SHORTHAND[case] if case else None
-            short_number: str = SHORTHAND[number] if number else None
+            if gender and case and number:
+                short_gender: str = SHORTHAND[gender]
+                short_case: str = SHORTHAND[case]
+                short_number: str = SHORTHAND[number]
         except KeyError:
             raise InvalidInputError(
                 f"Degree {degree}, gender {gender}, case {case} or number {number} not recognised"
@@ -1402,32 +1402,18 @@ class Adjective:
     def __repr__(self) -> str:
         return f"Adjective({", ".join(self.principal_parts)}, {self.termination}, {self.declension}, {self.meaning})"
 
-    def __hash__(self) -> int:
-        return hash(
-            (self.principal_parts, self.termination, self.declension, self.meaning)
-        )
-
-    def __eq__(self, other: object) -> bool:
-        if not isinstance(other, Adjective):
-            return NotImplemented
-        return self.endings == other.endings
-
-    def __lt__(self, other: object) -> bool:
-        if hasattr(other, "first"):
-            return self.first < other.first  # type: ignore
-        return NotImplemented
-
 
 @total_ordering
-class Pronoun:
+class Pronoun(Word):
     def __init__(self, *, pronoun: str, meaning: Union[str, MultipleMeanings]):
+        super().__init__()
         try:
-            self.endings: Endings = edge_cases.PRONOUNS[pronoun]
+            self.endings = edge_cases.PRONOUNS[pronoun]
         except KeyError:
             raise InvalidInputError(f"Pronoun {pronoun} not recognised")
 
         self.pronoun: str = pronoun
-        self.first: str = self.pronoun
+        self.first = self.pronoun
         self.meaning: Union[str, MultipleMeanings] = meaning
 
         self.mascnom: str = self.endings["Pmnomsg"]
@@ -1460,17 +1446,3 @@ class Pronoun:
         for _, item in self.endings.items():
             output.write(item + "\n")
         return output.getvalue()
-
-    def __hash__(self) -> int:
-        return hash((self.pronoun, self.meaning))
-
-    def __eq__(self, other: object) -> bool:
-        if not isinstance(other, Pronoun):
-            return NotImplemented
-        return self.endings == other.endings
-
-    def __lt__(self, other: object) -> bool:
-        if hasattr(other, "first"):
-            return self.first < other.first  # type: ignore
-        else:
-            return NotImplemented

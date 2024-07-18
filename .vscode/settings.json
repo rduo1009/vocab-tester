@@ -14,16 +14,6 @@
     "window.commandCenter": false,
     "editor.scrollbar.horizontal": "hidden",
     "editor.scrollbar.vertical": "hidden",
-
-    "files.exclude": {
-        "**/__pycache__": true,
-        "**/.mypy_cache": true,
-        "**/.pytest_cache": true,
-        "**/Pipfile": true,
-        "**/Pipfile.lock": true
-    },
-    "ruff.nativeServer": true,
-    "ruff.lint.run": "onSave",
     "todohighlight.keywords": [
         {
             "text": " HACK:",
@@ -46,7 +36,23 @@
             "backgroundColor": "#a6e3a1"
         }
     ],
+
+    "files.autoSave": "afterDelay",
+    "files.autoSaveDelay": 3000,
+    "files.exclude": {
+        "**/__pycache__": true,
+        "**/.mypy_cache": true,
+        "**/.pytest_cache": true,
+        "**/Pipfile": true,
+        "**/Pipfile.lock": true
+    },
     "autoDocstring.docstringFormat": "numpy",
+
+    "ruff.nativeServer": true,
+    "ruff.lint.run": "onSave",
+    "ruff.exclude": [
+        "test_*.py"
+    ],
     "python.testing.pytestEnabled": true,
     "python.testing.pytestArgs": [
         "."
@@ -54,14 +60,6 @@
     "python.testing.unittestEnabled": false,
     "mypy-type-checker.preferDaemon":true,
     "mypy-type-checker.importStrategy": "fromEnvironment",
-    "files.autoSave": "afterDelay",
-    "files.autoSaveDelay": 3000,
-    "ruff.exclude": [
-        "test_*.py"
-    ],
-    "mypy-type-checker.args": [
-        "--enable-incomplete-feature=NewGenericSyntax"
-    ],
     "mypy-type-checker.reportingScope": "file",
     
 }
