@@ -736,26 +736,33 @@ class Adjective(Word):
         super().__init__()
 
         self.principal_parts: tuple[str, ...] = principal_parts
-        self.mascnom: str
+        self.mascnom: str = self.principal_parts[0]
         self.femnom: str
         self.neutnom: str
-        self.mascgen: str
 
         self.pos_stem: str
-        self.cmp_stem: str
-        self.spr_stem: str
 
         self.first = self.principal_parts[0]
         self.meaning: Meaning = meaning
         self.declension: str = declension
         self.termination: Optional[int] = termination
+        self.irregular_flag: bool = False
 
         # FIXME: some adjectives don't have adverbs!
         #        bug probably to be left in, a bit complicated to fix
-        self.irregular_posadv: Optional[str] = None
-        self.irregular_cmpadv: Optional[str] = None
-        self.irregular_spradv: Optional[str] = None
-        self.irregular_flag: bool = False
+        if self.mascnom in edge_cases.IRREGULAR_COMPARATIVES:
+            self.cmp_stem: str = edge_cases.IRREGULAR_COMPARATIVES[self.mascnom][0]
+            self.spr_stem: str = edge_cases.IRREGULAR_COMPARATIVES[self.mascnom][1]
+            self.irregular_posadv: str = edge_cases.IRREGULAR_COMPARATIVES[
+                self.mascnom
+            ][2]
+            self.irregular_cmpadv: str = edge_cases.IRREGULAR_COMPARATIVES[
+                self.mascnom
+            ][3]
+            self.irregular_spradv: str = edge_cases.IRREGULAR_COMPARATIVES[
+                self.mascnom
+            ][4]
+            self.irregular_flag = True
 
         match self.declension:
             case "212":
@@ -767,26 +774,12 @@ class Adjective(Word):
                     raise InvalidInputError(
                         f"2-1-2 adjectives must have 3 principal parts (adjective '{self.first}' given)"
                     )
-                self.mascnom = self.principal_parts[0]
                 self.femnom = self.principal_parts[1]
                 self.neutnom = self.principal_parts[2]
 
                 self.pos_stem = self.femnom[:-1]  # cara -> car-
 
-                if self.mascnom in edge_cases.IRREGULAR_COMPARATIVES:
-                    self.cmp_stem = edge_cases.IRREGULAR_COMPARATIVES[self.mascnom][0]
-                    self.spr_stem = edge_cases.IRREGULAR_COMPARATIVES[self.mascnom][1]
-                    self.irregular_posadv = edge_cases.IRREGULAR_COMPARATIVES[
-                        self.mascnom
-                    ][2]
-                    self.irregular_cmpadv = edge_cases.IRREGULAR_COMPARATIVES[
-                        self.mascnom
-                    ][3]
-                    self.irregular_spradv = edge_cases.IRREGULAR_COMPARATIVES[
-                        self.mascnom
-                    ][4]
-                    self.irregular_flag = True
-                else:
+                if self.mascnom not in edge_cases.IRREGULAR_COMPARATIVES:
                     self.cmp_stem = self.pos_stem + "ior"  # car- -> carior-
                     if self.mascnom[:2] == "er":
                         self.spr_stem = self.mascnom + "rim"  # miser- -> miserrim-
@@ -905,13 +898,13 @@ class Adjective(Word):
                     "Asprndatpl": self.spr_stem + "is",  # carrissimis
                     "Asprnablpl": self.spr_stem + "is",  # carrissimis
                     "Dpos": self.irregular_posadv
-                    if self.irregular_posadv
+                    if self.irregular_flag
                     else self.pos_stem + "e",
                     "Dcmp": self.irregular_cmpadv
-                    if self.irregular_cmpadv
+                    if self.irregular_flag
                     else self.pos_stem + "ius",
                     "Dspr": self.irregular_spradv
-                    if self.irregular_spradv
+                    if self.irregular_flag
                     else self.spr_stem + "e",
                 }
 
@@ -924,8 +917,7 @@ class Adjective(Word):
                                 f"First-termination adjectives must have 2 principal parts (adjective '{self.first}')"
                             )
 
-                        self.mascnom = self.principal_parts[0]
-                        self.mascgen = self.principal_parts[1]
+                        self.mascgen: str = self.principal_parts[1]
 
                         if self.mascgen[-2:] != "is":
                             raise InvalidInputError(
@@ -933,24 +925,7 @@ class Adjective(Word):
                             )
                         self.pos_stem = self.mascgen[:-2]  # ingentis -> ingent-
 
-                        if self.mascnom in edge_cases.IRREGULAR_COMPARATIVES:
-                            self.cmp_stem = edge_cases.IRREGULAR_COMPARATIVES[
-                                self.mascnom
-                            ][0]
-                            self.spr_stem = edge_cases.IRREGULAR_COMPARATIVES[
-                                self.mascnom
-                            ][1]
-                            self.irregular_posadv = edge_cases.IRREGULAR_COMPARATIVES[
-                                self.mascnom
-                            ][2]
-                            self.irregular_cmpadv = edge_cases.IRREGULAR_COMPARATIVES[
-                                self.mascnom
-                            ][3]
-                            self.irregular_spradv = edge_cases.IRREGULAR_COMPARATIVES[
-                                self.mascnom
-                            ][4]
-                            self.irregular_flag = True
-                        else:
+                        if not self.irregular_flag:
                             self.cmp_stem = (
                                 self.pos_stem + "ior"
                             )  # ingent- > ingentior-
@@ -1077,13 +1052,13 @@ class Adjective(Word):
                             "Asprndatpl": self.spr_stem + "is",  # ingentissimis
                             "Asprnablpl": self.spr_stem + "is",  # ingentissimis
                             "Dpos": self.irregular_posadv
-                            if self.irregular_posadv
+                            if self.irregular_flag
                             else self.pos_stem + "er",
                             "Dcmp": self.irregular_cmpadv
-                            if self.irregular_cmpadv
+                            if self.irregular_flag
                             else self.pos_stem + "ius",
                             "Dspr": self.irregular_spradv
-                            if self.irregular_spradv
+                            if self.irregular_flag
                             else self.spr_stem + "e",
                         }
 
@@ -1094,28 +1069,10 @@ class Adjective(Word):
                                 f"Second-termination adjectives must have 2 principal parts (adjective '{self.first}')"
                             )
 
-                        self.mascnom = self.principal_parts[0]
                         self.neutnom = self.principal_parts[1]
 
                         self.pos_stem = self.mascnom[:-2]  # fortis -> fort-
-                        if self.mascnom in edge_cases.IRREGULAR_COMPARATIVES:
-                            self.cmp_stem = edge_cases.IRREGULAR_COMPARATIVES[
-                                self.mascnom
-                            ][0]
-                            self.spr_stem = edge_cases.IRREGULAR_COMPARATIVES[
-                                self.mascnom
-                            ][1]
-                            self.irregular_posadv = edge_cases.IRREGULAR_COMPARATIVES[
-                                self.mascnom
-                            ][2]
-                            self.irregular_cmpadv = edge_cases.IRREGULAR_COMPARATIVES[
-                                self.mascnom
-                            ][3]
-                            self.irregular_spradv = edge_cases.IRREGULAR_COMPARATIVES[
-                                self.mascnom
-                            ][4]
-                            self.irregular_flag = True
-                        else:
+                        if not self.irregular_flag:
                             self.cmp_stem = self.pos_stem + "ior"  # fort- -> fortior-
                             if self.mascnom[:2] == "er":
                                 self.spr_stem = (
@@ -1240,13 +1197,13 @@ class Adjective(Word):
                             "Asprndatpl": self.spr_stem + "is",  # fortissimis
                             "Asprnablpl": self.spr_stem + "is",  # fortissimis
                             "Dpos": self.irregular_posadv
-                            if self.irregular_posadv
+                            if self.irregular_flag
                             else self.pos_stem + "iter",
                             "Dcmp": self.irregular_cmpadv
-                            if self.irregular_cmpadv
+                            if self.irregular_flag
                             else self.pos_stem + "ius",
                             "Dspr": self.irregular_spradv
-                            if self.irregular_spradv
+                            if self.irregular_flag
                             else self.spr_stem + "e",
                         }
 
@@ -1262,24 +1219,7 @@ class Adjective(Word):
                         self.neutnom = self.principal_parts[2]
 
                         self.pos_stem = self.femnom[:-2]  # acris -> acr-
-                        if self.mascnom in edge_cases.IRREGULAR_COMPARATIVES:
-                            self.cmp_stem = edge_cases.IRREGULAR_COMPARATIVES[
-                                self.mascnom
-                            ][0]
-                            self.spr_stem = edge_cases.IRREGULAR_COMPARATIVES[
-                                self.mascnom
-                            ][1]
-                            self.irregular_posadv = edge_cases.IRREGULAR_COMPARATIVES[
-                                self.mascnom
-                            ][2]
-                            self.irregular_cmpadv = edge_cases.IRREGULAR_COMPARATIVES[
-                                self.mascnom
-                            ][3]
-                            self.irregular_spradv = edge_cases.IRREGULAR_COMPARATIVES[
-                                self.mascnom
-                            ][4]
-                            self.irregular_flag = True
-                        else:
+                        if not self.irregular_flag:
                             self.cmp_stem = self.pos_stem + "ior"  # acr- -> acrior-
                             if self.mascnom[-2:] == "er":
                                 self.spr_stem = (
@@ -1404,13 +1344,13 @@ class Adjective(Word):
                             "Asprndatpl": self.spr_stem + "is",  # acerrimis
                             "Asprnablpl": self.spr_stem + "is",  # acerrimis
                             "Dpos": self.irregular_posadv
-                            if self.irregular_posadv
+                            if self.irregular_flag
                             else self.pos_stem + "iter",
                             "Dcmp": self.irregular_cmpadv
-                            if self.irregular_cmpadv
+                            if self.irregular_flag
                             else self.pos_stem + "ius",
                             "Dspr": self.irregular_spradv
-                            if self.irregular_spradv
+                            if self.irregular_flag
                             else self.spr_stem + "e",
                         }
 
