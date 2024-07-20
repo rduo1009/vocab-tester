@@ -4,7 +4,7 @@ from typing import Union
 # There also may be missing verbs
 
 
-THIRD_IO_VERBS: list[str] = [
+THIRD_IO_VERBS: set[str] = {
     "abicio",
     "adicio",
     "aggredior",
@@ -40,7 +40,7 @@ THIRD_IO_VERBS: list[str] = [
     "sapio",
     "subicio",
     "traicio",
-]
+}
 
 
 def check_io_verb(pre: str) -> bool:
@@ -381,14 +381,14 @@ IRREGULAR_NOUNS: dict[str, Endings] = {
     },
 }
 
-LIS_ADJECTIVES: list[str] = [
+LIS_ADJECTIVES: set[str] = {
     "facilis",
     "difficilis",
     "similis",
     "dissimilis",
     "gracilis",
     "humilis",
-]
+}
 
 IRREGULAR_COMPARATIVES: dict[str, list[str]] = {
     "bonus": ["melior", "optim", "bene", "melius", "optime"],
