@@ -389,16 +389,17 @@ LIS_ADJECTIVES: list[str] = [
     "humilis",
 ]
 
-# TODO: this
 IRREGULAR_COMPARATIVES: dict[str, list[str]] = {
     "bonus": ["melior", "optim", "bene", "melius", "optime"],
     "malus": ["peior", "pessim", "male", "peius", "pessime"],
-    "magnus": ["maior", "maxim", ""],
-    "parvus": ["minor", "minim"],
-    "multus": ["plus", "plurim"],
-    "nequam": ["nequior", "nequissim"],
-    "frugi": ["frugalior", "frugalissim"],
-    "dexter": ["dexterior", "dextim"],
+    "magnus": ["maior", "maxim", "", "", ""],
+    "parvus": ["minor", "minim", "", "", ""],
+    # NOTE: multo (adverb) exists but that would very much stuff up things
+    "multus": ["plus", "plurim", "", "", ""],
+    # nequam should probably just be put in as a BasicWord
+    "nequam": ["nequior", "nequissim", "", "", ""],
+    "frugi": ["frugalior", "frugalissim", "frugaliter", "frugalius", "frugalissime"],
+    "dexter": ["dexterior", "dextim", "", "", ""],
 }
 
 PRONOUNS: dict[str, Endings] = {
