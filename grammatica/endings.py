@@ -1,3 +1,4 @@
+import itertools
 from dataclasses import dataclass
 from functools import total_ordering
 from io import StringIO
@@ -5,7 +6,7 @@ from typing import Optional
 
 from . import edge_cases
 from .custom_exceptions import InvalidInputError, NoMeaningError
-from .misc import Meaning, Ending, Endings
+from .misc import Ending, Endings, Meaning
 
 NUMBER_SHORTHAND: dict[str, str] = {
     "singular": "sg",
@@ -18,7 +19,7 @@ TENSE_SHORTHAND: dict[str, str] = {
     "future": "fut",
     "perfect": "per",
     "pluperfect": "plp",
-    "future perfect": "fpr",
+    # "future perfect": "fpr",
 }
 
 VOICE_SHORTHAND: dict[str, str] = {
@@ -134,9 +135,50 @@ class LearningVerb(Word):
         self._inf_stem: str = self.infinitive[:-3]
         self._per_stem: str = self.perfect[:-1]
 
+        self.endings = {}
+
+        # Dont differ: perfect, pluperfect, imperfect sbj, pluperfect sbj
+
+        SAME_ENDINGS: dict[str, tuple[str, tuple[str, ...]]] = {
+            "peractind": (
+                self._per_stem,
+                ("i", "isti", "it", "imus", "istis", "erunt"),
+            ),
+            "plpactind": (
+                self._per_stem,
+                ("eram", "eras", "erat", "eramus", "eratis", "erant"),
+            ),
+            "impactsbj": (self.infinitive, ("m", "s", "t", "mus", "tis", "nt")),
+            "plpactsbj": (
+                self._per_stem,
+                ("issem", "isses", "isset", "issemus", "issetis", "issent"),
+            ),
+        }
+
+        # FIXME: can the voice loop be integrated with the itertools.product() loop?
+        for voice in VOICE_SHORTHAND.values():
+            for tense, mood in (
+                ("per", "ind"),
+                ("plp", "ind"),
+                ("imp", "sbj"),
+                ("plp", "sbj"),
+            ):
+                count = 0
+                for number, person, voice in itertools.product(
+                    NUMBER_SHORTHAND.values(), range(1, 4), VOICE_SHORTHAND.values()
+                ):
+                    try:
+                        endings_dict = SAME_ENDINGS[f"{tense}{voice}{mood}"]
+                    except KeyError:
+                        break
+                    self.endings.update({
+                            f"V{tense}{voice}{mood}{number}{person}": endings_dict[0] + endings_dict[1][count] 
+                        })  # fmt: skip
+                    count += 1
+
         match self.conjugation:
             case 1:
-                self.endings = {
+                self.endings.update({
                     "Vpreactindsg1": self.present,  # porto
                     "Vpreactindsg2": self._inf_stem + "as",  # portas
                     "Vpreactindsg3": self._inf_stem + "at",  # portat
@@ -149,37 +191,13 @@ class LearningVerb(Word):
                     "Vimpactindpl1": self._inf_stem + "abamus",  # portabamus
                     "Vimpactindpl2": self._inf_stem + "abatis",  # portabatis
                     "Vimpactindpl3": self._inf_stem + "abant",  # portabant
-                    "Vperactindsg1": self.perfect,  # portavi
-                    "Vperactindsg2": self._per_stem + "isti",  # portavisti
-                    "Vperactindsg3": self._per_stem + "it",  # portavit
-                    "Vperactindpl1": self._per_stem + "imus",  # portavimus
-                    "Vperactindpl2": self._per_stem + "istis",  # portavistis
-                    "Vperactindpl3": self._per_stem + "erunt",  # portaverunt
-                    "Vplpactindsg1": self._per_stem + "eram",  # portaveram
-                    "Vplpactindsg2": self._per_stem + "eras",  # portaveras
-                    "Vplpactindsg3": self._per_stem + "erat",  # portaverat
-                    "Vplpactindpl1": self._per_stem + "eramus",  # portaveramus
-                    "Vplpactindpl2": self._per_stem + "eratis",  # portaveratis
-                    "Vplpactindpl3": self._per_stem + "erant",  # portaverant
                     "Vpreactinf   ": self.infinitive,  # portare
                     "Vpreactipesg2": self._inf_stem + "a",  # porta
                     "Vpreactipepl2": self._inf_stem + "ate",  # portate
-                    "Vimpactsbjsg1": self.infinitive + "m",  # portarem
-                    "Vimpactsbjsg2": self.infinitive + "s",  # portares
-                    "Vimpactsbjsg3": self.infinitive + "t",  # portaret
-                    "Vimpactsbjpl1": self.infinitive + "mus",  # portaremus
-                    "Vimpactsbjpl2": self.infinitive + "tis",  # portaretis
-                    "Vimpactsbjpl3": self.infinitive + "nt",  # portarent
-                    "Vplpactsbjsg1": self._per_stem + "issem",  # portavissem
-                    "Vplpactsbjsg2": self._per_stem + "isses",  # portavisses
-                    "Vplpactsbjsg3": self._per_stem + "isset",  # portavisset
-                    "Vplpactsbjpl1": self._per_stem + "issemus",  # portavissemus
-                    "Vplpactsbjpl2": self._per_stem + "issetis",  # portavissetis
-                    "Vplpactsbjpl3": self._per_stem + "issent",  # portavissent
-                }
+                })  # fmt:skip
 
             case 2:
-                self.endings = {
+                self.endings.update({
                     "Vpreactindsg1": self.present,  # doceo
                     "Vpreactindsg2": self._inf_stem + "es",  # doces
                     "Vpreactindsg3": self._inf_stem + "et",  # docet
@@ -192,37 +210,13 @@ class LearningVerb(Word):
                     "Vimpactindpl1": self._inf_stem + "ebamus",  # docebamus
                     "Vimpactindpl2": self._inf_stem + "ebatis",  # docebatis
                     "Vimpactindpl3": self._inf_stem + "ebant",  # docebant
-                    "Vperactindsg1": self.perfect,  # docui
-                    "Vperactindsg2": self._per_stem + "isti",  # docuisit
-                    "Vperactindsg3": self._per_stem + "it",  # docuit
-                    "Vperactindpl1": self._per_stem + "imus",  # docuimus
-                    "Vperactindpl2": self._per_stem + "istis",  # docuistis
-                    "Vperactindpl3": self._per_stem + "erunt",  # docuerunt
-                    "Vplpactindsg1": self._per_stem + "eram",  # docueram
-                    "Vplpactindsg2": self._per_stem + "eras",  # docueras
-                    "Vplpactindsg3": self._per_stem + "erat",  # docuerat
-                    "Vplpactindpl1": self._per_stem + "eramus",  # docueramus
-                    "Vplpactindpl2": self._per_stem + "eratis",  # docueratis
-                    "Vplpactindpl3": self._per_stem + "erant",  # docuerant
                     "Vpreactinf   ": self.infinitive,  # docere
                     "Vpreactipesg2": self._inf_stem + "e",  # doce
                     "Vpreactipepl2": self._inf_stem + "ete",  # docete
-                    "Vimpactsbjsg1": self.infinitive + "m",  # docerem
-                    "Vimpactsbjsg2": self.infinitive + "s",  # doceres
-                    "Vimpactsbjsg3": self.infinitive + "t",  # doceret
-                    "Vimpactsbjpl1": self.infinitive + "mus",  # doceremus
-                    "Vimpactsbjpl2": self.infinitive + "tis",  # doceretis
-                    "Vimpactsbjpl3": self.infinitive + "nt",  # docerent
-                    "Vplpactsbjsg1": self._per_stem + "issem",  # docuissem
-                    "Vplpactsbjsg2": self._per_stem + "isses",  # docuisses
-                    "Vplpactsbjsg3": self._per_stem + "isset",  # docuisset
-                    "Vplpactsbjpl1": self._per_stem + "issemus",  # docuissmus
-                    "Vplpactsbjpl2": self._per_stem + "issetis",  # docuissetis
-                    "Vplpactsbjpl3": self._per_stem + "issent",  # docuissent
-                }
+                })  # fmt:skip
 
             case 3:
-                self.endings = {
+                self.endings.update({
                     "Vpreactindsg1": self.present,  # traho
                     "Vpreactindsg2": self._inf_stem + "is",  # trahis
                     "Vpreactindsg3": self._inf_stem + "it",  # trahit
@@ -235,37 +229,13 @@ class LearningVerb(Word):
                     "Vimpactindpl1": self._inf_stem + "ebamus",  # trahebamus
                     "Vimpactindpl2": self._inf_stem + "ebatis",  # trahebatis
                     "Vimpactindpl3": self._inf_stem + "ebant",  # trahebant
-                    "Vperactindsg1": self.perfect,  # traxi
-                    "Vperactindsg2": self._per_stem + "isti",  # traxisti
-                    "Vperactindsg3": self._per_stem + "it",  # traxit
-                    "Vperactindpl1": self._per_stem + "imus",  # traximus
-                    "Vperactindpl2": self._per_stem + "istis",  # traxistis
-                    "Vperactindpl3": self._per_stem + "erunt",  # traxerunt
-                    "Vplpactindsg1": self._per_stem + "eram",  # traxeram
-                    "Vplpactindsg2": self._per_stem + "eras",  # traxeras
-                    "Vplpactindsg3": self._per_stem + "erat",  # traxerat
-                    "Vplpactindpl1": self._per_stem + "eramus",  # traxeramus
-                    "Vplpactindpl2": self._per_stem + "eratis",  # traxeratis
-                    "Vplpactindpl3": self._per_stem + "erant",  # traxerant
                     "Vpreactinf   ": self.infinitive,  # trahere
                     "Vpreactipesg2": self._inf_stem + "e",  # trahe
                     "Vpreactipepl2": self._inf_stem + "ite",  # trahite
-                    "Vimpactsbjsg1": self.infinitive + "m",  # traherem
-                    "Vimpactsbjsg2": self.infinitive + "s",  # traheres
-                    "Vimpactsbjsg3": self.infinitive + "t",  # traheret
-                    "Vimpactsbjpl1": self.infinitive + "mus",  # traheremus
-                    "Vimpactsbjpl2": self.infinitive + "tis",  # traheretis
-                    "Vimpactsbjpl3": self.infinitive + "nt",  # traherent
-                    "Vplpactsbjsg1": self._per_stem + "issem",  # traxissem
-                    "Vplpactsbjsg2": self._per_stem + "isses",  # traxisses
-                    "Vplpactsbjsg3": self._per_stem + "isset",  # traxisset
-                    "Vplpactsbjpl1": self._per_stem + "issemus",  # traxissemus
-                    "Vplpactsbjpl2": self._per_stem + "issetis",  # traxissetis
-                    "Vplpactsbjpl3": self._per_stem + "issent",  # traxissent
-                }
+                })  # fmt:skip
 
             case 4:
-                self.endings = {
+                self.endings.update({
                     "Vpreactindsg1": self.present,  # audio
                     "Vpreactindsg2": self._inf_stem + "is",  # audis
                     "Vpreactindsg3": self._inf_stem + "it",  # audit
@@ -278,37 +248,13 @@ class LearningVerb(Word):
                     "Vimpactindpl1": self._inf_stem + "iebamus",  # audiebamus
                     "Vimpactindpl2": self._inf_stem + "iebatis",  # audiebatis
                     "Vimpactindpl3": self._inf_stem + "iebant",  # audiebant
-                    "Vperactindsg1": self.perfect,  # audivi
-                    "Vperactindsg2": self._per_stem + "isti",  # audivisti
-                    "Vperactindsg3": self._per_stem + "it",  # audivit
-                    "Vperactindpl1": self._per_stem + "imus",  # audivimus
-                    "Vperactindpl2": self._per_stem + "istis",  # audivistis
-                    "Vperactindpl3": self._per_stem + "erunt",  # audiverunt
-                    "Vplpactindsg1": self._per_stem + "eram",  # audiveram
-                    "Vplpactindsg2": self._per_stem + "eras",  # audiveras
-                    "Vplpactindsg3": self._per_stem + "erat",  # audiverat
-                    "Vplpactindpl1": self._per_stem + "eramus",  # audiveramus
-                    "Vplpactindpl2": self._per_stem + "eratis",  # audiveratis
-                    "Vplpactindpl3": self._per_stem + "erant",  # audiverant
                     "Vpreactinf   ": self.infinitive,  # audire
                     "Vpreactipesg2": self._inf_stem + "i",  # audi
                     "Vpreactipepl2": self._inf_stem + "ite",  # audite
-                    "Vimpactsbjsg1": self.infinitive + "m",  # audirem
-                    "Vimpactsbjsg2": self.infinitive + "s",  # audires
-                    "Vimpactsbjsg3": self.infinitive + "t",  # audiret
-                    "Vimpactsbjpl1": self.infinitive + "mus",  # audiremus
-                    "Vimpactsbjpl2": self.infinitive + "tis",  # audiretis
-                    "Vimpactsbjpl3": self.infinitive + "nt",  # audirent
-                    "Vplpactsbjsg1": self._per_stem + "issem",  # audivissem
-                    "Vplpactsbjsg2": self._per_stem + "isses",  # audivisses
-                    "Vplpactsbjsg3": self._per_stem + "isset",  # audivisset
-                    "Vplpactsbjpl1": self._per_stem + "issemus",  # audivissemus
-                    "Vplpactsbjpl2": self._per_stem + "issetis",  # audivissetis
-                    "Vplpactsbjpl3": self._per_stem + "issent",  # audivissent
-                }
+                })  # fmt:skip
 
             case 5:
-                self.endings = {
+                self.endings.update({
                     "Vpreactindsg1": self.present,  # capio
                     "Vpreactindsg2": self._inf_stem + "is",  # capis
                     "Vpreactindsg3": self._inf_stem + "it",  # capit
@@ -321,34 +267,10 @@ class LearningVerb(Word):
                     "Vimpactindpl1": self._inf_stem + "iebamus",  # capiebamus
                     "Vimpactindpl2": self._inf_stem + "iebatis",  # capiebatis
                     "Vimpactindpl3": self._inf_stem + "iebant",  # capiebant
-                    "Vperactindsg1": self.perfect,  # cepi
-                    "Vperactindsg2": self._per_stem + "isti",  # cepisti
-                    "Vperactindsg3": self._per_stem + "it",  # cepit
-                    "Vperactindpl1": self._per_stem + "imus",  # cepimus
-                    "Vperactindpl2": self._per_stem + "istis",  # cepistis
-                    "Vperactindpl3": self._per_stem + "erunt",  # ceperunt
-                    "Vplpactindsg1": self._per_stem + "eram",  # ceperam
-                    "Vplpactindsg2": self._per_stem + "eras",  # ceperas
-                    "Vplpactindsg3": self._per_stem + "erat",  # ceperat
-                    "Vplpactindpl1": self._per_stem + "eramus",  # ceperamus
-                    "Vplpactindpl2": self._per_stem + "eratis",  # ceperatis
-                    "Vplpactindpl3": self._per_stem + "erant",  # ceperant
                     "Vpreactinf   ": self.infinitive,  # capere
                     "Vpreactipesg2": self._inf_stem + "e",  # cape
                     "Vpreactipepl2": self._inf_stem + "ite",  # capite
-                    "Vimpactsbjsg1": self.infinitive + "m",  # caperem
-                    "Vimpactsbjsg2": self.infinitive + "s",  # caperes
-                    "Vimpactsbjsg3": self.infinitive + "t",  # caperet
-                    "Vimpactsbjpl1": self.infinitive + "mus",  # caperemus
-                    "Vimpactsbjpl2": self.infinitive + "tis",  # caperetis
-                    "Vimpactsbjpl3": self.infinitive + "nt",  # caperent
-                    "Vplpactsbjsg1": self._per_stem + "issem",  # cepissem
-                    "Vplpactsbjsg2": self._per_stem + "isses",  # cepisses
-                    "Vplpactsbjsg3": self._per_stem + "isset",  # cepisset
-                    "Vplpactsbjpl1": self._per_stem + "issemus",  # cepissemus
-                    "Vplpactsbjpl2": self._per_stem + "issetis",  # cepissetis
-                    "Vplpactsbjpl3": self._per_stem + "issent",  # cepissent
-                }
+                })  # fmt:skip
 
             # case _:
             #     raise ValueError(f"Conjugation {self.conjugation} not recognised")
