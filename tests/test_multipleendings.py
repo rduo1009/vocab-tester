@@ -1,4 +1,4 @@
-# ruff: noqa
+# fmt: off
 # mypy: ignore-errors
 
 import sys, os  # noqa: E401

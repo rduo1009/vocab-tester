@@ -3,7 +3,7 @@ Contains miscellaneous functions and classes used by grammatica.
 """
 
 from dataclasses import dataclass
-from typing import TypeAlias, Union
+from typing import Union
 
 
 @dataclass(init=True)
@@ -51,7 +51,7 @@ class MultipleEndings:
         for key, value in kwargs.items():
             setattr(self, key, value)
 
-    def get_all(self) -> list:
+    def get_all(self) -> list[str]:
         return list(self.__dict__.values())
 
     def __str__(self) -> str:
@@ -60,5 +60,11 @@ class MultipleEndings:
     def __add__(self, val2: str) -> str:
         return self.__str__() + val2
 
+    def __radd__(self, val2: str) -> "MultipleEndings":
+        prefixed = {key: f"{val2}{value}" for key, value in self.__dict__.items()}
+        return MultipleEndings(**prefixed)
 
-Endings: TypeAlias = dict[str, Union[str, MultipleEndings]]
+
+type Ending = Union[str, MultipleEndings]  # type: ignore
+type Endings = dict[str, Union[str, Ending]]  # type: ignore
+type Meaning = Union[str, MultipleMeanings]  # type: ignore

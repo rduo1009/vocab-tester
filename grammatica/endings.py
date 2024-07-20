@@ -5,7 +5,7 @@ from typing import Optional, Union
 
 from . import edge_cases
 from .custom_exceptions import InvalidInputError, NoMeaningError
-from .misc import Endings, MultipleMeanings, MultipleEndings
+from .misc import Meaning, Ending, Endings
 
 SHORTHAND: dict[str, str] = {
     "singular": "sg",
@@ -61,7 +61,7 @@ class Word:
 @dataclass
 class BasicWord(Word):
     word: str
-    meaning: Union[str, MultipleMeanings]
+    meaning: Meaning
 
     def __post_init__(self) -> None:
         self.endings: Endings = {"": self.word}
@@ -79,20 +79,20 @@ class LearningVerb(Word):
         infinitive: str,
         perfect: str,
         ppp: str = "",
-        meaning: Union[str, MultipleMeanings],
+        meaning: Meaning,
     ) -> None:
         super().__init__()
         self.present: str = present
         self.infinitive: str = infinitive
         self.perfect: str = perfect
         self.ppp: str = ppp
-        self.meaning: Union[str, MultipleMeanings] = meaning
+        self.meaning: Meaning = meaning
 
         self.first = self.present
         self.conjugation: int
 
         # Conjugation edge cases
-        irregular_endings: Union[dict, Endings] = edge_cases.find_irregular_endings(
+        irregular_endings: Union[None, Endings] = edge_cases.find_irregular_endings(
             self.present
         )
         if irregular_endings:
@@ -120,7 +120,6 @@ class LearningVerb(Word):
         self.per_stem: str = self.perfect[:-1]
 
         match self.conjugation:
-            # First conjugation
             case 1:
                 self.endings = {
                     "Vpreactindsg1": self.present,  # porto
@@ -164,7 +163,6 @@ class LearningVerb(Word):
                     "Vplpactsbjpl3": self.per_stem + "issent",  # portavissent
                 }
 
-            # Second conjugation
             case 2:
                 self.endings = {
                     "Vpreactindsg1": self.present,  # doceo
@@ -208,7 +206,6 @@ class LearningVerb(Word):
                     "Vplpactsbjpl3": self.per_stem + "issent",  # docuissent
                 }
 
-            # Third conjugation
             case 3:
                 self.endings = {
                     "Vpreactindsg1": self.present,  # traho
@@ -252,7 +249,6 @@ class LearningVerb(Word):
                     "Vplpactsbjpl3": self.per_stem + "issent",  # traxissent
                 }
 
-            # Fourth conjugation
             case 4:
                 self.endings = {
                     "Vpreactindsg1": self.present,  # audio
@@ -296,7 +292,6 @@ class LearningVerb(Word):
                     "Vplpactsbjpl3": self.per_stem + "issent",  # audivissent
                 }
 
-            # Third conjugation -io verbs
             case 5:
                 self.endings = {
                     "Vpreactindsg1": self.present,  # capio
@@ -340,8 +335,8 @@ class LearningVerb(Word):
                     "Vplpactsbjpl3": self.per_stem + "issent",  # cepissent
                 }
 
-            case _:
-                raise ValueError(f"Conjugation {self.conjugation} not recognised")
+            # case _:
+            #     raise ValueError(f"Conjugation {self.conjugation} not recognised")
 
         # Participles
         if self.ppp:
@@ -432,7 +427,7 @@ class LearningVerb(Word):
         mood: str,
         participle_gender: Optional[str] = None,
         participle_case: Optional[str] = None,
-    ):
+    ) -> Ending:
         short_tense: str
         short_voice: str
         short_mood: str
@@ -521,9 +516,10 @@ class Noun(Word):
         nominative: str,
         genitive: str,
         gender: str,
-        meaning: Union[str, MultipleMeanings],
+        meaning: Meaning,
     ) -> None:
         super().__init__()
+
         self.gender: str
         if gender not in {"m", "f", "n"}:
             if gender not in {"masculine", "feminine", "neuter"}:
@@ -534,7 +530,7 @@ class Noun(Word):
 
         self.nom: str = nominative
         self.gen: str = genitive
-        self.meaning: Union[str, MultipleMeanings] = meaning
+        self.meaning: Meaning = meaning
         self.plurale_tantum: bool = False
 
         self.first = self.nom
@@ -699,7 +695,7 @@ class Noun(Word):
                 k: v for k, v in self.endings.items() if not k.endswith("sg")
             }
 
-    def get(self, *, case: str, number: str) -> Union[str, MultipleEndings]:
+    def get(self, *, case: str, number: str) -> Ending:
         try:
             short_case: str = SHORTHAND[case]
             short_number: str = SHORTHAND[number]
@@ -735,9 +731,10 @@ class Adjective(Word):
         *principal_parts: str,
         termination: Optional[int] = None,
         declension: str,
-        meaning: Union[str, MultipleMeanings],
+        meaning: Meaning,
     ) -> None:
         super().__init__()
+
         self.principal_parts: tuple[str, ...] = principal_parts
         self.mascnom: str
         self.femnom: str
@@ -749,7 +746,7 @@ class Adjective(Word):
         self.spr_stem: str
 
         self.first = self.principal_parts[0]
-        self.meaning: Union[str, MultipleMeanings] = meaning
+        self.meaning: Meaning = meaning
         self.declension: str = declension
         self.termination: Optional[int] = termination
 
@@ -1433,7 +1430,7 @@ class Adjective(Word):
         case: Optional[str] = None,
         number: Optional[str] = None,
         adverb: bool = False,
-    ) -> Union[str, MultipleEndings]:
+    ) -> Ending:
         short_degree: str
 
         if adverb:
@@ -1484,7 +1481,7 @@ class Adjective(Word):
 
 @total_ordering
 class Pronoun(Word):
-    def __init__(self, *, pronoun: str, meaning: Union[str, MultipleMeanings]):
+    def __init__(self, *, pronoun: str, meaning: Meaning):
         super().__init__()
         try:
             self.endings = edge_cases.PRONOUNS[pronoun]
@@ -1493,13 +1490,13 @@ class Pronoun(Word):
 
         self.pronoun: str = pronoun
         self.first = self.pronoun
-        self.meaning: Union[str, MultipleMeanings] = meaning
+        self.meaning: Meaning = meaning
 
-        self.mascnom: Union[str, MultipleEndings] = self.endings["Pmnomsg"]
-        self.femnom: Union[str, MultipleEndings] = self.endings["Pfnomsg"]
-        self.neutnom: Union[str, MultipleEndings] = self.endings["Pnnomsg"]
+        self.mascnom: Ending = self.endings["Pmnomsg"]
+        self.femnom: Ending = self.endings["Pfnomsg"]
+        self.neutnom: Ending = self.endings["Pnnomsg"]
 
-    def get(self, gender: str, case: str, number: str):
+    def get(self, gender: str, case: str, number: str) -> Ending:
         try:
             short_gender: str = SHORTHAND[gender]
             short_case: str = SHORTHAND[case]

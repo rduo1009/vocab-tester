@@ -1,3 +1,6 @@
+# fmt: off
+# mypy: ignore-errors
+
 import sys, os  # noqa: E401
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
@@ -9,8 +12,9 @@ from grammatica.custom_exceptions import NoMeaningError, InvalidInputError
 
 # fmt: off
 def test_errors1():
-    with pytest.raises(InvalidInputError, match="Infinitive 'makinganerror' is not valid"):
-        word = LearningVerb(present="test1", infinitive="makinganerror", perfect="test3", ppp="test4", meaning="test5")  # noqa: F841
+    with pytest.raises(InvalidInputError) as error:
+        LearningVerb(present="test1", infinitive="makinganerror", perfect="test3", ppp="test4", meaning="test5")
+    assert "Infinitive 'makinganerror' is not valid" == str(error.value)
 
 
 def test_errors2():

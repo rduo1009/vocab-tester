@@ -1,4 +1,5 @@
 from .misc import Endings, MultipleEndings
+from typing import Union
 #  NOTE: I understand that there are deponents, but am keeping them for future
 # There also may be missing verbs
 
@@ -323,11 +324,11 @@ DERIVED_IRREGULAR_ENDINGS: dict[str, Endings] = {
 }
 
 
-def prefix(pre: str, endings: dict) -> dict:
+def prefix(pre: str, endings: Endings) -> Endings:
     return {key: pre + value for key, value in endings.items()}
 
 
-def find_irregular_endings(pre: str) -> dict:
+def find_irregular_endings(pre: str) -> Union[Endings, None]:
     if pre in IRREGULAR_VERBS:
         return IRREGULAR_VERBS[pre]
     for irregular_suffix, suffix_list in DERIVED_IRREGULAR_VERBS.items():
@@ -336,7 +337,7 @@ def find_irregular_endings(pre: str) -> dict:
                 pre.rstrip(irregular_suffix),
                 DERIVED_IRREGULAR_ENDINGS[irregular_suffix],
             )
-    return dict()
+    return None
 
 
 IRREGULAR_NOUNS: dict[str, Endings] = {
