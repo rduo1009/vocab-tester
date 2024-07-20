@@ -4,9 +4,82 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 
 import pytest
 from grammatica.endings import Adjective
+from grammatica.custom_exceptions import InvalidInputError, NoMeaningError
 
 
-# fmt: off
+
+def test_errors1():
+    with pytest.raises(InvalidInputError) as error:
+        Adjective("laetus", "laeta", "laetum", declension="212", meaning="happy", termination=3)
+    assert "2-1-2 adjectives cannot have a termination (termination 3 given)" == str(error.value)
+
+def test_errors2():
+    with pytest.raises(InvalidInputError) as error:
+        Adjective("laetus", "laeta", declension="212", meaning="happy")
+    assert "2-1-2 adjectives must have 3 principal parts (adjective 'laetus' given)" == str(error.value)
+
+def test_errors3():
+    with pytest.raises(InvalidInputError) as error:
+        Adjective("laetus", "laeta", "laetum", declension="3", meaning="happy", termination=1)
+    assert "First-termination adjectives must have 2 principal parts (adjective 'laetus')" == str(error.value)
+
+def test_errors4():
+    with pytest.raises(InvalidInputError) as error:
+        Adjective("laetus", "laeta", declension="3", meaning="happy", termination=1)
+    assert "Genitive 'laeta' not recognised" == str(error.value)
+
+def test_errors5():
+    with pytest.raises(InvalidInputError) as error:
+        Adjective("laetus", "laeta", "laetum", declension="3", meaning="happy", termination=2)
+    assert "Second-termination adjectives must have 2 principal parts (adjective 'laetus')" == str(error.value)
+
+def test_errors6():
+    with pytest.raises(InvalidInputError) as error:
+        Adjective("laetus", "laeta", declension="3", meaning="happy", termination=3)
+    assert "Third-termination adjectives must have 3 principal parts (adjective 'laetus')" == str(error.value)
+
+def test_errors7():
+    with pytest.raises(InvalidInputError) as error:
+        Adjective("laetus", "laeta", declension="3", meaning="happy", termination=7)
+    assert "Termination must be 1, 2 or 3 (given 7)" == str(error.value)
+
+def test_errors8():
+    with pytest.raises(InvalidInputError) as error:
+        Adjective("laetus", "laeta", "laetum", declension="332801549372", meaning="happy", termination=3)
+    assert "Declension 332801549372 not recognised" == str(error.value)
+
+def test_errors9():
+    with pytest.raises(InvalidInputError) as error:
+        word = Adjective("laetus", "laeta", "laetum", declension="212", meaning="happy")
+        word.get(case="makinganerror", gender="masculine", number="singular", degree="adgsf", adverb=True)
+    assert "Adverbs do not have gender, case or number (given 'masculine', 'makinganerror' and 'singular')" == str(error.value)
+
+def test_errors10():
+    with pytest.raises(InvalidInputError) as error:
+        word = Adjective("laetus", "laeta", "laetum", declension="212", meaning="happy")
+        word.get(degree="adgsf", adverb=True)
+    assert "Degree 'adgsf' not recognised" == str(error.value)
+
+def test_errors11():
+    with pytest.raises(NoMeaningError) as error:
+        word = Adjective("laetus", "laeta", "laetum", declension="212", meaning="happy")
+        del word.endings["Dpos"]
+        word.get(degree="positive", adverb=True)
+    assert "No ending found for degree 'positive'" == str(error.value)
+
+def test_errors12():
+    with pytest.raises(InvalidInputError) as error:
+        word = Adjective("laetus", "laeta", "laetum", declension="212", meaning="happy")
+        word.get(case="makinganerror", gender="masculine", number="singular", degree="adgsf")
+    assert "Degree 'adgsf', gender 'masculine', case 'makinganerror' or number 'singular' not recognised" == str(error.value)
+
+def test_errors13():
+    with pytest.raises(NoMeaningError) as error:
+        word = Adjective("laetus", "laeta", "laetum", declension="212", meaning="happy")
+        del word.endings["Aposmnomsg"]
+        word.get(case="nominative", gender="masculine", number="singular", degree="positive")
+    assert "No ending found for degree 'positive', gender 'masculine', case 'nominative' and number 'singular'" == str(error.value)
+
 def test_repr():
     word = Adjective("laetus", "laeta", "laetum", declension="212", meaning="happy")
     assert word.__repr__() == "Adjective(laetus, laeta, laetum, None, 212, happy)"
@@ -654,7 +727,7 @@ def test_irregularadverb1():
     assert word.get(degree="superlative", adverb=True) == "optime"
 
 def test_irregularadverb2():
-    word = Adjective("bonus", "bona", declension="3", termination=1, meaning="happy")
+    word = Adjective("bonus", "bonis", declension="3", termination=1, meaning="happy")
     assert word.get(degree="positive", adverb=True) == "bene"
     assert word.get(degree="comparative", adverb=True) == "melius"
     assert word.get(degree="superlative", adverb=True) == "optime"

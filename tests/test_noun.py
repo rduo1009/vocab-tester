@@ -4,9 +4,38 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 
 import pytest
 from grammatica.endings import Noun
+from grammatica.custom_exceptions import InvalidInputError, NoMeaningError
 
 
 # fmt: off
+def test_errors1():
+    with pytest.raises(InvalidInputError) as error:
+        Noun(nominative="puer", genitive="pueri", gender="a", meaning="boy")
+    assert "Gender 'a' not recognised" == str(error.value)
+
+def test_errors2():
+    with pytest.raises(InvalidInputError) as error:
+        Noun(nominative="puer", genitive="puerifaksldsnj", gender="m", meaning="boy")
+    assert "Genitive form 'puerifaksldsnj' is not valid" == str(error.value)
+
+def test_errors3():
+    with pytest.raises(InvalidInputError) as error:
+        Noun(nominative="puer", genitive="puerei", gender="n", meaning="boy")
+    assert "Fifth declension nouns cannot be neuter (noun 'puer')" == str(error.value)
+
+def test_errors4():
+    with pytest.raises(InvalidInputError) as error:
+        word = Noun(nominative="puer", genitive="pueri", gender="m", meaning="boy")
+        word.get(case="makinganerror", number="makinganerror")
+    assert "Case 'makinganerror' or number 'makinganerror' not recognised" == str(error.value)
+
+def test_errors5():
+    with pytest.raises(NoMeaningError) as error:
+        word = Noun(nominative="puer", genitive="pueri", gender="m", meaning="boy")
+        del word.endings["Nnomsg"]
+        word.get(case="nominative", number="singular")
+    assert "No ending found for case 'nominative' and number 'singular'" == str(error.value)
+
 def test_repr():
     word = Noun(nominative="puer", genitive="pueri", gender="m", meaning="boy")
     assert word.__repr__() == "Noun(puer, pueri, m, boy)"

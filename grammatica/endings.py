@@ -341,7 +341,7 @@ class LearningVerb(Word):
                 }
 
             case _:
-                raise ValueError(f"Conjugation '{self.conjugation}' not recognised")
+                raise ValueError(f"Conjugation {self.conjugation} not recognised")
 
         # Participles
         if self.ppp:
@@ -468,7 +468,7 @@ class LearningVerb(Word):
 
             except KeyError:
                 raise NoMeaningError(
-                    f"No ending found for {person} {number} {tense} {voice} {mood}"
+                    f"No ending found for {participle_case} {number} {participle_gender} {tense} {voice} participle"
                 )
 
         else:
@@ -527,7 +527,7 @@ class Noun(Word):
         self.gender: str
         if gender not in {"m", "f", "n"}:
             if gender not in {"masculine", "feminine", "neuter"}:
-                raise InvalidInputError(f"Gender '{self.gender}' not recognised")
+                raise InvalidInputError(f"Gender '{gender}' not recognised")
             self.gender = SHORTHAND[gender]
         else:
             self.gender = gender
@@ -541,13 +541,17 @@ class Noun(Word):
         self.declension: int
         self.stem: str
 
-        # Find declension
         if self.nom in edge_cases.IRREGULAR_NOUNS:
             self.endings = edge_cases.IRREGULAR_NOUNS[nominative]
             self.declension = 0
             return
 
-        if genitive[-2:] == "ae":
+        # The ordering of this is strange because e.g. ending -ei ends in 'i' as well as 'ei'
+        # so 5th declension check must come before 2nd declension check, etc.
+        if genitive[-2:] == "ei":
+            self.declension = 5
+            self.stem = self.gen[:-2]  # diei > di-
+        elif genitive[-2:] == "ae":
             self.declension = 1
             self.stem = self.gen[:-2]  # puellae -> puell-
         elif genitive[-1:] == "i":
@@ -559,10 +563,11 @@ class Noun(Word):
         elif genitive[-2:] == "us":
             self.declension = 4
             self.stem = self.gen[:-2]  # manus -> man-
-        elif genitive[-2:] == "ei":
-            self.declension = 5
-            self.stem = self.gen[:-2]  # diei > di-
 
+        elif genitive[-4:] == "uum":
+            self.declension = 4
+            self.stem = self.gen[:-3]  # manuum -> man-
+            self.plurale_tantum = True
         elif genitive[-4:] == "arum":
             self.declension = 1
             self.stem = self.gen[:-4]  # puellarum -> puell-
@@ -571,24 +576,19 @@ class Noun(Word):
             self.declension = 2
             self.stem = self.gen[:-4]  # servorum -> serv-
             self.plurale_tantum = True
-        elif genitive[-2:] == "um":
-            self.declension = 3
-            self.stem = self.gen[:-2]  # canum -> can-
-            self.plurale_tantum = True
-        elif genitive[-4:] == "uum":
-            self.declension = 4
-            self.stem = self.gen[:-3]  # manuum -> man-
-            self.plurale_tantum = True
         elif genitive[-4:] == "erum":
             self.declension = 5
             self.stem = self.gen[:-4]  # dierum > di-
             self.plurale_tantum = True
+        elif genitive[-2:] == "um":
+            self.declension = 3
+            self.stem = self.gen[:-2]  # canum -> can-
+            self.plurale_tantum = True
 
         else:
-            raise InvalidInputError(f"Genitive form {self.gen} is not valid")
+            raise InvalidInputError(f"Genitive form '{self.gen}' is not valid")
 
         match self.declension:
-            # First declension
             case 1:
                 self.endings = {
                     "Nnomsg": self.nom,  # puella
@@ -605,7 +605,6 @@ class Noun(Word):
                     "Nablpl": self.stem + "is",  # puellis
                 }
 
-            # Second declension
             case 2:
                 self.endings = {
                     "Nnomsg": self.nom,  # servus
@@ -624,7 +623,6 @@ class Noun(Word):
                     "Nablpl": self.stem + "is",  # servis
                 }
 
-            # Third declension
             case 3:
                 self.endings = {
                     "Nnomsg": self.nom,  # mercator
@@ -641,7 +639,6 @@ class Noun(Word):
                     "Nablpl": self.stem + "ibus",  # mercatoribus
                 }
 
-            # Fourth declension
             case 4:
                 self.endings = {
                     "Nnomsg": self.nom,  # manus
@@ -658,7 +655,6 @@ class Noun(Word):
                     "Nablpl": self.stem + "ibus",  # manibus
                 }
 
-            # Fifth declension
             case 5:
                 self.endings = {
                     "Nnomsg": self.nom,  # res
@@ -676,7 +672,7 @@ class Noun(Word):
                 }
 
             case _:
-                raise ValueError("Declension not recognised")
+                raise ValueError(f"Declension {self.declension} not recognised")
 
         if self.gender == "n":
             self.endings["Naccsg"] = self.nom
@@ -690,7 +686,7 @@ class Noun(Word):
                 return
             elif self.declension == 5:
                 raise InvalidInputError(
-                    f"Fifth declension nouns cannot be neuter (noun {self.nom})"
+                    f"Fifth declension nouns cannot be neuter (noun '{self.nom}')"
                 )
 
             # For the other declensions
@@ -708,12 +704,16 @@ class Noun(Word):
             short_case: str = SHORTHAND[case]
             short_number: str = SHORTHAND[number]
         except KeyError:
-            raise InvalidInputError(f"Case {case} or number {number} not recognised")
+            raise InvalidInputError(
+                f"Case '{case}' or number '{number}' not recognised"
+            )
 
         try:
             return self.endings[f"N{short_case}{short_number}"]
         except KeyError:
-            raise NoMeaningError(f"No ending found for case {case} and number {number}")
+            raise NoMeaningError(
+                f"No ending found for case '{case}' and number '{number}'"
+            )
 
     def __repr__(self) -> str:
         return f"Noun({self.nom}, {self.gen}, {self.gender}, {self.meaning})"
@@ -754,6 +754,7 @@ class Adjective(Word):
         self.termination: Optional[int] = termination
 
         # FIXME: some adjectives don't have adverbs!
+        #        bug probably to be left in, a bit complicated to fix
         self.irregular_posadv: Optional[str] = None
         self.irregular_cmpadv: Optional[str] = None
         self.irregular_spradv: Optional[str] = None
@@ -767,7 +768,7 @@ class Adjective(Word):
                     )
                 if len(self.principal_parts) != 3:
                     raise InvalidInputError(
-                        f"2-1-2 adjectives must have 3 principal parts (adjective '{self.mascnom}' given)"
+                        f"2-1-2 adjectives must have 3 principal parts (adjective '{self.first}' given)"
                     )
                 self.mascnom = self.principal_parts[0]
                 self.femnom = self.principal_parts[1]
@@ -919,7 +920,6 @@ class Adjective(Word):
 
             case "3":
                 match self.termination:
-                    # First termination adjectives
                     case 1:
                         # ingens, ingentis
                         if len(self.principal_parts) != 2:
@@ -930,11 +930,11 @@ class Adjective(Word):
                         self.mascnom = self.principal_parts[0]
                         self.mascgen = self.principal_parts[1]
 
-                        self.pos_stem = self.mascgen[:-2]  # ingentis -> ingent-
-                        if self.pos_stem == "is":
+                        if self.mascgen[-2:] != "is":
                             raise InvalidInputError(
                                 f"Genitive '{self.mascgen}' not recognised"
                             )
+                        self.pos_stem = self.mascgen[:-2]  # ingentis -> ingent-
 
                         if self.mascnom in edge_cases.IRREGULAR_COMPARATIVES:
                             self.cmp_stem = edge_cases.IRREGULAR_COMPARATIVES[
@@ -1090,7 +1090,6 @@ class Adjective(Word):
                             else self.spr_stem + "e",
                         }
 
-                    # Second termination adjectives
                     case 2:
                         # fortis, forte
                         if len(self.principal_parts) != 2:
@@ -1254,7 +1253,6 @@ class Adjective(Word):
                             else self.spr_stem + "e",
                         }
 
-                    # Third termination adjectives
                     case 3:
                         # acer, acris, acre
                         if len(self.principal_parts) != 3:
@@ -1436,26 +1434,41 @@ class Adjective(Word):
         number: Optional[str] = None,
         adverb: bool = False,
     ) -> Union[str, MultipleEndings]:
+        short_degree: str
+
+        if adverb:
+            if gender or case or number:
+                raise InvalidInputError(
+                    f"Adverbs do not have gender, case or number (given '{gender}', '{case}' and '{number}')"
+                )
+            try:
+                short_degree = SHORTHAND[degree]
+            except KeyError:
+                raise InvalidInputError(f"Degree '{degree}' not recognised")
+
+            try:
+                return self.endings[f"D{short_degree}"]
+            except KeyError:
+                raise NoMeaningError(f"No ending found for degree '{degree}'")
+
         try:
-            short_degree: str = SHORTHAND[degree]
+            short_degree = SHORTHAND[degree]
             if gender and case and number:
                 short_gender: str = SHORTHAND[gender]
                 short_case: str = SHORTHAND[case]
                 short_number: str = SHORTHAND[number]
         except KeyError:
             raise InvalidInputError(
-                f"Degree {degree}, gender {gender}, case {case} or number {number} not recognised"
+                f"Degree '{degree}', gender '{gender}', case '{case}' or number '{number}' not recognised"
             )
 
         try:
-            if adverb:
-                return self.endings[f"D{short_degree}"]
             return self.endings[
                 f"A{short_degree}{short_gender}{short_case}{short_number}"
             ]
         except KeyError:
             raise NoMeaningError(
-                f"No ending found for degree {degree}, gender {gender}, case {case} and number {number}"
+                f"No ending found for degree '{degree}', gender '{gender}', case '{case}' and number '{number}'"
             )
 
     def __str__(self) -> str:
@@ -1476,7 +1489,7 @@ class Pronoun(Word):
         try:
             self.endings = edge_cases.PRONOUNS[pronoun]
         except KeyError:
-            raise InvalidInputError(f"Pronoun {pronoun} not recognised")
+            raise InvalidInputError(f"Pronoun '{pronoun}' not recognised")
 
         self.pronoun: str = pronoun
         self.first = self.pronoun
@@ -1493,14 +1506,14 @@ class Pronoun(Word):
             short_number: str = SHORTHAND[number]
         except KeyError:
             raise InvalidInputError(
-                f"Gender {gender}, case {case} or number {number} not recognised"
+                f"Gender '{gender}', case '{case}' or number '{number}' not recognised"
             )
 
         try:
             return self.endings[f"P{short_gender}{short_case}{short_number}"]
         except KeyError:
             raise NoMeaningError(
-                f"No ending found for gender {gender}, case {case} and number {number}"
+                f"No ending found for gender '{gender}', case '{case}' and number '{number}'"
             )
 
     def __repr__(self) -> str:

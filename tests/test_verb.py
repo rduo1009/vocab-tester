@@ -14,15 +14,43 @@ def test_errors1():
 
 
 def test_errors2():
-    with pytest.raises(InvalidInputError, match="Tense 'past', voice 'active', mood 'indicative', or number 'makinganerror' not recognised"):
+    with pytest.raises(InvalidInputError) as error:
         word = LearningVerb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
         word.get(person=1, number="makinganerror", tense="past", voice="active", mood="indicative")
+    assert "Tense 'past', voice 'active', mood 'indicative', or number 'makinganerror' not recognised" == str(error.value)
 
 
 def test_errors3():
-    with pytest.raises(InvalidInputError, match="Person '123415' not recognised"):
+    with pytest.raises(InvalidInputError) as error:
         word = LearningVerb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
         word.get(person=123415, number="singular", tense="present", voice="active", mood="indicative")
+    assert "Person '123415' not recognised" == str(error.value)
+
+def test_errors4():
+    with pytest.raises(InvalidInputError) as error:
+        word = LearningVerb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
+        word.get(person=1, number="singular", tense="present", voice="active", mood="participle")
+    assert "Gender or case not given" == str(error.value)
+
+def test_errors5():
+    with pytest.raises(InvalidInputError) as error:
+        word = LearningVerb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
+        word.get(tense="present", voice="active", mood="participle", participle_case="nominative", participle_gender="masculine")
+    assert "Number not given" == str(error.value)
+
+def test_errors6():
+    with pytest.raises(NoMeaningError) as error:
+        word = LearningVerb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
+        del word.endings["Vperpasptcmnomsg"]
+        word.get(tense="perfect", voice="passive", mood="participle", participle_case="nominative", participle_gender="masculine", number="singular")
+    assert "No ending found for nominative singular masculine perfect passive participle" == str(error.value)
+
+def test_errors7():
+    with pytest.raises(NoMeaningError) as error:
+        word = LearningVerb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
+        del word.endings["Vperactindsg3"]
+        word.get(tense="perfect", voice="active", mood="indicative", person=3, number="singular")
+    assert "No ending found for 3 singular perfect active indicative" == str(error.value)
 
 
 def test_repr():
