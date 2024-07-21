@@ -2,7 +2,7 @@ import itertools
 from dataclasses import dataclass
 from functools import total_ordering
 from io import StringIO
-from typing import Optional
+from typing import Optional, Literal
 
 from . import edge_cases
 from .custom_exceptions import InvalidInputError, NoMeaningError
@@ -108,7 +108,7 @@ class LearningVerb(Word):
         self.meaning: Meaning = meaning
 
         self.first = self.present
-        self.conjugation: int
+        self.conjugation: Literal[0, 1, 2, 3, 4, 5]
 
         # Conjugation edge cases
         if irregular_endings := edge_cases.find_irregular_endings(self.present):
@@ -131,230 +131,241 @@ class LearningVerb(Word):
         else:
             raise InvalidInputError(f"Infinitive '{self.infinitive}' is not valid")
 
-        self._pre_stem: str = self.present[:-1]
-        self._inf_stem: str = self.infinitive[:-3]
-        self._per_stem: str = self.perfect[:-1]
+        self.endings.update(
+            LearningVerb._static_regular_endings(
+                self.conjugation, self.present, self.infinitive, self.perfect
+            )
+        )
+        # Participles
+        if self.ppp:
+            self.endings.update(
+                LearningVerb._participle_endings(self.ppp, self.infinitive)
+            )
 
-        self.endings = {}
+    @staticmethod
+    def _static_regular_endings(
+        conjugation: Literal[1, 2, 3, 4, 5], present: str, infinitive: str, perfect: str
+    ) -> Endings:
+        _pre_stem: str = present[:-1]
+        _inf_stem: str = infinitive[:-3]
+        _per_stem: str = perfect[:-1]
 
-        # Dont differ: perfect, pluperfect, imperfect sbj, pluperfect sbj
+        match conjugation:
+            case 1:
+                return {
+                    "Vpreactindsg1": present,  # porto
+                    "Vpreactindsg2": _inf_stem + "as",  # portas
+                    "Vpreactindsg3": _inf_stem + "at",  # portat
+                    "Vpreactindpl1": _inf_stem + "amus",  # portamus
+                    "Vpreactindpl2": _inf_stem + "atis",  # portatis
+                    "Vpreactindpl3": _inf_stem + "ant",  # portant
+                    "Vimpactindsg1": _inf_stem + "abam",  # portabam
+                    "Vimpactindsg2": _inf_stem + "abas",  # portabas
+                    "Vimpactindsg3": _inf_stem + "abat",  # portabat
+                    "Vimpactindpl1": _inf_stem + "abamus",  # portabamus
+                    "Vimpactindpl2": _inf_stem + "abatis",  # portabatis
+                    "Vimpactindpl3": _inf_stem + "abant",  # portabant
+                    "Vpreactinf   ": infinitive,  # portare
+                    "Vpreactipesg2": _inf_stem + "a",  # porta
+                    "Vpreactipepl2": _inf_stem + "ate",  # portate
+                }  # fmt: skip
 
+            case 2:
+                return {
+                    "Vpreactindsg1": present,  # doceo
+                    "Vpreactindsg2": _inf_stem + "es",  # doces
+                    "Vpreactindsg3": _inf_stem + "et",  # docet
+                    "Vpreactindpl1": _inf_stem + "emus",  # docemus
+                    "Vpreactindpl2": _inf_stem + "etis",  # docetis
+                    "Vpreactindpl3": _inf_stem + "ent",  # docent
+                    "Vimpactindsg1": _inf_stem + "ebam",  # docebam
+                    "Vimpactindsg2": _inf_stem + "ebas",  # docebas
+                    "Vimpactindsg3": _inf_stem + "ebat",  # docebat
+                    "Vimpactindpl1": _inf_stem + "ebamus",  # docebamus
+                    "Vimpactindpl2": _inf_stem + "ebatis",  # docebatis
+                    "Vimpactindpl3": _inf_stem + "ebant",  # docebant
+                    "Vpreactinf   ": infinitive,  # docere
+                    "Vpreactipesg2": _inf_stem + "e",  # doce
+                    "Vpreactipepl2": _inf_stem + "ete",  # docete
+                }  # fmt: skip
+
+            case 3:
+                return {
+                    "Vpreactindsg1": present,  # traho
+                    "Vpreactindsg2": _inf_stem + "is",  # trahis
+                    "Vpreactindsg3": _inf_stem + "it",  # trahit
+                    "Vpreactindpl1": _inf_stem + "imus",  # trahimus
+                    "Vpreactindpl2": _inf_stem + "itis",  # trahitis
+                    "Vpreactindpl3": _inf_stem + "unt",  # trahunt
+                    "Vimpactindsg1": _inf_stem + "ebam",  # trahebam
+                    "Vimpactindsg2": _inf_stem + "ebas",  # trahebas
+                    "Vimpactindsg3": _inf_stem + "ebat",  # trahebat
+                    "Vimpactindpl1": _inf_stem + "ebamus",  # trahebamus
+                    "Vimpactindpl2": _inf_stem + "ebatis",  # trahebatis
+                    "Vimpactindpl3": _inf_stem + "ebant",  # trahebant
+                    "Vpreactinf   ": infinitive,  # trahere
+                    "Vpreactipesg2": _inf_stem + "e",  # trahe
+                    "Vpreactipepl2": _inf_stem + "ite",  # trahite
+                }  # fmt: skip
+
+            case 4:
+                return {
+                    "Vpreactindsg1": present,  # audio
+                    "Vpreactindsg2": _inf_stem + "is",  # audis
+                    "Vpreactindsg3": _inf_stem + "it",  # audit
+                    "Vpreactindpl1": _inf_stem + "imus",  # audimus
+                    "Vpreactindpl2": _inf_stem + "itis",  # auditis
+                    "Vpreactindpl3": _inf_stem + "iunt",  # audiunt
+                    "Vimpactindsg1": _inf_stem + "iebam",  # audiebam
+                    "Vimpactindsg2": _inf_stem + "iebas",  # audiebas
+                    "Vimpactindsg3": _inf_stem + "iebat",  # audiebat
+                    "Vimpactindpl1": _inf_stem + "iebamus",  # audiebamus
+                    "Vimpactindpl2": _inf_stem + "iebatis",  # audiebatis
+                    "Vimpactindpl3": _inf_stem + "iebant",  # audiebant
+                    "Vpreactinf   ": infinitive,  # audire
+                    "Vpreactipesg2": _inf_stem + "i",  # audi
+                    "Vpreactipepl2": _inf_stem + "ite",  # audite
+                }  # fmt: skip
+
+            case 5:
+                return {
+                    "Vpreactindsg1": present,  # capio
+                    "Vpreactindsg2": _inf_stem + "is",  # capis
+                    "Vpreactindsg3": _inf_stem + "it",  # capit
+                    "Vpreactindpl1": _inf_stem + "imus",  # capimus
+                    "Vpreactindpl2": _inf_stem + "itis",  # capitis
+                    "Vpreactindpl3": _inf_stem + "iunt",  # capiunt
+                    "Vimpactindsg1": _inf_stem + "iebam",  # capiebam
+                    "Vimpactindsg2": _inf_stem + "iebas",  # capiebas
+                    "Vimpactindsg3": _inf_stem + "iebat",  # capiebat
+                    "Vimpactindpl1": _inf_stem + "iebamus",  # capiebamus
+                    "Vimpactindpl2": _inf_stem + "iebatis",  # capiebatis
+                    "Vimpactindpl3": _inf_stem + "iebant",  # capiebant
+                    "Vpreactinf   ": infinitive,  # capere
+                    "Vpreactipesg2": _inf_stem + "e",  # cape
+                    "Vpreactipepl2": _inf_stem + "ite",  # capite
+                }  # fmt: skip
+
+            # case _:
+            #    raise ValueError(f"Conjugation {conjugation} not recognised")
+
+    @staticmethod
+    def _similar_regular_endings(
+        conjugation: Literal[1, 2, 3, 4, 5], present: str, infinitive: str, perfect: str
+    ) -> Endings:
+        _pre_stem: str = present[:-1]
+        _inf_stem: str = infinitive[:-3]
+        _per_stem: str = perfect[:-1]
+
+        # Same endings across conjugations: perfect, pluperfect, imperfect sbj, pluperfect sbj
         SAME_ENDINGS: dict[str, tuple[str, tuple[str, ...]]] = {
             "peractind": (
-                self._per_stem,
+                _per_stem,
                 ("i", "isti", "it", "imus", "istis", "erunt"),
             ),
             "plpactind": (
-                self._per_stem,
+                _per_stem,
                 ("eram", "eras", "erat", "eramus", "eratis", "erant"),
             ),
-            "impactsbj": (self.infinitive, ("m", "s", "t", "mus", "tis", "nt")),
+            "impactsbj": (infinitive, ("m", "s", "t", "mus", "tis", "nt")),
             "plpactsbj": (
-                self._per_stem,
+                _per_stem,
                 ("issem", "isses", "isset", "issemus", "issetis", "issent"),
             ),
         }
 
-        # FIXME: can the voice loop be integrated with the itertools.product() loop?
-        for voice in VOICE_SHORTHAND.values():
-            for tense, mood in (
-                ("per", "ind"),
-                ("plp", "ind"),
-                ("imp", "sbj"),
-                ("plp", "sbj"),
-            ):
-                count = 0
-                for number, person, voice in itertools.product(
-                    NUMBER_SHORTHAND.values(), range(1, 4), VOICE_SHORTHAND.values()
-                ):
-                    try:
-                        endings_dict = SAME_ENDINGS[f"{tense}{voice}{mood}"]
-                    except KeyError:
-                        break
-                    self.endings.update({
-                            f"V{tense}{voice}{mood}{number}{person}": endings_dict[0] + endings_dict[1][count] 
-                        })  # fmt: skip
-                    count += 1
-
-        match self.conjugation:
-            case 1:
-                self.endings.update({
-                    "Vpreactindsg1": self.present,  # porto
-                    "Vpreactindsg2": self._inf_stem + "as",  # portas
-                    "Vpreactindsg3": self._inf_stem + "at",  # portat
-                    "Vpreactindpl1": self._inf_stem + "amus",  # portamus
-                    "Vpreactindpl2": self._inf_stem + "atis",  # portatis
-                    "Vpreactindpl3": self._inf_stem + "ant",  # portant
-                    "Vimpactindsg1": self._inf_stem + "abam",  # portabam
-                    "Vimpactindsg2": self._inf_stem + "abas",  # portabas
-                    "Vimpactindsg3": self._inf_stem + "abat",  # portabat
-                    "Vimpactindpl1": self._inf_stem + "abamus",  # portabamus
-                    "Vimpactindpl2": self._inf_stem + "abatis",  # portabatis
-                    "Vimpactindpl3": self._inf_stem + "abant",  # portabant
-                    "Vpreactinf   ": self.infinitive,  # portare
-                    "Vpreactipesg2": self._inf_stem + "a",  # porta
-                    "Vpreactipepl2": self._inf_stem + "ate",  # portate
-                })  # fmt:skip
-
-            case 2:
-                self.endings.update({
-                    "Vpreactindsg1": self.present,  # doceo
-                    "Vpreactindsg2": self._inf_stem + "es",  # doces
-                    "Vpreactindsg3": self._inf_stem + "et",  # docet
-                    "Vpreactindpl1": self._inf_stem + "emus",  # docemus
-                    "Vpreactindpl2": self._inf_stem + "etis",  # docetis
-                    "Vpreactindpl3": self._inf_stem + "ent",  # docent
-                    "Vimpactindsg1": self._inf_stem + "ebam",  # docebam
-                    "Vimpactindsg2": self._inf_stem + "ebas",  # docebas
-                    "Vimpactindsg3": self._inf_stem + "ebat",  # docebat
-                    "Vimpactindpl1": self._inf_stem + "ebamus",  # docebamus
-                    "Vimpactindpl2": self._inf_stem + "ebatis",  # docebatis
-                    "Vimpactindpl3": self._inf_stem + "ebant",  # docebant
-                    "Vpreactinf   ": self.infinitive,  # docere
-                    "Vpreactipesg2": self._inf_stem + "e",  # doce
-                    "Vpreactipepl2": self._inf_stem + "ete",  # docete
-                })  # fmt:skip
-
-            case 3:
-                self.endings.update({
-                    "Vpreactindsg1": self.present,  # traho
-                    "Vpreactindsg2": self._inf_stem + "is",  # trahis
-                    "Vpreactindsg3": self._inf_stem + "it",  # trahit
-                    "Vpreactindpl1": self._inf_stem + "imus",  # trahimus
-                    "Vpreactindpl2": self._inf_stem + "itis",  # trahitis
-                    "Vpreactindpl3": self._inf_stem + "unt",  # trahunt
-                    "Vimpactindsg1": self._inf_stem + "ebam",  # trahebam
-                    "Vimpactindsg2": self._inf_stem + "ebas",  # trahebas
-                    "Vimpactindsg3": self._inf_stem + "ebat",  # trahebat
-                    "Vimpactindpl1": self._inf_stem + "ebamus",  # trahebamus
-                    "Vimpactindpl2": self._inf_stem + "ebatis",  # trahebatis
-                    "Vimpactindpl3": self._inf_stem + "ebant",  # trahebant
-                    "Vpreactinf   ": self.infinitive,  # trahere
-                    "Vpreactipesg2": self._inf_stem + "e",  # trahe
-                    "Vpreactipepl2": self._inf_stem + "ite",  # trahite
-                })  # fmt:skip
-
-            case 4:
-                self.endings.update({
-                    "Vpreactindsg1": self.present,  # audio
-                    "Vpreactindsg2": self._inf_stem + "is",  # audis
-                    "Vpreactindsg3": self._inf_stem + "it",  # audit
-                    "Vpreactindpl1": self._inf_stem + "imus",  # audimus
-                    "Vpreactindpl2": self._inf_stem + "itis",  # auditis
-                    "Vpreactindpl3": self._inf_stem + "iunt",  # audiunt
-                    "Vimpactindsg1": self._inf_stem + "iebam",  # audiebam
-                    "Vimpactindsg2": self._inf_stem + "iebas",  # audiebas
-                    "Vimpactindsg3": self._inf_stem + "iebat",  # audiebat
-                    "Vimpactindpl1": self._inf_stem + "iebamus",  # audiebamus
-                    "Vimpactindpl2": self._inf_stem + "iebatis",  # audiebatis
-                    "Vimpactindpl3": self._inf_stem + "iebant",  # audiebant
-                    "Vpreactinf   ": self.infinitive,  # audire
-                    "Vpreactipesg2": self._inf_stem + "i",  # audi
-                    "Vpreactipepl2": self._inf_stem + "ite",  # audite
-                })  # fmt:skip
-
-            case 5:
-                self.endings.update({
-                    "Vpreactindsg1": self.present,  # capio
-                    "Vpreactindsg2": self._inf_stem + "is",  # capis
-                    "Vpreactindsg3": self._inf_stem + "it",  # capit
-                    "Vpreactindpl1": self._inf_stem + "imus",  # capimus
-                    "Vpreactindpl2": self._inf_stem + "itis",  # capitis
-                    "Vpreactindpl3": self._inf_stem + "iunt",  # capiunt
-                    "Vimpactindsg1": self._inf_stem + "iebam",  # capiebam
-                    "Vimpactindsg2": self._inf_stem + "iebas",  # capiebas
-                    "Vimpactindsg3": self._inf_stem + "iebat",  # capiebat
-                    "Vimpactindpl1": self._inf_stem + "iebamus",  # capiebamus
-                    "Vimpactindpl2": self._inf_stem + "iebatis",  # capiebatis
-                    "Vimpactindpl3": self._inf_stem + "iebant",  # capiebant
-                    "Vpreactinf   ": self.infinitive,  # capere
-                    "Vpreactipesg2": self._inf_stem + "e",  # cape
-                    "Vpreactipepl2": self._inf_stem + "ite",  # capite
-                })  # fmt:skip
-
-            # case _:
-            #     raise ValueError(f"Conjugation {self.conjugation} not recognised")
-
-        # Participles
-        if self.ppp:
-            self.endings.update(self._participle_endings(self.ppp, self.infinitive))
-
-    def _participle_endings(self, ppp: str, infinitive: str) -> Endings:
-        self._preptc_stem: str = infinitive[:-2]
-        self._ppp_stem: str = ppp[:-2]
         return {
-                "Vpreactptcmnomsg": self._preptc_stem + "ns",
-                "Vpreactptcmvocsg": self._preptc_stem + "ns",
-                "Vpreactptcmaccsg": self._preptc_stem + "ntem",
-                "Vpreactptcmgensg": self._preptc_stem + "ntis",
-                "Vpreactptcmdatsg": self._preptc_stem + "nti",
-                "Vpreactptcmablsg": self._preptc_stem + "nte",
-                "Vpreactptcmnompl": self._preptc_stem + "ntes",
-                "Vpreactptcmvocpl": self._preptc_stem + "ntes",
-                "Vpreactptcmaccpl": self._preptc_stem + "ntes",
-                "Vpreactptcmgenpl": self._preptc_stem + "ntium",
-                "Vpreactptcmdatpl": self._preptc_stem + "ntibus",
-                "Vpreactptcmablpl": self._preptc_stem + "ntibus",
-                "Vpreactptcfnomsg": self._preptc_stem + "ns",
-                "Vpreactptcfvocsg": self._preptc_stem + "ns",
-                "Vpreactptcfaccsg": self._preptc_stem + "ntem",
-                "Vpreactptcfgensg": self._preptc_stem + "ntis",
-                "Vpreactptcfdatsg": self._preptc_stem + "nti",
-                "Vpreactptcfablsg": self._preptc_stem + "nte",
-                "Vpreactptcfnompl": self._preptc_stem + "ntes",
-                "Vpreactptcfvocpl": self._preptc_stem + "ntes",
-                "Vpreactptcfaccpl": self._preptc_stem + "ntes",
-                "Vpreactptcfgenpl": self._preptc_stem + "ntium",
-                "Vpreactptcfdatpl": self._preptc_stem + "ntibus",
-                "Vpreactptcfablpl": self._preptc_stem + "ntibus",
-                "Vpreactptcnnomsg": self._preptc_stem + "ns",
-                "Vpreactptcnvocsg": self._preptc_stem + "ns",
-                "Vpreactptcnaccsg": self._preptc_stem + "ns",
-                "Vpreactptcngensg": self._preptc_stem + "ntis",
-                "Vpreactptcndatsg": self._preptc_stem + "nti",
-                "Vpreactptcnablsg": self._preptc_stem + "nte",
-                "Vpreactptcnnompl": self._preptc_stem + "ntia",
-                "Vpreactptcnvocpl": self._preptc_stem + "ntia",
-                "Vpreactptcnaccpl": self._preptc_stem + "ntia",
-                "Vpreactptcngenpl": self._preptc_stem + "ntium",
-                "Vpreactptcndatpl": self._preptc_stem + "ntibus",
-                "Vpreactptcnablpl": self._preptc_stem + "ntibus",
-                "Vperpasptcmnomsg": self.ppp,
-                "Vperpasptcmvocsg": self._ppp_stem + "e",
-                "Vperpasptcmaccsg": self._ppp_stem + "um",
-                "Vperpasptcmgensg": self._ppp_stem + "i",
-                "Vperpasptcmdatsg": self._ppp_stem + "o",
-                "Vperpasptcmablsg": self._ppp_stem + "o",
-                "Vperpasptcmnompl": self._ppp_stem + "i",
-                "Vperpasptcmvocpl": self._ppp_stem + "i",
-                "Vperpasptcmaccpl": self._ppp_stem + "os",
-                "Vperpasptcmgenpl": self._ppp_stem + "orum",
-                "Vperpasptcmdatpl": self._ppp_stem + "is",
-                "Vperpasptcmablpl": self._ppp_stem + "is",
-                "Vperpasptcfnomsg": self._ppp_stem + "a",
-                "Vperpasptcfvocsg": self._ppp_stem + "a",
-                "Vperpasptcfaccsg": self._ppp_stem + "am",
-                "Vperpasptcfgensg": self._ppp_stem + "ae",
-                "Vperpasptcfdatsg": self._ppp_stem + "ae",
-                "Vperpasptcfablsg": self._ppp_stem + "a",
-                "Vperpasptcfnompl": self._ppp_stem + "ae",
-                "Vperpasptcfvocpl": self._ppp_stem + "ae",
-                "Vperpasptcfaccpl": self._ppp_stem + "as",
-                "Vperpasptcfgenpl": self._ppp_stem + "arum",
-                "Vperpasptcfdatpl": self._ppp_stem + "is",
-                "Vperpasptcfablpl": self._ppp_stem + "is",
-                "Vperpasptcnnomsg": self._ppp_stem + "um",
-                "Vperpasptcnvocsg": self._ppp_stem + "um",
-                "Vperpasptcnaccsg": self._ppp_stem + "um",
-                "Vperpasptcngensg": self._ppp_stem + "i",
-                "Vperpasptcndatsg": self._ppp_stem + "o",
-                "Vperpasptcnablsg": self._ppp_stem + "o",
-                "Vperpasptcnnompl": self._ppp_stem + "a",
-                "Vperpasptcnvocpl": self._ppp_stem + "a",
-                "Vperpasptcnaccpl": self._ppp_stem + "a",
-                "Vperpasptcngenpl": self._ppp_stem + "orum",
-                "Vperpasptcndatpl": self._ppp_stem + "is",
-                "Vperpasptcnablpl": self._ppp_stem + "is",
+            f"V{tense}{voice}{mood}{number}{person}": SAME_ENDINGS[
+                f"{tense}{voice}{mood}"
+            ][0]
+            + SAME_ENDINGS[f"{tense}{voice}{mood}"][1][i]
+            for voice, (tense, mood), (i, (number, person)) in itertools.product(
+                VOICE_SHORTHAND.values(),
+                [("per", "ind"), ("plp", "ind"), ("imp", "sbj"), ("plp", "sbj")],
+                enumerate(itertools.product(NUMBER_SHORTHAND.values(), range(1, 4))),
+            )
+            if f"{tense}{voice}{mood}" in SAME_ENDINGS
+        }
+
+        # Similar endings across conjugations:
+
+    @staticmethod
+    def _participle_endings(ppp: str, infinitive: str) -> Endings:
+        _preptc_stem: str = infinitive[:-2]
+        _ppp_stem: str = ppp[:-2]
+        return {
+                "Vpreactptcmnomsg": _preptc_stem + "ns",
+                "Vpreactptcmvocsg": _preptc_stem + "ns",
+                "Vpreactptcmaccsg": _preptc_stem + "ntem",
+                "Vpreactptcmgensg": _preptc_stem + "ntis",
+                "Vpreactptcmdatsg": _preptc_stem + "nti",
+                "Vpreactptcmablsg": _preptc_stem + "nte",
+                "Vpreactptcmnompl": _preptc_stem + "ntes",
+                "Vpreactptcmvocpl": _preptc_stem + "ntes",
+                "Vpreactptcmaccpl": _preptc_stem + "ntes",
+                "Vpreactptcmgenpl": _preptc_stem + "ntium",
+                "Vpreactptcmdatpl": _preptc_stem + "ntibus",
+                "Vpreactptcmablpl": _preptc_stem + "ntibus",
+                "Vpreactptcfnomsg": _preptc_stem + "ns",
+                "Vpreactptcfvocsg": _preptc_stem + "ns",
+                "Vpreactptcfaccsg": _preptc_stem + "ntem",
+                "Vpreactptcfgensg": _preptc_stem + "ntis",
+                "Vpreactptcfdatsg": _preptc_stem + "nti",
+                "Vpreactptcfablsg": _preptc_stem + "nte",
+                "Vpreactptcfnompl": _preptc_stem + "ntes",
+                "Vpreactptcfvocpl": _preptc_stem + "ntes",
+                "Vpreactptcfaccpl": _preptc_stem + "ntes",
+                "Vpreactptcfgenpl": _preptc_stem + "ntium",
+                "Vpreactptcfdatpl": _preptc_stem + "ntibus",
+                "Vpreactptcfablpl": _preptc_stem + "ntibus",
+                "Vpreactptcnnomsg": _preptc_stem + "ns",
+                "Vpreactptcnvocsg": _preptc_stem + "ns",
+                "Vpreactptcnaccsg": _preptc_stem + "ns",
+                "Vpreactptcngensg": _preptc_stem + "ntis",
+                "Vpreactptcndatsg": _preptc_stem + "nti",
+                "Vpreactptcnablsg": _preptc_stem + "nte",
+                "Vpreactptcnnompl": _preptc_stem + "ntia",
+                "Vpreactptcnvocpl": _preptc_stem + "ntia",
+                "Vpreactptcnaccpl": _preptc_stem + "ntia",
+                "Vpreactptcngenpl": _preptc_stem + "ntium",
+                "Vpreactptcndatpl": _preptc_stem + "ntibus",
+                "Vpreactptcnablpl": _preptc_stem + "ntibus",
+                "Vperpasptcmnomsg": ppp,
+                "Vperpasptcmvocsg": _ppp_stem + "e",
+                "Vperpasptcmaccsg": _ppp_stem + "um",
+                "Vperpasptcmgensg": _ppp_stem + "i",
+                "Vperpasptcmdatsg": _ppp_stem + "o",
+                "Vperpasptcmablsg": _ppp_stem + "o",
+                "Vperpasptcmnompl": _ppp_stem + "i",
+                "Vperpasptcmvocpl": _ppp_stem + "i",
+                "Vperpasptcmaccpl": _ppp_stem + "os",
+                "Vperpasptcmgenpl": _ppp_stem + "orum",
+                "Vperpasptcmdatpl": _ppp_stem + "is",
+                "Vperpasptcmablpl": _ppp_stem + "is",
+                "Vperpasptcfnomsg": _ppp_stem + "a",
+                "Vperpasptcfvocsg": _ppp_stem + "a",
+                "Vperpasptcfaccsg": _ppp_stem + "am",
+                "Vperpasptcfgensg": _ppp_stem + "ae",
+                "Vperpasptcfdatsg": _ppp_stem + "ae",
+                "Vperpasptcfablsg": _ppp_stem + "a",
+                "Vperpasptcfnompl": _ppp_stem + "ae",
+                "Vperpasptcfvocpl": _ppp_stem + "ae",
+                "Vperpasptcfaccpl": _ppp_stem + "as",
+                "Vperpasptcfgenpl": _ppp_stem + "arum",
+                "Vperpasptcfdatpl": _ppp_stem + "is",
+                "Vperpasptcfablpl": _ppp_stem + "is",
+                "Vperpasptcnnomsg": _ppp_stem + "um",
+                "Vperpasptcnvocsg": _ppp_stem + "um",
+                "Vperpasptcnaccsg": _ppp_stem + "um",
+                "Vperpasptcngensg": _ppp_stem + "i",
+                "Vperpasptcndatsg": _ppp_stem + "o",
+                "Vperpasptcnablsg": _ppp_stem + "o",
+                "Vperpasptcnnompl": _ppp_stem + "a",
+                "Vperpasptcnvocpl": _ppp_stem + "a",
+                "Vperpasptcnaccpl": _ppp_stem + "a",
+                "Vperpasptcngenpl": _ppp_stem + "orum",
+                "Vperpasptcndatpl": _ppp_stem + "is",
+                "Vperpasptcnablpl": _ppp_stem + "is",
         }  # fmt: skip
 
     def get(
