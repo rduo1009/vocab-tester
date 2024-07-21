@@ -2,7 +2,7 @@ import itertools
 from dataclasses import dataclass
 from functools import total_ordering
 from io import StringIO
-from typing import Optional, Literal
+from typing import Literal, Optional, Union, NamedTuple
 
 from . import edge_cases
 from .custom_exceptions import InvalidInputError, NoMeaningError
@@ -76,6 +76,12 @@ class Word:
     def __hash__(self) -> int:
         return hash(self.endings)
 
+    def __getitem__(self, key: str) -> Ending:
+        return self.endings[key]
+
+    def __setitem__(self, key: str, value: Ending) -> None:
+        self.endings[key] = value
+
 
 @dataclass
 class BasicWord(Word):
@@ -131,40 +137,36 @@ class LearningVerb(Word):
         else:
             raise InvalidInputError(f"Infinitive '{self.infinitive}' is not valid")
 
-        self.endings.update(
-            LearningVerb._static_regular_endings(
+        self.endings = {
+            **LearningVerb._static_regular_endings(
                 self.conjugation, self.present, self.infinitive, self.perfect
-            )
-        )
-        # Participles
+            ),
+            **LearningVerb._same_regular_endings(
+                self.present, self.infinitive, self.perfect
+            ),
+            **LearningVerb._similar_regular_endings(
+                self.conjugation, self.present, self.infinitive, self.perfect
+            ),
+        }
+
         if self.ppp:
             self.endings.update(
-                LearningVerb._participle_endings(self.ppp, self.infinitive)
+                **LearningVerb._participle_endings(self.ppp, self.infinitive),
             )
 
     @staticmethod
     def _static_regular_endings(
         conjugation: Literal[1, 2, 3, 4, 5], present: str, infinitive: str, perfect: str
     ) -> Endings:
-        _pre_stem: str = present[:-1]
-        _inf_stem: str = infinitive[:-3]
-        _per_stem: str = perfect[:-1]
+        # pre_stem: str = present[:-1]
+        inf_stem: str = infinitive[:-3]
+        # per_stem: str = perfect[:-1]
 
         match conjugation:
             case 1:
                 return {
                     "Vpreactindsg1": present,  # porto
-                    "Vpreactindsg2": _inf_stem + "as",  # portas
-                    "Vpreactindsg3": _inf_stem + "at",  # portat
-                    "Vpreactindpl1": _inf_stem + "amus",  # portamus
-                    "Vpreactindpl2": _inf_stem + "atis",  # portatis
-                    "Vpreactindpl3": _inf_stem + "ant",  # portant
-                    "Vimpactindsg1": _inf_stem + "abam",  # portabam
-                    "Vimpactindsg2": _inf_stem + "abas",  # portabas
-                    "Vimpactindsg3": _inf_stem + "abat",  # portabat
-                    "Vimpactindpl1": _inf_stem + "abamus",  # portabamus
-                    "Vimpactindpl2": _inf_stem + "abatis",  # portabatis
-                    "Vimpactindpl3": _inf_stem + "abant",  # portabant
+                    "Vpreactindpl3": inf_stem + "ant",  # portant
                     "Vpreactinf   ": infinitive,  # portare
                     "Vpreactipesg2": _inf_stem + "a",  # porta
                     "Vpreactipepl2": _inf_stem + "ate",  # portate
@@ -173,17 +175,7 @@ class LearningVerb(Word):
             case 2:
                 return {
                     "Vpreactindsg1": present,  # doceo
-                    "Vpreactindsg2": _inf_stem + "es",  # doces
-                    "Vpreactindsg3": _inf_stem + "et",  # docet
-                    "Vpreactindpl1": _inf_stem + "emus",  # docemus
-                    "Vpreactindpl2": _inf_stem + "etis",  # docetis
-                    "Vpreactindpl3": _inf_stem + "ent",  # docent
-                    "Vimpactindsg1": _inf_stem + "ebam",  # docebam
-                    "Vimpactindsg2": _inf_stem + "ebas",  # docebas
-                    "Vimpactindsg3": _inf_stem + "ebat",  # docebat
-                    "Vimpactindpl1": _inf_stem + "ebamus",  # docebamus
-                    "Vimpactindpl2": _inf_stem + "ebatis",  # docebatis
-                    "Vimpactindpl3": _inf_stem + "ebant",  # docebant
+                    "Vpreactindpl3": inf_stem + "ent",  # docent
                     "Vpreactinf   ": infinitive,  # docere
                     "Vpreactipesg2": _inf_stem + "e",  # doce
                     "Vpreactipepl2": _inf_stem + "ete",  # docete
@@ -192,17 +184,7 @@ class LearningVerb(Word):
             case 3:
                 return {
                     "Vpreactindsg1": present,  # traho
-                    "Vpreactindsg2": _inf_stem + "is",  # trahis
-                    "Vpreactindsg3": _inf_stem + "it",  # trahit
-                    "Vpreactindpl1": _inf_stem + "imus",  # trahimus
-                    "Vpreactindpl2": _inf_stem + "itis",  # trahitis
-                    "Vpreactindpl3": _inf_stem + "unt",  # trahunt
-                    "Vimpactindsg1": _inf_stem + "ebam",  # trahebam
-                    "Vimpactindsg2": _inf_stem + "ebas",  # trahebas
-                    "Vimpactindsg3": _inf_stem + "ebat",  # trahebat
-                    "Vimpactindpl1": _inf_stem + "ebamus",  # trahebamus
-                    "Vimpactindpl2": _inf_stem + "ebatis",  # trahebatis
-                    "Vimpactindpl3": _inf_stem + "ebant",  # trahebant
+                    "Vpreactindpl3": inf_stem + "unt",  # trahunt
                     "Vpreactinf   ": infinitive,  # trahere
                     "Vpreactipesg2": _inf_stem + "e",  # trahe
                     "Vpreactipepl2": _inf_stem + "ite",  # trahite
@@ -211,17 +193,7 @@ class LearningVerb(Word):
             case 4:
                 return {
                     "Vpreactindsg1": present,  # audio
-                    "Vpreactindsg2": _inf_stem + "is",  # audis
-                    "Vpreactindsg3": _inf_stem + "it",  # audit
-                    "Vpreactindpl1": _inf_stem + "imus",  # audimus
-                    "Vpreactindpl2": _inf_stem + "itis",  # auditis
-                    "Vpreactindpl3": _inf_stem + "iunt",  # audiunt
-                    "Vimpactindsg1": _inf_stem + "iebam",  # audiebam
-                    "Vimpactindsg2": _inf_stem + "iebas",  # audiebas
-                    "Vimpactindsg3": _inf_stem + "iebat",  # audiebat
-                    "Vimpactindpl1": _inf_stem + "iebamus",  # audiebamus
-                    "Vimpactindpl2": _inf_stem + "iebatis",  # audiebatis
-                    "Vimpactindpl3": _inf_stem + "iebant",  # audiebant
+                    "Vpreactindpl3": inf_stem + "iunt",  # audiunt
                     "Vpreactinf   ": infinitive,  # audire
                     "Vpreactipesg2": _inf_stem + "i",  # audi
                     "Vpreactipepl2": _inf_stem + "ite",  # audite
@@ -230,17 +202,7 @@ class LearningVerb(Word):
             case 5:
                 return {
                     "Vpreactindsg1": present,  # capio
-                    "Vpreactindsg2": _inf_stem + "is",  # capis
-                    "Vpreactindsg3": _inf_stem + "it",  # capit
-                    "Vpreactindpl1": _inf_stem + "imus",  # capimus
-                    "Vpreactindpl2": _inf_stem + "itis",  # capitis
-                    "Vpreactindpl3": _inf_stem + "iunt",  # capiunt
-                    "Vimpactindsg1": _inf_stem + "iebam",  # capiebam
-                    "Vimpactindsg2": _inf_stem + "iebas",  # capiebas
-                    "Vimpactindsg3": _inf_stem + "iebat",  # capiebat
-                    "Vimpactindpl1": _inf_stem + "iebamus",  # capiebamus
-                    "Vimpactindpl2": _inf_stem + "iebatis",  # capiebatis
-                    "Vimpactindpl3": _inf_stem + "iebant",  # capiebant
+                    "Vpreactindpl3": inf_stem + "iunt",  # capiunt
                     "Vpreactinf   ": infinitive,  # capere
                     "Vpreactipesg2": _inf_stem + "e",  # cape
                     "Vpreactipepl2": _inf_stem + "ite",  # capite
@@ -250,26 +212,27 @@ class LearningVerb(Word):
             #    raise ValueError(f"Conjugation {conjugation} not recognised")
 
     @staticmethod
-    def _similar_regular_endings(
-        conjugation: Literal[1, 2, 3, 4, 5], present: str, infinitive: str, perfect: str
-    ) -> Endings:
-        _pre_stem: str = present[:-1]
-        _inf_stem: str = infinitive[:-3]
-        _per_stem: str = perfect[:-1]
+    def _same_regular_endings(present: str, infinitive: str, perfect: str) -> Endings:
+        # pre_stem: str = present[:-1]
+        # inf_stem: str = infinitive[:-3]
+        per_stem: str = perfect[:-1]
 
         # Same endings across conjugations: perfect, pluperfect, imperfect sbj, pluperfect sbj
         SAME_ENDINGS: dict[str, tuple[str, tuple[str, ...]]] = {
             "peractind": (
-                _per_stem,
+                per_stem,
                 ("i", "isti", "it", "imus", "istis", "erunt"),
             ),
             "plpactind": (
-                _per_stem,
+                per_stem,
                 ("eram", "eras", "erat", "eramus", "eratis", "erant"),
             ),
-            "impactsbj": (infinitive, ("m", "s", "t", "mus", "tis", "nt")),
+            "impactsbj": (  # fmt: skip
+                infinitive,
+                ("m", "s", "t", "mus", "tis", "nt"),
+            ),
             "plpactsbj": (
-                _per_stem,
+                per_stem,
                 ("issem", "isses", "isset", "issemus", "issetis", "issent"),
             ),
         }
@@ -287,7 +250,44 @@ class LearningVerb(Word):
             if f"{tense}{voice}{mood}" in SAME_ENDINGS
         }
 
-        # Similar endings across conjugations:
+    @staticmethod
+    def _similar_regular_endings(
+        conjugation: Literal[1, 2, 3, 4, 5], present: str, infinitive: str, perfect: str
+    ) -> Endings:
+        # pre_stem: str = present[:-1]
+        inf_stem: str = infinitive[:-3]
+        # per_stem: str = perfect[:-1]
+
+        # Similar endings across conjugations: imperfect, present (kinda)
+        SIMILAR_ENDINGS: dict[
+            str, tuple[str, tuple[str, ...], tuple[Union[str, None], ...]]
+        ] = {
+            "impactind": (
+                inf_stem,
+                ("a", "e", "e", "ie", "ie"),
+                ("bam", "bas", "bat", "bamus", "batis", "bant"),
+            ),
+            "preactind": (
+                inf_stem,
+                ("a", "e", "i", "i", "i"),
+                (None, "s", "t", "mus", "tis", None),
+            ),
+        }
+
+        return {
+            f"V{tense}{voice}{mood}{number}{person}": SIMILAR_ENDINGS[  # type: ignore
+                f"{tense}{voice}{mood}"
+            ][0]
+            + SIMILAR_ENDINGS[f"{tense}{voice}{mood}"][1][conjugation - 1]
+            + SIMILAR_ENDINGS[f"{tense}{voice}{mood}"][2][i]
+            for voice, (tense, mood), (i, (number, person)) in itertools.product(
+                VOICE_SHORTHAND.values(),
+                [("imp", "ind"), ("pre", "ind")],
+                enumerate(itertools.product(NUMBER_SHORTHAND.values(), range(1, 4))),
+            )
+            if f"{tense}{voice}{mood}" in SIMILAR_ENDINGS
+            and SIMILAR_ENDINGS[f"{tense}{voice}{mood}"][2][i] is not None
+        }
 
     @staticmethod
     def _participle_endings(ppp: str, infinitive: str) -> Endings:

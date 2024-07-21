@@ -66,5 +66,5 @@ class MultipleEndings:
 
 
 type Ending = Union[str, MultipleEndings]  # type: ignore
-type Endings = dict[str, Union[str, Ending]]  # type: ignore
+type Endings = dict[str, Ending]  # type: ignore
 type Meaning = Union[str, MultipleMeanings]  # type: ignore
