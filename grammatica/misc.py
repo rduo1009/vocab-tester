@@ -3,7 +3,7 @@ Contains miscellaneous functions and classes used by grammatica.
 """
 
 from dataclasses import dataclass
-from typing import Union
+from typing import Union, Any, NamedTuple
 
 
 @dataclass(init=True)
@@ -65,6 +65,15 @@ class MultipleEndings:
         return MultipleEndings(**prefixed)
 
 
+def replace_at_index(tup: tuple[Any, ...], ix: int, val: Any) -> tuple[Any, ...]:
+    return tup[:ix] + (val,) + tup[ix + 1 :]
+
+
+CaseEnding: NamedTuple = NamedTuple(
+    "CaseEnding", [("sg", Union[str, None]), ("pl", str)]
+)
+
 type Ending = Union[str, MultipleEndings]  # type: ignore
 type Endings = dict[str, Ending]  # type: ignore
 type Meaning = Union[str, MultipleMeanings]  # type: ignore
+type EndingTable = tuple[CaseEnding, ...]  # type: ignore
