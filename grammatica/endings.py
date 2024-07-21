@@ -168,8 +168,8 @@ class LearningVerb(Word):
                     "Vpreactindsg1": present,  # porto
                     "Vpreactindpl3": inf_stem + "ant",  # portant
                     "Vpreactinf   ": infinitive,  # portare
-                    "Vpreactipesg2": _inf_stem + "a",  # porta
-                    "Vpreactipepl2": _inf_stem + "ate",  # portate
+                    "Vpreactipesg2": inf_stem + "a",  # porta
+                    "Vpreactipepl2": inf_stem + "ate",  # portate
                 }  # fmt: skip
 
             case 2:
@@ -177,8 +177,8 @@ class LearningVerb(Word):
                     "Vpreactindsg1": present,  # doceo
                     "Vpreactindpl3": inf_stem + "ent",  # docent
                     "Vpreactinf   ": infinitive,  # docere
-                    "Vpreactipesg2": _inf_stem + "e",  # doce
-                    "Vpreactipepl2": _inf_stem + "ete",  # docete
+                    "Vpreactipesg2": inf_stem + "e",  # doce
+                    "Vpreactipepl2": inf_stem + "ete",  # docete
                 }  # fmt: skip
 
             case 3:
@@ -186,8 +186,8 @@ class LearningVerb(Word):
                     "Vpreactindsg1": present,  # traho
                     "Vpreactindpl3": inf_stem + "unt",  # trahunt
                     "Vpreactinf   ": infinitive,  # trahere
-                    "Vpreactipesg2": _inf_stem + "e",  # trahe
-                    "Vpreactipepl2": _inf_stem + "ite",  # trahite
+                    "Vpreactipesg2": inf_stem + "e",  # trahe
+                    "Vpreactipepl2": inf_stem + "ite",  # trahite
                 }  # fmt: skip
 
             case 4:
@@ -195,8 +195,8 @@ class LearningVerb(Word):
                     "Vpreactindsg1": present,  # audio
                     "Vpreactindpl3": inf_stem + "iunt",  # audiunt
                     "Vpreactinf   ": infinitive,  # audire
-                    "Vpreactipesg2": _inf_stem + "i",  # audi
-                    "Vpreactipepl2": _inf_stem + "ite",  # audite
+                    "Vpreactipesg2": inf_stem + "i",  # audi
+                    "Vpreactipepl2": inf_stem + "ite",  # audite
                 }  # fmt: skip
 
             case 5:
@@ -204,8 +204,8 @@ class LearningVerb(Word):
                     "Vpreactindsg1": present,  # capio
                     "Vpreactindpl3": inf_stem + "iunt",  # capiunt
                     "Vpreactinf   ": infinitive,  # capere
-                    "Vpreactipesg2": _inf_stem + "e",  # cape
-                    "Vpreactipepl2": _inf_stem + "ite",  # capite
+                    "Vpreactipesg2": inf_stem + "e",  # cape
+                    "Vpreactipepl2": inf_stem + "ite",  # capite
                 }  # fmt: skip
 
             # case _:
@@ -279,14 +279,14 @@ class LearningVerb(Word):
                 f"{tense}{voice}{mood}"
             ][0]
             + SIMILAR_ENDINGS[f"{tense}{voice}{mood}"][1][conjugation - 1]
-            + SIMILAR_ENDINGS[f"{tense}{voice}{mood}"][2][i]
+            + suffix
             for voice, (tense, mood), (i, (number, person)) in itertools.product(
                 VOICE_SHORTHAND.values(),
                 [("imp", "ind"), ("pre", "ind")],
                 enumerate(itertools.product(NUMBER_SHORTHAND.values(), range(1, 4))),
             )
             if f"{tense}{voice}{mood}" in SIMILAR_ENDINGS
-            and SIMILAR_ENDINGS[f"{tense}{voice}{mood}"][2][i] is not None
+            and (suffix := SIMILAR_ENDINGS[f"{tense}{voice}{mood}"][2][i])
         }
 
     @staticmethod
@@ -472,8 +472,8 @@ class Noun(Word):
         super().__init__()
 
         self.gender: str
-        if gender not in {"m", "f", "n"}:
-            if gender not in {"masculine", "feminine", "neuter"}:
+        if gender not in GENDER_SHORTHAND.values():
+            if gender not in GENDER_SHORTHAND:
                 raise InvalidInputError(f"Gender '{gender}' not recognised")
             self.gender = GENDER_SHORTHAND[gender]
         else:
@@ -482,11 +482,9 @@ class Noun(Word):
         self.nom: str = nominative
         self.gen: str = genitive
         self.meaning: Meaning = meaning
-        self.plurale_tantum: bool = False
+        self.declension: int
 
         self.first = self.nom
-        self.declension: int
-        self.stem: str
 
         if self.nom in edge_cases.IRREGULAR_NOUNS:
             self.endings = edge_cases.IRREGULAR_NOUNS[nominative]
@@ -495,13 +493,12 @@ class Noun(Word):
 
         # The ordering of this is strange because e.g. ending -ei ends in 'i' as well as 'ei'
         # so 5th declension check must come before 2nd declension check, etc.
-
-        DECLENSION_MAP = {
-            "ei": (5, -2),
-            "ae": (1, -2),
-            "i": (2, -1),
-            "is": (3, -2),
-            "us": (4, -2),
+        DECLENSION_MAP: dict[str, tuple[int, int, Optional[bool]]] = {
+            "ei": (5, -2, None),
+            "ae": (1, -2, None),
+            "i": (2, -1, None),
+            "is": (3, -2, None),
+            "us": (4, -2, None),
             "uum": (4, -3, True),
             "arum": (1, -4, True),
             "orum": (2, -4, True),
@@ -509,100 +506,21 @@ class Noun(Word):
             "um": (3, -2, True),
         }
 
-        for ending, (declension, stem_slice, *plurale_tantum) in DECLENSION_MAP.items():
-            if genitive.endswith(ending):
+        for ending, (declension, stem_slice, plurale_tantum) in DECLENSION_MAP.items():
+            if self.gen.endswith(ending):
                 self.declension = declension
-                self.stem = self.gen[:stem_slice]
-                self.plurale_tantum = bool(plurale_tantum)
+                self.stem: str = self.gen[:stem_slice]
+                self.plurale_tantum: bool = bool(plurale_tantum)
                 break
         else:
             raise InvalidInputError(f"Genitive form '{self.gen}' is not valid")
 
-        match self.declension:
-            case 1:
-                self.endings = {
-                    "Nnomsg": self.nom,  # puella
-                    "Nvocsg": self.nom,  # puella
-                    "Naccsg": self.stem + "am",  # puellam
-                    "Ngensg": self.gen,  # puellae
-                    "Ndatsg": self.stem + "ae",  # puellae
-                    "Nablsg": self.stem + "a",  # puella
-                    "Nnompl": self.stem + "ae",  # puellae
-                    "Nvocpl": self.stem + "ae",  # puellae
-                    "Naccpl": self.stem + "as",  # puellas
-                    "Ngenpl": self.stem + "arum",  # puellarum
-                    "Ndatpl": self.stem + "is",  # puellis
-                    "Nablpl": self.stem + "is",  # puellis
-                }
-
-            case 2:
-                self.endings = {
-                    "Nnomsg": self.nom,  # servus
-                    "Nvocsg": self.nom
-                    if self.nom[-2:] == "er"
-                    else self.stem + "e",  # serve
-                    "Naccsg": self.stem + "um",  # servum
-                    "Ngensg": self.gen,  # servi
-                    "Ndatsg": self.stem + "o",  # servo
-                    "Nablsg": self.stem + "o",  # servo
-                    "Nnompl": self.stem + "i",  # servi
-                    "Nvocpl": self.stem + "i",  # servi
-                    "Naccpl": self.stem + "os",  # servos
-                    "Ngenpl": self.stem + "orum",  # servorum
-                    "Ndatpl": self.stem + "is",  # servis
-                    "Nablpl": self.stem + "is",  # servis
-                }
-
-            case 3:
-                self.endings = {
-                    "Nnomsg": self.nom,  # mercator
-                    "Nvocsg": self.nom,  # mercator
-                    "Naccsg": self.stem + "em",  # mercatorem
-                    "Ngensg": self.gen,  # mercatoris
-                    "Ndatsg": self.stem + "i",  # mercatori
-                    "Nablsg": self.stem + "e",  # mercatore
-                    "Nnompl": self.stem + "es",  # mercatores
-                    "Nvocpl": self.stem + "es",  # mercatores
-                    "Naccpl": self.stem + "es",  # mercatores
-                    "Ngenpl": self.stem + "um",  # mercatorum
-                    "Ndatpl": self.stem + "ibus",  # mercatoribus
-                    "Nablpl": self.stem + "ibus",  # mercatoribus
-                }
-
-            case 4:
-                self.endings = {
-                    "Nnomsg": self.nom,  # manus
-                    "Nvocsg": self.nom,  # manus
-                    "Naccsg": self.stem + "um",  # manum
-                    "Ngensg": self.stem + "us",  # manus
-                    "Ndatsg": self.stem + "ui",  # manui
-                    "Nablsg": self.stem + "u",  # manu
-                    "Nnompl": self.stem + "us",  # manus
-                    "Nvocpl": self.stem + "us",  # manus
-                    "Naccpl": self.stem + "us",  # manus
-                    "Ngenpl": self.stem + "uum",  # manuum
-                    "Ndatpl": self.stem + "ibus",  # manibus
-                    "Nablpl": self.stem + "ibus",  # manibus
-                }
-
-            case 5:
-                self.endings = {
-                    "Nnomsg": self.nom,  # res
-                    "Nvocsg": self.nom,  # res
-                    "Naccsg": self.stem + "em",  # rem
-                    "Ngensg": self.stem + "ei",  # rei
-                    "Ndatsg": self.stem + "ei",  # rei
-                    "Nablsg": self.stem + "e",  # re
-                    "Nnompl": self.stem + "es",  # res
-                    "Nvocpl": self.stem + "es",  # res
-                    "Naccpl": self.stem + "es",  # res
-                    "Ngenpl": self.stem + "erum",  # rerum
-                    "Ndatpl": self.stem + "ebus",  # rebus
-                    "Nablpl": self.stem + "ebus",  # rebus
-                }
-
-            case _:
-                raise ValueError(f"Declension {self.declension} not recognised")
+        self.endings = {
+            **Noun._same_regular_endings(self.stem, self.declension),
+            **Noun._static_regular_endings(
+                self.nom, self.gen, self.stem, self.declension
+            ),
+        }
 
         if self.gender == "n":
             self.endings["Naccsg"] = self.nom
@@ -628,6 +546,85 @@ class Noun(Word):
             self.endings = {
                 k: v for k, v in self.endings.items() if not k.endswith("sg")
             }
+
+    @staticmethod
+    def _same_regular_endings(stem: str, declension: int) -> Endings:
+        CaseEnding: NamedTuple = NamedTuple(
+            "CaseEnding", [("sg", Union[str, None]), ("pl", str)]
+        )
+
+        NOUN_ENDINGS: tuple[tuple[CaseEnding, ...], ...] = (
+            (
+                CaseEnding(None, "ae"),
+                CaseEnding(None, "ae"),
+                CaseEnding("am", "as"),
+                CaseEnding(None, "arum"),
+                CaseEnding("ae", "is"),
+                CaseEnding("a", "is"),
+            ),
+            (
+                CaseEnding(None, "i"),
+                CaseEnding(None, "i"),
+                CaseEnding("um", "os"),
+                CaseEnding(None, "orum"),
+                CaseEnding("o", "is"),
+                CaseEnding("o", "is"),
+            ),
+            (
+                CaseEnding(None, "es"),
+                CaseEnding(None, "es"),
+                CaseEnding("em", "es"),
+                CaseEnding(None, "um"),
+                CaseEnding("i", "ibus"),
+                CaseEnding("e", "ibus"),
+            ),
+            (
+                CaseEnding(None, "us"),
+                CaseEnding(None, "us"),
+                CaseEnding("um", "us"),
+                CaseEnding(None, "uum"),
+                CaseEnding("ui", "ibus"),
+                CaseEnding("us", "ibus"),
+            ),
+            (
+                CaseEnding(None, "es"),
+                CaseEnding(None, "es"),
+                CaseEnding("em", "es"),
+                CaseEnding(None, "erum"),
+                CaseEnding("ei", "ebus"),
+                CaseEnding("e", "ebus"),
+            ),
+        )
+
+        return {
+            f"N{case}{number}": stem
+            + getattr(NOUN_ENDINGS[declension - 1][count], number)
+            for count, case in enumerate(CASE_SHORTHAND.values())
+            for number in NUMBER_SHORTHAND.values()
+            if getattr(NOUN_ENDINGS[declension - 1][count], number)
+        }
+
+    @staticmethod
+    def _static_regular_endings(
+        nom: str, gen: str, stem: str, declension: int
+    ) -> Endings:
+        match declension:
+            case 1 | 3 | 4 | 5:
+                return {
+                    "Nnomsg": nom,  # puella
+                    "Nvocsg": nom,  # puella
+                    "Ngensg": gen,  # puellae
+                }
+
+            case 2:
+                return {
+                    "Nnomsg": nom,  # servus
+                    "Nvocsg": nom if nom[-2:] == "er" else stem + "e",  # serve
+                    "Ngensg": gen,  # servi
+                }
+
+            case _:
+                raise ValueError(f"Declension {declension} not recognised")
 
     def get(self, *, case: str, number: str) -> Ending:
         try:
@@ -664,7 +661,7 @@ class Adjective(Word):
         self,
         *principal_parts: str,
         termination: Optional[int] = None,
-        declension: str,
+        declension: Literal["212", "3"],
         meaning: Meaning,
     ) -> None:
         super().__init__()
@@ -678,7 +675,7 @@ class Adjective(Word):
 
         self.first = self.principal_parts[0]
         self.meaning: Meaning = meaning
-        self.declension: str = declension
+        self.declension: Literal["212", "3"] = declension
         self.termination: Optional[int] = termination
         self.irregular_flag: bool = False
 
@@ -713,7 +710,7 @@ class Adjective(Word):
 
                 self.pos_stem = self.femnom[:-1]  # cara -> car-
 
-                if self.mascnom not in edge_cases.IRREGULAR_COMPARATIVES:
+                if not self.irregular_flag:
                     self.cmp_stem = self.pos_stem + "ior"  # car- -> carior-
                     if self.mascnom[:2] == "er":
                         self.spr_stem = self.mascnom + "rim"  # miser- -> miserrim-
