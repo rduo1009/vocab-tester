@@ -1,37 +1,55 @@
 from dataclasses import dataclass
 from functools import total_ordering
 from io import StringIO
-from typing import Optional, Union
+from typing import Literal, Optional, Union
 
 from . import edge_cases
 from .custom_exceptions import InvalidInputError, NoMeaningError
 from .misc import Meaning, Ending, Endings
 
-SHORTHAND: dict[str, str] = {
+NUMBER_SHORTHAND: dict[str, str] = {
     "singular": "sg",
     "plural": "pl",
+}
+
+TENSE_SHORTHAND: dict[str, str] = {
     "present": "pre",
     "imperfect": "imp",
     "future": "fut",
     "perfect": "per",
     "pluperfect": "plp",
-    "future perfect": "fpr",
+    # "future perfect": "fpr",
+}
+
+VOICE_SHORTHAND: dict[str, str] = {
     "active": "act",
     "passive": "pas",
+}
+
+MOOD_SHORTHAND: dict[str, str] = {
     "indicative": "ind",
     "infinitive": "inf",
     "imperative": "ipe",
     "subjunctive": "sbj",
     "participle": "ptc",
+}
+
+CASE_SHORTHAND: dict[str, str] = {
     "nominative": "nom",
     "vocative": "voc",
     "accusative": "acc",
     "genitive": "gen",
     "dative": "dat",
     "ablative": "abl",
+}
+
+GENDER_SHORTHAND: dict[str, str] = {
     "masculine": "m",
     "feminine": "f",
     "neuter": "n",
+}
+
+DEGREE_SHORTHAND: dict[str, str] = {
     "positive": "pos",
     "comparative": "cmp",
     "superlative": "spr",
@@ -56,6 +74,9 @@ class Word:
 
     def __hash__(self) -> int:
         return hash(self.endings)
+
+    def __getitem__(self, key: str) -> Ending:
+        return self.endings[key]
 
 
 @dataclass
@@ -89,13 +110,10 @@ class LearningVerb(Word):
         self.meaning: Meaning = meaning
 
         self.first = self.present
-        self.conjugation: int
+        self.conjugation: Literal[0, 1, 2, 3, 4, 5]
 
         # Conjugation edge cases
-        irregular_endings: Union[None, Endings] = edge_cases.find_irregular_endings(
-            self.present
-        )
-        if irregular_endings:
+        if irregular_endings := edge_cases.find_irregular_endings(self.present):
             self.endings = irregular_endings
             self.conjugation = 0
             return
@@ -103,11 +121,11 @@ class LearningVerb(Word):
             self.conjugation = 5
 
         # Find conjugation
-        elif infinitive[-3:] == "are":
+        elif self.infinitive[-3:] == "are":
             self.conjugation = 1
-        elif infinitive[-3:] == "ire":
+        elif self.infinitive[-3:] == "ire":
             self.conjugation = 4
-        elif infinitive[-3:] == "ere":
+        elif self.infinitive[-3:] == "ere":
             if self.present[-2:] == "eo":
                 self.conjugation = 2
             else:
@@ -435,15 +453,15 @@ class LearningVerb(Word):
 
         if mood == "participle":
             try:
-                short_tense = SHORTHAND[tense]
-                short_voice = SHORTHAND[voice]
+                short_tense = TENSE_SHORTHAND[tense]
+                short_voice = VOICE_SHORTHAND[voice]
                 if number:
-                    short_number = SHORTHAND[number]
+                    short_number = NUMBER_SHORTHAND[number]
                 else:
                     raise InvalidInputError("Number not given")
                 if participle_case and participle_gender:
-                    short_gender: str = SHORTHAND[participle_gender]
-                    short_case: str = SHORTHAND[participle_case]
+                    short_gender: str = GENDER_SHORTHAND[participle_gender]
+                    short_case: str = CASE_SHORTHAND[participle_case]
                 else:
                     raise InvalidInputError("Gender or case not given")
             except KeyError:
@@ -468,11 +486,11 @@ class LearningVerb(Word):
 
         else:
             try:
-                short_tense = SHORTHAND[tense]
-                short_voice = SHORTHAND[voice]
-                short_mood = SHORTHAND[mood]
+                short_tense = TENSE_SHORTHAND[tense]
+                short_voice = VOICE_SHORTHAND[voice]
+                short_mood = MOOD_SHORTHAND[mood]
                 if number:
-                    short_number = SHORTHAND[number]
+                    short_number = NUMBER_SHORTHAND[number]
             except KeyError:
                 raise InvalidInputError(
                     f"Tense '{tense}', voice '{voice}', mood '{mood}', or number '{number}' not recognised"
@@ -521,23 +539,23 @@ class Noun(Word):
         super().__init__()
 
         self.gender: str
-        if gender not in {"m", "f", "n"}:
-            if gender not in {"masculine", "feminine", "neuter"}:
+        if gender not in GENDER_SHORTHAND.values():
+            if gender not in GENDER_SHORTHAND:
                 raise InvalidInputError(f"Gender '{gender}' not recognised")
-            self.gender = SHORTHAND[gender]
+            self.gender = GENDER_SHORTHAND[gender]
         else:
             self.gender = gender
 
-        self.nom: str = nominative
-        self.gen: str = genitive
+        self.nominative: str = nominative
+        self.genitive: str = genitive
         self.meaning: Meaning = meaning
         self.plurale_tantum: bool = False
 
-        self.first = self.nom
-        self.declension: int
+        self.first = self.nominative
+        self.declension: Literal[0, 1, 2, 3, 4, 5]
         self.stem: str
 
-        if self.nom in edge_cases.IRREGULAR_NOUNS:
+        if self.nominative in edge_cases.IRREGULAR_NOUNS:
             self.endings = edge_cases.IRREGULAR_NOUNS[nominative]
             self.declension = 0
             return
@@ -671,8 +689,8 @@ class Noun(Word):
                 raise ValueError(f"Declension {self.declension} not recognised")
 
         if self.gender == "n":
-            self.endings["Naccsg"] = self.nom
-            self.endings["Nvocsg"] = self.nom
+            self.endings["Naccsg"] = self.nominative
+            self.endings["Nvocsg"] = self.nominative
 
             if self.declension == 4:
                 self.endings["Nnompl"] = self.stem + "ua"  # cornua
@@ -682,7 +700,7 @@ class Noun(Word):
                 return
             elif self.declension == 5:
                 raise InvalidInputError(
-                    f"Fifth declension nouns cannot be neuter (noun '{self.nom}')"
+                    f"Fifth declension nouns cannot be neuter (noun '{self.nominative}')"
                 )
 
             # For the other declensions
@@ -697,8 +715,8 @@ class Noun(Word):
 
     def get(self, *, case: str, number: str) -> Ending:
         try:
-            short_case: str = SHORTHAND[case]
-            short_number: str = SHORTHAND[number]
+            short_case: str = CASE_SHORTHAND[case]
+            short_number: str = NUMBER_SHORTHAND[number]
         except KeyError:
             raise InvalidInputError(
                 f"Case '{case}' or number '{number}' not recognised"
@@ -712,11 +730,15 @@ class Noun(Word):
             )
 
     def __repr__(self) -> str:
-        return f"Noun({self.nom}, {self.gen}, {self.gender}, {self.meaning})"
+        return (
+            f"Noun({self.nominative}, {self.genitive}, {self.gender}, {self.meaning})"
+        )
 
     def __str__(self) -> str:
         output: StringIO = StringIO()
-        output.write(f"{self.meaning}: {self.nom}, {self.gen} ({self.declension})")
+        output.write(
+            f"{self.meaning}: {self.nominative}, {self.genitive} ({self.declension})"
+        )
 
         for _, item in self.endings.items():
             output.write(item + "\n")
@@ -730,7 +752,7 @@ class Adjective(Word):
         self,
         *principal_parts: str,
         termination: Optional[int] = None,
-        declension: str,
+        declension: Literal["212", "3"],
         meaning: Meaning,
     ) -> None:
         super().__init__()
@@ -1379,7 +1401,7 @@ class Adjective(Word):
                     f"Adverbs do not have gender, case or number (given '{gender}', '{case}' and '{number}')"
                 )
             try:
-                short_degree = SHORTHAND[degree]
+                short_degree = DEGREE_SHORTHAND[degree]
             except KeyError:
                 raise InvalidInputError(f"Degree '{degree}' not recognised")
 
@@ -1389,11 +1411,11 @@ class Adjective(Word):
                 raise NoMeaningError(f"No ending found for degree '{degree}'")
 
         try:
-            short_degree = SHORTHAND[degree]
+            short_degree = DEGREE_SHORTHAND[degree]
             if gender and case and number:
-                short_gender: str = SHORTHAND[gender]
-                short_case: str = SHORTHAND[case]
-                short_number: str = SHORTHAND[number]
+                short_gender: str = GENDER_SHORTHAND[gender]
+                short_case: str = CASE_SHORTHAND[case]
+                short_number: str = NUMBER_SHORTHAND[number]
         except KeyError:
             raise InvalidInputError(
                 f"Degree '{degree}', gender '{gender}', case '{case}' or number '{number}' not recognised"
@@ -1438,9 +1460,9 @@ class Pronoun(Word):
 
     def get(self, gender: str, case: str, number: str) -> Ending:
         try:
-            short_gender: str = SHORTHAND[gender]
-            short_case: str = SHORTHAND[case]
-            short_number: str = SHORTHAND[number]
+            short_gender: str = GENDER_SHORTHAND[gender]
+            short_case: str = CASE_SHORTHAND[case]
+            short_number: str = NUMBER_SHORTHAND[number]
         except KeyError:
             raise InvalidInputError(
                 f"Gender '{gender}', case '{case}' or number '{number}' not recognised"
