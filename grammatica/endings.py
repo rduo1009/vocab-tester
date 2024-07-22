@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from functools import total_ordering
 from io import StringIO
-from typing import Literal, Optional, Union
+from typing import Literal, Optional
 
 from . import edge_cases
 from .custom_exceptions import InvalidInputError, NoMeaningError
@@ -564,51 +564,51 @@ class Noun(Word):
         # so 5th declension check must come before 2nd declension check, etc.
         if genitive[-2:] == "ei":
             self.declension = 5
-            self.stem = self.gen[:-2]  # diei > di-
+            self.stem = self.genitive[:-2]  # diei > di-
         elif genitive[-2:] == "ae":
             self.declension = 1
-            self.stem = self.gen[:-2]  # puellae -> puell-
+            self.stem = self.genitive[:-2]  # puellae -> puell-
         elif genitive[-1:] == "i":
             self.declension = 2
-            self.stem = self.gen[:-1]  # servi -> serv-
+            self.stem = self.genitive[:-1]  # servi -> serv-
         elif genitive[-2:] == "is":
             self.declension = 3
-            self.stem = self.gen[:-2]  # canis -> can-
+            self.stem = self.genitive[:-2]  # canis -> can-
         elif genitive[-2:] == "us":
             self.declension = 4
-            self.stem = self.gen[:-2]  # manus -> man-
+            self.stem = self.genitive[:-2]  # manus -> man-
 
         elif genitive[-4:] == "uum":
             self.declension = 4
-            self.stem = self.gen[:-3]  # manuum -> man-
+            self.stem = self.genitive[:-3]  # manuum -> man-
             self.plurale_tantum = True
         elif genitive[-4:] == "arum":
             self.declension = 1
-            self.stem = self.gen[:-4]  # puellarum -> puell-
+            self.stem = self.genitive[:-4]  # puellarum -> puell-
             self.plurale_tantum = True
         elif genitive[-4:] == "orum":
             self.declension = 2
-            self.stem = self.gen[:-4]  # servorum -> serv-
+            self.stem = self.genitive[:-4]  # servorum -> serv-
             self.plurale_tantum = True
         elif genitive[-4:] == "erum":
             self.declension = 5
-            self.stem = self.gen[:-4]  # dierum > di-
+            self.stem = self.genitive[:-4]  # dierum > di-
             self.plurale_tantum = True
         elif genitive[-2:] == "um":
             self.declension = 3
-            self.stem = self.gen[:-2]  # canum -> can-
+            self.stem = self.genitive[:-2]  # canum -> can-
             self.plurale_tantum = True
 
         else:
-            raise InvalidInputError(f"Genitive form '{self.gen}' is not valid")
+            raise InvalidInputError(f"Genitive form '{self.genitive}' is not valid")
 
         match self.declension:
             case 1:
                 self.endings = {
-                    "Nnomsg": self.nom,  # puella
-                    "Nvocsg": self.nom,  # puella
+                    "Nnomsg": self.nominative,  # puella
+                    "Nvocsg": self.nominative,  # puella
                     "Naccsg": self.stem + "am",  # puellam
-                    "Ngensg": self.gen,  # puellae
+                    "Ngensg": self.genitive,  # puellae
                     "Ndatsg": self.stem + "ae",  # puellae
                     "Nablsg": self.stem + "a",  # puella
                     "Nnompl": self.stem + "ae",  # puellae
@@ -621,12 +621,12 @@ class Noun(Word):
 
             case 2:
                 self.endings = {
-                    "Nnomsg": self.nom,  # servus
-                    "Nvocsg": self.nom
-                    if self.nom[-2:] == "er"
+                    "Nnomsg": self.nominative,  # servus
+                    "Nvocsg": self.nominative
+                    if self.nominative[-2:] == "er"
                     else self.stem + "e",  # serve
                     "Naccsg": self.stem + "um",  # servum
-                    "Ngensg": self.gen,  # servi
+                    "Ngensg": self.genitive,  # servi
                     "Ndatsg": self.stem + "o",  # servo
                     "Nablsg": self.stem + "o",  # servo
                     "Nnompl": self.stem + "i",  # servi
@@ -639,10 +639,10 @@ class Noun(Word):
 
             case 3:
                 self.endings = {
-                    "Nnomsg": self.nom,  # mercator
-                    "Nvocsg": self.nom,  # mercator
+                    "Nnomsg": self.nominative,  # mercator
+                    "Nvocsg": self.nominative,  # mercator
                     "Naccsg": self.stem + "em",  # mercatorem
-                    "Ngensg": self.gen,  # mercatoris
+                    "Ngensg": self.genitive,  # mercatoris
                     "Ndatsg": self.stem + "i",  # mercatori
                     "Nablsg": self.stem + "e",  # mercatore
                     "Nnompl": self.stem + "es",  # mercatores
@@ -655,8 +655,8 @@ class Noun(Word):
 
             case 4:
                 self.endings = {
-                    "Nnomsg": self.nom,  # manus
-                    "Nvocsg": self.nom,  # manus
+                    "Nnomsg": self.nominative,  # manus
+                    "Nvocsg": self.nominative,  # manus
                     "Naccsg": self.stem + "um",  # manum
                     "Ngensg": self.stem + "us",  # manus
                     "Ndatsg": self.stem + "ui",  # manui
@@ -671,8 +671,8 @@ class Noun(Word):
 
             case 5:
                 self.endings = {
-                    "Nnomsg": self.nom,  # res
-                    "Nvocsg": self.nom,  # res
+                    "Nnomsg": self.nominative,  # res
+                    "Nvocsg": self.nominative,  # res
                     "Naccsg": self.stem + "em",  # rem
                     "Ngensg": self.stem + "ei",  # rei
                     "Ndatsg": self.stem + "ei",  # rei
