@@ -7,10 +7,9 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 
 import pytest
 from grammatica.endings import Noun
-from grammatica.custom_exceptions import InvalidInputError, NoMeaningError
+from grammatica.custom_exceptions import InvalidInputError, NoEndingError
 
 
-# fmt: off
 def test_errors1():
     with pytest.raises(InvalidInputError) as error:
         Noun(nominative="puer", genitive="pueri", gender="a", meaning="boy")
@@ -18,53 +17,53 @@ def test_errors1():
 
 def test_errors2():
     with pytest.raises(InvalidInputError) as error:
-        Noun(nominative="puer", genitive="puerifaksldsnj", gender="m", meaning="boy")
+        Noun(nominative="puer", genitive="puerifaksldsnj", gender="masculine", meaning="boy")
     assert "Genitive form 'puerifaksldsnj' is not valid" == str(error.value)
 
 def test_errors3():
     with pytest.raises(InvalidInputError) as error:
-        Noun(nominative="puer", genitive="puerei", gender="n", meaning="boy")
+        Noun(nominative="puer", genitive="puerei", gender="neuter", meaning="boy")
     assert "Fifth declension nouns cannot be neuter (noun 'puer')" == str(error.value)
 
 def test_errors4():
     with pytest.raises(InvalidInputError) as error:
-        word = Noun(nominative="puer", genitive="pueri", gender="m", meaning="boy")
+        word = Noun(nominative="puer", genitive="pueri", gender="masculine", meaning="boy")
         word.get(case="makinganerror", number="makinganerror")
     assert "Case 'makinganerror' or number 'makinganerror' not recognised" == str(error.value)
 
 def test_errors5():
-    with pytest.raises(NoMeaningError) as error:
-        word = Noun(nominative="puer", genitive="pueri", gender="m", meaning="boy")
+    with pytest.raises(NoEndingError) as error:
+        word = Noun(nominative="puer", genitive="pueri", gender="masculine", meaning="boy")
         del word.endings["Nnomsg"]
         word.get(case="nominative", number="singular")
     assert "No ending found for case 'nominative' and number 'singular'" == str(error.value)
 
 def test_repr():
-    word = Noun(nominative="puer", genitive="pueri", gender="m", meaning="boy")
+    word = Noun(nominative="puer", genitive="pueri", gender="masculine", meaning="boy")
     assert word.__repr__() == "Noun(puer, pueri, m, boy)"
 
 
 def test_eq():
-    word1 = Noun(nominative="puer", genitive="pueri", gender="m", meaning="boy")
-    word2 = Noun(nominative="puer", genitive="pueri", gender="m", meaning="boy")
+    word1 = Noun(nominative="puer", genitive="pueri", gender="masculine", meaning="boy")
+    word2 = Noun(nominative="puer", genitive="pueri", gender="masculine", meaning="boy")
     assert word1 == word2
 
 
 def test_lt():
-    word1 = Noun(nominative="puer", genitive="pueri", gender="m", meaning="boy")
-    word2 = Noun(nominative="apuer", genitive="pueri", gender="m", meaning="boy")
+    word1 = Noun(nominative="puer", genitive="pueri", gender="masculine", meaning="boy")
+    word2 = Noun(nominative="apuer", genitive="pueri", gender="masculine", meaning="boy")
     # word2 must be smaller than word1 as word1.first = "puer" and word2.first = "apuer"
     assert word1 > word2
 
 
 def test_gender():
-    word1 = Noun(nominative="puer", genitive="pueri", gender="m", meaning="boy")
+    word1 = Noun(nominative="puer", genitive="pueri", gender="masculine", meaning="boy")
     word2 = Noun(nominative="puer", genitive="pueri", gender="masculine", meaning="boy")
     assert word1 == word2
 
 
 def test_firstdeclension():
-    word = Noun(nominative="ancilla", genitive="ancillae", gender="f", meaning="slavegirl")
+    word = Noun(nominative="ancilla", genitive="ancillae", gender="feminine", meaning="slavegirl")
     assert word.get(case="nominative", number="singular") == "ancilla"
     assert word.get(case="vocative", number="singular") == "ancilla"
     assert word.get(case="accusative", number="singular") == "ancillam"
@@ -80,7 +79,7 @@ def test_firstdeclension():
 
 
 def test_seconddeclension1():
-    word = Noun(nominative="servus", genitive="servi", gender="m", meaning="slave")
+    word = Noun(nominative="servus", genitive="servi", gender="masculine", meaning="slave")
     assert word.get(case="nominative", number="singular") == "servus"
     assert word.get(case="vocative", number="singular") == "serve"
     assert word.get(case="accusative", number="singular") == "servum"
@@ -96,7 +95,7 @@ def test_seconddeclension1():
 
 
 def test_seconddeclension2():
-    word = Noun(nominative="puer", genitive="pueri", gender="m", meaning="boy")
+    word = Noun(nominative="puer", genitive="pueri", gender="masculine", meaning="boy")
     assert word.get(case="nominative", number="singular") == "puer"
     assert word.get(case="vocative", number="singular") == "puer"
     assert word.get(case="accusative", number="singular") == "puerum"
@@ -112,7 +111,7 @@ def test_seconddeclension2():
 
 
 def test_thirddeclension():
-    word = Noun(nominative="carcer", genitive="carceris", gender="m", meaning="prison")
+    word = Noun(nominative="carcer", genitive="carceris", gender="masculine", meaning="prison")
     assert word.get(case="nominative", number="singular") == "carcer"
     assert word.get(case="vocative", number="singular") == "carcer"
     assert word.get(case="accusative", number="singular") == "carcerem"
@@ -128,7 +127,7 @@ def test_thirddeclension():
 
 
 def test_seconddeclension_neuter():
-    word = Noun(nominative="templum", genitive="templi", gender="n", meaning="temple")
+    word = Noun(nominative="templum", genitive="templi", gender="neuter", meaning="temple")
     assert word.get(case="nominative", number="singular") == "templum"
     assert word.get(case="vocative", number="singular") == "templum"
     assert word.get(case="accusative", number="singular") == "templum"
@@ -144,7 +143,7 @@ def test_seconddeclension_neuter():
 
 
 def test_thirddeclension_neuter():
-    word = Noun(nominative="litus", genitive="litoris", gender="n", meaning="beach")
+    word = Noun(nominative="litus", genitive="litoris", gender="neuter", meaning="beach")
     assert word.get(case="nominative", number="singular") == "litus"
     assert word.get(case="vocative", number="singular") == "litus"
     assert word.get(case="accusative", number="singular") == "litus"

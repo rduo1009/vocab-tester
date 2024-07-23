@@ -8,7 +8,25 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 import pytest
 from grammatica.endings import Pronoun
 from grammatica.edge_cases import PRONOUNS
+from grammatica.custom_exceptions import InvalidInputError, NoEndingError
 
+def test_errors1():
+    with pytest.raises(InvalidInputError) as error:
+        Pronoun(pronoun="b", meaning="this").endings
+    assert "Pronoun 'b' not recognised" == str(error.value)
+
+def test_errors2():
+    with pytest.raises(InvalidInputError) as error:
+        word = Pronoun(pronoun="hic", meaning="this")
+        word.get(gender="a", case="b", number="c")
+    assert "Gender 'a', case 'b' or number 'c' not recognised" == str(error.value)
+
+def test_errors3():
+    with pytest.raises(NoEndingError) as error:
+        word = Pronoun(pronoun="hic", meaning="this")
+        del word.endings["Pmnomsg"]
+        word.get(gender="masculine", case="nominative", number="singular")
+    assert "No ending found for gender 'masculine', case 'nominative' and number 'singular'" == str(error.value)
 
 def test_pronoun():
-    assert Pronoun(pronoun="hic", meaning="this").endings == PRONOUNS["hic"]
+    assert Pronoun(pronoun="ille", meaning="that").endings == PRONOUNS["ille"]

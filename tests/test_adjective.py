@@ -7,7 +7,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 
 import pytest
 from grammatica.endings import Adjective
-from grammatica.custom_exceptions import InvalidInputError, NoMeaningError
+from grammatica.custom_exceptions import InvalidInputError, NoEndingError
 
 
 
@@ -64,7 +64,7 @@ def test_errors10():
     assert "Degree 'adgsf' not recognised" == str(error.value)
 
 def test_errors11():
-    with pytest.raises(NoMeaningError) as error:
+    with pytest.raises(NoEndingError) as error:
         word = Adjective("laetus", "laeta", "laetum", declension="212", meaning="happy")
         del word.endings["Dpos"]
         word.get(degree="positive", adverb=True)
@@ -77,7 +77,7 @@ def test_errors12():
     assert "Degree 'adgsf', gender 'masculine', case 'makinganerror' or number 'singular' not recognised" == str(error.value)
 
 def test_errors13():
-    with pytest.raises(NoMeaningError) as error:
+    with pytest.raises(NoEndingError) as error:
         word = Adjective("laetus", "laeta", "laetum", declension="212", meaning="happy")
         del word.endings["Aposmnomsg"]
         word.get(case="nominative", gender="masculine", number="singular", degree="positive")
