@@ -5,7 +5,7 @@ from io import StringIO
 from typing import Literal, Optional, Union
 
 from . import edge_cases
-from .custom_exceptions import InvalidInputError, NoMeaningError
+from .custom_exceptions import InvalidInputError, NoEndingError
 from .misc import Ending, Endings, Meaning, replace_at_index, CaseEnding, EndingTable
 
 NUMBER_SHORTHAND: dict[str, str] = {
@@ -58,20 +58,20 @@ DEGREE_SHORTHAND: dict[str, str] = {
 
 
 @total_ordering
-class Word:
+class _Word:
     def __init__(self) -> None:
         self.endings: Endings
-        self.first: str
+        self._first: str
 
     def __eq__(self, other: object) -> bool:
-        if not isinstance(other, Word):
+        if not isinstance(other, _Word):
             return NotImplemented
         return self.endings == other.endings
 
     def __lt__(self, other: object) -> bool:
-        if not isinstance(other, Word):
+        if not isinstance(other, _Word):
             return NotImplemented
-        return self.first < other.first  # type: ignore
+        return self._first < other._first  # type: ignore
 
     def __hash__(self) -> int:
         return hash(self.endings)
@@ -81,7 +81,7 @@ class Word:
 
 
 @dataclass
-class BasicWord(Word):
+class BasicWord(_Word):
     word: str
     meaning: Meaning
 
@@ -93,7 +93,7 @@ class BasicWord(Word):
 
 
 @total_ordering
-class LearningVerb(Word):
+class LearningVerb(_Word):
     def __init__(
         self,
         *,
@@ -110,7 +110,7 @@ class LearningVerb(Word):
         self.ppp: str = ppp
         self.meaning: Meaning = meaning
 
-        self.first = self.present
+        self._first = self.present
         self.conjugation: Literal[0, 1, 2, 3, 4, 5]
 
         # Conjugation edge cases
@@ -410,7 +410,7 @@ class LearningVerb(Word):
                 ]
 
             except KeyError:
-                raise NoMeaningError(
+                raise NoEndingError(
                     f"No ending found for {participle_case} {number} {participle_gender} {tense} {voice} participle"
                 )
 
@@ -437,7 +437,7 @@ class LearningVerb(Word):
                 ]
 
             except KeyError:
-                raise NoMeaningError(
+                raise NoEndingError(
                     f"No ending found for {person} {number} {tense} {voice} {mood}"
                 )
 
@@ -457,7 +457,7 @@ class LearningVerb(Word):
 
 
 @total_ordering
-class Noun(Word):
+class Noun(_Word):
     NOUN_ENDINGS: tuple[EndingTable, ...] = (
         (
             CaseEnding(None, "ae"),
@@ -511,20 +511,16 @@ class Noun(Word):
     ) -> None:
         super().__init__()
 
-        self.gender: str
-        if gender not in GENDER_SHORTHAND.values():
-            if gender not in GENDER_SHORTHAND:
-                raise InvalidInputError(f"Gender '{gender}' not recognised")
-            self.gender = GENDER_SHORTHAND[gender]
-        else:
-            self.gender = gender
+        if gender not in GENDER_SHORTHAND:
+            raise InvalidInputError(f"Gender '{gender}' not recognised")
+        self.gender: str = GENDER_SHORTHAND[gender]
 
         self.nominative: str = nominative
         self.genitive: str = genitive
         self.meaning: Meaning = meaning
         self.declension: Literal[0, 1, 2, 3, 4, 5]
 
-        self.first = self.nominative
+        self._first = self.nominative
 
         if self.nominative in edge_cases.IRREGULAR_NOUNS:
             self.endings = edge_cases.IRREGULAR_NOUNS[nominative]
@@ -551,16 +547,16 @@ class Noun(Word):
         for ending, (declension, stem_slice, plurale_tantum) in DECLENSION_MAP.items():
             if self.genitive.endswith(ending):
                 self.declension = declension
-                self.stem: str = self.genitive[:stem_slice]
+                self._stem: str = self.genitive[:stem_slice]
                 self.plurale_tantum: bool = bool(plurale_tantum)
                 break
         else:
             raise InvalidInputError(f"Genitive form '{self.genitive}' is not valid")
 
         self.endings = {
-            **Noun._same_regular_endings(self.stem, self.declension),
+            **Noun._same_regular_endings(self._stem, self.declension),
             **Noun._static_regular_endings(
-                self.nominative, self.genitive, self.stem, self.declension
+                self.nominative, self.genitive, self._stem, self.declension
             ),
         }
 
@@ -569,10 +565,10 @@ class Noun(Word):
             self.endings["Nvocsg"] = self.nominative
 
             if self.declension == 4:
-                self.endings["Nnompl"] = self.stem + "ua"  # cornua
-                self.endings["Naccpl"] = self.stem + "ua"  # cornua
-                self.endings["Nvocpl"] = self.stem + "ua"  # cornua
-                self.endings["Ndatpl"] = self.stem + "ua"  # cornua
+                self.endings["Nnompl"] = self._stem + "ua"  # cornua
+                self.endings["Naccpl"] = self._stem + "ua"  # cornua
+                self.endings["Nvocpl"] = self._stem + "ua"  # cornua
+                self.endings["Ndatpl"] = self._stem + "ua"  # cornua
                 return
             elif self.declension == 5:
                 raise InvalidInputError(
@@ -580,9 +576,9 @@ class Noun(Word):
                 )
 
             # For the other declensions
-            self.endings["Nnompl"] = self.stem + "a"
-            self.endings["Naccpl"] = self.stem + "a"
-            self.endings["Nvocpl"] = self.stem + "a"
+            self.endings["Nnompl"] = self._stem + "a"
+            self.endings["Naccpl"] = self._stem + "a"
+            self.endings["Nvocpl"] = self._stem + "a"
 
         if self.plurale_tantum:
             self.endings = {
@@ -631,7 +627,7 @@ class Noun(Word):
         try:
             return self.endings[f"N{short_case}{short_number}"]
         except KeyError:
-            raise NoMeaningError(
+            raise NoEndingError(
                 f"No ending found for case '{case}' and number '{number}'"
             )
 
@@ -653,7 +649,7 @@ class Noun(Word):
 
 
 @total_ordering
-class Adjective(Word):
+class Adjective(_Word):
     def __init__(
         self,
         *principal_parts: str,
@@ -663,14 +659,14 @@ class Adjective(Word):
     ) -> None:
         super().__init__()
 
-        self.principal_parts: tuple[str, ...] = principal_parts
-        self.mascnom: str = self.principal_parts[0]
-        self.femnom: str
-        self.neutnom: str
+        self._principal_parts: tuple[str, ...] = principal_parts
+        self._mascnom: str = self._principal_parts[0]
+        self._femnom: str
+        self._neutnom: str
 
-        self.pos_stem: str
+        self._pos_stem: str
 
-        self.first = self.principal_parts[0]
+        self._first = self._principal_parts[0]
         self.meaning: Meaning = meaning
         self.declension: Literal["212", "3"] = declension
         self.termination: Optional[int] = termination
@@ -720,42 +716,42 @@ class Adjective(Word):
                     raise InvalidInputError(
                         f"2-1-2 adjectives cannot have a termination (termination {self.termination} given)"
                     )
-                if len(self.principal_parts) != 3:
+                if len(self._principal_parts) != 3:
                     raise InvalidInputError(
-                        f"2-1-2 adjectives must have 3 principal parts (adjective '{self.first}' given)"
+                        f"2-1-2 adjectives must have 3 principal parts (adjective '{self._first}' given)"
                     )
-                self.femnom = self.principal_parts[1]
-                self.neutnom = self.principal_parts[2]
+                self._femnom = self._principal_parts[1]
+                self._neutnom = self._principal_parts[2]
 
-                self.pos_stem = self.femnom[:-1]  # cara -> car-
+                self._pos_stem = self._femnom[:-1]  # cara -> car-
                 Adjective._comparative_stem(self)
 
                 self.endings = {
                     **Adjective._endings_from_table(
-                        ADJECTIVE2_ENDINGS, self.pos_stem, "pos", "m"
+                        ADJECTIVE2_ENDINGS, self._pos_stem, "pos", "m"
                     ),
                     **Adjective._endings_from_table(
-                        ADJECTIVE1_ENDINGS, self.pos_stem, "pos", "f"
+                        ADJECTIVE1_ENDINGS, self._pos_stem, "pos", "f"
                     ),
                     **Adjective._endings_from_table(
-                        ADJECTIVE2N_ENDINGS, self.pos_stem, "pos", "n"
+                        ADJECTIVE2N_ENDINGS, self._pos_stem, "pos", "n"
                     ),
                     **{
-                        "Aposmnomsg": self.mascnom,  # carus
-                        "Aposfnomsg": self.femnom,  # cara
-                        "Aposfvocsg": self.femnom,  # cara
-                        "Aposnnomsg": self.neutnom,  # carum
-                        "Aposnvocsg": self.neutnom,  # carum
-                        "Aposnaccsg": self.neutnom,  # carum
-                        "Dpos": self.irregular_posadv
+                        "Aposmnomsg": self._mascnom,  # carus
+                        "Aposfnomsg": self._femnom,  # cara
+                        "Aposfvocsg": self._femnom,  # cara
+                        "Aposnnomsg": self._neutnom,  # carum
+                        "Aposnvocsg": self._neutnom,  # carum
+                        "Aposnaccsg": self._neutnom,  # carum
+                        "Dpos": self._irregular_posadv
                         if self.irregular_flag
-                        else self.pos_stem + "e",
-                        "Dcmp": self.irregular_cmpadv
+                        else self._pos_stem + "e",
+                        "Dcmp": self._irregular_cmpadv
                         if self.irregular_flag
-                        else self.pos_stem + "ius",
-                        "Dspr": self.irregular_spradv
+                        else self._pos_stem + "ius",
+                        "Dspr": self._irregular_spradv
                         if self.irregular_flag
-                        else self.spr_stem + "e",
+                        else self._spr_stem + "e",
                     },
                 }
 
@@ -763,101 +759,101 @@ class Adjective(Word):
                 match self.termination:
                     case 1:
                         # ingens, ingentis
-                        if len(self.principal_parts) != 2:
+                        if len(self._principal_parts) != 2:
                             raise InvalidInputError(
-                                f"First-termination adjectives must have 2 principal parts (adjective '{self.first}')"
+                                f"First-termination adjectives must have 2 principal parts (adjective '{self._first}')"
                             )
 
-                        self.mascgen: str = self.principal_parts[1]
+                        self._mascgen: str = self._principal_parts[1]
 
-                        if self.mascgen[-2:] != "is":
+                        if self._mascgen[-2:] != "is":
                             raise InvalidInputError(
-                                f"Genitive '{self.mascgen}' not recognised"
+                                f"Genitive '{self._mascgen}' not recognised"
                             )
 
-                        self.pos_stem = self.mascgen[:-2]  # ingentis -> ingent-
+                        self._pos_stem = self._mascgen[:-2]  # ingentis -> ingent-
                         Adjective._comparative_stem(self)
 
                         self.endings = {
-                            "Aposmnomsg": self.mascnom,  # ingens
-                            "Aposmvocsg": self.mascnom,  # ingens
-                            "Aposfnomsg": self.mascnom,  # ingens
-                            "Aposfvocsg": self.mascnom,  # ingens
-                            "Aposnnomsg": self.mascnom,  # ingens
-                            "Aposnvocsg": self.mascnom,  # ingens
-                            "Aposnaccsg": self.mascnom,  # ingens
-                            "Dpos": self.irregular_posadv
+                            "Aposmnomsg": self._mascnom,  # ingens
+                            "Aposmvocsg": self._mascnom,  # ingens
+                            "Aposfnomsg": self._mascnom,  # ingens
+                            "Aposfvocsg": self._mascnom,  # ingens
+                            "Aposnnomsg": self._mascnom,  # ingens
+                            "Aposnvocsg": self._mascnom,  # ingens
+                            "Aposnaccsg": self._mascnom,  # ingens
+                            "Dpos": self._irregular_posadv
                             if self.irregular_flag
-                            else self.pos_stem + "er",
-                            "Dcmp": self.irregular_cmpadv
+                            else self._pos_stem + "er",
+                            "Dcmp": self._irregular_cmpadv
                             if self.irregular_flag
-                            else self.pos_stem + "ius",
-                            "Dspr": self.irregular_spradv
+                            else self._pos_stem + "ius",
+                            "Dspr": self._irregular_spradv
                             if self.irregular_flag
-                            else self.spr_stem + "e",
+                            else self._spr_stem + "e",
                         }
 
                     case 2:
                         # fortis, forte
-                        if len(self.principal_parts) != 2:
+                        if len(self._principal_parts) != 2:
                             raise InvalidInputError(
-                                f"Second-termination adjectives must have 2 principal parts (adjective '{self.first}')"
+                                f"Second-termination adjectives must have 2 principal parts (adjective '{self._first}')"
                             )
 
-                        self.neutnom = self.principal_parts[1]
+                        self._neutnom = self._principal_parts[1]
 
-                        self.pos_stem = self.mascnom[:-2]  # fortis -> fort-
+                        self._pos_stem = self._mascnom[:-2]  # fortis -> fort-
                         Adjective._comparative_stem(self)
 
                         self.endings = {
-                            "Aposmnomsg": self.mascnom,  # fortis
-                            "Aposmvocsg": self.mascnom,  # fortis
-                            "Aposfnomsg": self.mascnom,  # fortis
-                            "Aposfvocsg": self.mascnom,  # fortis
-                            "Aposnnomsg": self.neutnom,  # forte
-                            "Aposnvocsg": self.neutnom,  # forte
-                            "Aposnaccsg": self.neutnom,  # forte
-                            "Dpos": self.irregular_posadv
+                            "Aposmnomsg": self._mascnom,  # fortis
+                            "Aposmvocsg": self._mascnom,  # fortis
+                            "Aposfnomsg": self._mascnom,  # fortis
+                            "Aposfvocsg": self._mascnom,  # fortis
+                            "Aposnnomsg": self._neutnom,  # forte
+                            "Aposnvocsg": self._neutnom,  # forte
+                            "Aposnaccsg": self._neutnom,  # forte
+                            "Dpos": self._irregular_posadv
                             if self.irregular_flag
-                            else self.pos_stem + "iter",
-                            "Dcmp": self.irregular_cmpadv
+                            else self._pos_stem + "iter",
+                            "Dcmp": self._irregular_cmpadv
                             if self.irregular_flag
-                            else self.pos_stem + "ius",
-                            "Dspr": self.irregular_spradv
+                            else self._pos_stem + "ius",
+                            "Dspr": self._irregular_spradv
                             if self.irregular_flag
-                            else self.spr_stem + "e",
+                            else self._spr_stem + "e",
                         }
 
                     case 3:
                         # acer, acris, acre
-                        if len(self.principal_parts) != 3:
+                        if len(self._principal_parts) != 3:
                             raise InvalidInputError(
-                                f"Third-termination adjectives must have 3 principal parts (adjective '{self.first}')"
+                                f"Third-termination adjectives must have 3 principal parts (adjective '{self._first}')"
                             )
 
-                        self.femnom = self.principal_parts[1]
-                        self.neutnom = self.principal_parts[2]
+                        self._femnom = self._principal_parts[1]
+                        self._neutnom = self._principal_parts[2]
 
-                        self.pos_stem = self.femnom[:-2]  # acris -> acr-
+                        self._pos_stem = self._femnom[:-2]  # acris -> acr-
                         Adjective._comparative_stem(self)
 
                         self.endings = {
-                            "Aposmnomsg": self.mascnom,  # acer
-                            "Aposmvocsg": self.mascnom,  # acer
-                            "Aposfnomsg": self.femnom,  # acris
-                            "Aposfvocsg": self.femnom,  # acris
-                            "Aposnnomsg": self.neutnom,  # acre
-                            "Aposnvocsg": self.neutnom,  # acre
-                            "Aposnaccsg": self.neutnom,  # acre
-                            "Dpos": self.irregular_posadv
+                            "Aposmnomsg": self._mascnom,  # acer
+                            "Aposmvocsg": self._mascnom,  # acer
+                            "Aposfnomsg": self._femnom,  # acris
+                            "Aposfvocsg": self._femnom,  # acris
+                            "Aposnnomsg": self._neutnom,  # acre
+                            "Aposnvocsg": self._neutnom,  # acre
+                            "Aposnaccsg": self._neutnom,  # acre
+                            "Dpos": self._irregular_posadv
                             if self.irregular_flag
-                            else self.pos_stem + "iter",
-                            "Dcmp": self.irregular_cmpadv
+                            else self._pos_stem + "iter",
+                            "Dcmp": self._irregular_cmpadv
                             if self.irregular_flag
-                            else self.pos_stem + "ius",
-                            "Dspr": self.irregular_spradv
+                            else self._pos_stem + "ius",
+                            "Dspr": self._irregular_spradv
                             if self.irregular_flag
-                            else self.spr_stem + "e",
+                            else self._spr_stem + "e",
                         }
 
                     case _:
@@ -868,13 +864,13 @@ class Adjective(Word):
                 self.endings.update(
                     {
                         **Adjective._endings_from_table(
-                            ADJECTIVE3_ENDINGS, self.pos_stem, "pos", "m"
+                            ADJECTIVE3_ENDINGS, self._pos_stem, "pos", "m"
                         ),
                         **Adjective._endings_from_table(
-                            ADJECTIVE3_ENDINGS, self.pos_stem, "pos", "f"
+                            ADJECTIVE3_ENDINGS, self._pos_stem, "pos", "f"
                         ),
                         **Adjective._endings_from_table(
-                            ADJECTIVE3N_ENDINGS, self.pos_stem, "pos", "n"
+                            ADJECTIVE3N_ENDINGS, self._pos_stem, "pos", "n"
                         ),
                     }
                 )
@@ -884,36 +880,36 @@ class Adjective(Word):
         self.endings.update(
             {
                 **Adjective._endings_from_table(
-                    ADJECTIVE3C_ENDINGS, self.cmp_stem, "cmp", "m"
+                    ADJECTIVE3C_ENDINGS, self._cmp_stem, "cmp", "m"
                 ),
                 **Adjective._endings_from_table(
-                    ADJECTIVE3C_ENDINGS, self.cmp_stem, "cmp", "f"
+                    ADJECTIVE3C_ENDINGS, self._cmp_stem, "cmp", "f"
                 ),
                 **Adjective._endings_from_table(
-                    ADJECTIVE3CN_ENDINGS, self.cmp_stem, "cmp", "n"
+                    ADJECTIVE3CN_ENDINGS, self._cmp_stem, "cmp", "n"
                 ),
-                "Acmpmnomsg": self.cmp_stem,  # carior
-                "Acmpmvocsg": self.cmp_stem,  # carior
-                "Acmpfnomsg": self.cmp_stem,  # carior
-                "Acmpfvocsg": self.cmp_stem,  # carior
-                "Acmpnnomsg": self.cmp_stem[:-3] + "ius",  # carius
-                "Acmpnvocsg": self.cmp_stem[:-3] + "ius",  # carius
-                "Acmpnaccsg": self.cmp_stem[:-3] + "ius",  # carius
+                "Acmpmnomsg": self._cmp_stem,  # carior
+                "Acmpmvocsg": self._cmp_stem,  # carior
+                "Acmpfnomsg": self._cmp_stem,  # carior
+                "Acmpfvocsg": self._cmp_stem,  # carior
+                "Acmpnnomsg": self._cmp_stem[:-3] + "ius",  # carius
+                "Acmpnvocsg": self._cmp_stem[:-3] + "ius",  # carius
+                "Acmpnaccsg": self._cmp_stem[:-3] + "ius",  # carius
                 **Adjective._endings_from_table(
-                    ADJECTIVE2_ENDINGS, self.spr_stem, "spr", "m"
-                ),
-                **Adjective._endings_from_table(
-                    ADJECTIVE1_ENDINGS, self.spr_stem, "spr", "f"
+                    ADJECTIVE2_ENDINGS, self._spr_stem, "spr", "m"
                 ),
                 **Adjective._endings_from_table(
-                    ADJECTIVE2N_ENDINGS, self.spr_stem, "spr", "n"
+                    ADJECTIVE1_ENDINGS, self._spr_stem, "spr", "f"
                 ),
-                "Asprmnomsg": self.spr_stem + "us",  # carrissimus
-                "Asprfnomsg": self.spr_stem + "a",  # carrissima
-                "Asprfvocsg": self.spr_stem + "a",  # carrissima
-                "Asprnnomsg": self.spr_stem + "um",  # carrissimum
-                "Asprnvocsg": self.spr_stem + "um",  # carrissimum
-                "Asprnaccsg": self.spr_stem + "um",  # carrissimum
+                **Adjective._endings_from_table(
+                    ADJECTIVE2N_ENDINGS, self._spr_stem, "spr", "n"
+                ),
+                "Asprmnomsg": self._spr_stem + "us",  # carrissimus
+                "Asprfnomsg": self._spr_stem + "a",  # carrissima
+                "Asprfvocsg": self._spr_stem + "a",  # carrissima
+                "Asprnnomsg": self._spr_stem + "um",  # carrissimum
+                "Asprnvocsg": self._spr_stem + "um",  # carrissimum
+                "Asprnaccsg": self._spr_stem + "um",  # carrissimum
             }
         )
 
@@ -922,28 +918,28 @@ class Adjective(Word):
         #        bug probably to be left in, a bit complicated to fix
         self.irregular_flag: bool = False
 
-        if self.mascnom in edge_cases.IRREGULAR_COMPARATIVES:
-            self.cmp_stem: str = edge_cases.IRREGULAR_COMPARATIVES[self.mascnom][0]
-            self.spr_stem: str = edge_cases.IRREGULAR_COMPARATIVES[self.mascnom][1]
-            self.irregular_posadv: str = edge_cases.IRREGULAR_COMPARATIVES[
-                self.mascnom
+        if self._mascnom in edge_cases.IRREGULAR_COMPARATIVES:
+            self._cmp_stem: str = edge_cases.IRREGULAR_COMPARATIVES[self._mascnom][0]
+            self._spr_stem: str = edge_cases.IRREGULAR_COMPARATIVES[self._mascnom][1]
+            self._irregular_posadv: str = edge_cases.IRREGULAR_COMPARATIVES[
+                self._mascnom
             ][2]
-            self.irregular_cmpadv: str = edge_cases.IRREGULAR_COMPARATIVES[
-                self.mascnom
+            self._irregular_cmpadv: str = edge_cases.IRREGULAR_COMPARATIVES[
+                self._mascnom
             ][3]
-            self.irregular_spradv: str = edge_cases.IRREGULAR_COMPARATIVES[
-                self.mascnom
+            self._irregular_spradv: str = edge_cases.IRREGULAR_COMPARATIVES[
+                self._mascnom
             ][4]
             self.irregular_flag = True
             return
 
-        self.cmp_stem = self.pos_stem + "ior"  # car- -> carior-
-        if self.mascnom[-2:] == "er":
-            self.spr_stem = self.mascnom + "rim"  # miser- -> miserrim-
-        elif self.mascnom in edge_cases.LIS_ADJECTIVES:
-            self.spr_stem = self.pos_stem + "lim"  # facil- -> facillim-
+        self._cmp_stem = self._pos_stem + "ior"  # car- -> carior-
+        if self._mascnom[-2:] == "er":
+            self._spr_stem = self._mascnom + "rim"  # miser- -> miserrim-
+        elif self._mascnom in edge_cases.LIS_ADJECTIVES:
+            self._spr_stem = self._pos_stem + "lim"  # facil- -> facillim-
         else:
-            self.spr_stem = self.pos_stem + "issim"  # car- -> carissim-
+            self._spr_stem = self._pos_stem + "issim"  # car- -> carissim-
 
     @staticmethod
     def _endings_from_table(
@@ -987,7 +983,7 @@ class Adjective(Word):
             try:
                 return self.endings[f"D{short_degree}"]
             except KeyError:
-                raise NoMeaningError(f"No ending found for degree '{degree}'")
+                raise NoEndingError(f"No ending found for degree '{degree}'")
 
         try:
             short_degree = DEGREE_SHORTHAND[degree]
@@ -1005,23 +1001,23 @@ class Adjective(Word):
                 f"A{short_degree}{short_gender}{short_case}{short_number}"
             ]
         except KeyError:
-            raise NoMeaningError(
+            raise NoEndingError(
                 f"No ending found for degree '{degree}', gender '{gender}', case '{case}' and number '{number}'"
             )
 
     def __str__(self) -> str:
         output: StringIO = StringIO()
-        output.write(f"{self.meaning}: {', '.join(self.principal_parts)}\n")
+        output.write(f"{self.meaning}: {', '.join(self._principal_parts)}\n")
         for _, item in self.endings.items():
             output.write(item + "\n")
         return output.getvalue()
 
     def __repr__(self) -> str:
-        return f"Adjective({', '.join(self.principal_parts)}, {self.termination}, {self.declension}, {self.meaning})"
+        return f"Adjective({', '.join(self._principal_parts)}, {self.termination}, {self.declension}, {self.meaning})"
 
 
 @total_ordering
-class Pronoun(Word):
+class Pronoun(_Word):
     def __init__(self, *, pronoun: str, meaning: Meaning):
         super().__init__()
         try:
@@ -1030,12 +1026,12 @@ class Pronoun(Word):
             raise InvalidInputError(f"Pronoun '{pronoun}' not recognised")
 
         self.pronoun: str = pronoun
-        self.first = self.pronoun
+        self._first = self.pronoun
         self.meaning: Meaning = meaning
 
-        self.mascnom: Ending = self.endings["Pmnomsg"]
-        self.femnom: Ending = self.endings["Pfnomsg"]
-        self.neutnom: Ending = self.endings["Pnnomsg"]
+        self._mascnom: Ending = self.endings["Pmnomsg"]
+        self._femnom: Ending = self.endings["Pfnomsg"]
+        self._neutnom: Ending = self.endings["Pnnomsg"]
 
     def get(self, gender: str, case: str, number: str) -> Ending:
         try:
@@ -1050,7 +1046,7 @@ class Pronoun(Word):
         try:
             return self.endings[f"P{short_gender}{short_case}{short_number}"]
         except KeyError:
-            raise NoMeaningError(
+            raise NoEndingError(
                 f"No ending found for gender '{gender}', case '{case}' and number '{number}'"
             )
 
@@ -1059,7 +1055,9 @@ class Pronoun(Word):
 
     def __str__(self) -> str:
         output: StringIO = StringIO()
-        output.write(f"{self.meaning}: {self.mascnom}, {self.femnom}, {self.neutnom}\n")
+        output.write(
+            f"{self.meaning}: {self._mascnom}, {self._femnom}, {self._neutnom}\n"
+        )
         for _, item in self.endings.items():
             output.write(item + "\n")
         return output.getvalue()

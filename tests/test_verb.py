@@ -7,7 +7,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 
 import pytest
 from grammatica.endings import LearningVerb
-from grammatica.custom_exceptions import NoMeaningError, InvalidInputError
+from grammatica.custom_exceptions import NoEndingError, InvalidInputError
 
 
 # fmt: off
@@ -43,14 +43,14 @@ def test_errors5():
     assert "Number not given" == str(error.value)
 
 def test_errors6():
-    with pytest.raises(NoMeaningError) as error:
+    with pytest.raises(NoEndingError) as error:
         word = LearningVerb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
         del word.endings["Vperpasptcmnomsg"]
         word.get(tense="perfect", voice="passive", mood="participle", participle_case="nominative", participle_gender="masculine", number="singular")
     assert "No ending found for nominative singular masculine perfect passive participle" == str(error.value)
 
 def test_errors7():
-    with pytest.raises(NoMeaningError) as error:
+    with pytest.raises(NoEndingError) as error:
         word = LearningVerb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
         del word.endings["Vperactindsg3"]
         word.get(tense="perfect", voice="active", mood="indicative", person=3, number="singular")

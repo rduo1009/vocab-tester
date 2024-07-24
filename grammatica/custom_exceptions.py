@@ -1,5 +1,5 @@
-class NoMeaningError(Exception):
-    """An error that is raised when no meaning is found for a given input to Word.get()
+class NoEndingError(Exception):
+    """An error that is raised when no ending is found for a given input to Word.get()
 
     Parameters
     ----------

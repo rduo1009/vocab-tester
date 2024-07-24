@@ -1,5 +1,5 @@
 {
-    "workbench.layoutControl.enabled": false, 
+    "workbench.layoutControl.enabled": false,
     "explorer.openEditors.visible": 1,
     "explorer.autoReveal": false,
     "workbench.sideBar.location": "right",
@@ -14,8 +14,7 @@
     "window.commandCenter": false,
     "editor.scrollbar.horizontal": "hidden",
     "editor.scrollbar.vertical": "hidden",
-    "todohighlight.keywords": [
-        {
+    "todohighlight.keywords": [{
             "text": " HACK:",
             "color": "#000",
             "backgroundColor": "#fab387",
@@ -54,10 +53,11 @@
         "."
     ],
     "python.testing.unittestEnabled": false,
-    "mypy-type-checker.preferDaemon":true,
+    "mypy-type-checker.preferDaemon": true,
     "mypy-type-checker.importStrategy": "fromEnvironment",
     "mypy-type-checker.reportingScope": "workspace",
     "mypy-type-checker.args": [
         "--strict"
     ],
+    "editor.rulers": [75]
 }
