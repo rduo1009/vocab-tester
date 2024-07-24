@@ -5,6 +5,7 @@ from dataclasses import dataclass
 from functools import total_ordering
 from io import StringIO
 from typing import Literal, Optional, Union
+from random import choice
 
 from . import edge_cases
 from .custom_exceptions import InvalidInputError, NoEndingError
@@ -76,6 +77,7 @@ class _Word:
     def __init__(self) -> None:
         self.endings: Endings
         self._first: str
+        self._unique_endings: set[Ending] = set()
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, _Word):
@@ -92,6 +94,30 @@ class _Word:
 
     def __getitem__(self, key: str) -> Ending:
         return self.endings[key]
+
+    def _find_unique_endings(self) -> None:
+        self._unique_endings = set(self.endings.values())
+
+    def pick(self) -> Ending:
+        """Returns a random ending from the endings.
+        Note that this method chooses from unique endings, so that the same
+        endings (e.g. puella is both nominative and ablative singular) do
+        not skew the results.
+
+        Returns
+        -------
+        Ending
+            The ending chosen.
+
+        Raises
+        ------
+        ValueError
+            If the _unique_endings set has not been created. This error
+            should never occur.
+        """
+        if self._unique_endings == set():
+            raise ValueError
+        return choice(tuple(self._unique_endings))
 
 
 @dataclass
