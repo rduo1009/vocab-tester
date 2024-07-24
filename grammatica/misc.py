@@ -21,19 +21,22 @@ class MultipleMeanings:
 
     Notes
     -----
-    This class allows for there to be several English definitions of one Latin word. This means for
-    translating-to-English questions, synonyms can be accepted, but not vice versa.
+    This class allows for there to be several English definitions of one
+    Latin word. This means for translating-to-English questions, synonyms
+    can be accepted, but not vice versa.
 
-    The meanings and other_meanings list is intended to be ordered from better to worse meanings.
+    The meanings and other_meanings list is intended to be ordered from
+    better to worse meanings.
     For example, meanings = ["clever", "cunning", "callid"]
-    'Callid' is technically correct, but not a very commonly used word, so it is put later in the
-    list.
+    'Callid' is technically correct, but not a very commonly used word, so
+    it is put later in thelist.
     """
 
     meanings: list[str]
 
     def __str__(self) -> str:
-        """Returns the best meaning as a representation of the MultipleMeanings object."""
+        """Returns the best meaning as a representation of the
+        MultipleMeanings object."""
         return self.best_meaning
 
     def __repr__(self) -> str:

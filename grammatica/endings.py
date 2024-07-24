@@ -1,3 +1,5 @@
+"""Representations of Latin words with their endings calculated."""
+
 from dataclasses import dataclass
 from functools import total_ordering
 from io import StringIO
@@ -58,6 +60,18 @@ DEGREE_SHORTHAND: dict[str, str] = {
 
 @total_ordering
 class _Word:
+    """Representation of an word.
+    This class is not intended to be used by the user. Rather, all of the
+    other classes inherit from this class.
+
+    Attributes
+    ----------
+    endings : Ending
+    _first : str
+        The first principal part. Used so that the word classes can be
+        alphabetically sorted.
+    """
+
     def __init__(self) -> None:
         self.endings: Endings
         self._first: str
@@ -81,6 +95,14 @@ class _Word:
 
 @dataclass
 class BasicWord(_Word):
+    """Representation of a Latin word that is undeclinable.
+
+    Attributes
+    ----------
+    word : str
+    meaning : Meaning
+    """
+
     word: str
     meaning: Meaning
 
@@ -88,11 +110,34 @@ class BasicWord(_Word):
         self.endings: Endings = {"": self.word}
 
     def get(self) -> str:
+        """Returns the word.
+
+        Returns
+        -------
+        str
+            The word.
+        """
         return self.word
 
 
 @total_ordering
 class LearningVerb(_Word):
+    """Representation of a Latin verb with endings.
+
+    Attributes
+    ----------
+    present, infinitive, perfect : str
+    ppp : str
+        The present perfect participle form of the verb. If the verb does
+        not have participle endings, ppp is an empty string.
+    meaning : Meaning
+    conjugation : {0, 1, 2, 3, 4, 5}
+        The conjugation of the verb. The value 5 represents the third
+        declension -io verbs, and the value 0 represents an irregular
+        conjugation.
+    endings : Endings
+    """
+
     def __init__(
         self,
         *,
@@ -102,6 +147,22 @@ class LearningVerb(_Word):
         ppp: str = "",
         meaning: Meaning,
     ) -> None:
+        """Initalises LearningVerb and determines the conjugation and
+        endings.
+
+        Parameters
+        ----------
+        present, infinitive, perfect : str
+        ppp : str, default = ""
+            The ppp ending of the verb. If the verb does not have
+            participle endings, ppp is an empty string.
+        meaning : Meaning
+
+        Raises
+        ------
+        InvalidInputError
+            If the input is invalid (incorrect infinitive)
+        """
         super().__init__()
         self.present: str = present
         self.infinitive: str = infinitive
@@ -446,6 +507,34 @@ class LearningVerb(_Word):
         participle_gender: Optional[str] = None,
         participle_case: Optional[str] = None,
     ) -> Ending:
+        """Returns the ending of the verb.
+        The function raises an error if the ending cannot be found, as it
+        is intended for the method to always find an ending.
+
+        Parameters
+        ----------
+        person : Optional[int], default = None
+            The person of the ending, if applicable (not participle).
+        number : Optional[str], default = None
+            The number of the ending, if applicable (not participle).
+        tense, voice, mood : str
+            The tense, voice and mood of the ending
+        participle_gender, participle_case : Optional[str]
+            The case and gender of the ending, if applicable (participle)
+
+        Returns
+        -------
+        Ending
+            The ending found
+
+        Raises
+        ------
+        InvalidInputError
+            If the inputs are not valid. Note that the inputs must be the
+            full words, e.g. 'singular', 'plural', 'masculine', 'feminine'
+        NoEndingError
+            If the ending cannot be found.
+        """
         short_tense: str
         short_voice: str
         short_mood: str
@@ -528,6 +617,20 @@ class LearningVerb(_Word):
 
 @total_ordering
 class Noun(_Word):
+    """Representation of a Latin noun with endings.
+
+    Attributes
+    ----------
+    nominative, genitive : str
+    meaning : Meaning
+    declension : {0, 1, 2, 3, 4, 5}
+        The declension of the noun. The value 0 represents an irregular
+        declension.
+    endings : Endings
+    plurale_tantum : bool
+        If the noun is a plurale tantum or not
+    """
+
     def __init__(
         self,
         *,
@@ -536,6 +639,19 @@ class Noun(_Word):
         gender: str,
         meaning: Meaning,
     ) -> None:
+        """Initialises Noun and determines the declension and endings.
+
+        Parameters
+        ----------
+        nominative, genitive : str
+        gender : str
+        meaning : Meaning
+
+        Raises
+        ------
+        InvalidInputError
+            If the input is not valid (invalid gender value or genitive)
+        """
         super().__init__()
 
         if gender not in GENDER_SHORTHAND:
@@ -710,6 +826,26 @@ class Noun(_Word):
             }
 
     def get(self, *, case: str, number: str) -> Ending:
+        """Returns the ending of the noun.
+        The function raises an error if the ending cannot be found, as it
+        is intended for the method to always find an ending.
+
+        Parameters
+        ----------
+        case, number : str
+
+        Returns
+        -------
+        Ending
+            The ending found.
+
+        Raises
+        ------
+        InvalidInputError
+            If the input is invalid
+        NoEndingError
+            If an ending cannot be found
+        """
         try:
             short_case: str = CASE_SHORTHAND[case]
             short_number: str = NUMBER_SHORTHAND[number]
@@ -744,6 +880,21 @@ class Noun(_Word):
 
 @total_ordering
 class Adjective(_Word):
+    """Representaiton of a Latin adjective with endings.
+
+    Attributes
+    ----------
+    meaning : Meaning
+    endings : Endings
+    declension : {"212", "3"}
+        The declension of the adjective. "212" represents a 2-1-2
+        adjective, while "3" represents a third declension adjective.
+    termination : Optional[int]
+        The termination of the adjective if applicable (only third
+        declension adjectives)
+    irregular_flag : bool
+    """
+
     def __init__(
         self,
         *principal_parts: str,
@@ -751,6 +902,25 @@ class Adjective(_Word):
         declension: Literal["212", "3"],
         meaning: Meaning,
     ) -> None:
+        """Initialises Adjective and determines the endings.
+
+        Parameters
+        ----------
+        *principal_parts : str
+            The principal parts of the adjective
+        termination : Optional[int], default = None
+            The termination of the adjective if applicable (only third
+            declension adjectives)
+        declension : {"212", "3"}
+            The declension of the adjective. "212" represents a 2-1-2
+            adjective, while "3" represents a third declension adjective.
+        meaning: Meaning
+
+        Raises
+        ------
+        InvalidInputError
+            If the input is invalid
+        """
         super().__init__()
 
         self._principal_parts: tuple[str, ...] = principal_parts
@@ -1390,6 +1560,31 @@ class Adjective(_Word):
         number: Optional[str] = None,
         adverb: bool = False,
     ) -> Ending:
+        """Returns the ending of the adjective.
+        The function raises an error if the ending cannot be found, as it
+        is intended for the method to always find an ending.
+
+        Parameters
+        ----------
+        degree : str
+        gender, case, number : Optional[str], default = None
+            The gender, case and number of the ending, if applicable (not
+            an adverb)
+        adverb : bool, default = False
+            Whether the queried ending is an adverb or not
+
+        Returns
+        -------
+        Ending
+            The ending found.
+
+        Raises
+        ------
+        InvalidInputError
+            If the input is invalid
+        NoEndingError
+            If an ending cannot be found
+        """
         short_degree: str
 
         if adverb:
@@ -1440,7 +1635,34 @@ class Adjective(_Word):
 
 @total_ordering
 class Pronoun(_Word):
+    """Representation of a Latin pronoun with endings.
+
+    Attributes
+    ----------
+    pronoun : str
+    meaning : Meaning
+    endings : Endings
+    """
+
     def __init__(self, *, pronoun: str, meaning: Meaning):
+        """Intialises Pronoun and determines the endings.
+
+        Parameters
+        ----------
+        pronoun : str
+        meaning : Meaning
+
+        Raises
+        ------
+        InvalidInputError
+            If the pronoun entered is not in the pronoun table.
+
+        Notes
+        -----
+        As pronouns in Latin have irregular endings with little pattern,
+        the pronoun endings are manually written out in the edge_cases
+        module.
+        """
         super().__init__()
         try:
             self.endings = edge_cases.PRONOUNS[pronoun]
@@ -1456,6 +1678,26 @@ class Pronoun(_Word):
         self._neutnom: Ending = self.endings["Pnnomsg"]
 
     def get(self, gender: str, case: str, number: str) -> Ending:
+        """Returns the ending of the pronoun.
+        The function raises an error if an ending cannot be found, as it
+        is intended for the method to always find an ending.
+
+        Parameters
+        ----------
+        gender, case, number : str
+
+        Returns
+        -------
+        Ending
+            The ending found.
+
+        Raises
+        ------
+        InvalidInputError
+            If the input is invalid
+        NoEndingError
+            If an ending cannot be found
+        """
         try:
             short_gender: str = GENDER_SHORTHAND[gender]
             short_case: str = CASE_SHORTHAND[case]

@@ -59,5 +59,6 @@
     "mypy-type-checker.args": [
         "--strict"
     ],
-    "editor.rulers": [75]
+    "editor.rulers": [75],
+    "editor.stickyScroll.enabled": true
 }
