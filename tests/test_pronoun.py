@@ -6,6 +6,7 @@ import sys, os  # noqa: E401
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 import pytest
+from types import SimpleNamespace
 from grammatica.endings import Pronoun
 from grammatica.edge_cases import PRONOUNS
 from grammatica.custom_exceptions import InvalidInputError, NoEndingError
@@ -27,6 +28,16 @@ def test_errors3():
         del word.endings["Pmnomsg"]
         word.get(gender="masculine", case="nominative", number="singular")
     assert "No ending found for gender 'masculine', case 'nominative' and number 'singular'" == str(error.value)
+
+def test_pick():
+    word = Pronoun(pronoun="ille", meaning="that")
+    word.pick()
+
+def test_find():
+    word = Pronoun(pronoun="ille", meaning="that")
+    assert word.find("ille") == [
+        SimpleNamespace(case="nominative", number="singular", gender="masculine", string="nominative singular masculine"),
+    ]
 
 def test_pronoun():
     assert Pronoun(pronoun="ille", meaning="that").endings == PRONOUNS["ille"]

@@ -57,7 +57,10 @@
     "mypy-type-checker.importStrategy": "fromEnvironment",
     "mypy-type-checker.reportingScope": "workspace",
     "mypy-type-checker.args": [
-        "--strict"
+        "--strict",
+        "--warn-return-any",
+        "--warn-unreachable",
+        "--strict-equality "
     ],
     "editor.rulers": [75],
     "editor.stickyScroll.enabled": true

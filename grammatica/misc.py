@@ -3,7 +3,16 @@ Contains miscellaneous functions and classes used by grammatica.
 """
 
 from dataclasses import dataclass
-from typing import Union
+from typing import Union, Any
+
+__all__ = [
+    "MultipleMeanings",
+    "MultipleEndings",
+    "key_from_value",
+    "Ending",
+    "Endings",
+    "Meaning",
+]
 
 
 @dataclass(init=True)
@@ -66,6 +75,10 @@ class MultipleEndings:
     def __radd__(self, val2: str) -> "MultipleEndings":
         prefixed = {key: f"{val2}{value}" for key, value in self.__dict__.items()}
         return MultipleEndings(**prefixed)
+
+
+def key_from_value(dd: dict[Any, Any], value: Any) -> Any:
+    return next((key for key, val in dd.items() if val == value), None)
 
 
 type Ending = Union[str, MultipleEndings]  # type: ignore
