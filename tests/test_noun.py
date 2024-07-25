@@ -6,6 +6,7 @@ import sys, os  # noqa: E401
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 import pytest
+from types import SimpleNamespace
 from grammatica.endings import Noun
 from grammatica.custom_exceptions import InvalidInputError, NoEndingError
 
@@ -55,12 +56,26 @@ def test_lt():
     # word2 must be smaller than word1 as word1.first = "puer" and word2.first = "apuer"
     assert word1 > word2
 
+def compare(s, t):
+    t = list(t)   # make a mutable copy
+    try:
+        for elem in s:
+            t.remove(elem)
+    except ValueError:
+        return False
+    return not t
 
-def test_gender():
-    word1 = Noun(nominative="puer", genitive="pueri", gender="masculine", meaning="boy")
-    word2 = Noun(nominative="puer", genitive="pueri", gender="masculine", meaning="boy")
-    assert word1 == word2
+def test_find():
+    word = Noun(nominative="ancilla", genitive="ancillae", gender="feminine", meaning="slavegirl")
+    assert compare(word.find("ancilla"), [
+        SimpleNamespace(case="nominative", number="singular", string="nominative singular"),
+        SimpleNamespace(case="vocative", number="singular", string="vocative singular"),
+        SimpleNamespace(case="ablative", number="singular", string="ablative singular")
+    ])
 
+def test_pick():
+    word = Noun(nominative="ancilla", genitive="ancillae", gender="feminine", meaning="slavegirl")
+    word.pick()
 
 def test_firstdeclension():
     word = Noun(nominative="ancilla", genitive="ancillae", gender="feminine", meaning="slavegirl")

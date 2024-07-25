@@ -74,7 +74,13 @@ def test_lt():
     # word2 must be smaller than word1 as word1.first = "test1" and word2.first = "aaatest1"
     assert word1 > word2
 
+def test_find():
+    word = LearningVerb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
+    assert word.find("celabam")[0].string == "imperfect active indicative singular 1st person"
 
+def test_pick():
+    word = LearningVerb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
+    word.pick()
 def test_firstconjugation():
     word = LearningVerb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
 

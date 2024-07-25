@@ -72,6 +72,10 @@ def index_from_value(input_dict: dict[Any, ...], value: Any) -> int:
     return list(input_dict.values()).index(value)
 
 
+def key_from_value(dd: dict[Any, Any], value: Any) -> Any:
+    return next((key for key, val in dd.items() if val == value), None)
+
+
 type Ending = Union[str, MultipleEndings]  # type: ignore
 type Endings = dict[str, Ending]  # type: ignore
 type Meaning = Union[str, MultipleMeanings]  # type: ignore

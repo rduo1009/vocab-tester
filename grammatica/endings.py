@@ -1,16 +1,25 @@
 """Representations of Latin words with their endings calculated."""
 
 import itertools
+from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from functools import total_ordering
 from io import StringIO
 from random import choice
-from typing import Literal, Optional, Union
+from types import SimpleNamespace
+from typing import Literal, Optional, Union, Any
 
 from . import edge_cases, ending_tables
 from .custom_exceptions import InvalidInputError, NoEndingError
 from .ending_tables import EndingsTable
-from .misc import Ending, Endings, Meaning, index_from_value
+from .misc import (
+    Ending,
+    Endings,
+    Meaning,
+    MultipleEndings,
+    index_from_value,
+    key_from_value,
+)
 
 NUMBER_SHORTHAND: dict[str, str] = {
     "singular": "sg",
@@ -60,9 +69,15 @@ DEGREE_SHORTHAND: dict[str, str] = {
     "superlative": "spr",
 }
 
+PERSON_SHORTHAND: dict[int, str] = {
+    1: "1st person",
+    2: "2nd person",
+    3: "3rd person",
+}
+
 
 @total_ordering
-class _Word:
+class _Word(ABC):
     """Representation of an word.
     This class is not intended to be used by the user. Rather, all of the
     other classes inherit from this class.
@@ -120,6 +135,39 @@ class _Word:
             raise ValueError
         return choice(tuple(self._unique_endings))
 
+    def find(self, form: str) -> list[SimpleNamespace]:
+        """Finds the grammatical properties that match the given form.
+
+        Attributes
+        ----------
+        form : str
+            The form to search for.
+
+        Returns
+        -------
+        list[SimpleNamespace]
+            The list of `SimpleNamespace` objects that represent the endings that match the given form.
+        """
+
+        results = []
+        for key, value in self.endings.items():
+            if isinstance(value, MultipleEndings):
+                if form in value.get_all():
+                    results.append(self._create_namespace(key))
+            elif value == form:
+                results.append(self._create_namespace(key))
+        return results
+
+    # Force implementation of these methods
+    @abstractmethod
+    def get(self, *args: Any, **kwargs: Any) -> Ending:
+        pass
+
+    @staticmethod
+    @abstractmethod
+    def _create_namespace(key: str) -> SimpleNamespace:
+        pass
+
 
 @dataclass
 class BasicWord(_Word):
@@ -136,6 +184,7 @@ class BasicWord(_Word):
 
     def __post_init__(self) -> None:
         self.endings: Endings = {"": self.word}
+        self._find_unique_endings()
 
     def get(self) -> str:
         """Returns the word.
@@ -146,6 +195,10 @@ class BasicWord(_Word):
             The word.
         """
         return self.word
+
+    @staticmethod
+    def _create_namespace(key: str) -> SimpleNamespace:
+        return NotImplemented
 
 
 @total_ordering
@@ -241,6 +294,8 @@ class LearningVerb(_Word):
             self.endings.update(
                 LearningVerb._participle_endings(self.ppp, self.infinitive)
             )
+
+        self._find_unique_endings()
 
     @staticmethod
     def _static_regular_endings(
@@ -498,38 +553,47 @@ class LearningVerb(_Word):
                 return self.endings[
                     f"V{short_tense}{short_voice}ptc{short_gender}{short_case}{short_number}"
                 ]
-
             except KeyError:
                 raise NoEndingError(
                     f"No ending found for {participle_case} {number} {participle_gender} {tense} {voice} participle"
                 )
 
-        else:
-            try:
-                short_tense = TENSE_SHORTHAND[tense]
-                short_voice = VOICE_SHORTHAND[voice]
-                short_mood = MOOD_SHORTHAND[mood]
-                if number:
-                    short_number = NUMBER_SHORTHAND[number]
-            except KeyError:
-                raise InvalidInputError(
-                    f"Tense '{tense}', voice '{voice}', mood '{mood}', or number '{number}' not recognised"
-                )
+        try:
+            short_tense = TENSE_SHORTHAND[tense]
+            short_voice = VOICE_SHORTHAND[voice]
+            short_mood = MOOD_SHORTHAND[mood]
+            if number:
+                short_number = NUMBER_SHORTHAND[number]
+        except KeyError:
+            raise InvalidInputError(
+                f"Tense '{tense}', voice '{voice}', mood '{mood}', or number '{number}' not recognised"
+            )
 
-            if person and person not in {1, 2, 3}:
-                raise InvalidInputError(f"Person '{person}' not recognised")
+        if person and person not in {1, 2, 3}:
+            raise InvalidInputError(f"Person '{person}' not recognised")
 
-            try:
-                if mood == "infinitive":
-                    return self.endings[f"V{short_tense}{short_voice}inf   "]
-                return self.endings[
-                    f"V{short_tense}{short_voice}{short_mood}{short_number}{person}"
-                ]
+        try:
+            if mood == "infinitive":
+                return self.endings[f"V{short_tense}{short_voice}inf   "]
+            return self.endings[
+                f"V{short_tense}{short_voice}{short_mood}{short_number}{person}"
+            ]
+        except KeyError:
+            raise NoEndingError(
+                f"No ending found for {person} {number} {tense} {voice} {mood}"
+            )
 
-            except KeyError:
-                raise NoEndingError(
-                    f"No ending found for {person} {number} {tense} {voice} {mood}"
-                )
+    @staticmethod
+    def _create_namespace(key: str) -> SimpleNamespace:
+        output: SimpleNamespace = SimpleNamespace(
+            tense=key_from_value(TENSE_SHORTHAND, key[1:4]),
+            voice=key_from_value(VOICE_SHORTHAND, key[4:7]),
+            mood=key_from_value(MOOD_SHORTHAND, key[7:10]),
+            number=key_from_value(NUMBER_SHORTHAND, key[10:12]),
+            person=PERSON_SHORTHAND[int(key[12])],
+        )
+        output.string = f"{output.tense} {output.voice} {output.mood} {output.number} {output.person}"
+        return output
 
     def __repr__(self) -> str:
         return f"LearningVerb({self.present}, {self.infinitive}, {self.perfect}, {self.ppp}, {self.meaning})"
@@ -659,6 +723,8 @@ class Noun(_Word):
                 k: v for k, v in self.endings.items() if not k.endswith("sg")
             }
 
+        self._find_unique_endings()
+
     @staticmethod
     def _same_regular_endings(stem: str, declension: Literal[1, 2, 3, 4, 5]) -> Endings:
         return {
@@ -729,6 +795,15 @@ class Noun(_Word):
             raise NoEndingError(
                 f"No ending found for case '{case}' and number '{number}'"
             )
+
+    @staticmethod
+    def _create_namespace(key: str) -> SimpleNamespace:
+        output: SimpleNamespace = SimpleNamespace(
+            case=key_from_value(CASE_SHORTHAND, key[1:4]),
+            number=key_from_value(NUMBER_SHORTHAND, key[4:6]),
+        )
+        output.string = f"{output.case} {output.number}"
+        return output
 
     def __repr__(self) -> str:
         return (
@@ -1031,6 +1106,8 @@ class Adjective(_Word):
             }
         )
 
+        self._find_unique_endings()
+
     def _comparative_stem(self) -> None:
         # FIXME: some adjectives don't have adverbs!
         #        bug probably to be left in, a bit complicated to fix
@@ -1152,6 +1229,17 @@ class Adjective(_Word):
                 f"No ending found for degree '{degree}', gender '{gender}', case '{case}' and number '{number}'"
             )
 
+    @staticmethod
+    def _create_namespace(key: str) -> SimpleNamespace:
+        output: SimpleNamespace = SimpleNamespace(
+            degree=key_from_value(DEGREE_SHORTHAND, key[1:4]),
+            gender=key_from_value(GENDER_SHORTHAND, key[4]),
+            case=key_from_value(CASE_SHORTHAND, key[5:8]),
+            number=key_from_value(NUMBER_SHORTHAND, key[8:10]),
+        )
+        output.string = f"{output.degree} {output.case} {output.number} {output.gender}"
+        return output
+
     def __str__(self) -> str:
         output: StringIO = StringIO()
         output.write(f"{self.meaning}: {', '.join(self._principal_parts)}\n")
@@ -1207,6 +1295,8 @@ class Pronoun(_Word):
         self._femnom: Ending = self.endings["Pfnomsg"]
         self._neutnom: Ending = self.endings["Pnnomsg"]
 
+        self._find_unique_endings()
+
     def get(self, gender: str, case: str, number: str) -> Ending:
         """Returns the ending of the pronoun.
         The function raises an error if an ending cannot be found, as it
@@ -1243,6 +1333,16 @@ class Pronoun(_Word):
             raise NoEndingError(
                 f"No ending found for gender '{gender}', case '{case}' and number '{number}'"
             )
+
+    @staticmethod
+    def _create_namespace(key: str) -> SimpleNamespace:
+        output: SimpleNamespace = SimpleNamespace(
+            gender=key_from_value(GENDER_SHORTHAND, key[1]),
+            case=key_from_value(CASE_SHORTHAND, key[2:5]),
+            number=key_from_value(NUMBER_SHORTHAND, key[5:7]),
+        )
+        output.string = f"{output.case} {output.number} {output.gender}"
+        return output
 
     def __repr__(self) -> str:
         return f"Pronoun({self.pronoun}, {self.meaning})"

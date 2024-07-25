@@ -6,6 +6,7 @@ import sys, os  # noqa: E401
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 import pytest
+from types import SimpleNamespace
 from grammatica.endings import Adjective
 from grammatica.custom_exceptions import InvalidInputError, NoEndingError
 
@@ -99,6 +100,25 @@ def test_lt():
     word2 = Adjective("laetus", "laeta", "laetum", declension="212", meaning="happy")
     assert word1 < word2
 
+def compare(s, t):
+    t = list(t)   # make a mutable copy
+    try:
+        for elem in s:
+            t.remove(elem)
+    except ValueError:
+        return False
+    return not t
+
+def test_find():
+    word = word = Adjective("laetus", "laeta", "laetum", declension="212", meaning="happy")
+    assert compare(word.find("laeta"), [       
+        SimpleNamespace(degree="positive", gender="feminine", case="nominative", number="singular", string="positive nominative singular feminine"),
+        SimpleNamespace(degree="positive", gender="feminine", case="vocative", number="singular", string="positive vocative singular feminine"),
+        SimpleNamespace(degree="positive", gender="feminine", case="ablative", number="singular", string="positive ablative singular feminine"),
+        SimpleNamespace(degree="positive", gender="neuter", case="nominative", number="plural", string="positive nominative plural neuter"),
+        SimpleNamespace(degree="positive", gender="neuter", case="vocative", number="plural", string="positive vocative plural neuter"),
+        SimpleNamespace(degree="positive", gender="neuter", case="accusative", number="plural", string="positive accusative plural neuter"),
+    ])
 
 def test_declension212():
     word = Adjective("laetus", "laeta", "laetum", declension="212", meaning="happy")
