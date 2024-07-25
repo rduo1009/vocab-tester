@@ -4,12 +4,13 @@ import itertools
 from dataclasses import dataclass
 from functools import total_ordering
 from io import StringIO
-from typing import Literal, Optional, Union
 from random import choice
+from typing import Literal, Optional, Union
 
-from . import edge_cases
+from . import edge_cases, ending_tables
 from .custom_exceptions import InvalidInputError, NoEndingError
-from .misc import Ending, Endings, Meaning, replace_at_index, CaseEnding, EndingTable
+from .ending_tables import EndingsTable
+from .misc import Ending, Endings, Meaning, index_from_value
 
 NUMBER_SHORTHAND: dict[str, str] = {
     "singular": "sg",
@@ -304,37 +305,20 @@ class LearningVerb(_Word):
         # inf_stem: str = infinitive[:-3]
         per_stem: str = perfect[:-1]
 
-        # Same endings across conjugations: perfect, pluperfect, imperfect sbj, pluperfect sbj
-        SAME_ENDINGS: dict[str, tuple[str, tuple[str, ...]]] = {
-            "peractind": (
-                per_stem,
-                ("i", "isti", "it", "imus", "istis", "erunt"),
-            ),
-            "plpactind": (
-                per_stem,
-                ("eram", "eras", "erat", "eramus", "eratis", "erant"),
-            ),
-            "impactsbj": (  # fmt: skip
-                infinitive,
-                ("m", "s", "t", "mus", "tis", "nt"),
-            ),
-            "plpactsbj": (
-                per_stem,
-                ("issem", "isses", "isset", "issemus", "issetis", "issent"),
-            ),
-        }
-
+        VERB_SAME_ENDINGS: dict[str, tuple[str, tuple[str, ...]]] = (
+            ending_tables.VERB_SAME_ENDINGS(infinitive=infinitive, per_stem=per_stem)
+        )
         return {
-            f"V{tense}{voice}{mood}{number}{person}": SAME_ENDINGS[
+            f"V{tense}{voice}{mood}{number}{person}": VERB_SAME_ENDINGS[
                 f"{tense}{voice}{mood}"
             ][0]
-            + SAME_ENDINGS[f"{tense}{voice}{mood}"][1][i]
+            + VERB_SAME_ENDINGS[f"{tense}{voice}{mood}"][1][i]
             for voice, (tense, mood), (i, (number, person)) in itertools.product(
                 VOICE_SHORTHAND.values(),
                 [("per", "ind"), ("plp", "ind"), ("imp", "sbj"), ("plp", "sbj")],
                 enumerate(itertools.product(NUMBER_SHORTHAND.values(), range(1, 4))),
             )
-            if f"{tense}{voice}{mood}" in SAME_ENDINGS
+            if f"{tense}{voice}{mood}" in VERB_SAME_ENDINGS
         }
 
     @staticmethod
@@ -345,35 +329,23 @@ class LearningVerb(_Word):
         inf_stem: str = infinitive[:-3]
         # per_stem: str = perfect[:-1]
 
-        # Similar endings across conjugations: imperfect, present (kinda)
-        SIMILAR_ENDINGS: dict[
+        VERB_SIMILAR_ENDINGS: dict[
             str, tuple[str, tuple[str, ...], tuple[Union[str, None], ...]]
-        ] = {
-            "impactind": (
-                inf_stem,
-                ("a", "e", "e", "ie", "ie"),
-                ("bam", "bas", "bat", "bamus", "batis", "bant"),
-            ),
-            "preactind": (
-                inf_stem,
-                ("a", "e", "i", "i", "i"),
-                (None, "s", "t", "mus", "tis", None),
-            ),
-        }
+        ] = ending_tables.VERB_SIMILAR_ENDINGS(inf_stem=inf_stem)
 
         return {
-            f"V{tense}{voice}{mood}{number}{person}": SIMILAR_ENDINGS[  # type: ignore
+            f"V{tense}{voice}{mood}{number}{person}": VERB_SIMILAR_ENDINGS[  # type: ignore
                 f"{tense}{voice}{mood}"
             ][0]
-            + SIMILAR_ENDINGS[f"{tense}{voice}{mood}"][1][conjugation - 1]
+            + VERB_SIMILAR_ENDINGS[f"{tense}{voice}{mood}"][1][conjugation - 1]
             + suffix
             for voice, (tense, mood), (i, (number, person)) in itertools.product(
                 VOICE_SHORTHAND.values(),
                 [("imp", "ind"), ("pre", "ind")],
                 enumerate(itertools.product(NUMBER_SHORTHAND.values(), range(1, 4))),
             )
-            if f"{tense}{voice}{mood}" in SIMILAR_ENDINGS
-            and (suffix := SIMILAR_ENDINGS[f"{tense}{voice}{mood}"][2][i])
+            if f"{tense}{voice}{mood}" in VERB_SIMILAR_ENDINGS
+            and (suffix := VERB_SIMILAR_ENDINGS[f"{tense}{voice}{mood}"][2][i])
         }
 
     @staticmethod
@@ -590,49 +562,6 @@ class Noun(_Word):
         If the noun is a plurale tantum or not
     """
 
-    NOUN_ENDINGS: tuple[EndingTable, ...] = (
-        (
-            CaseEnding(None, "ae"),
-            CaseEnding(None, "ae"),
-            CaseEnding("am", "as"),
-            CaseEnding("ae", "arum"),
-            CaseEnding("ae", "is"),
-            CaseEnding("a", "is"),
-        ),
-        (
-            CaseEnding(None, "i"),
-            CaseEnding(None, "i"),
-            CaseEnding("um", "os"),
-            CaseEnding("i", "orum"),
-            CaseEnding("o", "is"),
-            CaseEnding("o", "is"),
-        ),
-        (
-            CaseEnding(None, "es"),
-            CaseEnding(None, "es"),
-            CaseEnding("em", "es"),
-            CaseEnding("is", "um"),
-            CaseEnding("i", "ibus"),
-            CaseEnding("e", "ibus"),
-        ),
-        (
-            CaseEnding(None, "us"),
-            CaseEnding(None, "us"),
-            CaseEnding("um", "us"),
-            CaseEnding("us", "uum"),
-            CaseEnding("ui", "ibus"),
-            CaseEnding("us", "ibus"),
-        ),
-        (
-            CaseEnding(None, "es"),
-            CaseEnding(None, "es"),
-            CaseEnding("em", "es"),
-            CaseEnding("ei", "erum"),
-            CaseEnding("ei", "ebus"),
-            CaseEnding("e", "ebus"),
-        ),
-    )
-
     def __init__(
         self,
         *,
@@ -733,11 +662,16 @@ class Noun(_Word):
     @staticmethod
     def _same_regular_endings(stem: str, declension: Literal[1, 2, 3, 4, 5]) -> Endings:
         return {
-            f"N{case}{number}": stem
-            + getattr(Noun.NOUN_ENDINGS[declension - 1][count], number)
+            f"N{case}{number}": stem + suffix
             for count, case in enumerate(CASE_SHORTHAND.values())
             for number in NUMBER_SHORTHAND.values()
-            if getattr(Noun.NOUN_ENDINGS[declension - 1][count], number)
+            if (
+                suffix := ending_tables.NOUN_ENDINGS[
+                    index_from_value(CASE_SHORTHAND, case)
+                    + ((declension - 1) * 12)
+                    + (6 if number == "pl" else 0)
+                ]
+            )
         }
 
     @staticmethod
@@ -870,45 +804,6 @@ class Adjective(_Word):
         self.declension: Literal["212", "3"] = declension
         self.termination: Optional[int] = termination
 
-        ADJECTIVE1_ENDINGS: EndingTable = Noun.NOUN_ENDINGS[0]
-
-        ADJECTIVE2_ENDINGS: EndingTable = replace_at_index(
-            Noun.NOUN_ENDINGS[1],  # type: ignore
-            1,
-            CaseEnding("e", "i"),
-        )
-
-        ADJECTIVE3_ENDINGS: EndingTable = (
-            CaseEnding(None, "es"),
-            CaseEnding(None, "es"),
-            CaseEnding("em", "es"),
-            CaseEnding("is", "ium"),
-            CaseEnding("i", "ibus"),
-            CaseEnding("i", "ibus"),
-        )
-
-        ADJECTIVE2N_ENDINGS: EndingTable = Noun.NOUN_ENDINGS[1]
-        for i in range(3):
-            ADJECTIVE2N_ENDINGS = replace_at_index(
-                ADJECTIVE2N_ENDINGS, i, CaseEnding(None, "a")
-            )
-
-        ADJECTIVE3N_ENDINGS: EndingTable = (
-            CaseEnding(None, "ia"),
-            CaseEnding(None, "ia"),
-            CaseEnding(None, "ia"),
-            CaseEnding("is", "ium"),
-            CaseEnding("i", "ibus"),
-            CaseEnding("i", "ibus"),
-        )
-
-        ADJECTIVE3C_ENDINGS: EndingTable = Noun.NOUN_ENDINGS[2]
-        ADJECTIVE3CN_ENDINGS: EndingTable = ADJECTIVE3C_ENDINGS
-        for i in range(3):
-            ADJECTIVE3CN_ENDINGS = replace_at_index(
-                ADJECTIVE3CN_ENDINGS, i, CaseEnding(None, "a")
-            )
-
         match self.declension:
             case "212":
                 if self.termination:
@@ -926,16 +821,16 @@ class Adjective(_Word):
                 Adjective._comparative_stem(self)
 
                 self.endings = Adjective._endings_from_table(
-                    ADJECTIVE2_ENDINGS, self._pos_stem, "pos", "m"
+                    ending_tables.ADJECTIVE2_ENDINGS, self._pos_stem, "pos", "m"
                 )
                 self.endings.update(
                     Adjective._endings_from_table(
-                        ADJECTIVE1_ENDINGS, self._pos_stem, "pos", "f"
+                        ending_tables.ADJECTIVE1_ENDINGS, self._pos_stem, "pos", "f"
                     )
                 )
                 self.endings.update(
                     Adjective._endings_from_table(
-                        ADJECTIVE2N_ENDINGS, self._pos_stem, "pos", "n"
+                        ending_tables.ADJECTIVE2N_ENDINGS, self._pos_stem, "pos", "n"
                     )
                 )
                 self.endings.update(
@@ -1066,17 +961,17 @@ class Adjective(_Word):
 
                 self.endings.update(
                     Adjective._endings_from_table(
-                        ADJECTIVE3_ENDINGS, self._pos_stem, "pos", "m"
+                        ending_tables.ADJECTIVE3_ENDINGS, self._pos_stem, "pos", "m"
                     )
                 )
                 self.endings.update(
                     Adjective._endings_from_table(
-                        ADJECTIVE3_ENDINGS, self._pos_stem, "pos", "f"
+                        ending_tables.ADJECTIVE3_ENDINGS, self._pos_stem, "pos", "f"
                     )
                 )
                 self.endings.update(
                     Adjective._endings_from_table(
-                        ADJECTIVE3N_ENDINGS, self._pos_stem, "pos", "n"
+                        ending_tables.ADJECTIVE3N_ENDINGS, self._pos_stem, "pos", "n"
                     ),
                 )
             case _:
@@ -1084,17 +979,17 @@ class Adjective(_Word):
 
         self.endings.update(
             Adjective._endings_from_table(
-                ADJECTIVE3C_ENDINGS, self._cmp_stem, "cmp", "m"
+                ending_tables.ADJECTIVE3C_ENDINGS, self._cmp_stem, "cmp", "m"
             )
         )
         self.endings.update(
             Adjective._endings_from_table(
-                ADJECTIVE3C_ENDINGS, self._cmp_stem, "cmp", "f"
+                ending_tables.ADJECTIVE3C_ENDINGS, self._cmp_stem, "cmp", "f"
             )
         )
         self.endings.update(
             Adjective._endings_from_table(
-                ADJECTIVE3CN_ENDINGS, self._cmp_stem, "cmp", "n"
+                ending_tables.ADJECTIVE3CN_ENDINGS, self._cmp_stem, "cmp", "n"
             )
         )
 
@@ -1112,17 +1007,17 @@ class Adjective(_Word):
 
         self.endings.update(
             Adjective._endings_from_table(
-                ADJECTIVE2_ENDINGS, self._spr_stem, "spr", "m"
+                ending_tables.ADJECTIVE2_ENDINGS, self._spr_stem, "spr", "m"
             )
         )
         self.endings.update(
             Adjective._endings_from_table(
-                ADJECTIVE1_ENDINGS, self._spr_stem, "spr", "f"
+                ending_tables.ADJECTIVE1_ENDINGS, self._spr_stem, "spr", "f"
             )
         )
         self.endings.update(
             Adjective._endings_from_table(
-                ADJECTIVE2N_ENDINGS, self._spr_stem, "spr", "n"
+                ending_tables.ADJECTIVE2N_ENDINGS, self._spr_stem, "spr", "n"
             )
         )
         self.endings.update(
@@ -1132,7 +1027,7 @@ class Adjective(_Word):
                 "Asprfvocsg": self._spr_stem + "a",  # carrissima
                 "Asprnnomsg": self._spr_stem + "um",  # carrissimum
                 "Asprnvocsg": self._spr_stem + "um",  # carrissimum
-                "Asprnaccsg": self._spr_stem + "um",  # carrissimum})
+                "Asprnaccsg": self._spr_stem + "um",  # carrissimum
             }
         )
 
@@ -1166,7 +1061,7 @@ class Adjective(_Word):
 
     @staticmethod
     def _endings_from_table(
-        endings_table: EndingTable,
+        endings_table: EndingsTable,
         stem: str,
         degree: Literal["pos", "cmp", "spr"],
         gender: Literal["m", "f", "n"],
@@ -1175,11 +1070,15 @@ class Adjective(_Word):
             raise ValueError
 
         return {
-            f"A{degree}{gender}{case}{number}": stem
-            + getattr(endings_table[count], number)
+            f"A{degree}{gender}{case}{number}": stem + suffix
             for count, case in enumerate(CASE_SHORTHAND.values())
             for number in NUMBER_SHORTHAND.values()
-            if getattr(endings_table[count], number)
+            if (
+                suffix := endings_table[
+                    index_from_value(CASE_SHORTHAND, case)
+                    + (6 if number == "pl" else 0)
+                ]
+            )
         }
 
     def get(
