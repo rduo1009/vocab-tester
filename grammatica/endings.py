@@ -1,16 +1,18 @@
-"""Representations of Latin words with their endings calculated."""
+"""endings.py
+Representations of Latin words with their endings calculated.
+"""
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from functools import total_ordering
 from io import StringIO
-from typing import Literal, Optional, Any
 from random import choice
 from types import SimpleNamespace
+from typing import Any, Literal, Optional
 
 from . import edge_cases
 from .custom_exceptions import InvalidInputError, NoEndingError
-from .misc import Meaning, Ending, Endings, MultipleEndings, key_from_value
+from .misc import Ending, Endings, Meaning, MultipleEndings, key_from_value
 
 NUMBER_SHORTHAND: dict[str, str] = {
     "singular": "sg",
