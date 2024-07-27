@@ -1,4 +1,6 @@
-"""Representations of Latin words with their endings calculated."""
+"""endings.py
+Representations of Latin words with their endings calculated.
+"""
 
 import itertools
 from abc import ABC, abstractmethod
@@ -7,7 +9,7 @@ from functools import total_ordering
 from io import StringIO
 from random import choice
 from types import SimpleNamespace
-from typing import Literal, Optional, Union, Any
+from typing import Any, Literal, Optional, Union
 
 from . import edge_cases, ending_tables
 from .custom_exceptions import InvalidInputError, NoEndingError

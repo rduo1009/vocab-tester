@@ -1,9 +1,13 @@
-from .misc import Endings, MultipleEndings
+"""edge_cases.py
+Contains edge case endings.
+"""
+
 from typing import Union
+
+from .misc import Endings, MultipleEndings
+
 #  NOTE: I understand that there are deponents, but am keeping them for future
 # There also may be missing verbs
-
-
 THIRD_IO_VERBS: set[str] = {
     "abicio",
     "adicio",
@@ -43,9 +47,23 @@ THIRD_IO_VERBS: set[str] = {
 }
 
 
-def check_io_verb(pre: str) -> bool:
+def check_io_verb(present: str) -> bool:
+    """Checks if the given prefix `pre` matches any of the third
+    conjugation -io verbs in the `THIRD_IO_VERBS` set.
+
+    Parameters
+    ---------
+    present : str
+        The present form verb to check
+
+    Returns
+    -------
+    bool
+        If the prefix matches a third conjugation -io verb
+    """
+
     for io_verb in THIRD_IO_VERBS:
-        if pre.endswith(io_verb):
+        if present.endswith(io_verb):
             return True
     return False
 
@@ -324,17 +342,31 @@ DERIVED_IRREGULAR_ENDINGS: dict[str, Endings] = {
 }
 
 
-def prefix(pre: str, endings: Endings) -> Endings:
+def _prefix(pre: str, endings: Endings) -> Endings:
     return {key: pre + value for key, value in endings.items()}
 
 
-def find_irregular_endings(pre: str) -> Union[Endings, None]:
-    if pre in IRREGULAR_VERBS:
-        return IRREGULAR_VERBS[pre]
+def find_irregular_endings(present: str) -> Union[Endings, None]:
+    """Detects if a verb is irregular (using the irregular verb dictionary)
+    and returns its endings.
+
+    Parameters
+    ---------
+    present : str
+        The present form verb to check.
+
+    Returns
+    -------
+    Union[Endings, None]
+        The endings. None if the verb is not irregular.
+    """
+
+    if present in IRREGULAR_VERBS:
+        return IRREGULAR_VERBS[present]
     for irregular_suffix, suffix_list in DERIVED_IRREGULAR_VERBS.items():
-        if pre in suffix_list:
-            return prefix(
-                pre.rstrip(irregular_suffix),
+        if present in suffix_list:
+            return _prefix(
+                present.rstrip(irregular_suffix),
                 DERIVED_IRREGULAR_ENDINGS[irregular_suffix],
             )
     return None

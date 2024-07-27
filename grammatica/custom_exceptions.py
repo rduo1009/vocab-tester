@@ -1,5 +1,11 @@
+"""custom_exceptions.py
+Contains custom exceptions used by grammatica.
+"""
+
+
 class NoEndingError(Exception):
-    """An error that is raised when no ending is found for a given input to Word.get()
+    """An error that is raised when no ending is found for a given input to
+    Word.get()
 
     Parameters
     ----------
@@ -11,7 +17,8 @@ class NoEndingError(Exception):
 
 
 class InvalidInputError(Exception):
-    """An error that is raised when an invalid input is given to a grammatica class.
+    """An error that is raised when an invalid input is given to a
+    grammatica class.
 
     Parameters
     ----------
