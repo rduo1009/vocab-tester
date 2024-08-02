@@ -9,6 +9,7 @@ from io import StringIO
 from random import choice
 from types import SimpleNamespace
 from typing import Any, Final, Literal, Optional
+
 from immutabledict import immutabledict
 
 from . import edge_cases
@@ -130,7 +131,7 @@ class _Word(ABC):
 		return choice(tuple(self._unique_endings))
 
 	def find(self, form: str) -> list[SimpleNamespace]:
-		"""Finds the grammatical properties that match the given form.
+		"""Finds the accidol properties that match the given form.
 
 		Attributes
 		----------
