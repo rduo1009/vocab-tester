@@ -11,63 +11,63 @@ from .misc import Endings, MultipleEndings
 #  NOTE: I understand that there are deponents, but am keeping them for future
 # There also may be missing verbs
 THIRD_IO_VERBS: Final[set[str]] = {
-	"abicio",
-	"adicio",
-	"aggredior",
-	"capio",
-	"concutio",
-	"confugio",
-	"conicio",
-	"cupio",
-	"deicio",
-	"diripio",
-	"disicio",
-	"effugio",
-	"eicio",
-	"eripio",
-	"facio",
-	"fugio",
-	"gradior",
-	"iacio",
-	"illicio",
-	"ingredior",
-	"inicio",
-	"mori",
-	"obicio",
-	"patior",
-	"percutio",
-	"perfugio",
-	"profugio",
-	"proicio",
-	"quatere",
-	"rapio",
-	"refugio",
-	"reicio",
-	"sapio",
-	"subicio",
-	"traicio",
+    "abicio",
+    "adicio",
+    "aggredior",
+    "capio",
+    "concutio",
+    "confugio",
+    "conicio",
+    "cupio",
+    "deicio",
+    "diripio",
+    "disicio",
+    "effugio",
+    "eicio",
+    "eripio",
+    "facio",
+    "fugio",
+    "gradior",
+    "iacio",
+    "illicio",
+    "ingredior",
+    "inicio",
+    "mori",
+    "obicio",
+    "patior",
+    "percutio",
+    "perfugio",
+    "profugio",
+    "proicio",
+    "quatere",
+    "rapio",
+    "refugio",
+    "reicio",
+    "sapio",
+    "subicio",
+    "traicio",
 }
 
 
 def check_io_verb(present: str) -> bool:
-	"""Checks if the given prefix `pre` matches any of the third
-	conjugation -io verbs in the `THIRD_IO_VERBS` set.
+    """Checks if the given prefix `pre` matches any of the third
+    conjugation -io verbs in the `THIRD_IO_VERBS` set.
 
-	Parameters
-	---------
-	present : str
-	    The present form verb to check
+    Parameters
+    ---------
+    present : str
+        The present form verb to check
 
-	Returns
-	-------
-	bool
-	    If the prefix matches a third conjugation -io verb
-	"""
+    Returns
+    -------
+    bool
+        If the prefix matches a third conjugation -io verb
+    """
 
-	for io_verb in THIRD_IO_VERBS:
-		if present.endswith(io_verb):
-			return True
-	return False
+    for io_verb in THIRD_IO_VERBS:
+        if present.endswith(io_verb):
+            return True
+    return False
 
 
 IRREGULAR_VERBS: Final[dict[str, Endings]] = deepfreeze({
@@ -345,33 +345,33 @@ DERIVED_IRREGULAR_ENDINGS: Final[dict[str, Endings]] = deepfreeze({
 
 
 def _prefix(pre: str, endings: Endings) -> Endings:
-	return frozendict({key: pre + value for key, value in endings.items()})
+    return frozendict({key: pre + value for key, value in endings.items()})
 
 
 def find_irregular_endings(present: str) -> Union[Endings, None]:
-	"""Detects if a verb is irregular (using the irregular verb dictionary)
-	and returns its endings.
+    """Detects if a verb is irregular (using the irregular verb dictionary)
+    and returns its endings.
 
-	Parameters
-	---------
-	present : str
-	    The present form verb to check.
+    Parameters
+    ---------
+    present : str
+        The present form verb to check.
 
-	Returns
-	-------
-	Union[Endings, None]
-	    The endings. None if the verb is not irregular.
-	"""
+    Returns
+    -------
+    Union[Endings, None]
+        The endings. None if the verb is not irregular.
+    """
 
-	if present in IRREGULAR_VERBS:
-		return IRREGULAR_VERBS[present]
-	for irregular_suffix, suffix_list in DERIVED_IRREGULAR_VERBS.items():
-		if present in suffix_list:
-			return _prefix(
-				present.rstrip(irregular_suffix),
-				DERIVED_IRREGULAR_ENDINGS[irregular_suffix],
-			)
-	return None
+    if present in IRREGULAR_VERBS:
+        return IRREGULAR_VERBS[present]
+    for irregular_suffix, suffix_list in DERIVED_IRREGULAR_VERBS.items():
+        if present in suffix_list:
+            return _prefix(
+                present.rstrip(irregular_suffix),
+                DERIVED_IRREGULAR_ENDINGS[irregular_suffix],
+            )
+    return None
 
 
 IRREGULAR_NOUNS: Final[dict[str, Endings]] = deepfreeze({
