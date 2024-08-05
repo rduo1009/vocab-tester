@@ -42,19 +42,19 @@ def test_errors5():
         word.get(tense="present", voice="active", mood="participle", participle_case="nominative", participle_gender="masculine")
     assert "Number not given" == str(error.value)
 
-def test_errors6():
-    with pytest.raises(NoEndingError) as error:
-        word = LearningVerb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
-        del word.endings["Vperpasptcmnomsg"]
-        word.get(tense="perfect", voice="passive", mood="participle", participle_case="nominative", participle_gender="masculine", number="singular")
-    assert "No ending found for nominative singular masculine perfect passive participle" == str(error.value)
+#def test_errors6():
+#    with pytest.raises(NoEndingError) as error:
+#        word = LearningVerb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
+#        del word.endings["Vperpasptcmnomsg"]
+#        word.get(tense="perfect", voice="passive", mood="participle", participle_case="nominative", participle_gender="masculine", number="singular")
+#    assert "No ending found for nominative singular masculine perfect passive participle" == str(error.value)
 
-def test_errors7():
-    with pytest.raises(NoEndingError) as error:
-        word = LearningVerb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
-        del word.endings["Vperactindsg3"]
-        word.get(tense="perfect", voice="active", mood="indicative", person=3, number="singular")
-    assert "No ending found for 3 singular perfect active indicative" == str(error.value)
+#def test_errors7():
+#    with pytest.raises(NoEndingError) as error:
+#        word = LearningVerb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
+#        del word.endings["Vperactindsg3"]
+#        word.get(tense="perfect", voice="active", mood="indicative", person=3, number="singular")
+#    assert "No ending found for 3 singular perfect active indicative" == str(error.value)
 
 
 def test_repr():

@@ -5,6 +5,8 @@ Contains miscellaneous functions and classes used by accido.
 from dataclasses import dataclass
 from typing import Any, Union
 
+from frozendict import frozendict
+
 
 @dataclass(init=True)
 class MultipleMeanings:
@@ -88,7 +90,7 @@ class MultipleEndings:
 		return MultipleEndings(**prefixed)
 
 
-def key_from_value(dd: dict[Any, Any], value: Any) -> Any:
+def key_from_value(dd: Union[frozendict[Any, Any], dict[Any, Any]], value: Any) -> Any:
 	"""Returns the value in a dictionary from its key.
 	If no key is found with the given value, returns `None`.
 
@@ -110,5 +112,5 @@ def key_from_value(dd: dict[Any, Any], value: Any) -> Any:
 
 
 type Ending = Union[str, MultipleEndings]  # type: ignore
-type Endings = dict[str, Union[str, Ending]]  # type: ignore
+type Endings = frozendict[str, Ending]  # type: ignore
 type Meaning = Union[str, MultipleMeanings]  # type: ignore

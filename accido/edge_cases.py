@@ -2,7 +2,9 @@
 Contains edge case endings.
 """
 
-from typing import Union, Final
+from typing import Final, Union
+
+from frozendict import deepfreeze, frozendict
 
 from .misc import Endings, MultipleEndings
 
@@ -68,7 +70,7 @@ def check_io_verb(present: str) -> bool:
 	return False
 
 
-IRREGULAR_VERBS: Final[dict[str, Endings]] = {
+IRREGULAR_VERBS: Final[dict[str, Endings]] = deepfreeze({
 	"sum": {
 		"Vpreactindsg1": "sum",
 		"Vpreactindsg2": "es",
@@ -268,9 +270,9 @@ IRREGULAR_VERBS: Final[dict[str, Endings]] = {
 		"Vplpactsbjpl2": "iissetis",
 		"Vplpactsbjpl3": "iissent",
 	},
-}
-# TODO TODO
-DERIVED_IRREGULAR_VERBS: Final[dict[str, list[str]]] = {
+})  # fmt: skip
+
+DERIVED_IRREGULAR_VERBS: Final[frozendict[str, list[str]]] = deepfreeze({
 	"eo": [
 		"abeo",
 		"adeo",
@@ -295,9 +297,9 @@ DERIVED_IRREGULAR_VERBS: Final[dict[str, list[str]]] = {
 		"transeo",
 		"veneo",
 	],
-}
+})  # fmt: skip
 
-DERIVED_IRREGULAR_ENDINGS: Final[dict[str, Endings]] = {
+DERIVED_IRREGULAR_ENDINGS: Final[dict[str, Endings]] = deepfreeze({
 	"eo": {
 		"Vpreactindsg1": "eo",
 		"Vpreactindsg2": "is",
@@ -339,11 +341,11 @@ DERIVED_IRREGULAR_ENDINGS: Final[dict[str, Endings]] = {
 		"Vplpactsbjpl2": "issetis",
 		"Vplpactsbjpl3": "issent",
 	},
-}
+})  # fmt: skip
 
 
 def _prefix(pre: str, endings: Endings) -> Endings:
-	return {key: pre + value for key, value in endings.items()}
+	return frozendict({key: pre + value for key, value in endings.items()})
 
 
 def find_irregular_endings(present: str) -> Union[Endings, None]:
@@ -372,7 +374,7 @@ def find_irregular_endings(present: str) -> Union[Endings, None]:
 	return None
 
 
-IRREGULAR_NOUNS: Final[dict[str, Endings]] = {
+IRREGULAR_NOUNS: Final[dict[str, Endings]] = deepfreeze({
 	"ego": {
 		"Nnomsg": "ego",
 		"Nvocsg": "ego",
@@ -411,18 +413,18 @@ IRREGULAR_NOUNS: Final[dict[str, Endings]] = {
 		"Ndatpl": "sibi",
 		"Nablpl": "se",
 	},
-}
+})  # fmt: skip
 
-LIS_ADJECTIVES: Final[set[str]] = {
+LIS_ADJECTIVES: Final[set[str]] = deepfreeze({
 	"facilis",
 	"difficilis",
 	"similis",
 	"dissimilis",
 	"gracilis",
 	"humilis",
-}
+})  # fmt: skip
 
-IRREGULAR_COMPARATIVES: Final[dict[str, list[Union[str, None]]]] = {
+IRREGULAR_COMPARATIVES: Final[frozendict[str, list[Union[str, None]]]] = deepfreeze({
 	"bonus": ["melior", "optim", "bene", "melius", "optime"],
 	"malus": ["peior", "pessim", "male", "peius", "pessime"],
 	"magnus": ["maior", "maxim", None, None, None],
@@ -433,9 +435,9 @@ IRREGULAR_COMPARATIVES: Final[dict[str, list[Union[str, None]]]] = {
 	"nequam": ["nequior", "nequissim", None, None, None],
 	"frugi": ["frugalior", "frugalissim", "frugaliter", "frugalius", "frugalissime"],
 	"dexter": ["dexterior", "dextim", None, None, None],
-}
+})  # fmt: skip
 
-PRONOUNS: Final[dict[str, Endings]] = {
+PRONOUNS: Final[dict[str, Endings]] = deepfreeze({
 	"hic": {
 		"Pmnomsg": "hic",
 		"Pmaccsg": "hunc",
@@ -660,4 +662,4 @@ PRONOUNS: Final[dict[str, Endings]] = {
 		"Pndatpl": "quibusdam",
 		"Pnablpl": "quibusdam",
 	},
-}
+})  # fmt: skip

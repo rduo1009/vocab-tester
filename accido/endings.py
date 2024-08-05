@@ -10,18 +10,18 @@ from random import choice
 from types import SimpleNamespace
 from typing import Any, Final, Literal, Optional
 
-from immutabledict import immutabledict
+from frozendict import deepfreeze, frozendict
 
 from . import edge_cases
 from .custom_exceptions import InvalidInputError, NoEndingError
 from .misc import Ending, Endings, Meaning, MultipleEndings, key_from_value
 
-NUMBER_SHORTHAND: Final[dict[str, str]] = immutabledict({
+NUMBER_SHORTHAND: Final[frozendict[str, str]] = frozendict({
     "singular": "sg",
     "plural": "pl",
 })  # fmt: skip
 
-TENSE_SHORTHAND: Final[dict[str, str]] = immutabledict({
+TENSE_SHORTHAND: Final[frozendict[str, str]] = frozendict({
     "present": "pre",
     "imperfect": "imp",
     "future": "fut",
@@ -30,12 +30,12 @@ TENSE_SHORTHAND: Final[dict[str, str]] = immutabledict({
     # "future perfect": "fpr",
 })  # fmt: skip
 
-VOICE_SHORTHAND: Final[dict[str, str]] = immutabledict({
+VOICE_SHORTHAND: Final[frozendict[str, str]] = frozendict({
     "active": "act",
     "passive": "pas",
 })  # fmt: skip
 
-MOOD_SHORTHAND: Final[dict[str, str]] = immutabledict({
+MOOD_SHORTHAND: Final[frozendict[str, str]] = frozendict({
     "indicative": "ind",
     "infinitive": "inf",
     "imperative": "ipe",
@@ -43,7 +43,7 @@ MOOD_SHORTHAND: Final[dict[str, str]] = immutabledict({
     "participle": "ptc",
 })  # fmt: skip
 
-CASE_SHORTHAND: Final[dict[str, str]] = immutabledict({
+CASE_SHORTHAND: Final[frozendict[str, str]] = frozendict({
     "nominative": "nom",
     "vocative": "voc",
     "accusative": "acc",
@@ -52,19 +52,19 @@ CASE_SHORTHAND: Final[dict[str, str]] = immutabledict({
     "ablative": "abl",
 })  # fmt: skip
 
-GENDER_SHORTHAND: Final[dict[str, str]] = immutabledict({
+GENDER_SHORTHAND: Final[frozendict[str, str]] = frozendict({
     "masculine": "m",
     "feminine": "f",
     "neuter": "n",
 })  # fmt: skip
 
-DEGREE_SHORTHAND: Final[dict[str, str]] = immutabledict({
+DEGREE_SHORTHAND: Final[frozendict[str, str]] = frozendict({
     "positive": "pos",
     "comparative": "cmp",
     "superlative": "spr",
 })  # fmt: skip
 
-PERSON_SHORTHAND: Final[dict[int, str]] = immutabledict({
+PERSON_SHORTHAND: Final[frozendict[int, str]] = frozendict({
     1: "1st person",
     2: "2nd person",
     3: "3rd person",
@@ -98,7 +98,7 @@ class _Word(ABC):
 	def __lt__(self, other: object) -> bool:
 		if not isinstance(other, _Word):
 			return NotImplemented
-		return self._first < other._first  # type: ignore
+		return self._first < other._first
 
 	def __hash__(self) -> int:
 		return hash(self.endings)
@@ -185,7 +185,7 @@ class BasicWord(_Word):
 	meaning: Meaning
 
 	def __post_init__(self) -> None:
-		self.endings: Endings = {"": self.word}
+		self.endings: Endings = frozendict({"": self.word})
 		self._find_unique_endings()
 
 	def get(self) -> str:
@@ -302,7 +302,7 @@ class LearningVerb(_Word):
 
 		match self.conjugation:
 			case 1:
-				self.endings = {
+				self.endings = frozendict({
 					"Vpreactindsg1": self.present,  # porto
 					"Vpreactindsg2": self._inf_stem + "as",  # portas
 					"Vpreactindsg3": self._inf_stem + "at",  # portat
@@ -342,10 +342,10 @@ class LearningVerb(_Word):
 					"Vplpactsbjpl1": self._per_stem + "issemus",  # portavissemus
 					"Vplpactsbjpl2": self._per_stem + "issetis",  # portavissetis
 					"Vplpactsbjpl3": self._per_stem + "issent",  # portavissent
-				}
+				})  # fmt: skip
 
 			case 2:
-				self.endings = {
+				self.endings = frozendict({
 					"Vpreactindsg1": self.present,  # doceo
 					"Vpreactindsg2": self._inf_stem + "es",  # doces
 					"Vpreactindsg3": self._inf_stem + "et",  # docet
@@ -385,10 +385,10 @@ class LearningVerb(_Word):
 					"Vplpactsbjpl1": self._per_stem + "issemus",  # docuissmus
 					"Vplpactsbjpl2": self._per_stem + "issetis",  # docuissetis
 					"Vplpactsbjpl3": self._per_stem + "issent",  # docuissent
-				}
+				})  # fmt: skip
 
 			case 3:
-				self.endings = {
+				self.endings = frozendict({
 					"Vpreactindsg1": self.present,  # traho
 					"Vpreactindsg2": self._inf_stem + "is",  # trahis
 					"Vpreactindsg3": self._inf_stem + "it",  # trahit
@@ -428,10 +428,10 @@ class LearningVerb(_Word):
 					"Vplpactsbjpl1": self._per_stem + "issemus",  # traxissemus
 					"Vplpactsbjpl2": self._per_stem + "issetis",  # traxissetis
 					"Vplpactsbjpl3": self._per_stem + "issent",  # traxissent
-				}
+				})  # fmt: skip
 
 			case 4:
-				self.endings = {
+				self.endings = frozendict({
 					"Vpreactindsg1": self.present,  # audio
 					"Vpreactindsg2": self._inf_stem + "is",  # audis
 					"Vpreactindsg3": self._inf_stem + "it",  # audit
@@ -471,10 +471,10 @@ class LearningVerb(_Word):
 					"Vplpactsbjpl1": self._per_stem + "issemus",  # audivissemus
 					"Vplpactsbjpl2": self._per_stem + "issetis",  # audivissetis
 					"Vplpactsbjpl3": self._per_stem + "issent",  # audivissent
-				}
+				})  # fmt: skip
 
 			case 5:
-				self.endings = {
+				self.endings = frozendict({
 					"Vpreactindsg1": self.present,  # capio
 					"Vpreactindsg2": self._inf_stem + "is",  # capis
 					"Vpreactindsg3": self._inf_stem + "it",  # capit
@@ -514,7 +514,7 @@ class LearningVerb(_Word):
 					"Vplpactsbjpl1": self._per_stem + "issemus",  # cepissemus
 					"Vplpactsbjpl2": self._per_stem + "issetis",  # cepissetis
 					"Vplpactsbjpl3": self._per_stem + "issent",  # cepissent
-				}
+				})  # fmt: skip
 
 			# case _:
 			#     raise ValueError(f"Conjugation {self.conjugation} not recognised")
@@ -523,82 +523,82 @@ class LearningVerb(_Word):
 		if self.ppp:
 			self._preptc_stem: str = self.infinitive[:-2]
 			self._ppp_stem: str = self.ppp[:-2]
-			self.endings.update({
-                    "Vpreactptcmnomsg": self._preptc_stem + "ns",
-                    "Vpreactptcmvocsg": self._preptc_stem + "ns",
-                    "Vpreactptcmaccsg": self._preptc_stem + "ntem",
-                    "Vpreactptcmgensg": self._preptc_stem + "ntis",
-                    "Vpreactptcmdatsg": self._preptc_stem + "nti",
-                    "Vpreactptcmablsg": self._preptc_stem + "nte",
-                    "Vpreactptcmnompl": self._preptc_stem + "ntes",
-                    "Vpreactptcmvocpl": self._preptc_stem + "ntes",
-                    "Vpreactptcmaccpl": self._preptc_stem + "ntes",
-                    "Vpreactptcmgenpl": self._preptc_stem + "ntium",
-                    "Vpreactptcmdatpl": self._preptc_stem + "ntibus",
-                    "Vpreactptcmablpl": self._preptc_stem + "ntibus",
-                    "Vpreactptcfnomsg": self._preptc_stem + "ns",
-                    "Vpreactptcfvocsg": self._preptc_stem + "ns",
-                    "Vpreactptcfaccsg": self._preptc_stem + "ntem",
-                    "Vpreactptcfgensg": self._preptc_stem + "ntis",
-                    "Vpreactptcfdatsg": self._preptc_stem + "nti",
-                    "Vpreactptcfablsg": self._preptc_stem + "nte",
-                    "Vpreactptcfnompl": self._preptc_stem + "ntes",
-                    "Vpreactptcfvocpl": self._preptc_stem + "ntes",
-                    "Vpreactptcfaccpl": self._preptc_stem + "ntes",
-                    "Vpreactptcfgenpl": self._preptc_stem + "ntium",
-                    "Vpreactptcfdatpl": self._preptc_stem + "ntibus",
-                    "Vpreactptcfablpl": self._preptc_stem + "ntibus",
-                    "Vpreactptcnnomsg": self._preptc_stem + "ns",
-                    "Vpreactptcnvocsg": self._preptc_stem + "ns",
-                    "Vpreactptcnaccsg": self._preptc_stem + "ns",
-                    "Vpreactptcngensg": self._preptc_stem + "ntis",
-                    "Vpreactptcndatsg": self._preptc_stem + "nti",
-                    "Vpreactptcnablsg": self._preptc_stem + "nte",
-                    "Vpreactptcnnompl": self._preptc_stem + "ntia",
-                    "Vpreactptcnvocpl": self._preptc_stem + "ntia",
-                    "Vpreactptcnaccpl": self._preptc_stem + "ntia",
-                    "Vpreactptcngenpl": self._preptc_stem + "ntium",
-                    "Vpreactptcndatpl": self._preptc_stem + "ntibus",
-                    "Vpreactptcnablpl": self._preptc_stem + "ntibus",
-                    "Vperpasptcmnomsg": self.ppp,
-                    "Vperpasptcmvocsg": self._ppp_stem + "e",
-                    "Vperpasptcmaccsg": self._ppp_stem + "um",
-                    "Vperpasptcmgensg": self._ppp_stem + "i",
-                    "Vperpasptcmdatsg": self._ppp_stem + "o",
-                    "Vperpasptcmablsg": self._ppp_stem + "o",
-                    "Vperpasptcmnompl": self._ppp_stem + "i",
-                    "Vperpasptcmvocpl": self._ppp_stem + "i",
-                    "Vperpasptcmaccpl": self._ppp_stem + "os",
-                    "Vperpasptcmgenpl": self._ppp_stem + "orum",
-                    "Vperpasptcmdatpl": self._ppp_stem + "is",
-                    "Vperpasptcmablpl": self._ppp_stem + "is",
-                    "Vperpasptcfnomsg": self._ppp_stem + "a",
-                    "Vperpasptcfvocsg": self._ppp_stem + "a",
-                    "Vperpasptcfaccsg": self._ppp_stem + "am",
-                    "Vperpasptcfgensg": self._ppp_stem + "ae",
-                    "Vperpasptcfdatsg": self._ppp_stem + "ae",
-                    "Vperpasptcfablsg": self._ppp_stem + "a",
-                    "Vperpasptcfnompl": self._ppp_stem + "ae",
-                    "Vperpasptcfvocpl": self._ppp_stem + "ae",
-                    "Vperpasptcfaccpl": self._ppp_stem + "as",
-                    "Vperpasptcfgenpl": self._ppp_stem + "arum",
-                    "Vperpasptcfdatpl": self._ppp_stem + "is",
-                    "Vperpasptcfablpl": self._ppp_stem + "is",
-                    "Vperpasptcnnomsg": self._ppp_stem + "um",
-                    "Vperpasptcnvocsg": self._ppp_stem + "um",
-                    "Vperpasptcnaccsg": self._ppp_stem + "um",
-                    "Vperpasptcngensg": self._ppp_stem + "i",
-                    "Vperpasptcndatsg": self._ppp_stem + "o",
-                    "Vperpasptcnablsg": self._ppp_stem + "o",
-                    "Vperpasptcnnompl": self._ppp_stem + "a",
-                    "Vperpasptcnvocpl": self._ppp_stem + "a",
-                    "Vperpasptcnaccpl": self._ppp_stem + "a",
-                    "Vperpasptcngenpl": self._ppp_stem + "orum",
-                    "Vperpasptcndatpl": self._ppp_stem + "is",
-                    "Vperpasptcnablpl": self._ppp_stem + "is",
-            })  # fmt: skip
+			self.endings = self.endings | {
+				"Vpreactptcmnomsg": self._preptc_stem + "ns",
+				"Vpreactptcmvocsg": self._preptc_stem + "ns",
+				"Vpreactptcmaccsg": self._preptc_stem + "ntem",
+				"Vpreactptcmgensg": self._preptc_stem + "ntis",
+				"Vpreactptcmdatsg": self._preptc_stem + "nti",
+				"Vpreactptcmablsg": self._preptc_stem + "nte",
+				"Vpreactptcmnompl": self._preptc_stem + "ntes",
+				"Vpreactptcmvocpl": self._preptc_stem + "ntes",
+				"Vpreactptcmaccpl": self._preptc_stem + "ntes",
+				"Vpreactptcmgenpl": self._preptc_stem + "ntium",
+				"Vpreactptcmdatpl": self._preptc_stem + "ntibus",
+				"Vpreactptcmablpl": self._preptc_stem + "ntibus",
+				"Vpreactptcfnomsg": self._preptc_stem + "ns",
+				"Vpreactptcfvocsg": self._preptc_stem + "ns",
+				"Vpreactptcfaccsg": self._preptc_stem + "ntem",
+				"Vpreactptcfgensg": self._preptc_stem + "ntis",
+				"Vpreactptcfdatsg": self._preptc_stem + "nti",
+				"Vpreactptcfablsg": self._preptc_stem + "nte",
+				"Vpreactptcfnompl": self._preptc_stem + "ntes",
+				"Vpreactptcfvocpl": self._preptc_stem + "ntes",
+				"Vpreactptcfaccpl": self._preptc_stem + "ntes",
+				"Vpreactptcfgenpl": self._preptc_stem + "ntium",
+				"Vpreactptcfdatpl": self._preptc_stem + "ntibus",
+				"Vpreactptcfablpl": self._preptc_stem + "ntibus",
+				"Vpreactptcnnomsg": self._preptc_stem + "ns",
+				"Vpreactptcnvocsg": self._preptc_stem + "ns",
+				"Vpreactptcnaccsg": self._preptc_stem + "ns",
+				"Vpreactptcngensg": self._preptc_stem + "ntis",
+				"Vpreactptcndatsg": self._preptc_stem + "nti",
+				"Vpreactptcnablsg": self._preptc_stem + "nte",
+				"Vpreactptcnnompl": self._preptc_stem + "ntia",
+				"Vpreactptcnvocpl": self._preptc_stem + "ntia",
+				"Vpreactptcnaccpl": self._preptc_stem + "ntia",
+				"Vpreactptcngenpl": self._preptc_stem + "ntium",
+				"Vpreactptcndatpl": self._preptc_stem + "ntibus",
+				"Vpreactptcnablpl": self._preptc_stem + "ntibus",
+				"Vperpasptcmnomsg": self.ppp,
+				"Vperpasptcmvocsg": self._ppp_stem + "e",
+				"Vperpasptcmaccsg": self._ppp_stem + "um",
+				"Vperpasptcmgensg": self._ppp_stem + "i",
+				"Vperpasptcmdatsg": self._ppp_stem + "o",
+				"Vperpasptcmablsg": self._ppp_stem + "o",
+				"Vperpasptcmnompl": self._ppp_stem + "i",
+				"Vperpasptcmvocpl": self._ppp_stem + "i",
+				"Vperpasptcmaccpl": self._ppp_stem + "os",
+				"Vperpasptcmgenpl": self._ppp_stem + "orum",
+				"Vperpasptcmdatpl": self._ppp_stem + "is",
+				"Vperpasptcmablpl": self._ppp_stem + "is",
+				"Vperpasptcfnomsg": self._ppp_stem + "a",
+				"Vperpasptcfvocsg": self._ppp_stem + "a",
+				"Vperpasptcfaccsg": self._ppp_stem + "am",
+				"Vperpasptcfgensg": self._ppp_stem + "ae",
+				"Vperpasptcfdatsg": self._ppp_stem + "ae",
+				"Vperpasptcfablsg": self._ppp_stem + "a",
+				"Vperpasptcfnompl": self._ppp_stem + "ae",
+				"Vperpasptcfvocpl": self._ppp_stem + "ae",
+				"Vperpasptcfaccpl": self._ppp_stem + "as",
+				"Vperpasptcfgenpl": self._ppp_stem + "arum",
+				"Vperpasptcfdatpl": self._ppp_stem + "is",
+				"Vperpasptcfablpl": self._ppp_stem + "is",
+				"Vperpasptcnnomsg": self._ppp_stem + "um",
+				"Vperpasptcnvocsg": self._ppp_stem + "um",
+				"Vperpasptcnaccsg": self._ppp_stem + "um",
+				"Vperpasptcngensg": self._ppp_stem + "i",
+				"Vperpasptcndatsg": self._ppp_stem + "o",
+				"Vperpasptcnablsg": self._ppp_stem + "o",
+				"Vperpasptcnnompl": self._ppp_stem + "a",
+				"Vperpasptcnvocpl": self._ppp_stem + "a",
+				"Vperpasptcnaccpl": self._ppp_stem + "a",
+				"Vperpasptcngenpl": self._ppp_stem + "orum",
+				"Vperpasptcndatpl": self._ppp_stem + "is",
+				"Vperpasptcnablpl": self._ppp_stem + "is",
+			}
 
-		self._endings = immutabledict(self.endings)
+		self._endings = deepfreeze(self.endings)
 		self._find_unique_endings()
 
 	def get(
@@ -857,9 +857,10 @@ class Noun(_Word):
 		else:
 			raise InvalidInputError(f"Genitive form '{self.genitive}' is not valid")
 
+		self._temp_endings: dict[str, Ending]
 		match self.declension:
 			case 1:
-				self.endings = {
+				self._temp_endings = {
 					"Nnomsg": self.nominative,  # puella
 					"Nvocsg": self.nominative,  # puella
 					"Naccsg": self._stem + "am",  # puellam
@@ -875,7 +876,7 @@ class Noun(_Word):
 				}
 
 			case 2:
-				self.endings = {
+				self._temp_endings = {
 					"Nnomsg": self.nominative,  # servus
 					"Nvocsg": self.nominative
 					if self.nominative[-2:] == "er"
@@ -893,7 +894,7 @@ class Noun(_Word):
 				}
 
 			case 3:
-				self.endings = {
+				self._temp_endings = {
 					"Nnomsg": self.nominative,  # mercator
 					"Nvocsg": self.nominative,  # mercator
 					"Naccsg": self._stem + "em",  # mercatorem
@@ -909,7 +910,7 @@ class Noun(_Word):
 				}
 
 			case 4:
-				self.endings = {
+				self._temp_endings = {
 					"Nnomsg": self.nominative,  # manus
 					"Nvocsg": self.nominative,  # manus
 					"Naccsg": self._stem + "um",  # manum
@@ -925,7 +926,7 @@ class Noun(_Word):
 				}
 
 			case 5:
-				self.endings = {
+				self._temp_endings = {
 					"Nnomsg": self.nominative,  # res
 					"Nvocsg": self.nominative,  # res
 					"Naccsg": self._stem + "em",  # rem
@@ -944,14 +945,14 @@ class Noun(_Word):
 				raise ValueError(f"Declension {self.declension} not recognised")
 
 		if self.gender == "n":
-			self.endings["Naccsg"] = self.nominative
-			self.endings["Nvocsg"] = self.nominative
+			self._temp_endings["Naccsg"] = self.nominative
+			self._temp_endings["Nvocsg"] = self.nominative
 
 			if self.declension == 4:
-				self.endings["Nnompl"] = self._stem + "ua"  # cornua
-				self.endings["Naccpl"] = self._stem + "ua"  # cornua
-				self.endings["Nvocpl"] = self._stem + "ua"  # cornua
-				self.endings["Ndatpl"] = self._stem + "ua"  # cornua
+				self._temp_endings["Nnompl"] = self._stem + "ua"  # cornua
+				self._temp_endings["Naccpl"] = self._stem + "ua"  # cornua
+				self._temp_endings["Nvocpl"] = self._stem + "ua"  # cornua
+				self._temp_endings["Ndatpl"] = self._stem + "ua"  # cornua
 				return
 			elif self.declension == 5:
 				raise InvalidInputError(
@@ -959,17 +960,18 @@ class Noun(_Word):
 				)
 
 			# For the other declensions
-			self.endings["Nnompl"] = self._stem + "a"
-			self.endings["Naccpl"] = self._stem + "a"
-			self.endings["Nvocpl"] = self._stem + "a"
+			self._temp_endings["Nnompl"] = self._stem + "a"
+			self._temp_endings["Naccpl"] = self._stem + "a"
+			self._temp_endings["Nvocpl"] = self._stem + "a"
 
 		if self.plurale_tantum:
-			self.endings = {
-				k: v for k, v in self.endings.items() if not k.endswith("sg")
+			self._temp_endings = {
+				k: v for k, v in self._temp_endings.items() if not k.endswith("sg")
 			}
 
-		self._endings = immutabledict(self.endings)
 		self._find_unique_endings()
+
+		self.endings = deepfreeze(self._temp_endings)
 
 	def get(self, *, case: str, number: str) -> Ending:
 		"""Returns the ending of the noun.
@@ -1010,7 +1012,7 @@ class Noun(_Word):
 			)
 
 		try:
-			return self.endings[f"N{short_case}{short_number}"]
+			return self._temp_endings[f"N{short_case}{short_number}"]
 		except KeyError:
 			raise NoEndingError(
 				f"No ending found for case '{case}' and number '{number}'"
@@ -1036,7 +1038,7 @@ class Noun(_Word):
 			f"{self.meaning}: {self.nominative}, {self.genitive} ({self.declension})"
 		)
 
-		for _, item in self.endings.items():
+		for _, item in self._temp_endings.items():
 			output.write(item + "\n")
 
 		return output.getvalue()
@@ -1157,7 +1159,7 @@ class Adjective(_Word):
 					else:
 						self._spr_stem = self._pos_stem + "issim"  # car- -> carissim-
 
-				self.endings = {
+				self.endings = frozendict({
 					"Aposmnomsg": self._mascnom,  # carus
 					"Aposmvocsg": self._pos_stem + "e",  # care
 					"Aposmaccsg": self._pos_stem + "um",  # carum
@@ -1275,7 +1277,7 @@ class Adjective(_Word):
 					"Dspr": self._irregular_spradv
 					if self.irregular_flag
 					else self._spr_stem + "e",
-				}
+				})  # fmt: skip
 
 			case "3":
 				match self.termination:
@@ -1311,7 +1313,7 @@ class Adjective(_Word):
 									self._pos_stem + "issim"  # ingent- -> ingentissim-
 								)
 
-						self.endings = {
+						self.endings = frozendict({
 							"Aposmnomsg": self._mascnom,  # ingens
 							"Aposmvocsg": self._mascnom,  # ingens
 							"Aposmaccsg": self._pos_stem + "em",  # ingentem
@@ -1429,7 +1431,7 @@ class Adjective(_Word):
 							"Dspr": self._irregular_spradv
 							if self.irregular_flag
 							else self._spr_stem + "e",
-						}
+						})  # fmt: skip
 
 					case 2:
 						# fortis, forte
@@ -1456,7 +1458,7 @@ class Adjective(_Word):
 									self._pos_stem + "issim"  # fort- -> fortissim-
 								)
 
-						self.endings = {
+						self.endings = frozendict({
 							"Aposmnomsg": self._mascnom,  # fortis
 							"Aposmvocsg": self._mascnom,  # fortis
 							"Aposmaccsg": self._pos_stem + "em",  # fortem
@@ -1574,7 +1576,7 @@ class Adjective(_Word):
 							"Dspr": self._irregular_spradv
 							if self.irregular_flag
 							else self._spr_stem + "e",
-						}
+						})  # fmt: skip
 
 					case 3:
 						# acer, acris, acre
@@ -1603,7 +1605,7 @@ class Adjective(_Word):
 									self._pos_stem + "issim"  # levis -> levissim-
 								)
 
-						self.endings = {
+						self.endings = frozendict({
 							"Aposmnomsg": self._mascnom,  # acer
 							"Aposmvocsg": self._mascnom,  # acer
 							"Aposmaccsg": self._pos_stem + "em",  # acrem
@@ -1721,7 +1723,7 @@ class Adjective(_Word):
 							"Dspr": self._irregular_spradv
 							if self.irregular_flag
 							else self._spr_stem + "e",
-						}
+						})  # fmt: skip
 
 					case _:
 						raise InvalidInputError(
@@ -1731,7 +1733,7 @@ class Adjective(_Word):
 			case _:
 				raise InvalidInputError(f"Declension {self.declension} not recognised")
 
-		self._endings = immutabledict(self.endings)
+		self._endings = deepfreeze(self.endings)
 		self._find_unique_endings()
 
 	def get(
@@ -1889,7 +1891,7 @@ class Pronoun(_Word):
 		self._femnom: Ending = self.endings["Pfnomsg"]
 		self._neutnom: Ending = self.endings["Pnnomsg"]
 
-		self._endings = immutabledict(self.endings)
+		self._endings = deepfreeze(self.endings)
 		self._find_unique_endings()
 
 	def get(self, *, gender: str, case: str, number: str) -> Ending:
