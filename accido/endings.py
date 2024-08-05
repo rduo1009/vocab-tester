@@ -10,7 +10,8 @@ from io import StringIO
 from random import choice
 from types import SimpleNamespace
 from typing import Any, Final, Literal, Optional, Union
-from immutabledict import immutabledict
+
+from frozendict import deepfreeze, frozendict
 
 from . import edge_cases, ending_tables
 from .custom_exceptions import InvalidInputError, NoEndingError
@@ -24,12 +25,12 @@ from .misc import (
 	key_from_value,
 )
 
-NUMBER_SHORTHAND: Final[dict[str, str]] = immutabledict({
+NUMBER_SHORTHAND: Final[frozendict[str, str]] = frozendict({
 	"singular": "sg",
 	"plural": "pl",
 })  # fmt: skip
 
-TENSE_SHORTHAND: Final[dict[str, str]] = immutabledict({
+TENSE_SHORTHAND: Final[frozendict[str, str]] = frozendict({
 	"present": "pre",
 	"imperfect": "imp",
 	"future": "fut",
@@ -38,12 +39,12 @@ TENSE_SHORTHAND: Final[dict[str, str]] = immutabledict({
 	# "future perfect": "fpr",
 })  # fmt: skip
 
-VOICE_SHORTHAND: Final[dict[str, str]] = immutabledict({
+VOICE_SHORTHAND: Final[frozendict[str, str]] = frozendict({
 	"active": "act",
 	"passive": "pas",
 })  # fmt: skip
 
-MOOD_SHORTHAND: Final[dict[str, str]] = immutabledict({
+MOOD_SHORTHAND: Final[frozendict[str, str]] = frozendict({
 	"indicative": "ind",
 	"infinitive": "inf",
 	"imperative": "ipe",
@@ -51,7 +52,7 @@ MOOD_SHORTHAND: Final[dict[str, str]] = immutabledict({
 	"participle": "ptc",
 })  # fmt: skip
 
-CASE_SHORTHAND: Final[dict[str, str]] = immutabledict({
+CASE_SHORTHAND: Final[frozendict[str, str]] = frozendict({
 	"nominative": "nom",
 	"vocative": "voc",
 	"accusative": "acc",
@@ -60,19 +61,19 @@ CASE_SHORTHAND: Final[dict[str, str]] = immutabledict({
 	"ablative": "abl",
 })  # fmt: skip
 
-GENDER_SHORTHAND: Final[dict[str, str]] = immutabledict({
+GENDER_SHORTHAND: Final[frozendict[str, str]] = frozendict({
 	"masculine": "m",
 	"feminine": "f",
 	"neuter": "n",
 })  # fmt: skip
 
-DEGREE_SHORTHAND: Final[dict[str, str]] = immutabledict({
+DEGREE_SHORTHAND: Final[frozendict[str, str]] = frozendict({
 	"positive": "pos",
 	"comparative": "cmp",
 	"superlative": "spr",
 })  # fmt: skip
 
-PERSON_SHORTHAND: Final[dict[int, str]] = immutabledict({
+PERSON_SHORTHAND: Final[frozendict[int, str]] = frozendict({
 	1: "1st person",
 	2: "2nd person",
 	3: "3rd person",
@@ -106,7 +107,7 @@ class _Word(ABC):
 	def __lt__(self, other: object) -> bool:
 		if not isinstance(other, _Word):
 			return NotImplemented
-		return self._first < other._first  # type: ignore
+		return self._first < other._first
 
 	def __hash__(self) -> int:
 		return hash(self.endings)
@@ -418,7 +419,7 @@ class LearningVerb(_Word):
 		] = ending_tables.VERB_SIMILAR_ENDINGS(inf_stem=inf_stem)
 
 		return {
-			f"V{tense}{voice}{mood}{number}{person}": VERB_SIMILAR_ENDINGS[  # type: ignore
+			f"V{tense}{voice}{mood}{number}{person}": VERB_SIMILAR_ENDINGS[
 				f"{tense}{voice}{mood}"
 			][0]
 			+ VERB_SIMILAR_ENDINGS[f"{tense}{voice}{mood}"][1][conjugation - 1]
@@ -781,7 +782,7 @@ class Noun(_Word):
 				k: v for k, v in self.endings.items() if not k.endswith("sg")
 			}
 
-		self._endings = immutabledict(self.endings)
+		self.endings = deepfreeze(self.endings)
 		self._find_unique_endings()
 
 	@staticmethod
@@ -1397,7 +1398,7 @@ class Pronoun(_Word):
 		self._femnom: Ending = self.endings["Pfnomsg"]
 		self._neutnom: Ending = self.endings["Pnnomsg"]
 
-		self._endings = immutabledict(self.endings)
+		self.endings = deepfreeze(self.endings)
 		self._find_unique_endings()
 
 	def get(self, *, gender: str, case: str, number: str) -> Ending:

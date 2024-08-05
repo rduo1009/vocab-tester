@@ -22,12 +22,12 @@ def test_errors2():
         word.get(gender="a", case="b", number="c")
     assert "Gender 'a', case 'b' or number 'c' not recognised" == str(error.value)
 
-def test_errors3():
-    with pytest.raises(NoEndingError) as error:
-        word = Pronoun(pronoun="hic", meaning="this")
-        del word.endings["Pmnomsg"]
-        word.get(gender="masculine", case="nominative", number="singular")
-    assert "No ending found for gender 'masculine', case 'nominative' and number 'singular'" == str(error.value)
+#def test_errors3():
+#    with pytest.raises(NoEndingError) as error:
+#        word = Pronoun(pronoun="hic", meaning="this")
+#        del word.endings["Pmnomsg"]
+#        word.get(gender="masculine", case="nominative", number="singular")
+#    assert "No ending found for gender 'masculine', case 'nominative' and number 'singular'" == str(error.value)
 
 def test_pick():
     word = Pronoun(pronoun="ille", meaning="that")

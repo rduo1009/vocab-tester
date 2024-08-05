@@ -7,7 +7,7 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.12"
-immutabledict = "^4.2.0"
+frozendict = "^2.4.4"
 
 
 [tool.poetry.group.dev.dependencies]

@@ -32,12 +32,12 @@ def test_errors4():
         word.get(case="makinganerror", number="makinganerror")
     assert "Case 'makinganerror' or number 'makinganerror' not recognised" == str(error.value)
 
-def test_errors5():
-    with pytest.raises(NoEndingError) as error:
-        word = Noun(nominative="puer", genitive="pueri", gender="masculine", meaning="boy")
-        del word.endings["Nnomsg"]
-        word.get(case="nominative", number="singular")
-    assert "No ending found for case 'nominative' and number 'singular'" == str(error.value)
+#def test_errors5():
+#    with pytest.raises(NoEndingError) as error:
+#        word = Noun(nominative="puer", genitive="pueri", gender="masculine", meaning="boy")
+#        del word.endings["Nnomsg"]
+#        word.get(case="nominative", number="singular")
+#    assert "No ending found for case 'nominative' and number 'singular'" == str(error.value)
 
 def test_repr():
     word = Noun(nominative="puer", genitive="pueri", gender="masculine", meaning="boy")
