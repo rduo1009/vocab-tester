@@ -27,5 +27,8 @@ convention = "numpy"
 
 [tool.ruff.format]
 quote-style = "double"
-indent-style = "tab"
+indent-style = "space"
 docstring-code-format = false
+
+[tool.ruff]
+line-length = 120

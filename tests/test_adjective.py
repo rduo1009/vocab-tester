@@ -768,3 +768,9 @@ def test_irregularadverb4():
     assert word.get(degree="positive", adverb=True) == "bene"
     assert word.get(degree="comparative", adverb=True) == "melius"
     assert word.get(degree="superlative", adverb=True) == "optime"
+
+def test_irregularadverb5():
+    word = Adjective("magnus", "magna", "magnum", declension="212", meaning="big")
+    with pytest.raises(NoEndingError) as error:
+        word.get(degree="positive", adverb=True)
+    assert "No ending found for degree 'positive'" == str(error.value)
