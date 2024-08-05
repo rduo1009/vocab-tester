@@ -13,7 +13,7 @@ from grammatica.custom_exceptions import NoEndingError, InvalidInputError
 # fmt: off
 def test_errors1():
     with pytest.raises(InvalidInputError) as error:
-        LearningVerb(present="test1", infinitive="makinganerror", perfect="test3", ppp="test4", meaning="test5")
+        LearningVerb(present="test1", infinitive="makinganerror", perfect="test3i", ppp="test4", meaning="test5")
     assert "Infinitive 'makinganerror' is not valid" == str(error.value)
 
 
@@ -58,19 +58,19 @@ def test_errors7():
 
 
 def test_repr():
-    word = LearningVerb(present="test1", infinitive="testare", perfect="test3", ppp="test4", meaning="test5")
-    assert word.__repr__() == "LearningVerb(test1, testare, test3, test4, test5)"
+    word = LearningVerb(present="test1", infinitive="testare", perfect="test3i", ppp="test4", meaning="test5")
+    assert word.__repr__() == "LearningVerb(test1, testare, test3i, test4, test5)"
 
 
 def test_eq():
-    word1 = LearningVerb(present="test1", infinitive="testare", perfect="test3", ppp="test4", meaning="test5")
-    word2 = LearningVerb(present="test1", infinitive="testare", perfect="test3", ppp="test4", meaning="test5")
+    word1 = LearningVerb(present="test1", infinitive="testare", perfect="test3i", ppp="test4", meaning="test5")
+    word2 = LearningVerb(present="test1", infinitive="testare", perfect="test3i", ppp="test4", meaning="test5")
     assert word1 == word2
 
 
 def test_lt():
-    word1 = LearningVerb(present="test1", infinitive="testare", perfect="test3", ppp="test4", meaning="test5")
-    word2 = LearningVerb(present="aaatest1", infinitive="testare", perfect="test3", ppp="test4", meaning="test5")
+    word1 = LearningVerb(present="test1", infinitive="testare", perfect="test3i", ppp="test4", meaning="test5")
+    word2 = LearningVerb(present="aaatest1", infinitive="testare", perfect="test3i", ppp="test4", meaning="test5")
     # word2 must be smaller than word1 as word1.first = "test1" and word2.first = "aaatest1"
     assert word1 > word2
 
@@ -81,6 +81,8 @@ def test_find():
 def test_pick():
     word = LearningVerb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
     word.pick()
+
+
 def test_firstconjugation():
     word = LearningVerb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
 

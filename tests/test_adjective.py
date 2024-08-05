@@ -110,7 +110,7 @@ def compare(s, t):
     return not t
 
 def test_find():
-    word = word = Adjective("laetus", "laeta", "laetum", declension="212", meaning="happy")
+    word = Adjective("laetus", "laeta", "laetum", declension="212", meaning="happy")
     assert compare(word.find("laeta"), [       
         SimpleNamespace(degree="positive", gender="feminine", case="nominative", number="singular", string="positive nominative singular feminine"),
         SimpleNamespace(degree="positive", gender="feminine", case="vocative", number="singular", string="positive vocative singular feminine"),

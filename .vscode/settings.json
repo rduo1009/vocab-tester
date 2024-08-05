@@ -42,8 +42,9 @@
         "**/__pycache__": true,
         "**/.mypy_cache": true,
         "**/.pytest_cache": true,
-        "**/Pipfile": true,
-        "**/Pipfile.lock": true
+        "**/.python-version": true,
+        "**/.venv": true,
+        "**/poetry.lock": true
     },
     "autoDocstring.docstringFormat": "numpy",
 
@@ -63,5 +64,6 @@
         "--strict-equality"
     ],
     "editor.rulers": [75],
-    "editor.stickyScroll.enabled": true
+    "editor.stickyScroll.enabled": true,
+    "terminal.integrated.fontFamily": "'Hack Nerd Font'"
 }
