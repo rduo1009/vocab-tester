@@ -7,8 +7,8 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 
 import pytest
 from types import SimpleNamespace
-from accido.endings import Noun
-from accido.custom_exceptions import InvalidInputError, NoEndingError
+from src.accido.endings import Noun
+from src.accido.custom_exceptions import InvalidInputError, NoEndingError
 
 
 def test_errors1():

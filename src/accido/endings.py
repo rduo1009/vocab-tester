@@ -3,7 +3,6 @@ Representations of Latin words with their endings calculated.
 """
 
 from abc import ABC, abstractmethod
-from dataclasses import dataclass
 from functools import total_ordering
 from io import StringIO
 from random import choice
@@ -15,7 +14,6 @@ from frozendict import deepfreeze, frozendict
 from . import edge_cases
 from .custom_exceptions import InvalidInputError, NoEndingError
 from .misc import Ending, Endings, Meaning, MultipleEndings, key_from_value
-
 
 NUMBER_SHORTHAND: Final[frozendict[str, str]] = frozendict({
     "singular": "sg",
@@ -166,7 +164,6 @@ class _Word(ABC):
         pass
 
 
-@dataclass
 class BasicWord(_Word):
     """Representation of a Latin word that is undeclinable.
 
@@ -182,10 +179,9 @@ class BasicWord(_Word):
     {"": "sed"}
     """  # fmt: skip
 
-    word: str
-    meaning: Meaning
-
-    def __post_init__(self) -> None:
+    def __init__(self, word: str, meaning: Meaning):
+        self.word: str = word
+        self.meaning: Meaning = meaning
         self.endings: Endings = frozendict({"": self.word})
         self._find_unique_endings()
 
@@ -273,11 +269,16 @@ class LearningVerb(_Word):
         self._first = self.present
         self.conjugation: Literal[0, 1, 2, 3, 4, 5]
 
+        if self.present[-1:] != "o":
+            raise InvalidInputError(f"Present {self.present} is not valid")
+
         if self.perfect[-1:] != "i":
             raise InvalidInputError(f"Perfect '{self.perfect}' is not valid")
 
         # Conjugation edge cases
-        if irregular_endings := edge_cases.find_irregular_endings(self.present):
+        if irregular_endings := edge_cases.find_irregular_endings(
+            self.present
+        ):
             self.endings = irregular_endings
             self.conjugation = 0
             return
@@ -295,7 +296,9 @@ class LearningVerb(_Word):
             else:
                 self.conjugation = 3
         else:
-            raise InvalidInputError(f"Infinitive '{self.infinitive}' is not valid")
+            raise InvalidInputError(
+                f"Infinitive '{self.infinitive}' is not valid"
+            )
 
         self._pre_stem: str = self.present[:-1]
         self._inf_stem: str = self.infinitive[:-3]
@@ -684,10 +687,14 @@ class LearningVerb(_Word):
                 )
 
             if person:
-                raise InvalidInputError(f"Participle cannot have a person (person '{person}')")
+                raise InvalidInputError(
+                    f"Participle cannot have a person (person '{person}')"
+                )
 
             try:
-                return self.endings[f"V{short_tense}{short_voice}ptc{short_gender}{short_case}{short_number}"]
+                return self.endings[
+                    f"V{short_tense}{short_voice}ptc{short_gender}{short_case}{short_number}"
+                ]
             except KeyError:
                 raise NoEndingError(
                     f"No ending found for {participle_case} {number} {participle_gender} {tense} {voice} participle"
@@ -710,9 +717,13 @@ class LearningVerb(_Word):
         try:
             if mood == "infinitive":
                 return self.endings[f"V{short_tense}{short_voice}inf   "]
-            return self.endings[f"V{short_tense}{short_voice}{short_mood}{short_number}{person}"]
+            return self.endings[
+                f"V{short_tense}{short_voice}{short_mood}{short_number}{person}"
+            ]
         except KeyError:
-            raise NoEndingError(f"No ending found for {person} {number} {tense} {voice} {mood}")
+            raise NoEndingError(
+                f"No ending found for {person} {number} {tense} {voice} {mood}"
+            )
 
     @staticmethod
     def _create_namespace(key: str) -> SimpleNamespace:
@@ -848,7 +859,9 @@ class Noun(_Word):
             self.plurale_tantum = True
 
         else:
-            raise InvalidInputError(f"Genitive form '{self.genitive}' is not valid")
+            raise InvalidInputError(
+                f"Genitive form '{self.genitive}' is not valid"
+            )
 
         temp_endings: dict[str, Ending]
         match self.declension:
@@ -871,7 +884,9 @@ class Noun(_Word):
             case 2:
                 temp_endings = {
                     "Nnomsg": self.nominative,  # servus
-                    "Nvocsg": self.nominative if self.nominative[-2:] == "er" else self._stem + "e",  # serve
+                    "Nvocsg": self.nominative
+                    if self.nominative[-2:] == "er"
+                    else self._stem + "e",  # serve
                     "Naccsg": self._stem + "um",  # servum
                     "Ngensg": self.genitive,  # servi
                     "Ndatsg": self._stem + "o",  # servo
@@ -933,7 +948,9 @@ class Noun(_Word):
                 }
 
             case _:
-                raise ValueError(f"Declension {self.declension} not recognised")
+                raise ValueError(
+                    f"Declension {self.declension} not recognised"
+                )
 
         if self.gender == "n":
             temp_endings["Naccsg"] = self.nominative
@@ -946,7 +963,9 @@ class Noun(_Word):
                 temp_endings["Ndatpl"] = self._stem + "ua"  # cornua
                 return
             elif self.declension == 5:
-                raise InvalidInputError(f"Fifth declension nouns cannot be neuter (noun '{self.nominative}')")
+                raise InvalidInputError(
+                    f"Fifth declension nouns cannot be neuter (noun '{self.nominative}')"
+                )
 
             # For the other declensions
             temp_endings["Nnompl"] = self._stem + "a"
@@ -954,7 +973,9 @@ class Noun(_Word):
             temp_endings["Nvocpl"] = self._stem + "a"
 
         if self.plurale_tantum:
-            temp_endings = {k: v for k, v in temp_endings.items() if not k.endswith("sg")}
+            temp_endings = {
+                k: v for k, v in temp_endings.items() if not k.endswith("sg")
+            }
 
         self.endings = deepfreeze(temp_endings)
         self._find_unique_endings()
@@ -979,7 +1000,7 @@ class Noun(_Word):
             If the input is invalid.
         NoEndingError
             If an ending cannot be found.
-        
+
         Examples
         --------
         >>> foo = Noun(nominative="ancilla", genitive="ancillae", \
@@ -988,17 +1009,21 @@ class Noun(_Word):
         "ancilla"
 
         Note that all arguments of get are keyword-only.
-        """  # fmt: skip
+        """
         try:
             short_case: str = CASE_SHORTHAND[case]
             short_number: str = NUMBER_SHORTHAND[number]
         except KeyError:
-            raise InvalidInputError(f"Case '{case}' or number '{number}' not recognised")
+            raise InvalidInputError(
+                f"Case '{case}' or number '{number}' not recognised"
+            )
 
         try:
             return self.endings[f"N{short_case}{short_number}"]
         except KeyError:
-            raise NoEndingError(f"No ending found for case '{case}' and number '{number}'")
+            raise NoEndingError(
+                f"No ending found for case '{case}' and number '{number}'"
+            )
 
     @staticmethod
     def _create_namespace(key: str) -> SimpleNamespace:
@@ -1014,7 +1039,9 @@ class Noun(_Word):
 
     def __str__(self) -> str:
         output: StringIO = StringIO()
-        output.write(f"{self.meaning}: {self.nominative}, {self.genitive} ({self.declension})")
+        output.write(
+            f"{self.meaning}: {self.nominative}, {self.genitive} ({self.declension})"
+        )
 
         for _, item in self.endings.items():
             output.write(item + "\n")
@@ -1100,23 +1127,23 @@ class Adjective(_Word):
         self._cmp_stem: str
         self._spr_stem: str
 
-        self._irregular_posadv: Ending
-        self._irregular_cmpadv: Ending
-        self._irregular_spradv: Ending
+        self._irregular_posadv: str
+        self._irregular_cmpadv: str
+        self._irregular_spradv: str
 
         if self._mascnom in edge_cases.IRREGULAR_COMPARATIVES:
             self.irregular_flag = True
             irregular_data = edge_cases.IRREGULAR_COMPARATIVES[self._mascnom]
 
-            self._cmp_stem = irregular_data[0]
-            self._spr_stem = irregular_data[1]
+            self._cmp_stem = irregular_data[0]  # type: ignore
+            self._spr_stem = irregular_data[1]  # type: ignore
 
-            if all(irregular_data[2:]):
+            if None not in irregular_data[2:]:
                 (
                     self._irregular_posadv,
                     self._irregular_cmpadv,
                     self._irregular_spradv,
-                ) = irregular_data[2:]
+                ) = irregular_data[2:]  # type: ignore
             else:
                 self.adverb_flag = False
 
@@ -1138,11 +1165,17 @@ class Adjective(_Word):
                 if self._mascnom not in edge_cases.IRREGULAR_COMPARATIVES:
                     self._cmp_stem = self._pos_stem + "ior"  # car- -> carior-
                     if self._mascnom[:2] == "er":
-                        self._spr_stem = self._mascnom + "rim"  # miser- -> miserrim-
+                        self._spr_stem = (
+                            self._mascnom + "rim"
+                        )  # miser- -> miserrim-
                     elif self._mascnom in edge_cases.LIS_ADJECTIVES:
-                        self._spr_stem = self._pos_stem + "lim"  # facil- -> facillim-
+                        self._spr_stem = (
+                            self._pos_stem + "lim"
+                        )  # facil- -> facillim-
                     else:
-                        self._spr_stem = self._pos_stem + "issim"  # car- -> carissim-
+                        self._spr_stem = (
+                            self._pos_stem + "issim"
+                        )  # car- -> carissim-
 
                 self.endings = frozendict({
                     "Aposmnomsg": self._mascnom,  # carus
@@ -1257,9 +1290,15 @@ class Adjective(_Word):
 
                 if self.adverb_flag:
                     self.endings = self.endings | {
-                        "Dpos": self._irregular_posadv if self.irregular_flag else self._pos_stem + "e",
-                        "Dcmp": self._irregular_cmpadv if self.irregular_flag else self._pos_stem + "ius",
-                        "Dspr": self._irregular_spradv if self.irregular_flag else self._spr_stem + "e",
+                        "Dpos": self._irregular_posadv
+                        if self.irregular_flag
+                        else self._pos_stem + "e",
+                        "Dcmp": self._irregular_cmpadv
+                        if self.irregular_flag
+                        else self._pos_stem + "ius",
+                        "Dspr": self._irregular_spradv
+                        if self.irregular_flag
+                        else self._spr_stem + "e",
                     }
 
             case "3":
@@ -1274,20 +1313,30 @@ class Adjective(_Word):
                         self._mascgen: str = self._principal_parts[1]
 
                         if self._mascgen[-2:] != "is":
-                            raise InvalidInputError(f"Genitive '{self._mascgen}' not recognised")
-                        self._pos_stem = self._mascgen[:-2]  # ingentis -> ingent-
+                            raise InvalidInputError(
+                                f"Genitive '{self._mascgen}' not recognised"
+                            )
+                        self._pos_stem = self._mascgen[
+                            :-2
+                        ]  # ingentis -> ingent-
 
                         if not self.irregular_flag:
-                            self._cmp_stem = self._pos_stem + "ior"  # ingent- > ingentior-
+                            self._cmp_stem = (
+                                self._pos_stem + "ior"
+                            )  # ingent- > ingentior-
                             if self._mascnom[:2] == "er":
-                                self._spr_stem = self._mascnom + "rim"  # miser- -> miserrim-
+                                self._spr_stem = (
+                                    self._mascnom + "rim"
+                                )  # miser- -> miserrim-
                             elif self._mascnom in edge_cases.LIS_ADJECTIVES:
                                 self._spr_stem = (
-                                    self._pos_stem + "lim"  # facil- -> facillim-
+                                    self._pos_stem
+                                    + "lim"  # facil- -> facillim-
                                 )
                             else:
                                 self._spr_stem = (
-                                    self._pos_stem + "issim"  # ingent- -> ingentissim-
+                                    self._pos_stem
+                                    + "issim"  # ingent- -> ingentissim-
                                 )
 
                         self.endings = frozendict({
@@ -1403,9 +1452,15 @@ class Adjective(_Word):
 
                         if self.adverb_flag:
                             self.endings = self.endings | {
-                                "Dpos": self._irregular_posadv if self.irregular_flag else self._pos_stem + "er",
-                                "Dcmp": self._irregular_cmpadv if self.irregular_flag else self._pos_stem + "ius",
-                                "Dspr": self._irregular_spradv if self.irregular_flag else self._spr_stem + "e",
+                                "Dpos": self._irregular_posadv
+                                if self.irregular_flag
+                                else self._pos_stem + "er",
+                                "Dcmp": self._irregular_cmpadv
+                                if self.irregular_flag
+                                else self._pos_stem + "ius",
+                                "Dspr": self._irregular_spradv
+                                if self.irregular_flag
+                                else self._spr_stem + "e",
                             }
 
                     case 2:
@@ -1419,18 +1474,23 @@ class Adjective(_Word):
 
                         self._pos_stem = self._mascnom[:-2]  # fortis -> fort-
                         if not self.irregular_flag:
-                            self._cmp_stem = self._pos_stem + "ior"  # fort- -> fortior-
+                            self._cmp_stem = (
+                                self._pos_stem + "ior"
+                            )  # fort- -> fortior-
                             if self._mascnom[:2] == "er":
                                 self._spr_stem = (
-                                    self._mascnom + "rim"  # miser- -> miserrim-
+                                    self._mascnom
+                                    + "rim"  # miser- -> miserrim-
                                 )
                             elif self._mascnom in edge_cases.LIS_ADJECTIVES:
                                 self._spr_stem = (
-                                    self._pos_stem + "lim"  # facil- -> facillim-
+                                    self._pos_stem
+                                    + "lim"  # facil- -> facillim-
                                 )
                             else:
                                 self._spr_stem = (
-                                    self._pos_stem + "issim"  # fort- -> fortissim-
+                                    self._pos_stem
+                                    + "issim"  # fort- -> fortissim-
                                 )
 
                         self.endings = frozendict({
@@ -1546,9 +1606,15 @@ class Adjective(_Word):
 
                         if self.adverb_flag:
                             self.endings = self.endings | {
-                                "Dpos": self._irregular_posadv if self.irregular_flag else self._pos_stem + "iter",
-                                "Dcmp": self._irregular_cmpadv if self.irregular_flag else self._pos_stem + "ius",
-                                "Dspr": self._irregular_spradv if self.irregular_flag else self._spr_stem + "e",
+                                "Dpos": self._irregular_posadv
+                                if self.irregular_flag
+                                else self._pos_stem + "iter",
+                                "Dcmp": self._irregular_cmpadv
+                                if self.irregular_flag
+                                else self._pos_stem + "ius",
+                                "Dspr": self._irregular_spradv
+                                if self.irregular_flag
+                                else self._spr_stem + "e",
                             }
 
                     case 3:
@@ -1564,16 +1630,22 @@ class Adjective(_Word):
 
                         self._pos_stem = self._femnom[:-2]  # acris -> acr-
                         if not self.irregular_flag:
-                            self._cmp_stem = self._pos_stem + "ior"  # acr- -> acrior-
+                            self._cmp_stem = (
+                                self._pos_stem + "ior"
+                            )  # acr- -> acrior-
                             if self._mascnom[-2:] == "er":
-                                self._spr_stem = self._mascnom + "rim"  # cer- -> acerrim-
+                                self._spr_stem = (
+                                    self._mascnom + "rim"
+                                )  # cer- -> acerrim-
                             elif self._mascnom in edge_cases.LIS_ADJECTIVES:
                                 self._spr_stem = (
-                                    self._pos_stem + "lim"  # facil- -> facillim-
+                                    self._pos_stem
+                                    + "lim"  # facil- -> facillim-
                                 )
                             else:
                                 self._spr_stem = (
-                                    self._pos_stem + "issim"  # levis -> levissim-
+                                    self._pos_stem
+                                    + "issim"  # levis -> levissim-
                                 )
 
                         self.endings = frozendict({
@@ -1689,16 +1761,26 @@ class Adjective(_Word):
 
                         if self.adverb_flag:
                             self.endings = self.endings | {
-                                "Dpos": self._irregular_posadv if self.irregular_flag else self._pos_stem + "iter",
-                                "Dcmp": self._irregular_cmpadv if self.irregular_flag else self._pos_stem + "ius",
-                                "Dspr": self._irregular_spradv if self.irregular_flag else self._spr_stem + "e",
+                                "Dpos": self._irregular_posadv
+                                if self.irregular_flag
+                                else self._pos_stem + "iter",
+                                "Dcmp": self._irregular_cmpadv
+                                if self.irregular_flag
+                                else self._pos_stem + "ius",
+                                "Dspr": self._irregular_spradv
+                                if self.irregular_flag
+                                else self._spr_stem + "e",
                             }
 
                     case _:
-                        raise InvalidInputError(f"Termination must be 1, 2 or 3 (given {self.termination})")
+                        raise InvalidInputError(
+                            f"Termination must be 1, 2 or 3 (given {self.termination})"
+                        )
 
             case _:
-                raise InvalidInputError(f"Declension {self.declension} not recognised")
+                raise InvalidInputError(
+                    f"Declension {self.declension} not recognised"
+                )
 
         self._endings = deepfreeze(self.endings)
         self._find_unique_endings()
@@ -1776,7 +1858,9 @@ class Adjective(_Word):
             )
 
         try:
-            return self.endings[f"A{short_degree}{short_gender}{short_case}{short_number}"]
+            return self.endings[
+                f"A{short_degree}{short_gender}{short_case}{short_number}"
+            ]
         except KeyError:
             raise NoEndingError(
                 f"No ending found for degree '{degree}', gender '{gender}', case '{case}' and number '{number}'"
@@ -1790,7 +1874,9 @@ class Adjective(_Word):
             case=key_from_value(CASE_SHORTHAND, key[5:8]),
             number=key_from_value(NUMBER_SHORTHAND, key[8:10]),
         )
-        output.string = f"{output.degree} {output.case} {output.number} {output.gender}"
+        output.string = (
+            f"{output.degree} {output.case} {output.number} {output.gender}"
+        )
         return output
 
     def __str__(self) -> str:
@@ -1894,12 +1980,16 @@ class Pronoun(_Word):
             short_case: str = CASE_SHORTHAND[case]
             short_number: str = NUMBER_SHORTHAND[number]
         except KeyError:
-            raise InvalidInputError(f"Gender '{gender}', case '{case}' or number '{number}' not recognised")
+            raise InvalidInputError(
+                f"Gender '{gender}', case '{case}' or number '{number}' not recognised"
+            )
 
         try:
             return self.endings[f"P{short_gender}{short_case}{short_number}"]
         except KeyError:
-            raise NoEndingError(f"No ending found for gender '{gender}', case '{case}' and number '{number}'")
+            raise NoEndingError(
+                f"No ending found for gender '{gender}', case '{case}' and number '{number}'"
+            )
 
     @staticmethod
     def _create_namespace(key: str) -> SimpleNamespace:
@@ -1916,7 +2006,9 @@ class Pronoun(_Word):
 
     def __str__(self) -> str:
         output: StringIO = StringIO()
-        output.write(f"{self.meaning}: {self._mascnom}, {self._femnom}, {self._neutnom}\n")
+        output.write(
+            f"{self.meaning}: {self._mascnom}, {self._femnom}, {self._neutnom}\n"
+        )
         for _, item in self.endings.items():
             output.write(item + "\n")
         return output.getvalue()

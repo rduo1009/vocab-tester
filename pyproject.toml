@@ -32,4 +32,4 @@ indent-style = "space"
 docstring-code-format = false
 
 [tool.ruff]
-line-length = 120
+line-length = 79
