@@ -109,9 +109,6 @@ class _Word(ABC):
             return NotImplemented
         return self._first < other._first
 
-    def __hash__(self) -> int:
-        return hash(self.endings)
-
     def __getitem__(self, key: str) -> Ending:
         return self.endings[key]
 
@@ -886,7 +883,7 @@ class Adjective(_Word):
         self,
         *principal_parts: str,
         termination: Optional[int] = None,
-        declension: Literal["212", "3"],
+        declension: str,
         meaning: Meaning,
     ) -> None:
         """Initialises Adjective and determines the endings.
@@ -919,7 +916,7 @@ class Adjective(_Word):
 
         self._first = self._principal_parts[0]
         self.meaning: Meaning = meaning
-        self.declension: Literal["212", "3"] = declension
+        self.declension: str = declension
         self.termination: Optional[int] = termination
 
         match self.declension:
