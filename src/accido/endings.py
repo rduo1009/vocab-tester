@@ -99,9 +99,6 @@ class _Word(ABC):
             return NotImplemented
         return self._first < other._first
 
-    def __hash__(self) -> int:
-        return hash(self.endings)
-
     def __getitem__(self, key: str) -> Ending:
         return self.endings[key]
 
@@ -164,7 +161,7 @@ class _Word(ABC):
         pass
 
 
-class BasicWord(_Word):
+class Regular(_Word):
     """Representation of a Latin word that is undeclinable.
 
     Attributes
@@ -174,7 +171,7 @@ class BasicWord(_Word):
 
     Examples
     --------
-    >>> foo = BasicWord(word="sed", meaning="but")
+    >>> foo = Regular(word="sed", meaning="but")
     >>> foo.endings
     {"": "sed"}
     """  # fmt: skip
@@ -195,7 +192,7 @@ class BasicWord(_Word):
         
         Examples
         --------
-        >>> foo = BasicWord(word="sed", meaning="but")
+        >>> foo = Regular(word="sed", meaning="but")
         >>> foo.get()
         "sed"
         """  # fmt: skip
@@ -783,7 +780,7 @@ class Noun(_Word):
         *,
         nominative: str,
         genitive: str,
-        gender: Literal["masculine", "feminine", "neuter"],
+        gender: str,
         meaning: Meaning,
     ) -> None:
         """Initialises Noun and determines the declension and endings.
@@ -1086,7 +1083,7 @@ class Adjective(_Word):
         self,
         *principal_parts: str,
         termination: Optional[int] = None,
-        declension: Literal["212", "3"],
+        declension: str,
         meaning: Meaning,
     ) -> None:
         """Initialises Adjective and determines the endings.
@@ -1119,7 +1116,7 @@ class Adjective(_Word):
 
         self._first = self._principal_parts[0]
         self.meaning: Meaning = meaning
-        self.declension: Literal["212", "3"] = declension
+        self.declension: str = declension
         self.termination: Optional[int] = termination
         self.irregular_flag: bool = False
         self.adverb_flag: bool = True
