@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 try:
     from icecream import ic  # type: ignore
 except ImportError:  # Graceful fallback if IceCream isn't installed.

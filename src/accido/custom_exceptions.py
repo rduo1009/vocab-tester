@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 """custom_exceptions.py
 Contains custom exceptions used by accido.
 """

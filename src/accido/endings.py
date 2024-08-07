@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 """endings.py
 Representations of Latin words with their endings calculated.
 """
@@ -161,7 +163,8 @@ class _Word(ABC):
         pass
 
 
-class Regular(_Word):
+@total_ordering
+class RegularWord(_Word):
     """Representation of a Latin word that is undeclinable.
 
     Attributes
@@ -171,7 +174,7 @@ class Regular(_Word):
 
     Examples
     --------
-    >>> foo = Regular(word="sed", meaning="but")
+    >>> foo = RegularWord(word="sed", meaning="but")
     >>> foo.endings
     {"": "sed"}
     """  # fmt: skip
@@ -192,7 +195,7 @@ class Regular(_Word):
         
         Examples
         --------
-        >>> foo = Regular(word="sed", meaning="but")
+        >>> foo = RegularWord(word="sed", meaning="but")
         >>> foo.get()
         "sed"
         """  # fmt: skip
@@ -201,6 +204,9 @@ class Regular(_Word):
     @staticmethod
     def _create_namespace(key: str) -> SimpleNamespace:
         return NotImplemented
+
+    def __repr__(self) -> str:
+        return f"RegularWord({self.word}, {self.meaning})"
 
 
 @total_ordering
@@ -216,7 +222,7 @@ class LearningVerb(_Word):
     meaning : Meaning
     conjugation : {0, 1, 2, 3, 4, 5}
         The conjugation of the verb. The value 5 represents the third
-        declension -io verbs, and the value 0 represents an irregular
+        declension -io verbs, and the value 0 represents an irRegularWord
         conjugation.
     endings : Endings
 
@@ -273,10 +279,10 @@ class LearningVerb(_Word):
             raise InvalidInputError(f"Perfect '{self.perfect}' is not valid")
 
         # Conjugation edge cases
-        if irregular_endings := edge_cases.find_irregular_endings(
+        if irRegularWord_endings := edge_cases.find_irRegularWord_endings(
             self.present
         ):
-            self.endings = irregular_endings
+            self.endings = irRegularWord_endings
             self.conjugation = 0
             return
         elif edge_cases.check_io_verb(self.present):
@@ -758,7 +764,7 @@ class Noun(_Word):
     nominative, genitive : str
     meaning : Meaning
     declension : {0, 1, 2, 3, 4, 5}
-        The declension of the noun. The value 0 represents an irregular
+        The declension of the noun. The value 0 represents an irRegularWord
         declension.
     endings : Endings
     plurale_tantum : bool
@@ -811,8 +817,8 @@ class Noun(_Word):
         self.declension: Literal[0, 1, 2, 3, 4, 5]
         self._stem: str
 
-        if self.nominative in edge_cases.IRREGULAR_NOUNS:
-            self.endings = edge_cases.IRREGULAR_NOUNS[nominative]
+        if self.nominative in edge_cases.IRRegularWord_NOUNS:
+            self.endings = edge_cases.IRRegularWord_NOUNS[nominative]
             self.declension = 0
             return
 
@@ -1060,7 +1066,7 @@ class Adjective(_Word):
     termination : Optional[int]
         The termination of the adjective if applicable (only third
         declension adjectives).
-    irregular_flag : bool
+    irRegularWord_flag : bool
 
     Examples
     --------
@@ -1118,29 +1124,31 @@ class Adjective(_Word):
         self.meaning: Meaning = meaning
         self.declension: str = declension
         self.termination: Optional[int] = termination
-        self.irregular_flag: bool = False
+        self.irRegularWord_flag: bool = False
         self.adverb_flag: bool = True
 
         self._cmp_stem: str
         self._spr_stem: str
 
-        self._irregular_posadv: str
-        self._irregular_cmpadv: str
-        self._irregular_spradv: str
+        self._irRegularWord_posadv: str
+        self._irRegularWord_cmpadv: str
+        self._irRegularWord_spradv: str
 
-        if self._mascnom in edge_cases.IRREGULAR_COMPARATIVES:
-            self.irregular_flag = True
-            irregular_data = edge_cases.IRREGULAR_COMPARATIVES[self._mascnom]
+        if self._mascnom in edge_cases.IRRegularWord_COMPARATIVES:
+            self.irRegularWord_flag = True
+            irRegularWord_data = edge_cases.IRRegularWord_COMPARATIVES[
+                self._mascnom
+            ]
 
-            self._cmp_stem = irregular_data[0]  # type: ignore
-            self._spr_stem = irregular_data[1]  # type: ignore
+            self._cmp_stem = irRegularWord_data[0]  # type: ignore
+            self._spr_stem = irRegularWord_data[1]  # type: ignore
 
-            if None not in irregular_data[2:]:
+            if None not in irRegularWord_data[2:]:
                 (
-                    self._irregular_posadv,
-                    self._irregular_cmpadv,
-                    self._irregular_spradv,
-                ) = irregular_data[2:]  # type: ignore
+                    self._irRegularWord_posadv,
+                    self._irRegularWord_cmpadv,
+                    self._irRegularWord_spradv,
+                ) = irRegularWord_data[2:]  # type: ignore
             else:
                 self.adverb_flag = False
 
@@ -1159,7 +1167,7 @@ class Adjective(_Word):
 
                 self._pos_stem = self._femnom[:-1]  # cara -> car-
 
-                if self._mascnom not in edge_cases.IRREGULAR_COMPARATIVES:
+                if self._mascnom not in edge_cases.IRRegularWord_COMPARATIVES:
                     self._cmp_stem = self._pos_stem + "ior"  # car- -> carior-
                     if self._mascnom[:2] == "er":
                         self._spr_stem = (
@@ -1287,14 +1295,14 @@ class Adjective(_Word):
 
                 if self.adverb_flag:
                     self.endings = self.endings | {
-                        "Dpos": self._irregular_posadv
-                        if self.irregular_flag
+                        "Dpos": self._irRegularWord_posadv
+                        if self.irRegularWord_flag
                         else self._pos_stem + "e",
-                        "Dcmp": self._irregular_cmpadv
-                        if self.irregular_flag
+                        "Dcmp": self._irRegularWord_cmpadv
+                        if self.irRegularWord_flag
                         else self._pos_stem + "ius",
-                        "Dspr": self._irregular_spradv
-                        if self.irregular_flag
+                        "Dspr": self._irRegularWord_spradv
+                        if self.irRegularWord_flag
                         else self._spr_stem + "e",
                     }
 
@@ -1317,7 +1325,7 @@ class Adjective(_Word):
                             :-2
                         ]  # ingentis -> ingent-
 
-                        if not self.irregular_flag:
+                        if not self.irRegularWord_flag:
                             self._cmp_stem = (
                                 self._pos_stem + "ior"
                             )  # ingent- > ingentior-
@@ -1449,14 +1457,14 @@ class Adjective(_Word):
 
                         if self.adverb_flag:
                             self.endings = self.endings | {
-                                "Dpos": self._irregular_posadv
-                                if self.irregular_flag
+                                "Dpos": self._irRegularWord_posadv
+                                if self.irRegularWord_flag
                                 else self._pos_stem + "er",
-                                "Dcmp": self._irregular_cmpadv
-                                if self.irregular_flag
+                                "Dcmp": self._irRegularWord_cmpadv
+                                if self.irRegularWord_flag
                                 else self._pos_stem + "ius",
-                                "Dspr": self._irregular_spradv
-                                if self.irregular_flag
+                                "Dspr": self._irRegularWord_spradv
+                                if self.irRegularWord_flag
                                 else self._spr_stem + "e",
                             }
 
@@ -1470,7 +1478,7 @@ class Adjective(_Word):
                         self._neutnom = self._principal_parts[1]
 
                         self._pos_stem = self._mascnom[:-2]  # fortis -> fort-
-                        if not self.irregular_flag:
+                        if not self.irRegularWord_flag:
                             self._cmp_stem = (
                                 self._pos_stem + "ior"
                             )  # fort- -> fortior-
@@ -1603,14 +1611,14 @@ class Adjective(_Word):
 
                         if self.adverb_flag:
                             self.endings = self.endings | {
-                                "Dpos": self._irregular_posadv
-                                if self.irregular_flag
+                                "Dpos": self._irRegularWord_posadv
+                                if self.irRegularWord_flag
                                 else self._pos_stem + "iter",
-                                "Dcmp": self._irregular_cmpadv
-                                if self.irregular_flag
+                                "Dcmp": self._irRegularWord_cmpadv
+                                if self.irRegularWord_flag
                                 else self._pos_stem + "ius",
-                                "Dspr": self._irregular_spradv
-                                if self.irregular_flag
+                                "Dspr": self._irRegularWord_spradv
+                                if self.irRegularWord_flag
                                 else self._spr_stem + "e",
                             }
 
@@ -1626,7 +1634,7 @@ class Adjective(_Word):
                         self._neutnom = self._principal_parts[2]
 
                         self._pos_stem = self._femnom[:-2]  # acris -> acr-
-                        if not self.irregular_flag:
+                        if not self.irRegularWord_flag:
                             self._cmp_stem = (
                                 self._pos_stem + "ior"
                             )  # acr- -> acrior-
@@ -1758,14 +1766,14 @@ class Adjective(_Word):
 
                         if self.adverb_flag:
                             self.endings = self.endings | {
-                                "Dpos": self._irregular_posadv
-                                if self.irregular_flag
+                                "Dpos": self._irRegularWord_posadv
+                                if self.irRegularWord_flag
                                 else self._pos_stem + "iter",
-                                "Dcmp": self._irregular_cmpadv
-                                if self.irregular_flag
+                                "Dcmp": self._irRegularWord_cmpadv
+                                if self.irRegularWord_flag
                                 else self._pos_stem + "ius",
-                                "Dspr": self._irregular_spradv
-                                if self.irregular_flag
+                                "Dspr": self._irRegularWord_spradv
+                                if self.irRegularWord_flag
                                 else self._spr_stem + "e",
                             }
 
@@ -1921,7 +1929,7 @@ class Pronoun(_Word):
 
         Notes
         -----
-        As pronouns in Latin have irregular endings with little pattern,
+        As pronouns in Latin have irRegularWord endings with little pattern,
         the pronoun endings are manually written out in the edge_cases
         module.
         """

@@ -1,15 +1,19 @@
 # fmt: off
 # mypy: ignore-errors
 
-import sys, os  # noqa: E401
+import os
+import sys  # noqa: E401
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-import pytest
 from types import SimpleNamespace
-from src.accido.endings import Pronoun
-from src.accido.edge_cases import PRONOUNS
+
+import pytest
+
 from src.accido.custom_exceptions import InvalidInputError, NoEndingError
+from src.accido.edge_cases import PRONOUNS
+from src.accido.endings import Pronoun
+
 
 def test_errors1():
     with pytest.raises(InvalidInputError) as error:

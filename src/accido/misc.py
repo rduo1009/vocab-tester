@@ -1,9 +1,11 @@
+#!/usr/bin/env python3
+
 """misc.py
 Contains miscellaneous functions and classes used by accido.
 """
 
 from dataclasses import dataclass
-from typing import Any, Union
+from typing import Any
 
 from frozendict import frozendict
 
@@ -54,7 +56,7 @@ class MultipleEndings:
     separate string.
     The fact that the attribute names can be customises means that this
     class can be used for many use cases.
-    e.g. MultipleEndings(regular="nostri", partitive="nostrum")
+    e.g. MultipleEndings(RegularWord="nostri", partitive="nostrum")
     would allow for nostrum being the partitive genitive, while nostri
     for the rest of the genitive uses.
 
@@ -86,11 +88,15 @@ class MultipleEndings:
         return self.__str__() + val2
 
     def __radd__(self, val2: str) -> "MultipleEndings":
-        prefixed = {key: f"{val2}{value}" for key, value in self.__dict__.items()}
+        prefixed = {
+            key: f"{val2}{value}" for key, value in self.__dict__.items()
+        }
         return MultipleEndings(**prefixed)
 
 
-def key_from_value(dd: Union[frozendict[Any, Any], dict[Any, Any]], value: Any) -> Any:
+def key_from_value(
+    dd: frozendict[Any, Any] | dict[Any, Any], value: Any
+) -> Any:
     """Returns the value in a dictionary from its key.
     If no key is found with the given value, returns `None`.
 
@@ -104,13 +110,13 @@ def key_from_value(dd: Union[frozendict[Any, Any], dict[Any, Any]], value: Any) 
     Returns
     -------
     Any
-        The first key whose value matches `value`, or `None` if not
+        The first key whose value matches 'value', or None if not
         found.
     """
 
     return next((key for key, val in dd.items() if val == value), None)
 
 
-type Ending = Union[str, MultipleEndings]  # type: ignore
+type Ending = str | MultipleEndings  # type: ignore
 type Endings = frozendict[str, Ending]  # type: ignore
-type Meaning = Union[str, MultipleMeanings]  # type: ignore
+type Meaning = str | MultipleMeanings  # type: ignore

@@ -1,13 +1,15 @@
 # fmt: off
 # mypy: ignore-errors
 
-import sys, os  # noqa: E401
+import os
+import sys  # noqa: E401
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 import pytest
+
+from src.accido.custom_exceptions import InvalidInputError, NoEndingError
 from src.accido.endings import LearningVerb
-from src.accido.custom_exceptions import NoEndingError, InvalidInputError
 
 
 # fmt: off
@@ -337,7 +339,7 @@ def test_fourthconjugation():
     assert word.get(person=3, number="plural", tense="pluperfect", voice="active", mood="subjunctive") == "aperuissent"
 
 
-def test_irregularverb_eo():
+def test_irRegularWordverb_eo():
     word = LearningVerb(present="abeo", infinitive="abire", perfect="abii", ppp="abitum", meaning="depart")
 
     assert word.get(person=1, number="singular", tense="present", voice="active", mood="indicative") == "abeo"

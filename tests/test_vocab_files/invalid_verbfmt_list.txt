@@ -1,0 +1,2 @@
+@Verb
+hear: audio, audire, audivi, auditus, error, error, error

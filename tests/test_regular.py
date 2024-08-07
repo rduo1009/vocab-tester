@@ -1,23 +1,24 @@
 # fmt: off
 # mypy: ignore-errors
 
-import sys, os  # noqa: E401
+import os
+import sys  # noqa: E401
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from src.accido.endings import BasicWord
+from src.accido.endings import RegularWord
 from src.accido.misc import MultipleMeanings
 
 
 def test_one_meaning():
-    word = BasicWord("test1", "test2")
+    word = RegularWord("test1", "test2")
     assert word.meaning.__str__() == "test2"
 
 
 def test_multiple_meanings():
-    word = BasicWord("test1", MultipleMeanings(["test2", "test3", "test4"]))
+    word = RegularWord("test1", MultipleMeanings(["test2", "test3", "test4"]))
     assert word.meaning.__str__() == "test2"
 
 def test_pick():
-    word = BasicWord("test1", "test2")
+    word = RegularWord("test1", "test2")
     word.pick()

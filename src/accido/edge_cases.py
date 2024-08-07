@@ -1,8 +1,10 @@
+#!/usr/bin/env python3
+
 """edge_cases.py
 Contains edge case endings.
 """
 
-from typing import Final, Union
+from typing import Final
 
 from frozendict import deepfreeze, frozendict
 
@@ -70,7 +72,7 @@ def check_io_verb(present: str) -> bool:
     return False
 
 
-IRREGULAR_VERBS: Final[dict[str, Endings]] = deepfreeze({
+IRRegularWord_VERBS: Final[dict[str, Endings]] = deepfreeze({
 	"sum": {
 		"Vpreactindsg1": "sum",
 		"Vpreactindsg2": "es",
@@ -272,7 +274,7 @@ IRREGULAR_VERBS: Final[dict[str, Endings]] = deepfreeze({
 	},
 })  # fmt: skip
 
-DERIVED_IRREGULAR_VERBS: Final[frozendict[str, list[str]]] = deepfreeze({
+DERIVED_IRRegularWord_VERBS: Final[frozendict[str, list[str]]] = deepfreeze({
 	"eo": [
 		"abeo",
 		"adeo",
@@ -299,7 +301,7 @@ DERIVED_IRREGULAR_VERBS: Final[frozendict[str, list[str]]] = deepfreeze({
 	],
 })  # fmt: skip
 
-DERIVED_IRREGULAR_ENDINGS: Final[dict[str, Endings]] = deepfreeze({
+DERIVED_IRRegularWord_ENDINGS: Final[dict[str, Endings]] = deepfreeze({
 	"eo": {
 		"Vpreactindsg1": "eo",
 		"Vpreactindsg2": "is",
@@ -348,8 +350,8 @@ def _prefix(pre: str, endings: Endings) -> Endings:
     return frozendict({key: pre + value for key, value in endings.items()})
 
 
-def find_irregular_endings(present: str) -> Union[Endings, None]:
-    """Detects if a verb is irregular (using the irregular verb dictionary)
+def find_irRegularWord_endings(present: str) -> Endings | None:
+    """Detects if a verb is irRegularWord (using the irRegularWord verb dictionary)
     and returns its endings.
 
     Parameters
@@ -360,21 +362,24 @@ def find_irregular_endings(present: str) -> Union[Endings, None]:
     Returns
     -------
     Union[Endings, None]
-        The endings. None if the verb is not irregular.
+        The endings. None if the verb is not irRegularWord.
     """
 
-    if present in IRREGULAR_VERBS:
-        return IRREGULAR_VERBS[present]
-    for irregular_suffix, suffix_list in DERIVED_IRREGULAR_VERBS.items():
+    if present in IRRegularWord_VERBS:
+        return IRRegularWord_VERBS[present]
+    for (
+        irRegularWord_suffix,
+        suffix_list,
+    ) in DERIVED_IRRegularWord_VERBS.items():
         if present in suffix_list:
             return _prefix(
-                present.rstrip(irregular_suffix),
-                DERIVED_IRREGULAR_ENDINGS[irregular_suffix],
+                present.rstrip(irRegularWord_suffix),
+                DERIVED_IRRegularWord_ENDINGS[irRegularWord_suffix],
             )
     return None
 
 
-IRREGULAR_NOUNS: Final[dict[str, Endings]] = deepfreeze({
+IRRegularWord_NOUNS: Final[dict[str, Endings]] = deepfreeze({
 	"ego": {
 		"Nnomsg": "ego",
 		"Nvocsg": "ego",
@@ -385,7 +390,7 @@ IRREGULAR_NOUNS: Final[dict[str, Endings]] = deepfreeze({
 		"Nnompl": "nos",
 		"Nvocpl": "nos",
 		"Naccpl": "nos",
-		"Ngenpl": MultipleEndings(regular="nostri", partitive="nostrum"),
+		"Ngenpl": MultipleEndings(RegularWord="nostri", partitive="nostrum"),
 		"Ndatpl": "nobis",
 		"Nablpl": "nobis",
 	},
@@ -399,7 +404,7 @@ IRREGULAR_NOUNS: Final[dict[str, Endings]] = deepfreeze({
 		"Nnompl": "vos",
 		"Nvocpl": "vos",
 		"Naccpl": "vos",
-		"Ngenpl": MultipleEndings(regular="vestri", partitive="vestrum"),
+		"Ngenpl": MultipleEndings(RegularWord="vestri", partitive="vestrum"),
 		"Ndatpl": "vobis",
 		"Nablpl": "vobis",
 	},
@@ -424,14 +429,14 @@ LIS_ADJECTIVES: Final[set[str]] = deepfreeze({
 	"humilis",
 })  # fmt: skip
 
-IRREGULAR_COMPARATIVES: Final[frozendict[str, list[Union[str, None]]]] = deepfreeze({
+IRRegularWord_COMPARATIVES: Final[frozendict[str, list[str | None]]] = deepfreeze({
 	"bonus": ["melior", "optim", "bene", "melius", "optime"],
 	"malus": ["peior", "pessim", "male", "peius", "pessime"],
 	"magnus": ["maior", "maxim", None, None, None],
 	"parvus": ["minor", "minim", None, None, None],
 	# NOTE: multo (adverb) exists but that would very much stuff up things
 	"multus": ["plus", "plurim", None, None, None],
-	# nequam should probably just be put in as a BasicWord
+	# nequam should probably just be put in as a RegularWord
 	"nequam": ["nequior", "nequissim", None, None, None],
 	"frugi": ["frugalior", "frugalissim", "frugaliter", "frugalius", "frugalissime"],
 	"dexter": ["dexterior", "dextim", None, None, None],

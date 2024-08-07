@@ -1,0 +1,2 @@
+@Adjective
+good: bonus, bona, bonum, error, error

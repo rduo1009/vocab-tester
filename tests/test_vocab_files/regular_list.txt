@@ -1,0 +1,24 @@
+@Verb
+hear: audio, audire, audivi, auditus
+take: capio, capire, capivi
+
+@Noun
+girl: puella, puellae, (f)
+farmer: agricola, agricolae, (m)
+boy: puer, pueri, (m)
+dog: canis, canis, (m)
+name: nomen, nominis, (n)
+
+@Adjective
+large: ingens, ingentis, (3-1)
+light: levis, leve, (3-2)
+keen: acer, acris, acre, (3-3)
+quick: celer, celeris, celere, (3)
+
+@Regular
+into: in
+from: e
+
+@Pronoun
+this: hic, haec, hoc
+that: ille
