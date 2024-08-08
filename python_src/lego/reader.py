@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
 
+from dataclasses import dataclass
 from io import StringIO
 from re import match
 from typing import Final
+
+import python_src
 
 from .. import accido
 from .custom_exceptions import InvalidVocabFileFormat
@@ -14,7 +17,15 @@ GENDER_SHORTHAND: Final[dict[str, str]] = {
 }
 
 
-def read_vocab_file(file: StringIO) -> list[accido.endings._Word]:
+@dataclass
+class VocabList:
+    vocab_list: list[accido.endings._Word]
+
+    def __post_init__(self) -> None:
+        self.version = python_src.__version__
+
+
+def read_vocab_file(file: StringIO) -> VocabList:
     line: str
     current: str = ""
     vocab: list[accido.endings._Word] = []
@@ -161,4 +172,8 @@ def read_vocab_file(file: StringIO) -> list[accido.endings._Word]:
                     #    raise InvalidVocabFileFormat(
                     #        f"Invalid word type: {current}"
                     #    )
-    return vocab
+    return VocabList(vocab_list=vocab)
+
+
+def read_vocab_dump():
+    pass

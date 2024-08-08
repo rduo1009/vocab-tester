@@ -8,9 +8,9 @@ import sys  # noqa: E401
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 import pytest
-from src.accido.endings import LearningVerb, Adjective, RegularWord, Noun, Pronoun
-from src.lego.reader import read_vocab_file
-from src.lego.custom_exceptions import InvalidVocabFileFormat
+from python_src.accido.endings import LearningVerb, Adjective, RegularWord, Noun, Pronoun
+from python_src.lego.reader import read_vocab_file
+from python_src.lego.custom_exceptions import InvalidVocabFileFormat
 from io import StringIO
 
 def test_reader():

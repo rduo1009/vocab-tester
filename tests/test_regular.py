@@ -6,8 +6,8 @@ import sys  # noqa: E401
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from src.accido.endings import RegularWord
-from src.accido.misc import MultipleMeanings
+from python_src.accido.endings import RegularWord
+from python_src.accido.misc import MultipleMeanings
 
 
 def test_one_meaning():

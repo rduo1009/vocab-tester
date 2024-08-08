@@ -10,8 +10,8 @@ from types import SimpleNamespace
 
 import pytest
 
-from src.accido.custom_exceptions import InvalidInputError, NoEndingError
-from src.accido.endings import Noun
+from python_src.accido.custom_exceptions import InvalidInputError, NoEndingError
+from python_src.accido.endings import Noun
 
 
 def test_errors1():
