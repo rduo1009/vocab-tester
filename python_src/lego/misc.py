@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import ctypes
 from dataclasses import dataclass
 
 import python_src
@@ -16,4 +17,6 @@ class VocabList:
         self.version: str = python_src.__version__
 
 
-key: bytes = b"vocab-tester"
+libkey: ctypes.CDLL = ctypes.CDLL("python_src/lego/libkey.so")
+libkey.get_key.restype = ctypes.c_char_p
+key: bytes = libkey.get_key()

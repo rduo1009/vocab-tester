@@ -8,3 +8,4 @@ timing_*.py
 /.vscode
 test_saver.py
 testdump/
+*.so
