@@ -10,7 +10,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 import pytest
 from pathlib import Path
 from python_src.accido.endings import LearningVerb, Adjective, RegularWord, Noun, Pronoun
-from python_src.lego.reader import read_vocab_file, VocabList
+from python_src.lego.reader import read_vocab_file, VocabList, _regenerate_vocab_list
 from python_src.lego.custom_exceptions import InvalidVocabFileFormat
 from io import StringIO
 
@@ -36,7 +36,7 @@ def test_reader():
 
 def test_regenerate():
     l = read_vocab_file(Path("tests/test_vocab_files/regular_list.txt"))
-    assert l == lego.reader._regenerate_vocab_list(l)
+    assert l == _regenerate_vocab_list(l)
 
 def test_reader_with_s():
     l = read_vocab_file(Path("tests/test_vocab_files/regular_with_s_list.txt"))
