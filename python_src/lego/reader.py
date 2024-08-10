@@ -49,7 +49,7 @@ def read_vocab_file(file_path: Path) -> VocabList:
                             | "Regular"
                             | "Pronoun"
                         ):
-                            current = line[1:]
+                            current = line[1:].strip()
 
                         case (
                             "Verbs"
