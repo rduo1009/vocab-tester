@@ -90,7 +90,7 @@ def read_vocab_file(file_path: Path) -> VocabList:
 
                             if len(latin_parts) > 3:
                                 vocab.append(
-                                    accido.endings.LearningVerb(
+                                    accido.endings.Verb(
                                         present=latin_parts[0],
                                         infinitive=latin_parts[1],
                                         perfect=latin_parts[2],
@@ -100,7 +100,7 @@ def read_vocab_file(file_path: Path) -> VocabList:
                                 )
                             else:
                                 vocab.append(
-                                    accido.endings.LearningVerb(
+                                    accido.endings.Verb(
                                         present=latin_parts[0],
                                         infinitive=latin_parts[1],
                                         perfect=latin_parts[2],
@@ -212,9 +212,9 @@ def _regenerate_vocab_list(vocab_list: VocabList) -> VocabList:
                     meaning=word.meaning,
                 )
             )
-        elif type(word) is accido.endings.LearningVerb:
+        elif type(word) is accido.endings.Verb:
             new_vocab.append(
-                accido.endings.LearningVerb(
+                accido.endings.Verb(
                     present=word.present,
                     infinitive=word.infinitive,
                     perfect=word.perfect,

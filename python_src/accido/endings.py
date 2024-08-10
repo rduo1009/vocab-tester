@@ -211,7 +211,7 @@ class RegularWord(_Word):
 
 
 @total_ordering
-class LearningVerb(_Word):
+class Verb(_Word):
     """Representation of a Latin verb with endings.
 
     Attributes
@@ -229,13 +229,13 @@ class LearningVerb(_Word):
 
     Examples
     --------
-    >>> foo = LearningVerb(present="celo", infinitive="celare", \
+    >>> foo = Verb(present="celo", infinitive="celare", \
     ...       perfect="celavi", ppp="celatus", \
     ...       meaning="hide")
     >>> foo.endings
     {"Vpreactindsg1": "celo", "Vpreactindsg2": "celas", ...}
 
-    Note that all arguments of LearningVerb are keyword-only.
+    Note that all arguments of Verb are keyword-only.
     """
 
     def __init__(
@@ -247,7 +247,7 @@ class LearningVerb(_Word):
         ppp: str = "",
         meaning: Meaning,
     ) -> None:
-        """Initalises LearningVerb and determines the conjugation and
+        """Initalises Verb and determines the conjugation and
         endings.
 
         Parameters
@@ -651,7 +651,7 @@ class LearningVerb(_Word):
 
         Examples
         --------
-        >>> foo = LearningVerb(present="celo", infinitive="celare", \
+        >>> foo = Verb(present="celo", infinitive="celare", \
         ...                    perfect="celavi", ppp="celatus", \
         ...                    meaning="hide")
         >>> foo.get(person=1, number="singular", tense="present", \
@@ -742,7 +742,7 @@ class LearningVerb(_Word):
         return output
 
     def __repr__(self) -> str:
-        return f"LearningVerb({self.present}, {self.infinitive}, {self.perfect}, {self.ppp}, {self.meaning})"
+        return f"Verb({self.present}, {self.infinitive}, {self.perfect}, {self.ppp}, {self.meaning})"
 
     def __str__(self) -> str:
         output: StringIO = StringIO()

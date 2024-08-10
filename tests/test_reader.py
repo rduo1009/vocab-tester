@@ -9,7 +9,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 
 import pytest
 from pathlib import Path
-from python_src.accido.endings import LearningVerb, Adjective, RegularWord, Noun, Pronoun
+from python_src.accido.endings import Verb, Adjective, RegularWord, Noun, Pronoun
 from python_src.lego.reader import read_vocab_file, VocabList, _regenerate_vocab_list
 from python_src.lego.custom_exceptions import InvalidVocabFileFormat
 from io import StringIO
@@ -17,8 +17,8 @@ from io import StringIO
 def test_reader():
     l = read_vocab_file(Path("tests/test_vocab_files/regular_list.txt"))
     assert l == VocabList([
-        LearningVerb(present="audio", infinitive="audire", perfect="audivi", ppp="auditus", meaning="hear"),
-        LearningVerb(present="capio", infinitive="capire", perfect="capivi", meaning="take"),
+        Verb(present="audio", infinitive="audire", perfect="audivi", ppp="auditus", meaning="hear"),
+        Verb(present="capio", infinitive="capire", perfect="capivi", meaning="take"),
         Noun(nominative="puella", genitive="puellae", gender="feminine", meaning="girl"),
         Noun(nominative="agricola", genitive="agricolae", gender="masculine", meaning="farmer"),
         Noun(nominative="puer", genitive="pueri", gender="masculine", meaning="boy"),
@@ -41,8 +41,8 @@ def test_regenerate():
 def test_reader_with_s():
     l = read_vocab_file(Path("tests/test_vocab_files/regular_with_s_list.txt"))
     assert l == VocabList([
-        LearningVerb(present="audio", infinitive="audire", perfect="audivi", ppp="auditus", meaning="hear"),
-        LearningVerb(present="capio", infinitive="capire", perfect="capivi", meaning="take"),
+        Verb(present="audio", infinitive="audire", perfect="audivi", ppp="auditus", meaning="hear"),
+        Verb(present="capio", infinitive="capire", perfect="capivi", meaning="take"),
         Noun(nominative="puella", genitive="puellae", gender="feminine", meaning="girl"),
         Noun(nominative="agricola", genitive="agricolae", gender="masculine", meaning="farmer"),
         Noun(nominative="puer", genitive="pueri", gender="masculine", meaning="boy"),

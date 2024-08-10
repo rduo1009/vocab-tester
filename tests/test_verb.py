@@ -9,84 +9,84 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 import pytest
 
 from python_src.accido.custom_exceptions import InvalidInputError, NoEndingError # isort: skip
-from python_src.accido.endings import LearningVerb
+from python_src.accido.endings import Verb
 
 
 # fmt: off
 def test_errors1():
     with pytest.raises(InvalidInputError) as error:
-        LearningVerb(present="test1o", infinitive="makinganerror", perfect="test3i", ppp="test4", meaning="test5")
+        Verb(present="test1o", infinitive="makinganerror", perfect="test3i", ppp="test4", meaning="test5")
     assert "Infinitive 'makinganerror' is not valid" == str(error.value)
 
 
 def test_errors2():
     with pytest.raises(InvalidInputError) as error:
-        word = LearningVerb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
+        word = Verb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
         word.get(person=1, number="makinganerror", tense="past", voice="active", mood="indicative")
     assert "Tense 'past', voice 'active', mood 'indicative', or number 'makinganerror' not recognised" == str(error.value)
 
 
 def test_errors3():
     with pytest.raises(InvalidInputError) as error:
-        word = LearningVerb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
+        word = Verb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
         word.get(person=123415, number="singular", tense="present", voice="active", mood="indicative")
     assert "Person '123415' not recognised" == str(error.value)
 
 def test_errors4():
     with pytest.raises(InvalidInputError) as error:
-        word = LearningVerb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
+        word = Verb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
         word.get(person=1, number="singular", tense="present", voice="active", mood="participle")
     assert "Gender or case not given" == str(error.value)
 
 def test_errors5():
     with pytest.raises(InvalidInputError) as error:
-        word = LearningVerb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
+        word = Verb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
         word.get(tense="present", voice="active", mood="participle", participle_case="nominative", participle_gender="masculine")
     assert "Number not given" == str(error.value)
 
 #def test_errors6():
 #    with pytest.raises(NoEndingError) as error:
-#        word = LearningVerb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
+#        word = Verb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
 #        del word.endings["Vperpasptcmnomsg"]
 #        word.get(tense="perfect", voice="passive", mood="participle", participle_case="nominative", participle_gender="masculine", number="singular")
 #    assert "No ending found for nominative singular masculine perfect passive participle" == str(error.value)
 
 #def test_errors7():
 #    with pytest.raises(NoEndingError) as error:
-#        word = LearningVerb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
+#        word = Verb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
 #        del word.endings["Vperactindsg3"]
 #        word.get(tense="perfect", voice="active", mood="indicative", person=3, number="singular")
 #    assert "No ending found for 3 singular perfect active indicative" == str(error.value)
 
 
 def test_repr():
-    word = LearningVerb(present="test1o", infinitive="testare", perfect="test3i", ppp="test4", meaning="test5")
-    assert word.__repr__() == "LearningVerb(test1o, testare, test3i, test4, test5)"
+    word = Verb(present="test1o", infinitive="testare", perfect="test3i", ppp="test4", meaning="test5")
+    assert word.__repr__() == "Verb(test1o, testare, test3i, test4, test5)"
 
 
 def test_eq():
-    word1 = LearningVerb(present="test1o", infinitive="testare", perfect="test3i", ppp="test4", meaning="test5")
-    word2 = LearningVerb(present="test1o", infinitive="testare", perfect="test3i", ppp="test4", meaning="test5")
+    word1 = Verb(present="test1o", infinitive="testare", perfect="test3i", ppp="test4", meaning="test5")
+    word2 = Verb(present="test1o", infinitive="testare", perfect="test3i", ppp="test4", meaning="test5")
     assert word1 == word2
 
 
 def test_lt():
-    word1 = LearningVerb(present="test1o", infinitive="testare", perfect="test3i", ppp="test4", meaning="test5")
-    word2 = LearningVerb(present="aaatest1o", infinitive="testare", perfect="test3i", ppp="test4", meaning="test5")
+    word1 = Verb(present="test1o", infinitive="testare", perfect="test3i", ppp="test4", meaning="test5")
+    word2 = Verb(present="aaatest1o", infinitive="testare", perfect="test3i", ppp="test4", meaning="test5")
     # word2 must be smaller than word1 as word1.first = "test1" and word2.first = "aaatest1"
     assert word1 > word2
 
 def test_find():
-    word = LearningVerb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
+    word = Verb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
     assert word.find("celabam")[0].string == "imperfect active indicative singular 1st person"
 
 def test_pick():
-    word = LearningVerb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
+    word = Verb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
     word.pick()
 
 
 def test_firstconjugation():
-    word = LearningVerb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
+    word = Verb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
 
     assert word.get(person=1, number="singular", tense="present", voice="active", mood="indicative") == "celo"
     assert word.get(person=2, number="singular", tense="present", voice="active", mood="indicative") == "celas"
@@ -137,7 +137,7 @@ def test_firstconjugation():
 
 
 def test_secondconjugation():
-    word = LearningVerb(present="pareo", infinitive="parere", perfect="parui", meaning="hide")
+    word = Verb(present="pareo", infinitive="parere", perfect="parui", meaning="hide")
 
     assert word.get(person=1, number="singular", tense="present", voice="active", mood="indicative") == "pareo"
     assert word.get(person=2, number="singular", tense="present", voice="active", mood="indicative") == "pares"
@@ -188,7 +188,7 @@ def test_secondconjugation():
 
 
 def test_thirdconjugation():
-    word = LearningVerb(present="desero", infinitive="deserere", perfect="deserui", ppp="desertus", meaning="desert")
+    word = Verb(present="desero", infinitive="deserere", perfect="deserui", ppp="desertus", meaning="desert")
 
     assert word.get(person=1, number="singular", tense="present", voice="active", mood="indicative") == "desero"
     assert word.get(person=2, number="singular", tense="present", voice="active", mood="indicative") == "deseris"
@@ -239,7 +239,7 @@ def test_thirdconjugation():
 
 
 def test_thirdioconjugation():
-    word = LearningVerb(present="patefacio", infinitive="patefacere", perfect="patefeci", ppp="patefactus", meaning="reveal")
+    word = Verb(present="patefacio", infinitive="patefacere", perfect="patefeci", ppp="patefactus", meaning="reveal")
 
     assert word.get(person=1, number="singular", tense="present", voice="active", mood="indicative") == "patefacio"
     assert word.get(person=2, number="singular", tense="present", voice="active", mood="indicative") == "patefacis"
@@ -289,7 +289,7 @@ def test_thirdioconjugation():
     assert word.get(person=3, number="plural", tense="pluperfect", voice="active", mood="subjunctive") == "patefecissent"
 
 def test_fourthconjugation():
-    word = LearningVerb(present="aperio", infinitive="aperire", perfect="aperui", ppp="apertus", meaning="open")
+    word = Verb(present="aperio", infinitive="aperire", perfect="aperui", ppp="apertus", meaning="open")
 
     assert word.get(person=1, number="singular", tense="present", voice="active", mood="indicative") == "aperio"
     assert word.get(person=2, number="singular", tense="present", voice="active", mood="indicative") == "aperis"
@@ -340,7 +340,7 @@ def test_fourthconjugation():
 
 
 def test_irRegularWordverb_eo():
-    word = LearningVerb(present="abeo", infinitive="abire", perfect="abii", ppp="abitum", meaning="depart")
+    word = Verb(present="abeo", infinitive="abire", perfect="abii", ppp="abitum", meaning="depart")
 
     assert word.get(person=1, number="singular", tense="present", voice="active", mood="indicative") == "abeo"
     assert word.get(person=2, number="singular", tense="present", voice="active", mood="indicative") == "abis"
@@ -390,7 +390,7 @@ def test_irRegularWordverb_eo():
     assert word.get(person=3, number="plural", tense="pluperfect", voice="active", mood="subjunctive") == "abissent"
 
 def test_present_participle():
-    word = LearningVerb(present="porto", infinitive="portare", perfect="portavi", ppp="portatus", meaning="carry")
+    word = Verb(present="porto", infinitive="portare", perfect="portavi", ppp="portatus", meaning="carry")
 
     assert word.get(number="singular", tense="present", voice="active", mood="participle", participle_gender="masculine", participle_case="nominative") == "portans" 
     assert word.get(number="singular", tense="present", voice="active", mood="participle", participle_gender="masculine", participle_case="vocative") == "portans"
@@ -436,7 +436,7 @@ def test_present_participle():
 
 
 def test_ppp():
-    word = LearningVerb(present="porto", infinitive="portare", perfect="portavi", ppp="portatus", meaning="carry")
+    word = Verb(present="porto", infinitive="portare", perfect="portavi", ppp="portatus", meaning="carry")
 
     assert word.get(number="singular", tense="perfect", voice="passive", mood="participle", participle_gender="masculine", participle_case="nominative") == "portatus"
     assert word.get(number="singular", tense="perfect", voice="passive", mood="participle", participle_gender="masculine", participle_case="vocative") == "portate"
