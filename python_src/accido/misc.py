@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
 """misc.py
 Contains miscellaneous functions and classes used by accido.

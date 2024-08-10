@@ -10,10 +10,7 @@ from types import SimpleNamespace
 
 import pytest
 
-from python_src.accido.custom_exceptions import (
-    InvalidInputError,
-    NoEndingError,
-)
+from python_src.accido.custom_exceptions import InvalidInputError, NoEndingError # isort: skip
 from python_src.accido.endings import Noun
 
 

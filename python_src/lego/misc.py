@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
 from dataclasses import dataclass
 
@@ -9,10 +10,10 @@ from .. import accido
 
 @dataclass
 class VocabList:
-    vocab_list: list[accido.endings._Word]
+    vocab: list[accido.endings._Word]
 
     def __post_init__(self) -> None:
-        self.version = python_src.__version__
+        self.version: str = python_src.__version__
 
 
-key = b"vocab-tester"
+key: bytes = b"vocab-tester"

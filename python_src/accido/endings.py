@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
 """endings.py
 Representations of Latin words with their endings calculated.
@@ -794,7 +795,7 @@ class Noun(_Word):
         Parameters
         ----------
         nominative, genitive : str
-        gender : {"masculine", "feminine", "euter"}
+        gender : {"masculine", "feminine", "neuter"}
         meaning : Meaning
 
         Raises
@@ -806,7 +807,7 @@ class Noun(_Word):
 
         if gender not in GENDER_SHORTHAND:
             raise InvalidInputError(f"Gender '{gender}' not recognised")
-        self.gender: str = GENDER_SHORTHAND[gender]
+        self.gender: str = gender
 
         self.nominative: str = nominative
         self.genitive: str = genitive
@@ -955,7 +956,7 @@ class Noun(_Word):
                     f"Declension {self.declension} not recognised"
                 )
 
-        if self.gender == "n":
+        if self.gender == "neuter":
             temp_endings["Naccsg"] = self.nominative
             temp_endings["Nvocsg"] = self.nominative
 
@@ -1038,7 +1039,7 @@ class Noun(_Word):
         return output
 
     def __repr__(self) -> str:
-        return f"Noun({self.nominative}, {self.genitive}, {self.gender}, {self.meaning})"
+        return f"Noun({self.nominative}, {self.genitive}, {GENDER_SHORTHAND[self.gender]}, {self.meaning})"
 
     def __str__(self) -> str:
         output: StringIO = StringIO()
