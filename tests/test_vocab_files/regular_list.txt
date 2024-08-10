@@ -13,7 +13,6 @@ name: nomen, nominis, (n)
 large: ingens, ingentis, (3-1)
 light: levis, leve, (3-2)
 keen: acer, acris, acre, (3-3)
-quick: celer, celeris, celere, (3)
 
 @ Regular
 into: in

@@ -178,30 +178,18 @@ def read_vocab_file(file_path: Path) -> VocabList:
                                     )
                                 )
                             elif declension.startswith("3"):
-                                if (
-                                    len(latin_parts) == 4
-                                ):  # i.e. three principal parts
-                                    vocab.append(
-                                        accido.endings.Adjective(
-                                            *latin_parts[:-1],
-                                            termination=3,
-                                            declension="3",
-                                            meaning=meaning,
-                                        )
+                                if not match(r"^.-.$", declension):
+                                    raise InvalidVocabFileFormat(
+                                        f"Invalid adjective declension: {declension}"
                                     )
-                                else:
-                                    if not match(r"^.-.$", declension):
-                                        raise InvalidVocabFileFormat(
-                                            f"Invalid adjective declension: {declension}"
-                                        )
-                                    vocab.append(
-                                        accido.endings.Adjective(
-                                            *latin_parts[:-1],
-                                            termination=int(declension[2]),
-                                            declension="3",
-                                            meaning=meaning,
-                                        )
+                                vocab.append(
+                                    accido.endings.Adjective(
+                                        *latin_parts[:-1],
+                                        termination=int(declension[2]),
+                                        declension="3",
+                                        meaning=meaning,
                                     )
+                                )
                             else:
                                 raise InvalidVocabFileFormat(
                                     f"Invalid adjective declension: {declension}"
