@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-"""misc.py
-Contains miscellaneous functions and classes used by accido.
-"""
+"""Contains miscellaneous functions and classes used by accido."""
 
 from dataclasses import dataclass
 from typing import Any
@@ -118,6 +116,7 @@ def key_from_value(
     return next((key for key, val in dd.items() if val == value), None)
 
 
-type Ending = str | MultipleEndings  # type: ignore
-type Endings = frozendict[str, Ending]  # type: ignore
-type Meaning = str | MultipleMeanings  # type: ignore
+# Type annotation support
+type Ending = str | MultipleEndings
+type Endings = frozendict[str, Ending]
+type Meaning = str | MultipleMeanings

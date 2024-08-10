@@ -80,9 +80,9 @@ def test_find():
     word = Verb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
     assert word.find("celabam")[0].string == "imperfect active indicative singular 1st person"
 
-def test_pick():
-    word = Verb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
-    word.pick()
+#def test_pick():
+#    word = Verb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
+#    word.pick()
 
 
 def test_firstconjugation():

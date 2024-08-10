@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import hashlib
+"""Contains functions for reading vocabulary files."""
+
+import hashlib as hl
 import hmac
 from io import TextIOWrapper
 from pathlib import Path
@@ -10,12 +12,13 @@ from typing import Any, Final
 
 import dill as pickle  # type: ignore
 
-import python_src
+import python_src as src
 
 from .. import accido
-from .custom_exceptions import InvalidVocabFileFormat
-from .misc import VocabList, key
+from .custom_exceptions import InvalidVocabFileFormat, InvalidVocabDump
+from .misc import KEY, VocabList
 
+"""Mapping of gender values to their more concise abbreviated forms."""
 GENDER_SHORTHAND: Final[dict[str, str]] = {
     "m": "masculine",
     "f": "feminine",
@@ -24,6 +27,32 @@ GENDER_SHORTHAND: Final[dict[str, str]] = {
 
 
 def read_vocab_file(file_path: Path) -> VocabList:
+    """Reads a vocabulary file and returns a VocabList object.
+
+    Parameters
+    ----------
+    file_path : pathlib.Path
+        The path to the vocabulary file.
+
+    Returns
+    -------
+    VocabList
+        The vocabulary from the file.
+
+    Raises
+    ------
+    InvalidVocabFileFormat
+        If the file is not a valid vocabulary file, or if the formatting
+        is incorrect.
+
+    FileNotFoundError
+        If the file does not exist.
+
+    Examples
+    --------
+    >>> read_vocab_file(Path("path_to_file.txt"))
+    VocabList(...)
+    """
     vocab: list[accido.endings._Word] = []
     file: TextIOWrapper
 
@@ -201,6 +230,20 @@ def read_vocab_file(file_path: Path) -> VocabList:
 
 
 def _regenerate_vocab_list(vocab_list: VocabList) -> VocabList:
+    """Regenerates a VocabList from a VocabList.
+    This is useful for regenerating a VocabList if it was created in a
+    previous version of the package.
+
+    Parameters
+    ----------
+    vocab_list : VocabList
+        The VocabList to regenerate.
+
+    Returns
+    -------
+    VocabList
+        The regenerated VocabList.
+    """
     word: accido.endings._Word
     new_vocab: list[accido.endings._Word] = []
 
@@ -252,19 +295,48 @@ def _regenerate_vocab_list(vocab_list: VocabList) -> VocabList:
 
 
 def read_vocab_dump(filename: Path) -> VocabList:
+    """Reads a vocabulary dump file and returns a VocabList object.
+    The pickle files are signed with a HMAC signature to ensure the data
+    has not been tampered with. If the data is invalid, an exception is
+    raised.
+
+    Parameters
+    ----------
+    filename : pathlib.Path
+        The path to the vocabulary dump file.
+
+    Returns
+    -------
+    VocabList
+        The vocabulary from the file.
+
+    Raises
+    ------
+    InvalidVocabDump
+        If the file is not a valid vocabulary dump, or if the data has been
+        tampered with.
+    FileNotFoundError
+        If the file does not exist.
+
+    Examples
+    --------
+    >>> read_vocab_dump(Path("path_to_file.pickle"))
+    VocabList(...)
+    """
+
     with open(filename, "rb") as file:
         content: bytes = file.read()
         pickled_data: bytes = content[:-64]
         signature: str = content[-64:].decode()
 
-    if hmac.new(key, pickled_data, hashlib.sha256).hexdigest() != signature:
-        raise ValueError("Data integrity check failed for vocab dump")
+    if hmac.new(KEY, pickled_data, hl.sha256).hexdigest() != signature:
+        raise InvalidVocabDump("Data integrity check failed for vocab dump.")
 
     output: Any | VocabList = pickle.loads(pickled_data)
     if type(output) is VocabList:
-        if output.version == python_src.__version__:
+        if output.version == src.__version__:
             return output
         else:
             return _regenerate_vocab_list(output)
 
-    raise ValueError("Vocab dump is not valid")
+    raise InvalidVocabDump("Vocab dump is not valid.")

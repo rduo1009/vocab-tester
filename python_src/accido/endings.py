@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-"""endings.py
-Representations of Latin words with their endings calculated.
-"""
+"""Representations of Latin words with their endings calculated."""
 
 from abc import ABC, abstractmethod
 from functools import total_ordering
@@ -17,11 +15,13 @@ from . import edge_cases
 from .custom_exceptions import InvalidInputError, NoEndingError
 from .misc import Ending, Endings, Meaning, MultipleEndings, key_from_value
 
+"""Mapping of number values to their more concise abbreviated forms."""
 NUMBER_SHORTHAND: Final[frozendict[str, str]] = frozendict({
     "singular": "sg",
     "plural": "pl",
 })  # fmt: skip
 
+"""Mapping of tense values to their more concise abbreviated forms."""
 TENSE_SHORTHAND: Final[frozendict[str, str]] = frozendict({
     "present": "pre",
     "imperfect": "imp",
@@ -31,11 +31,13 @@ TENSE_SHORTHAND: Final[frozendict[str, str]] = frozendict({
     # "future perfect": "fpr",
 })  # fmt: skip
 
+"""Mapping of voice values to their more concise abbreviated forms."""
 VOICE_SHORTHAND: Final[frozendict[str, str]] = frozendict({
     "active": "act",
     "passive": "pas",
 })  # fmt: skip
 
+"""Mapping of mood values to their more concise abbreviated forms."""
 MOOD_SHORTHAND: Final[frozendict[str, str]] = frozendict({
     "indicative": "ind",
     "infinitive": "inf",
@@ -44,6 +46,7 @@ MOOD_SHORTHAND: Final[frozendict[str, str]] = frozendict({
     "participle": "ptc",
 })  # fmt: skip
 
+"""Mapping of case values to their more concise abbreviated forms."""
 CASE_SHORTHAND: Final[frozendict[str, str]] = frozendict({
     "nominative": "nom",
     "vocative": "voc",
@@ -53,18 +56,21 @@ CASE_SHORTHAND: Final[frozendict[str, str]] = frozendict({
     "ablative": "abl",
 })  # fmt: skip
 
+"""Mapping of gender values to their more concise abbreviated forms."""
 GENDER_SHORTHAND: Final[frozendict[str, str]] = frozendict({
     "masculine": "m",
     "feminine": "f",
     "neuter": "n",
 })  # fmt: skip
 
+"""Mapping of degree values to their more concise abbreviated forms."""
 DEGREE_SHORTHAND: Final[frozendict[str, str]] = frozendict({
     "positive": "pos",
     "comparative": "cmp",
     "superlative": "spr",
 })  # fmt: skip
 
+"""Mapping of person values to their more concise abbreviated forms."""
 PERSON_SHORTHAND: Final[frozendict[int, str]] = frozendict({
     1: "1st person",
     2: "2nd person",
@@ -119,7 +125,7 @@ class _Word(ABC):
     def _find_unique_endings(self) -> None:
         self._unique_endings = set(self.endings.values())
 
-    def find(self, form: str) -> list[SimpleNamespace]:
+    def find(self, form: str) -> list[EndingComponents]:
         """Finds the accidol properties that match the given form.
 
         Attributes
@@ -129,8 +135,8 @@ class _Word(ABC):
 
         Returns
         -------
-        list[SimpleNamespace]
-            The list of SimpleNamespace objects that represent the endings 
+        list[EndingComponents]
+            The list of EndingComponents objects that represent the endings 
             that match the given form.
         """  # fmt: skip
 
@@ -150,7 +156,7 @@ class _Word(ABC):
 
     @staticmethod
     @abstractmethod
-    def _create_namespace(key: str) -> SimpleNamespace:
+    def _create_namespace(key: str) -> EndingComponents:
         pass
 
 
@@ -193,7 +199,7 @@ class RegularWord(_Word):
         return self.word
 
     @staticmethod
-    def _create_namespace(key: str) -> SimpleNamespace:
+    def _create_namespace(key: str) -> EndingComponents:
         return NotImplemented
 
     def __repr__(self) -> str:
@@ -270,13 +276,13 @@ class Verb(_Word):
             raise InvalidInputError(f"Perfect '{self.perfect}' is not valid")
 
         # Conjugation edge cases
-        if irregular_endings := edge_cases.find_irregular_endings(
+        if irregular_endings := edge_cases._find_irregular_endings(
             self.present
         ):
             self.endings = irregular_endings
             self.conjugation = 0
             return
-        elif edge_cases.check_io_verb(self.present):
+        elif edge_cases._check_io_verb(self.present):
             self.conjugation = 5
 
         # Find conjugation
@@ -720,8 +726,8 @@ class Verb(_Word):
             )
 
     @staticmethod
-    def _create_namespace(key: str) -> SimpleNamespace:
-        output: SimpleNamespace = SimpleNamespace(
+    def _create_namespace(key: str) -> EndingComponents:
+        output: EndingComponents = EndingComponents(
             tense=key_from_value(TENSE_SHORTHAND, key[1:4]),
             voice=key_from_value(VOICE_SHORTHAND, key[4:7]),
             mood=key_from_value(MOOD_SHORTHAND, key[7:10]),
@@ -1019,8 +1025,8 @@ class Noun(_Word):
             )
 
     @staticmethod
-    def _create_namespace(key: str) -> SimpleNamespace:
-        output: SimpleNamespace = SimpleNamespace(
+    def _create_namespace(key: str) -> EndingComponents:
+        output: EndingComponents = EndingComponents(
             case=key_from_value(CASE_SHORTHAND, key[1:4]),
             number=key_from_value(NUMBER_SHORTHAND, key[4:6]),
         )
@@ -1124,9 +1130,9 @@ class Adjective(_Word):
         self._irregular_cmpadv: str
         self._irregular_spradv: str
 
-        if self._mascnom in edge_cases.IRREGULAR_COMPARATIVES:
+        if self._mascnom in edge_cases.IRREGULAR_ADJECTIVES:
             self.irregular_flag = True
-            irregular_data = edge_cases.IRREGULAR_COMPARATIVES[self._mascnom]
+            irregular_data = edge_cases.IRREGULAR_ADJECTIVES[self._mascnom]
 
             self._cmp_stem = irregular_data[0]  # type: ignore
             self._spr_stem = irregular_data[1]  # type: ignore
@@ -1155,7 +1161,7 @@ class Adjective(_Word):
 
                 self._pos_stem = self._femnom[:-1]  # cara -> car-
 
-                if self._mascnom not in edge_cases.IRREGULAR_COMPARATIVES:
+                if self._mascnom not in edge_cases.IRREGULAR_ADJECTIVES:
                     self._cmp_stem = self._pos_stem + "ior"  # car- -> carior-
                     if self._mascnom[:2] == "er":
                         self._spr_stem = (
@@ -1860,8 +1866,8 @@ class Adjective(_Word):
             )
 
     @staticmethod
-    def _create_namespace(key: str) -> SimpleNamespace:
-        output: SimpleNamespace = SimpleNamespace(
+    def _create_namespace(key: str) -> EndingComponents:
+        output: EndingComponents = EndingComponents(
             degree=key_from_value(DEGREE_SHORTHAND, key[1:4]),
             gender=key_from_value(GENDER_SHORTHAND, key[4]),
             case=key_from_value(CASE_SHORTHAND, key[5:8]),
@@ -1985,8 +1991,8 @@ class Pronoun(_Word):
             )
 
     @staticmethod
-    def _create_namespace(key: str) -> SimpleNamespace:
-        output: SimpleNamespace = SimpleNamespace(
+    def _create_namespace(key: str) -> EndingComponents:
+        output: EndingComponents = EndingComponents(
             gender=key_from_value(GENDER_SHORTHAND, key[1]),
             case=key_from_value(CASE_SHORTHAND, key[2:5]),
             number=key_from_value(NUMBER_SHORTHAND, key[5:7]),

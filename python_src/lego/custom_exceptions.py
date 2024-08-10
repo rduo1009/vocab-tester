@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+"""Contains custom exceptions used by lego."""
+
 
 class InvalidVocabFileFormat(Exception):
     """An error that is raised when a vocab file has the incorrect format.

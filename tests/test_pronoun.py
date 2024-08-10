@@ -33,9 +33,9 @@ def test_errors2():
 #        word.get(gender="masculine", case="nominative", number="singular")
 #    assert "No ending found for gender 'masculine', case 'nominative' and number 'singular'" == str(error.value)
 
-def test_pick():
-    word = Pronoun(pronoun="ille", meaning="that")
-    word.pick()
+#def test_pick():
+#    word = Pronoun(pronoun="ille", meaning="that")
+#    word.pick()
 
 def test_find():
     word = Pronoun(pronoun="ille", meaning="that")

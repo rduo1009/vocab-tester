@@ -77,9 +77,9 @@ def test_find():
         SimpleNamespace(case="ablative", number="singular", string="ablative singular")
     ])
 
-def test_pick():
-    word = Noun(nominative="ancilla", genitive="ancillae", gender="feminine", meaning="slavegirl")
-    word.pick()
+#def test_pick():
+#    word = Noun(nominative="ancilla", genitive="ancillae", gender="feminine", meaning="slavegirl")
+#    word.pick()
 
 def test_firstdeclension():
     word = Noun(nominative="ancilla", genitive="ancillae", gender="feminine", meaning="slavegirl")

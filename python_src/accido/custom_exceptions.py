@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-"""custom_exceptions.py
-Contains custom exceptions used by accido.
-"""
+"""Contains custom exceptions used by accido."""
 
 
 class NoEndingError(Exception):
