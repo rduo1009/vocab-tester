@@ -532,79 +532,79 @@ class LearningVerb(_Word):
             self._preptc_stem: str = self.infinitive[:-2]
             self._ppp_stem: str = self.ppp[:-2]
             self.endings = self.endings | {
-                "Vpreactptcmnomsg": self._preptc_stem + "ns",
-                "Vpreactptcmvocsg": self._preptc_stem + "ns",
-                "Vpreactptcmaccsg": self._preptc_stem + "ntem",
-                "Vpreactptcmgensg": self._preptc_stem + "ntis",
-                "Vpreactptcmdatsg": self._preptc_stem + "nti",
-                "Vpreactptcmablsg": self._preptc_stem + "nte",
-                "Vpreactptcmnompl": self._preptc_stem + "ntes",
-                "Vpreactptcmvocpl": self._preptc_stem + "ntes",
-                "Vpreactptcmaccpl": self._preptc_stem + "ntes",
-                "Vpreactptcmgenpl": self._preptc_stem + "ntium",
-                "Vpreactptcmdatpl": self._preptc_stem + "ntibus",
-                "Vpreactptcmablpl": self._preptc_stem + "ntibus",
-                "Vpreactptcfnomsg": self._preptc_stem + "ns",
-                "Vpreactptcfvocsg": self._preptc_stem + "ns",
-                "Vpreactptcfaccsg": self._preptc_stem + "ntem",
-                "Vpreactptcfgensg": self._preptc_stem + "ntis",
-                "Vpreactptcfdatsg": self._preptc_stem + "nti",
-                "Vpreactptcfablsg": self._preptc_stem + "nte",
-                "Vpreactptcfnompl": self._preptc_stem + "ntes",
-                "Vpreactptcfvocpl": self._preptc_stem + "ntes",
-                "Vpreactptcfaccpl": self._preptc_stem + "ntes",
-                "Vpreactptcfgenpl": self._preptc_stem + "ntium",
-                "Vpreactptcfdatpl": self._preptc_stem + "ntibus",
-                "Vpreactptcfablpl": self._preptc_stem + "ntibus",
-                "Vpreactptcnnomsg": self._preptc_stem + "ns",
-                "Vpreactptcnvocsg": self._preptc_stem + "ns",
-                "Vpreactptcnaccsg": self._preptc_stem + "ns",
-                "Vpreactptcngensg": self._preptc_stem + "ntis",
-                "Vpreactptcndatsg": self._preptc_stem + "nti",
-                "Vpreactptcnablsg": self._preptc_stem + "nte",
-                "Vpreactptcnnompl": self._preptc_stem + "ntia",
-                "Vpreactptcnvocpl": self._preptc_stem + "ntia",
-                "Vpreactptcnaccpl": self._preptc_stem + "ntia",
-                "Vpreactptcngenpl": self._preptc_stem + "ntium",
-                "Vpreactptcndatpl": self._preptc_stem + "ntibus",
-                "Vpreactptcnablpl": self._preptc_stem + "ntibus",
-                "Vperpasptcmnomsg": self.ppp,
-                "Vperpasptcmvocsg": self._ppp_stem + "e",
-                "Vperpasptcmaccsg": self._ppp_stem + "um",
-                "Vperpasptcmgensg": self._ppp_stem + "i",
-                "Vperpasptcmdatsg": self._ppp_stem + "o",
-                "Vperpasptcmablsg": self._ppp_stem + "o",
-                "Vperpasptcmnompl": self._ppp_stem + "i",
-                "Vperpasptcmvocpl": self._ppp_stem + "i",
-                "Vperpasptcmaccpl": self._ppp_stem + "os",
-                "Vperpasptcmgenpl": self._ppp_stem + "orum",
-                "Vperpasptcmdatpl": self._ppp_stem + "is",
-                "Vperpasptcmablpl": self._ppp_stem + "is",
-                "Vperpasptcfnomsg": self._ppp_stem + "a",
-                "Vperpasptcfvocsg": self._ppp_stem + "a",
-                "Vperpasptcfaccsg": self._ppp_stem + "am",
-                "Vperpasptcfgensg": self._ppp_stem + "ae",
-                "Vperpasptcfdatsg": self._ppp_stem + "ae",
-                "Vperpasptcfablsg": self._ppp_stem + "a",
-                "Vperpasptcfnompl": self._ppp_stem + "ae",
-                "Vperpasptcfvocpl": self._ppp_stem + "ae",
-                "Vperpasptcfaccpl": self._ppp_stem + "as",
-                "Vperpasptcfgenpl": self._ppp_stem + "arum",
-                "Vperpasptcfdatpl": self._ppp_stem + "is",
-                "Vperpasptcfablpl": self._ppp_stem + "is",
-                "Vperpasptcnnomsg": self._ppp_stem + "um",
-                "Vperpasptcnvocsg": self._ppp_stem + "um",
-                "Vperpasptcnaccsg": self._ppp_stem + "um",
-                "Vperpasptcngensg": self._ppp_stem + "i",
-                "Vperpasptcndatsg": self._ppp_stem + "o",
-                "Vperpasptcnablsg": self._ppp_stem + "o",
-                "Vperpasptcnnompl": self._ppp_stem + "a",
-                "Vperpasptcnvocpl": self._ppp_stem + "a",
-                "Vperpasptcnaccpl": self._ppp_stem + "a",
-                "Vperpasptcngenpl": self._ppp_stem + "orum",
-                "Vperpasptcndatpl": self._ppp_stem + "is",
-                "Vperpasptcnablpl": self._ppp_stem + "is",
-            }
+                "Vpreactptcmnomsg": self._preptc_stem + "ns",  # portans
+                "Vpreactptcmvocsg": self._preptc_stem + "ns",  # portans
+                "Vpreactptcmaccsg": self._preptc_stem + "ntem",  # portantem
+                "Vpreactptcmgensg": self._preptc_stem + "ntis",  # portantis
+                "Vpreactptcmdatsg": self._preptc_stem + "nti",  # portanti
+                "Vpreactptcmablsg": self._preptc_stem + "nte",  # portante
+                "Vpreactptcmnompl": self._preptc_stem + "ntes",  # portantes
+                "Vpreactptcmvocpl": self._preptc_stem + "ntes",  # portantes
+                "Vpreactptcmaccpl": self._preptc_stem + "ntes",  # portantes
+                "Vpreactptcmgenpl": self._preptc_stem + "ntium",  # portantium
+                "Vpreactptcmdatpl": self._preptc_stem + "ntibus",  # portantibus
+                "Vpreactptcmablpl": self._preptc_stem + "ntibus",  # portantibus
+                "Vpreactptcfnomsg": self._preptc_stem + "ns",  # portans
+                "Vpreactptcfvocsg": self._preptc_stem + "ns",  # portans
+                "Vpreactptcfaccsg": self._preptc_stem + "ntem",  # portantem
+                "Vpreactptcfgensg": self._preptc_stem + "ntis",  # portantis
+                "Vpreactptcfdatsg": self._preptc_stem + "nti",  # portanti
+                "Vpreactptcfablsg": self._preptc_stem + "nte",  # portante
+                "Vpreactptcfnompl": self._preptc_stem + "ntes",  # portantes
+                "Vpreactptcfvocpl": self._preptc_stem + "ntes",  # portantes
+                "Vpreactptcfaccpl": self._preptc_stem + "ntes",  # portantes
+                "Vpreactptcfgenpl": self._preptc_stem + "ntium",  # portantium
+                "Vpreactptcfdatpl": self._preptc_stem + "ntibus",  # portantibus
+                "Vpreactptcfablpl": self._preptc_stem + "ntibus",  # portantibus
+                "Vpreactptcnnomsg": self._preptc_stem + "ns",  # portans
+                "Vpreactptcnvocsg": self._preptc_stem + "ns",  # portans
+                "Vpreactptcnaccsg": self._preptc_stem + "ns",  # portans
+                "Vpreactptcngensg": self._preptc_stem + "ntis",  # portantis
+                "Vpreactptcndatsg": self._preptc_stem + "nti",  # portanti
+                "Vpreactptcnablsg": self._preptc_stem + "nte",  # portante
+                "Vpreactptcnnompl": self._preptc_stem + "ntia",  # portantia
+                "Vpreactptcnvocpl": self._preptc_stem + "ntia",  # portantia
+                "Vpreactptcnaccpl": self._preptc_stem + "ntia",  # portantia
+                "Vpreactptcngenpl": self._preptc_stem + "ntium",  # portantium
+                "Vpreactptcndatpl": self._preptc_stem + "ntibus",  # portantibus
+                "Vpreactptcnablpl": self._preptc_stem + "ntibus",  # portantibus
+                "Vperpasptcmnomsg": self.ppp,  # portatus
+                "Vperpasptcmvocsg": self._ppp_stem + "e",  # portate
+                "Vperpasptcmaccsg": self._ppp_stem + "um",  # portatum
+                "Vperpasptcmgensg": self._ppp_stem + "i",  # portati
+                "Vperpasptcmdatsg": self._ppp_stem + "o",  # portato
+                "Vperpasptcmablsg": self._ppp_stem + "o",  # portato
+                "Vperpasptcmnompl": self._ppp_stem + "i",  # portati
+                "Vperpasptcmvocpl": self._ppp_stem + "i",  # portati
+                "Vperpasptcmaccpl": self._ppp_stem + "os",  # portatos
+                "Vperpasptcmgenpl": self._ppp_stem + "orum",  # portatorum
+                "Vperpasptcmdatpl": self._ppp_stem + "is",  # portatis
+                "Vperpasptcmablpl": self._ppp_stem + "is",  # portatis
+                "Vperpasptcfnomsg": self._ppp_stem + "a",  # portata
+                "Vperpasptcfvocsg": self._ppp_stem + "a",  # portata
+                "Vperpasptcfaccsg": self._ppp_stem + "am",  # portatam
+                "Vperpasptcfgensg": self._ppp_stem + "ae",  # portatae
+                "Vperpasptcfdatsg": self._ppp_stem + "ae",  # portatae
+                "Vperpasptcfablsg": self._ppp_stem + "a",  # portata
+                "Vperpasptcfnompl": self._ppp_stem + "ae",  # portatae
+                "Vperpasptcfvocpl": self._ppp_stem + "ae",  # portatae
+                "Vperpasptcfaccpl": self._ppp_stem + "as",  # portatas
+                "Vperpasptcfgenpl": self._ppp_stem + "arum",  # portarum
+                "Vperpasptcfdatpl": self._ppp_stem + "is",  # portatis
+                "Vperpasptcfablpl": self._ppp_stem + "is",  # portatis
+                "Vperpasptcnnomsg": self._ppp_stem + "um",  # portatum
+                "Vperpasptcnvocsg": self._ppp_stem + "um",  # portatum
+                "Vperpasptcnaccsg": self._ppp_stem + "um",  # portatum
+                "Vperpasptcngensg": self._ppp_stem + "i",  # portati
+                "Vperpasptcndatsg": self._ppp_stem + "o",  # portato
+                "Vperpasptcnablsg": self._ppp_stem + "o",  # portato
+                "Vperpasptcnnompl": self._ppp_stem + "a",  # portata
+                "Vperpasptcnvocpl": self._ppp_stem + "a",  # portata
+                "Vperpasptcnaccpl": self._ppp_stem + "a",  # portata
+                "Vperpasptcngenpl": self._ppp_stem + "orum",  # portatorum
+                "Vperpasptcndatpl": self._ppp_stem + "is",  # portatis
+                "Vperpasptcnablpl": self._ppp_stem + "is",  # portatis
+            }  # fmt: skip
 
         self._endings = deepfreeze(self.endings)
         self._find_unique_endings()
@@ -1169,16 +1169,16 @@ class Adjective(_Word):
                     self._cmp_stem = self._pos_stem + "ior"  # car- -> carior-
                     if self._mascnom[:2] == "er":
                         self._spr_stem = (
-                            self._mascnom + "rim"
-                        )  # miser- -> miserrim-
+                            self._mascnom + "rim"  # miser- -> miserrim-
+                        )
                     elif self._mascnom in edge_cases.LIS_ADJECTIVES:
                         self._spr_stem = (
-                            self._pos_stem + "lim"
-                        )  # facil- -> facillim-
+                            self._pos_stem + "lim"  # facil- -> facillim-
+                        )
                     else:
                         self._spr_stem = (
-                            self._pos_stem + "issim"
-                        )  # car- -> carissim-
+                            self._pos_stem + "issim"  # car- -> carissim-
+                        )
 
                 self.endings = frozendict({
                     "Aposmnomsg": self._mascnom,  # carus
@@ -1295,13 +1295,13 @@ class Adjective(_Word):
                     self.endings = self.endings | {
                         "Dpos": self._irregular_posadv
                         if self.irregular_flag
-                        else self._pos_stem + "e",
+                        else self._pos_stem + "e",  # laete
                         "Dcmp": self._irregular_cmpadv
                         if self.irregular_flag
-                        else self._pos_stem + "ius",
+                        else self._pos_stem + "ius",  # laetius
                         "Dspr": self._irregular_spradv
                         if self.irregular_flag
-                        else self._spr_stem + "e",
+                        else self._spr_stem + "e",  # laetissime
                     }
 
             case "3":
@@ -1320,8 +1320,8 @@ class Adjective(_Word):
                                 f"Genitive '{self._mascgen}' not recognised"
                             )
                         self._pos_stem = self._mascgen[
-                            :-2
-                        ]  # ingentis -> ingent-
+                            :-2  # ingentis -> ingent-
+                        ]
 
                         if not self.irregular_flag:
                             self._cmp_stem = (
@@ -1457,13 +1457,13 @@ class Adjective(_Word):
                             self.endings = self.endings | {
                                 "Dpos": self._irregular_posadv
                                 if self.irregular_flag
-                                else self._pos_stem + "er",
+                                else self._pos_stem + "er",  # atrociter
                                 "Dcmp": self._irregular_cmpadv
                                 if self.irregular_flag
-                                else self._pos_stem + "ius",
+                                else self._pos_stem + "ius",  # atrocius
                                 "Dspr": self._irregular_spradv
                                 if self.irregular_flag
-                                else self._spr_stem + "e",
+                                else self._spr_stem + "e",  # atrocissime
                             }
 
                     case 2:
@@ -1611,13 +1611,13 @@ class Adjective(_Word):
                             self.endings = self.endings | {
                                 "Dpos": self._irregular_posadv
                                 if self.irregular_flag
-                                else self._pos_stem + "iter",
+                                else self._pos_stem + "iter",  # fortiter
                                 "Dcmp": self._irregular_cmpadv
                                 if self.irregular_flag
-                                else self._pos_stem + "ius",
+                                else self._pos_stem + "ius",  # fortius
                                 "Dspr": self._irregular_spradv
                                 if self.irregular_flag
-                                else self._spr_stem + "e",
+                                else self._spr_stem + "e",  # fortissime
                             }
 
                     case 3:
@@ -1766,13 +1766,13 @@ class Adjective(_Word):
                             self.endings = self.endings | {
                                 "Dpos": self._irregular_posadv
                                 if self.irregular_flag
-                                else self._pos_stem + "iter",
+                                else self._pos_stem + "iter",  # acriter
                                 "Dcmp": self._irregular_cmpadv
                                 if self.irregular_flag
-                                else self._pos_stem + "ius",
+                                else self._pos_stem + "ius",  # acrius
                                 "Dspr": self._irregular_spradv
                                 if self.irregular_flag
-                                else self._spr_stem + "e",
+                                else self._spr_stem + "e",  # acerrime
                             }
 
                     case _:
