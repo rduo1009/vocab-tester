@@ -72,7 +72,7 @@ def check_io_verb(present: str) -> bool:
     return False
 
 
-IRRegularWord_VERBS: Final[dict[str, Endings]] = deepfreeze({
+IRREGULAR_VERBS: Final[dict[str, Endings]] = deepfreeze({
 	"sum": {
 		"Vpreactindsg1": "sum",
 		"Vpreactindsg2": "es",
@@ -274,7 +274,7 @@ IRRegularWord_VERBS: Final[dict[str, Endings]] = deepfreeze({
 	},
 })  # fmt: skip
 
-DERIVED_IRRegularWord_VERBS: Final[frozendict[str, list[str]]] = deepfreeze({
+DERIVED_IRREGULAR_VERBS: Final[frozendict[str, list[str]]] = deepfreeze({
 	"eo": [
 		"abeo",
 		"adeo",
@@ -301,7 +301,7 @@ DERIVED_IRRegularWord_VERBS: Final[frozendict[str, list[str]]] = deepfreeze({
 	],
 })  # fmt: skip
 
-DERIVED_IRRegularWord_ENDINGS: Final[dict[str, Endings]] = deepfreeze({
+DERIVED_IRREGULAR_ENDINGS: Final[dict[str, Endings]] = deepfreeze({
 	"eo": {
 		"Vpreactindsg1": "eo",
 		"Vpreactindsg2": "is",
@@ -350,8 +350,8 @@ def _prefix(pre: str, endings: Endings) -> Endings:
     return frozendict({key: pre + value for key, value in endings.items()})
 
 
-def find_irRegularWord_endings(present: str) -> Endings | None:
-    """Detects if a verb is irRegularWord (using the irRegularWord verb dictionary)
+def find_irregular_endings(present: str) -> Endings | None:
+    """Detects if a verb is irregular (using the irregular verb dictionary)
     and returns its endings.
 
     Parameters
@@ -362,24 +362,24 @@ def find_irRegularWord_endings(present: str) -> Endings | None:
     Returns
     -------
     Union[Endings, None]
-        The endings. None if the verb is not irRegularWord.
+        The endings. None if the verb is not irregular.
     """
 
-    if present in IRRegularWord_VERBS:
-        return IRRegularWord_VERBS[present]
+    if present in IRREGULAR_VERBS:
+        return IRREGULAR_VERBS[present]
     for (
-        irRegularWord_suffix,
+        IRREGULAR_suffix,
         suffix_list,
-    ) in DERIVED_IRRegularWord_VERBS.items():
+    ) in DERIVED_IRREGULAR_VERBS.items():
         if present in suffix_list:
             return _prefix(
-                present.rstrip(irRegularWord_suffix),
-                DERIVED_IRRegularWord_ENDINGS[irRegularWord_suffix],
+                present.rstrip(IRREGULAR_suffix),
+                DERIVED_IRREGULAR_ENDINGS[IRREGULAR_suffix],
             )
     return None
 
 
-IRRegularWord_NOUNS: Final[dict[str, Endings]] = deepfreeze({
+IRREGULAR_NOUNS: Final[dict[str, Endings]] = deepfreeze({
 	"ego": {
 		"Nnomsg": "ego",
 		"Nvocsg": "ego",
@@ -390,7 +390,7 @@ IRRegularWord_NOUNS: Final[dict[str, Endings]] = deepfreeze({
 		"Nnompl": "nos",
 		"Nvocpl": "nos",
 		"Naccpl": "nos",
-		"Ngenpl": MultipleEndings(RegularWord="nostri", partitive="nostrum"),
+		"Ngenpl": MultipleEndings(regular="nostri", partitive="nostrum"),
 		"Ndatpl": "nobis",
 		"Nablpl": "nobis",
 	},
@@ -404,7 +404,7 @@ IRRegularWord_NOUNS: Final[dict[str, Endings]] = deepfreeze({
 		"Nnompl": "vos",
 		"Nvocpl": "vos",
 		"Naccpl": "vos",
-		"Ngenpl": MultipleEndings(RegularWord="vestri", partitive="vestrum"),
+		"Ngenpl": MultipleEndings(regular="vestri", partitive="vestrum"),
 		"Ndatpl": "vobis",
 		"Nablpl": "vobis",
 	},
@@ -429,14 +429,14 @@ LIS_ADJECTIVES: Final[set[str]] = deepfreeze({
 	"humilis",
 })  # fmt: skip
 
-IRRegularWord_COMPARATIVES: Final[frozendict[str, list[str | None]]] = deepfreeze({
+IRREGULAR_COMPARATIVES: Final[frozendict[str, list[str | None]]] = deepfreeze({
 	"bonus": ["melior", "optim", "bene", "melius", "optime"],
 	"malus": ["peior", "pessim", "male", "peius", "pessime"],
 	"magnus": ["maior", "maxim", None, None, None],
 	"parvus": ["minor", "minim", None, None, None],
 	# NOTE: multo (adverb) exists but that would very much stuff up things
 	"multus": ["plus", "plurim", None, None, None],
-	# nequam should probably just be put in as a RegularWord
+	# nequam should probably just be put in as a regular
 	"nequam": ["nequior", "nequissim", None, None, None],
 	"frugi": ["frugalior", "frugalissim", "frugaliter", "frugalius", "frugalissime"],
 	"dexter": ["dexterior", "dextim", None, None, None],
