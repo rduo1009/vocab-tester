@@ -34,6 +34,10 @@ def test_reader():
         Pronoun(pronoun="ille", meaning="that")
     ])
 
+def test_regenerate():
+    l = read_vocab_file(Path("tests/test_vocab_files/regular_list.txt"))
+    assert l == lego.reader._regenerate_vocab_list(l)
+
 def test_reader_with_s():
     l = read_vocab_file(Path("tests/test_vocab_files/regular_with_s_list.txt"))
     assert l == VocabList([
