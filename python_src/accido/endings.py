@@ -8,7 +8,6 @@ Representations of Latin words with their endings calculated.
 from abc import ABC, abstractmethod
 from functools import total_ordering
 from io import StringIO
-from random import choice
 from types import SimpleNamespace
 from typing import Any, Final, Literal, Optional
 
@@ -107,27 +106,6 @@ class _Word(ABC):
 
     def _find_unique_endings(self) -> None:
         self._unique_endings = set(self.endings.values())
-
-    def pick(self) -> Ending:
-        """Returns a random ending from the endings.
-        Note that this method chooses from unique endings, so that the same
-        endings (e.g. puella is both nominative and ablative singular) do
-        not skew the results.
-
-        Returns
-        -------
-        Ending
-            The ending chosen.
-
-        Raises
-        ------
-        ValueError
-            If the _unique_endings set has not been created. This error
-            should never occur.
-        """
-        if self._unique_endings == set():
-            raise ValueError
-        return choice(tuple(self._unique_endings))
 
     def find(self, form: str) -> list[SimpleNamespace]:
         """Finds the accidol properties that match the given form.
