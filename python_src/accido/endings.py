@@ -72,6 +72,18 @@ PERSON_SHORTHAND: Final[frozendict[int, str]] = frozendict({
 })  # fmt: skip
 
 
+class EndingComponents(SimpleNamespace):
+    """A container for the grammatical components of an ending.
+
+    Examples
+    --------
+    >>> foo = EndingComponents(case="nominative", gender="masculine", \
+                               number="singular")
+    """
+
+    pass
+
+
 @total_ordering
 class _Word(ABC):
     """Representation of an word.
