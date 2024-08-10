@@ -957,24 +957,23 @@ class Noun(_Word):
                 )
 
         if self.gender == "neuter":
-            temp_endings["Naccsg"] = self.nominative
-            temp_endings["Nvocsg"] = self.nominative
+            temp_endings["Naccsg"] = self.nominative  # templum
+            temp_endings["Nvocsg"] = self.nominative  # templum
 
             if self.declension == 4:
                 temp_endings["Nnompl"] = self._stem + "ua"  # cornua
                 temp_endings["Naccpl"] = self._stem + "ua"  # cornua
                 temp_endings["Nvocpl"] = self._stem + "ua"  # cornua
                 temp_endings["Ndatpl"] = self._stem + "ua"  # cornua
-                return
             elif self.declension == 5:
                 raise InvalidInputError(
                     f"Fifth declension nouns cannot be neuter (noun '{self.nominative}')"
                 )
-
-            # For the other declensions
-            temp_endings["Nnompl"] = self._stem + "a"
-            temp_endings["Naccpl"] = self._stem + "a"
-            temp_endings["Nvocpl"] = self._stem + "a"
+            else:
+                # For the other declensions
+                temp_endings["Nnompl"] = self._stem + "a"  # templa
+                temp_endings["Naccpl"] = self._stem + "a"  # templa
+                temp_endings["Nvocpl"] = self._stem + "a"  # templa
 
         if self.plurale_tantum:
             temp_endings = {
