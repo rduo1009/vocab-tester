@@ -33,3 +33,10 @@ docstring-code-format = false
 
 [tool.ruff]
 line-length = 79
+
+[tool.mypy]
+strict = true
+warn_return_any = true
+warn_unreachable = true
+strict_equality = true
+mypy_path = "mypy_stubs"
