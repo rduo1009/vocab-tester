@@ -12,6 +12,7 @@ nltk = "^3.8.1"
 lemminflect = "^0.2.3"
 spacy = "^3.7.5"
 frozendict = "^2.4.4"
+fsrs = "^2.5.1"
 
 [tool.poetry.group.dev.dependencies]
 icecream = "*"
