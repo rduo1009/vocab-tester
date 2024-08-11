@@ -122,9 +122,6 @@ class _Word(ABC):
     def __getitem__(self, key: str) -> Ending:
         return self.endings[key]
 
-    def _find_unique_endings(self) -> None:
-        self._unique_endings = set(self.endings.values())
-
     def find(self, form: str) -> list[EndingComponents]:
         """Finds the accidol properties that match the given form.
 
@@ -180,7 +177,6 @@ class RegularWord(_Word):
         self.word: str = word
         self.meaning: Meaning = meaning
         self.endings: Endings = frozendict({"": self.word})
-        self._find_unique_endings()
 
     def get(self) -> str:
         """Returns the word.
@@ -602,9 +598,6 @@ class Verb(_Word):
                 "Vperpasptcnablpl": self._ppp_stem + "is",  # portatis
             }  # fmt: skip
 
-        self._endings = deepfreeze(self.endings)
-        self._find_unique_endings()
-
     def get(
         self,
         *,
@@ -977,7 +970,6 @@ class Noun(_Word):
             }
 
         self.endings = deepfreeze(temp_endings)
-        self._find_unique_endings()
 
     def get(self, *, case: str, number: str) -> Ending:
         """Returns the ending of the noun.
@@ -1782,7 +1774,6 @@ class Adjective(_Word):
                 )
 
         self._endings = deepfreeze(self.endings)
-        self._find_unique_endings()
 
     def get(
         self,
@@ -1942,7 +1933,6 @@ class Pronoun(_Word):
         self._neutnom: Ending = self.endings["Pnnomsg"]
 
         self._endings = deepfreeze(self.endings)
-        self._find_unique_endings()
 
     def get(self, *, gender: str, case: str, number: str) -> Ending:
         """Returns the ending of the pronoun.
