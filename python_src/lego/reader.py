@@ -278,6 +278,8 @@ def _regenerate_vocab_list(vocab_list: VocabList) -> VocabList:
                     meaning=word.meaning,
                 )
             )
+        else:
+            raise ValueError(f"Unknown word type: {type(word)}")
 
     return VocabList(new_vocab)
 

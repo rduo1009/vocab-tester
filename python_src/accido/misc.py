@@ -55,7 +55,7 @@ class MultipleEndings:
     separate string.
     The fact that the attribute names can be customises means that this
     class can be used for many use cases.
-    e.g. MultipleEndings(RegularWord="nostri", partitive="nostrum")
+    e.g. MultipleEndings(regular="nostri", partitive="nostrum")
     would allow for nostrum being the partitive genitive, while nostri
     for the rest of the genitive uses.
 
