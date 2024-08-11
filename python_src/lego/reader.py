@@ -26,6 +26,29 @@ GENDER_SHORTHAND: Final[dict[str, str]] = {
 }
 
 
+def _generate_meaning(meaning: str) -> accido.misc.Meaning:
+    """Generates a meaning (either just a string or a MultipleMeanings
+    object) from a given string.
+
+    Parameters
+    ----------
+    meaning : str
+        The meaning to generate.
+
+    Returns
+    -------
+    Meaning
+        The meaning.
+    """
+
+    if "/" in meaning:
+        return accido.misc.MultipleMeanings(
+            [x.strip() for x in meaning.split("/")]
+        )
+    else:
+        return meaning
+
+
 def read_vocab_file(file_path: Path) -> VocabList:
     """Reads a vocabulary file and returns a VocabList object.
 
@@ -101,7 +124,9 @@ def read_vocab_file(file_path: Path) -> VocabList:
                             f"Invalid line format: {line}"
                         )
 
-                    meaning: str = parts[0].strip()
+                    meaning: accido.misc.Meaning = _generate_meaning(
+                        parts[0].strip()
+                    )
                     latin_parts: list[str] = [
                         raw_part.strip() for raw_part in parts[1].split(",")
                     ]

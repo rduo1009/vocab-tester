@@ -10,6 +10,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 import pytest
 from pathlib import Path
 from python_src.accido.endings import Verb, Adjective, RegularWord, Noun, Pronoun
+from python_src.accido.misc import MultipleMeanings
 from python_src.lego.reader import read_vocab_file, VocabList, _regenerate_vocab_list
 from python_src.lego.custom_exceptions import InvalidVocabFileFormat
 from io import StringIO
@@ -54,6 +55,13 @@ def test_reader_with_s():
         RegularWord(word="e", meaning="from"),
         Pronoun(pronoun="hic", meaning="this"),
         Pronoun(pronoun="ille", meaning="that")
+    ])
+
+def test_multiple_meanings():
+    l = read_vocab_file(Path("tests/test_vocab_files/multiple_meanings_list.txt"))
+    assert l == VocabList([
+        Verb(present="peto", infinitive="petere", perfect="petivi", ppp="petitus", meaning=MultipleMeanings(["attack", "make for", "seek", "ask"])),
+        Noun(nominative="ancilla", genitive="ancillae", gender="feminine", meaning=MultipleMeanings(["slave-girl", "maid"])),
     ])
 
 def test_invalidpos():
