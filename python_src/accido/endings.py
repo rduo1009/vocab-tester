@@ -5,7 +5,6 @@
 
 from abc import ABC, abstractmethod
 from functools import total_ordering
-from io import StringIO
 from types import SimpleNamespace
 from typing import Any, Final, Literal, Optional
 
@@ -734,15 +733,9 @@ class Verb(_Word):
         return f"Verb({self.present}, {self.infinitive}, {self.perfect}, {self.ppp}, {self.meaning})"
 
     def __str__(self) -> str:
-        output: StringIO = StringIO()
-        output.write(
-            f"{self.meaning}: {self.present}, {self.infinitive}, {self.perfect}, {self.ppp} ({self.conjugation})\n\n"
-        )
-
-        for _, item in self.endings.items():
-            output.write(item + "\n")
-
-        return output.getvalue()
+        if self.ppp:
+            return f"{self.meaning}: {self.present}, {self.infinitive}, {self.perfect}, {self.ppp}"
+        return f"{self.meaning}: {self.present}, {self.infinitive}, {self.perfect}"
 
 
 @total_ordering
@@ -1029,15 +1022,7 @@ class Noun(_Word):
         return f"Noun({self.nominative}, {self.genitive}, {GENDER_SHORTHAND[self.gender]}, {self.meaning})"
 
     def __str__(self) -> str:
-        output: StringIO = StringIO()
-        output.write(
-            f"{self.meaning}: {self.nominative}, {self.genitive} ({self.declension})"
-        )
-
-        for _, item in self.endings.items():
-            output.write(item + "\n")
-
-        return output.getvalue()
+        return f"{self.meaning}: {self.nominative}, {self.genitive} ({self.declension})"
 
 
 @total_ordering
@@ -1870,11 +1855,9 @@ class Adjective(_Word):
         return output
 
     def __str__(self) -> str:
-        output: StringIO = StringIO()
-        output.write(f"{self.meaning}: {', '.join(self._principal_parts)}\n")
-        for _, item in self.endings.items():
-            output.write(item + "\n")
-        return output.getvalue()
+        if self.declension == "3":
+            return f"{self.meaning}: {', '.join(self._principal_parts)} ({self.declension}-{self.termination})"
+        return f"{self.meaning}: {', '.join(self._principal_parts)} (2-1-2)"
 
     def __repr__(self) -> str:
         return f"Adjective({', '.join(self._principal_parts)}, {self.termination}, {self.declension}, {self.meaning})"
@@ -1994,10 +1977,4 @@ class Pronoun(_Word):
         return f"Pronoun({self.pronoun}, {self.meaning})"
 
     def __str__(self) -> str:
-        output: StringIO = StringIO()
-        output.write(
-            f"{self.meaning}: {self._mascnom}, {self._femnom}, {self._neutnom}\n"
-        )
-        for _, item in self.endings.items():
-            output.write(item + "\n")
-        return output.getvalue()
+        return f"{self.meaning}: {self._mascnom}, {self._femnom}, {self._neutnom}\n"
