@@ -8,7 +8,7 @@ import hmac
 from pathlib import Path
 from warnings import warn
 
-import dill as pickle  # type: ignore
+import dill as pickle
 
 from .misc import KEY, VocabList
 

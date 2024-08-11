@@ -10,7 +10,7 @@ from pathlib import Path
 from re import match
 from typing import Any, Final
 
-import dill as pickle  # type: ignore
+import dill as pickle
 
 import python_src as src
 
