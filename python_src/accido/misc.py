@@ -11,43 +11,36 @@ from frozendict import frozendict
 
 @dataclass(init=True)
 class MultipleMeanings:
-    """Represents multiple meanings, with a best meaning and other
+    """Represents multiple meanings, with a main meaning and other
     meanings.
 
     Attributes
     ----------
-    meanings : list[str]
-        The meanings, the input of the class.
-    best_meaning : str
-        The best meaning.
-    other_meanings : list[str], str
-        Other meanings.
+    raw_meanings : list[str]
+    meanings : set[str]
+        The meanings.
+    main_meaning : str
+        The main meaning.
 
     Notes
     -----
     This class allows for there to be several English definitions of one
     Latin word. This means for translating-to-English questions, synonyms
     can be accepted, but not vice versa.
-
-    The meanings and other_meanings list is intended to be ordered from
-    better to worse meanings.
-    e.g. meanings = ["clever", "cunning", "callid"]
-    'Callid' is technically correct, but not a very commonly used word, so
-    it is put later in thelist.
     """
 
-    meanings: list[str]
+    raw_meanings: list[str]
 
     def __str__(self) -> str:
-        return self.best_meaning
+        return self.main_meaning
 
     def __repr__(self) -> str:
         return f"MultipleMeanings({",".join(self.meanings)})"
 
     def __post_init__(self) -> None:
         """If other_meanings is a string, convert it to a list."""
-        self.best_meaning: str = self.meanings[0]
-        self.other_meanings: list[str] = self.meanings[1:]
+        self.main_meaning: str = self.raw_meanings[0]
+        self.meanings: set[str] = set(self.raw_meanings)
 
 
 class MultipleEndings:
@@ -62,6 +55,7 @@ class MultipleEndings:
     Attributes
     ----------
     value : str
+
     etc.
     """
 
@@ -86,6 +80,7 @@ class MultipleEndings:
     def __add__(self, val2: str) -> str:
         return self.__str__() + val2
 
+    # Allows for a prefix to be added to all of the endings.
     def __radd__(self, val2: str) -> "MultipleEndings":
         prefixed = {
             key: f"{val2}{value}" for key, value in self.__dict__.items()
