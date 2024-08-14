@@ -10,7 +10,10 @@ from types import SimpleNamespace
 
 import pytest
 
-from python_src.accido.custom_exceptions import InvalidInputError, NoEndingError
+from python_src.accido.custom_exceptions import (
+    InvalidInputError,
+    NoEndingError,
+)
 from python_src.accido.edge_cases import PRONOUNS
 from python_src.accido.endings import Pronoun
 
