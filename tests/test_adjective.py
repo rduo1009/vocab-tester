@@ -242,7 +242,7 @@ def test_declension212():
     assert word.get(degree="superlative", gender="neuter", case="ablative", number="plural") == "laetissimis"
 
 
-def test_declension212_irRegularWord():
+def test_declension212_irregular():
     word = Adjective("bonus", "bona", "bonum", declension="212", meaning="happy")
     assert word.get(degree="positive", gender="masculine", case="nominative", number="singular") == "bonus"
     assert word.get(degree="positive", gender="masculine", case="vocative", number="singular") == "bone"
@@ -745,31 +745,31 @@ def test_adverb4():
     assert word.get(degree="comparative", adverb=True) == "celerius"
     assert word.get(degree="superlative", adverb=True) == "celerrime"
 
-def test_irRegularWordadverb1():
+def test_irregularadverb1():
     word = Adjective("bonus", "bona", "bonum", declension="212", meaning="happy")
     assert word.get(degree="positive", adverb=True) == "bene"
     assert word.get(degree="comparative", adverb=True) == "melius"
     assert word.get(degree="superlative", adverb=True) == "optime"
 
-def test_irRegularWordadverb2():
+def test_irregularadverb2():
     word = Adjective("bonus", "bonis", declension="3", termination=1, meaning="happy")
     assert word.get(degree="positive", adverb=True) == "bene"
     assert word.get(degree="comparative", adverb=True) == "melius"
     assert word.get(degree="superlative", adverb=True) == "optime"
 
-def test_irRegularWordadverb3():
+def test_irregularadverb3():
     word = Adjective("bonus", "bona", declension="3", termination=2, meaning="happy")
     assert word.get(degree="positive", adverb=True) == "bene"
     assert word.get(degree="comparative", adverb=True) == "melius"
     assert word.get(degree="superlative", adverb=True) == "optime"
 
-def test_irRegularWordadverb4():
+def test_irregularadverb4():
     word = Adjective("bonus", "bona", "bonum", declension="3", termination=3, meaning="happy")
     assert word.get(degree="positive", adverb=True) == "bene"
     assert word.get(degree="comparative", adverb=True) == "melius"
     assert word.get(degree="superlative", adverb=True) == "optime"
 
-def test_irRegularWordadverb5():
+def test_irregularadverb5():
     word = Adjective("magnus", "magna", "magnum", declension="212", meaning="big")
     with pytest.raises(NoEndingError) as error:
         word.get(degree="positive", adverb=True)

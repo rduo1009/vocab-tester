@@ -339,7 +339,7 @@ def test_fourthconjugation():
     assert word.get(person=3, number="plural", tense="pluperfect", voice="active", mood="subjunctive") == "aperuissent"
 
 
-def test_irRegularWordverb_eo():
+def test_irregularverb_eo():
     word = Verb(present="abeo", infinitive="abire", perfect="abii", ppp="abitum", meaning="depart")
 
     assert word.get(person=1, number="singular", tense="present", voice="active", mood="indicative") == "abeo"
