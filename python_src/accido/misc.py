@@ -1,5 +1,5 @@
 """misc.py
-Contains miscellaneous functions and classes used by grammatica.
+Contains miscellaneous functions and classes used by accido.
 """
 
 from dataclasses import dataclass

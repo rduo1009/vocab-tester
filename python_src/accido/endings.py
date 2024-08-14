@@ -140,7 +140,7 @@ class _Word(ABC):
 		return choice(tuple(self._unique_endings))
 
 	def find(self, form: str) -> list[SimpleNamespace]:
-		"""Finds the grammatical properties that match the given form.
+		"""Finds the accidol properties that match the given form.
 
 		Attributes
 		----------

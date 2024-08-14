@@ -5,8 +5,8 @@ import sys, os  # noqa: E401
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from grammatica.endings import BasicWord
-from grammatica.misc import MultipleMeanings
+from python_src.accido.endings import BasicWord
+from python_src.accido.misc import MultipleMeanings
 
 
 def test_one_meaning():

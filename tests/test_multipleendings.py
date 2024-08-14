@@ -5,7 +5,7 @@ import sys, os  # noqa: E401
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from grammatica.misc import MultipleEndings
+from python_src.accido.misc import MultipleEndings
 
 
 def test_multiple_endings():
