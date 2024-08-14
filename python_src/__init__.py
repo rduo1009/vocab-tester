@@ -3,8 +3,8 @@
 
 """A wrapper for the Python packages used by vocab-tester."""
 
-from . import accido, lego
+from . import accido, lego, transfero
 
-__all__ = ["accido", "lego"]
-__version__ = "0.2.2"
+__all__ = ["accido", "lego", "transfero"]
+__version__ = "0.3"
 __author__ = "rduo1009"
