@@ -70,7 +70,7 @@ def check_io_verb(present: str) -> bool:
     return False
 
 
-IRREGULAR_VERBS: Final[dict[str, Endings]] = {
+IRREGULAR_VERBS: Final[dict[str, Endings]] = frozendict({
     "sum": {
         "Vpreactindsg1": "sum",
         "Vpreactindsg2": "es",
@@ -270,7 +270,7 @@ IRREGULAR_VERBS: Final[dict[str, Endings]] = {
         "Vplpactsbjpl2": "iissetis",
         "Vplpactsbjpl3": "iissent",
     },
-}
+})
 # TODO TODO
 DERIVED_IRREGULAR_VERBS: Final[dict[str, list[str]]] = {
     "eo": [
@@ -299,7 +299,7 @@ DERIVED_IRREGULAR_VERBS: Final[dict[str, list[str]]] = {
     ],
 }
 
-DERIVED_IRREGULAR_ENDINGS: Final[dict[str, Endings]] = {
+DERIVED_IRREGULAR_ENDINGS: Final[dict[str, Endings]] = frozendict({
     "eo": {
         "Vpreactindsg1": "eo",
         "Vpreactindsg2": "is",

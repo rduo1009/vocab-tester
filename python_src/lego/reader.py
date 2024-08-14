@@ -38,47 +38,25 @@ def read_vocab_file(file_path: Path) -> VocabList:
                     continue
                 case "@":
                     match line[1:].strip():
-                        case (
-                            "Verb"
-                            | "Adjective"
-                            | "Noun"
-                            | "Regular"
-                            | "Pronoun"
-                        ):
+                        case "Verb" | "Adjective" | "Noun" | "Regular" | "Pronoun":
                             current = line[1:]
-                        case (
-                            "Verbs"
-                            | "Adjectives"
-                            | "Nouns"
-                            | "Regulars"
-                            | "Pronouns"
-                        ):
+                        case "Verbs" | "Adjectives" | "Nouns" | "Regulars" | "Pronouns":
                             current = line[1:-1].strip()
                         case _:
-                            raise InvalidVocabFileFormat(
-                                f"Invalid part of speech: {line[1:].strip()}"
-                            )
+                            raise InvalidVocabFileFormat(f"Invalid part of speech: {line[1:].strip()}")
                 case _:
                     parts: list[str] = line.strip().split(":")
                     if len(parts) != 2:
-                        raise InvalidVocabFileFormat(
-                            f"Invalid line format: {line}"
-                        )
+                        raise InvalidVocabFileFormat(f"Invalid line format: {line}")
 
                     meaning: str = parts[0].strip()
-                    latin_parts: list[str] = [
-                        raw_part.strip() for raw_part in parts[1].split(",")
-                    ]
+                    latin_parts: list[str] = [raw_part.strip() for raw_part in parts[1].split(",")]
                     match current:
                         case "":
-                            raise InvalidVocabFileFormat(
-                                "Part of speech was not given"
-                            )
+                            raise InvalidVocabFileFormat("Part of speech was not given")
                         case "Verb":
                             if len(latin_parts) not in {3, 4}:
-                                raise InvalidVocabFileFormat(
-                                    f"Invalid verb format: {line}"
-                                )
+                                raise InvalidVocabFileFormat(f"Invalid verb format: {line}")
                             if len(latin_parts) > 3:
                                 vocab.append(
                                     accido.endings.LearningVerb(
@@ -100,20 +78,14 @@ def read_vocab_file(file_path: Path) -> VocabList:
                                 )
                         case "Noun":
                             if len(latin_parts) != 3:
-                                raise InvalidVocabFileFormat(
-                                    f"Invalid noun format: {line}"
-                                )
+                                raise InvalidVocabFileFormat(f"Invalid noun format: {line}")
                             try:
                                 vocab.append(
                                     accido.endings.Noun(
                                         meaning=meaning,
                                         nominative=latin_parts[0],
                                         genitive=latin_parts[1].split()[0],
-                                        gender=GENDER_SHORTHAND[
-                                            latin_parts[2]
-                                            .split()[-1]
-                                            .strip("()")
-                                        ],
+                                        gender=GENDER_SHORTHAND[latin_parts[2].split()[-1].strip("()")],
                                     )
                                 )
                             except KeyError:
@@ -122,9 +94,7 @@ def read_vocab_file(file_path: Path) -> VocabList:
                                 )
                         case "Adjective":
                             if len(latin_parts) not in {3, 4}:
-                                raise InvalidVocabFileFormat(
-                                    f"Invalid adjective format: {line}"
-                                )
+                                raise InvalidVocabFileFormat(f"Invalid adjective format: {line}")
                             declension: str = latin_parts[-1].strip("()")
                             if declension == "212":
                                 vocab.append(
@@ -135,9 +105,7 @@ def read_vocab_file(file_path: Path) -> VocabList:
                                     )
                                 )
                             elif declension.startswith("3"):
-                                if (
-                                    len(latin_parts) == 4
-                                ):  # i.e. three principal parts
+                                if len(latin_parts) == 4:  # i.e. three principal parts
                                     vocab.append(
                                         accido.endings.Adjective(
                                             *latin_parts[:-1],
@@ -148,9 +116,7 @@ def read_vocab_file(file_path: Path) -> VocabList:
                                     )
                                 else:
                                     if not match(r"^.-.$", declension):
-                                        raise InvalidVocabFileFormat(
-                                            f"Invalid adjective declension: {declension}"
-                                        )
+                                        raise InvalidVocabFileFormat(f"Invalid adjective declension: {declension}")
                                     vocab.append(
                                         accido.endings.Adjective(
                                             *latin_parts[:-1],
@@ -160,22 +126,12 @@ def read_vocab_file(file_path: Path) -> VocabList:
                                         )
                                     )
                             else:
-                                raise InvalidVocabFileFormat(
-                                    f"Invalid adjective declension: {declension}"
-                                )
+                                raise InvalidVocabFileFormat(f"Invalid adjective declension: {declension}")
 
                         case "Regular":
-                            vocab.append(
-                                accido.endings.RegularWord(
-                                    latin_parts[0], meaning
-                                )
-                            )
+                            vocab.append(accido.endings.RegularWord(latin_parts[0], meaning))
                         case "Pronoun":
-                            vocab.append(
-                                accido.endings.Pronoun(
-                                    meaning=meaning, pronoun=latin_parts[0]
-                                )
-                            )
+                            vocab.append(accido.endings.Pronoun(meaning=meaning, pronoun=latin_parts[0]))
                         # case _:
                         #    raise InvalidVocabFileFormat(
                         #        f"Invalid word type: {current}"
