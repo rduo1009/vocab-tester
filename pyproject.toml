@@ -10,7 +10,6 @@ python = "^3.12"
 dill = "^0.3.8"
 nltk = "^3.8.1"
 lemminflect = "^0.2.3"
-spacy = "^3.7.5"
 frozendict = "^2.4.4"
 
 [tool.poetry.group.dev.dependencies]
