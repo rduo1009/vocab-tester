@@ -796,7 +796,7 @@ class Noun(_Word):
         self.meaning: Meaning = meaning
         self.plurale_tantum: bool = False
 
-        self._first = self.nominative
+        self._first: str = self.nominative
         self.declension: Literal[0, 1, 2, 3, 4, 5]
         self._stem: str
 
