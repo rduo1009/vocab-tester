@@ -1,13 +1,15 @@
 # fmt: off
 # mypy: ignore-errors
 
-import sys, os  # noqa: E401
+import os
+import sys  # noqa: E401
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 import pytest
+
+from python_src.accido.custom_exceptions import InvalidInputError, NoEndingError
 from python_src.accido.endings import LearningVerb
-from python_src.accido.custom_exceptions import NoEndingError, InvalidInputError
 
 
 # fmt: off

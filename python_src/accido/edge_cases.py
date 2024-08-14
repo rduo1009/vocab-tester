@@ -2,7 +2,7 @@
 Contains edge case endings.
 """
 
-from typing import Union, Final
+from typing import Final, Union
 
 from .misc import Endings, MultipleEndings
 
