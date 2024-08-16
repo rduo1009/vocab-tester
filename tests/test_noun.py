@@ -10,7 +10,7 @@ from types import SimpleNamespace
 
 import pytest
 
-from python_src.accido.custom_exceptions import InvalidInputError, NoEndingError # isort: skip
+from python_src.accido.custom_exceptions import InvalidInputError  # isort: skip
 from python_src.accido.endings import Noun
 
 
@@ -36,7 +36,7 @@ def test_errors4():
     assert "Case 'makinganerror' or number 'makinganerror' not recognised" == str(error.value)
 
 #def test_errors5():
-#    with pytest.raises(NoEndingError) as error:
+#    with pytest.raises() as error:
 #        word = Noun(nominative="puer", genitive="pueri", gender="masculine", meaning="boy")
 #        del word.endings["Nnomsg"]
 #        word.get(case="nominative", number="singular")
