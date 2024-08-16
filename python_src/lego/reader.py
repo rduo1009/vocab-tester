@@ -15,7 +15,7 @@ import dill as pickle
 import python_src as src
 
 from .. import accido
-from .custom_exceptions import InvalidVocabFileFormat, InvalidVocabDump
+from .custom_exceptions import InvalidVocabDump, InvalidVocabFileFormat
 from .misc import KEY, VocabList
 
 """Mapping of gender values to their more concise abbreviated forms."""

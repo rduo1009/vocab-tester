@@ -10,7 +10,7 @@ from types import SimpleNamespace
 
 import pytest
 
-from python_src.accido.custom_exceptions import InvalidInputError, NoEndingError # isort: skip
+from python_src.accido.custom_exceptions import InvalidInputError  # isort: skip
 from python_src.accido.edge_cases import PRONOUNS
 from python_src.accido.endings import Pronoun
 
@@ -27,7 +27,7 @@ def test_errors2():
     assert "Gender 'a', case 'b' or number 'c' not recognised" == str(error.value)
 
 #def test_errors3():
-#    with pytest.raises(NoEndingError) as error:
+#    with pytest.raises() as error:
 #        word = Pronoun(pronoun="hic", meaning="this")
 #        del word.endings["Pmnomsg"]
 #        word.get(gender="masculine", case="nominative", number="singular")

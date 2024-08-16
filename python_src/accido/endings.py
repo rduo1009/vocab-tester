@@ -11,7 +11,7 @@ from typing import Any, Final, Literal, Optional
 from frozendict import deepfreeze, frozendict
 
 from . import edge_cases
-from .custom_exceptions import InvalidInputError, NoEndingError
+from .custom_exceptions import InvalidInputError
 from .misc import Ending, Endings, Meaning, MultipleEndings, key_from_value
 
 """Mapping of number values to their more concise abbreviated forms."""
@@ -147,7 +147,7 @@ class _Word(ABC):
 
     # Force implementation of these methods
     @abstractmethod
-    def get(self, *args: Any, **kwargs: Any) -> Ending:
+    def get(self, *args: Any, **kwargs: Any) -> Ending | None:
         pass
 
     @staticmethod
@@ -607,10 +607,9 @@ class Verb(_Word):
         mood: str,
         participle_gender: Optional[str] = None,
         participle_case: Optional[str] = None,
-    ) -> Ending:
+    ) -> Ending | None:
         """Returns the ending of the verb.
-        The function raises an error if the ending cannot be found, as it
-        is intended for the method to always find an ending.
+        The function returns None if no ending is found.
 
         Parameters
         ----------
@@ -627,13 +626,15 @@ class Verb(_Word):
         -------
         Ending
             The ending found
+        None
+            If no ending is found
 
         Raises
         ------
         InvalidInputError
             If the inputs are not valid. Note that the inputs must be the
             full words, e.g. 'singular', 'plural', 'masculine', 'feminine'.
-        NoEndingError
+        
             If the ending cannot be found.
         
 
@@ -688,9 +689,7 @@ class Verb(_Word):
                     f"V{short_tense}{short_voice}ptc{short_gender}{short_case}{short_number}"
                 ]
             except KeyError:
-                raise NoEndingError(
-                    f"No ending found for {participle_case} {number} {participle_gender} {tense} {voice} participle"
-                )
+                return None
 
         try:
             short_tense = TENSE_SHORTHAND[tense]
@@ -713,9 +712,7 @@ class Verb(_Word):
                 f"V{short_tense}{short_voice}{short_mood}{short_number}{person}"
             ]
         except KeyError:
-            raise NoEndingError(
-                f"No ending found for {person} {number} {tense} {voice} {mood}"
-            )
+            return None
 
     @staticmethod
     def _create_namespace(key: str) -> EndingComponents:
@@ -964,10 +961,9 @@ class Noun(_Word):
 
         self.endings = deepfreeze(temp_endings)
 
-    def get(self, *, case: str, number: str) -> Ending:
+    def get(self, *, case: str, number: str) -> Ending | None:
         """Returns the ending of the noun.
-        The function raises an error if the ending cannot be found, as it
-        is intended for the method to always find an ending.
+        The function returns None if no ending is found.
 
         Parameters
         ----------
@@ -977,13 +973,13 @@ class Noun(_Word):
         -------
         Ending
             The ending found.
+        None
+            If no ending is found.
 
         Raises
         ------
         InvalidInputError
             If the input is invalid.
-        NoEndingError
-            If an ending cannot be found.
 
         Examples
         --------
@@ -1005,9 +1001,7 @@ class Noun(_Word):
         try:
             return self.endings[f"N{short_case}{short_number}"]
         except KeyError:
-            raise NoEndingError(
-                f"No ending found for case '{case}' and number '{number}'"
-            )
+            return None
 
     @staticmethod
     def _create_namespace(key: str) -> EndingComponents:
@@ -1768,10 +1762,9 @@ class Adjective(_Word):
         case: Optional[str] = None,
         number: Optional[str] = None,
         adverb: bool = False,
-    ) -> Ending:
+    ) -> Ending | None:
         """Returns the ending of the adjective.
-        The function raises an error if the ending cannot be found, as it
-        is intended for the method to always find an ending.
+        The function returns None if no ending is found.
 
         Parameters
         ----------
@@ -1786,13 +1779,13 @@ class Adjective(_Word):
         -------
         Ending
             The ending found.
+        None
+            If no ending is found.
 
         Raises
         ------
         InvalidInputError
             If the input is invalid.
-        NoEndingError
-            If an ending cannot be found.
         
         Examples
         --------
@@ -1819,7 +1812,7 @@ class Adjective(_Word):
             try:
                 return self.endings[f"D{short_degree}"]
             except KeyError:
-                raise NoEndingError(f"No ending found for degree '{degree}'")
+                return None
 
         try:
             short_degree = DEGREE_SHORTHAND[degree]
@@ -1837,9 +1830,7 @@ class Adjective(_Word):
                 f"A{short_degree}{short_gender}{short_case}{short_number}"
             ]
         except KeyError:
-            raise NoEndingError(
-                f"No ending found for degree '{degree}', gender '{gender}', case '{case}' and number '{number}'"
-            )
+            return None
 
     @staticmethod
     def _create_namespace(key: str) -> EndingComponents:
@@ -1917,10 +1908,9 @@ class Pronoun(_Word):
 
         self._endings = deepfreeze(self.endings)
 
-    def get(self, *, gender: str, case: str, number: str) -> Ending:
+    def get(self, *, gender: str, case: str, number: str) -> Ending | None:
         """Returns the ending of the pronoun.
-        The function raises an error if an ending cannot be found, as it
-        is intended for the method to always find an ending.
+        The function returns None if no ending is found.
 
         Parameters
         ----------
@@ -1930,12 +1920,14 @@ class Pronoun(_Word):
         -------
         Ending
             The ending found.
+        None
+            If no ending is found
 
         Raises
         ------
         InvalidInputError
             If the input is invalid.
-        NoEndingError
+        
             If an ending cannot be found.
         
         Examples
@@ -1959,9 +1951,7 @@ class Pronoun(_Word):
         try:
             return self.endings[f"P{short_gender}{short_case}{short_number}"]
         except KeyError:
-            raise NoEndingError(
-                f"No ending found for gender '{gender}', case '{case}' and number '{number}'"
-            )
+            return None
 
     @staticmethod
     def _create_namespace(key: str) -> EndingComponents:

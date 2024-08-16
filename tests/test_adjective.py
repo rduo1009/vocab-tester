@@ -10,7 +10,7 @@ from types import SimpleNamespace
 
 import pytest
 
-from python_src.accido.custom_exceptions import InvalidInputError, NoEndingError # isort: skip 
+from python_src.accido.custom_exceptions import InvalidInputError  # isort: skip 
 from python_src.accido.endings import Adjective
 
 
@@ -67,7 +67,7 @@ def test_errors10():
     assert "Degree 'adgsf' not recognised" == str(error.value)
 
 #def test_errors11():
-#    with pytest.raises(NoEndingError) as error:
+#    with pytest.raises() as error:
 #        word = Adjective("laetus", "laeta", "laetum", declension="212", meaning="happy")
 #        del word.endings["Dpos"]
 #        word.get(degree="positive", adverb=True)
@@ -80,7 +80,7 @@ def test_errors12():
     assert "Degree 'adgsf', gender 'masculine', case 'makinganerror' or number 'singular' not recognised" == str(error.value)
 
 #def test_errors13():
-#    with pytest.raises(NoEndingError) as error:
+#    with pytest.raises() as error:
 #        word = Adjective("laetus", "laeta", "laetum", declension="212", meaning="happy")
 #        del word.endings["Aposmnomsg"]
 #        word.get(case="nominative", gender="masculine", number="singular", degree="positive")
@@ -771,6 +771,5 @@ def test_irregularadverb4():
 
 def test_irregularadverb5():
     word = Adjective("magnus", "magna", "magnum", declension="212", meaning="big")
-    with pytest.raises(NoEndingError) as error:
-        word.get(degree="positive", adverb=True)
-    assert "No ending found for degree 'positive'" == str(error.value)
+    a = word.get(degree="positive", adverb=True)
+    assert a is None
