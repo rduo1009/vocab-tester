@@ -26,16 +26,11 @@ class TI_EngtoLat_Question(_Question):
     """
 
     english: str
-    answer: accido.misc.Ending
+    answers: list[str]
 
     def check(self, response: str, further_answers: list[str]) -> bool:
         """Check if the response is correct."""
-        if type(self.answer) is str:
-            return response == self.answer
-        elif type(self.answer) is accido.misc.MultipleEndings:
-            return response in self.answer.get_all()
-        else:
-            raise TypeError(f"Unknown type of answer: {type(self.answer)}")
+        return response in self.answers
 
 
 @dataclass
@@ -44,18 +39,11 @@ class TI_LattoEng_Question(_Question):
     For example, "quaero" (answer: "I search")"""
 
     latin: str
-    answer: accido.misc.Meaning
+    answers: list[str]
 
-    def check(self, response: str, further_answers: list[str]) -> bool:
+    def check(self, response: str) -> bool:
         """Check if the response is correct."""
-        if type(self.answer) is str:
-            return response == self.answer
-        elif type(self.answer) is accido.misc.MultipleMeanings:
-            return response in self.answer.meanings
-        elif self.answer in further_answers:
-            return True
-        else:
-            raise TypeError(f"Unknown type of answer: {type(self.answer)}")
+        return response in self.answers
 
 
 @dataclass
@@ -68,10 +56,10 @@ class PW_ComptoLat_Question(_Question):
 
     latin: str
     components: accido.endings.EndingComponents
-    answer: str
+    answers: list[str]
 
     def check(self, response: str) -> bool:
-        return response == self.answer
+        return response in self.answers
 
 
 @dataclass
@@ -84,7 +72,7 @@ class PW_LattoComp_Question(_Question):
 
     dictionary_entry: str
     latin: str
-    answer: accido.endings.EndingComponents
+    answers: list[accido.endings.EndingComponents]
 
     def check(self, response: accido.endings.EndingComponents) -> bool:
-        return response == self.answer
+        return response in self.answers

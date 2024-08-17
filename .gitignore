@@ -8,3 +8,4 @@ timing_*.py
 /.vscode
 testdump/
 *.so
+monkeytype.sqlite3
