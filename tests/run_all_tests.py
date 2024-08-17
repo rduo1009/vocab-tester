@@ -1,6 +1,6 @@
+import importlib
 import os
 import sys
-import importlib
 
 if __name__ == "__main__":
     sys.path.insert(
