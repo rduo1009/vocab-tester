@@ -1,6 +1,9 @@
+import importlib
 import os
 import sys
-import importlib
+import warnings
+
+warnings.filterwarnings("ignore")
 
 if __name__ == "__main__":
     sys.path.insert(
@@ -14,10 +17,14 @@ if __name__ == "__main__":
             if filename.startswith("test_") and filename.endswith(".py"):
                 if dirpath not in sys.path:
                     sys.path.append(dirpath)
+
                 module_name = filename[:-3]
                 module = importlib.import_module(module_name)
+
                 for attr_name in dir(module):
                     if attr_name.startswith("test_"):
                         test_func = getattr(module, attr_name)
+
                         if callable(test_func):
+                            print(f"Running {test_func.__name__}...")
                             test_func()
