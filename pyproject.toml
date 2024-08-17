@@ -17,6 +17,7 @@ icecream = "*"
 mypy = "*"
 ruff = "*"
 pytest = "*"
+monkeytype = "^23.3.0"
 
 [build-system]
 requires = ["poetry-core"]
