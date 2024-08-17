@@ -4,9 +4,10 @@ version = "0.1.0"
 description = "An application that tests Latin vocabulary and grammar."
 authors = ["rduo1009 <robertduong09alt@gmail.com>"]
 readme = "README.md"
+packages = [{ include = "python_src" }]
 
 [tool.poetry.dependencies]
-python = "^3.12"
+python = "^3.12.5"
 dill = "^0.3.8"
 nltk = "^3.8.1"
 lemminflect = "^0.2.3"
@@ -19,6 +20,9 @@ mypy = "*"
 ruff = "*"
 pytest = "*"
 monkeytype = "^23.3.0"
+coverage = "^7.6.1"
+pytest-cov = "^5.0.0"
+pytest-sugar = "^1.0.0"
 
 [build-system]
 requires = ["poetry-core"]
