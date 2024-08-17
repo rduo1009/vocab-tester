@@ -5,7 +5,7 @@
 import os
 import sys  # noqa: E401
 
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
 import pytest
 from pathlib import Path
@@ -16,7 +16,7 @@ from python_src.lego.custom_exceptions import InvalidVocabFileFormat
 from io import StringIO
 
 def test_reader():
-    l = read_vocab_file(Path("tests/test_vocab_files/regular_list.txt"))
+    l = read_vocab_file(Path("tests/python_src.lego/test_vocab_files/regular_list.txt"))
     assert l == VocabList([
         Verb(present="audio", infinitive="audire", perfect="audivi", ppp="auditus", meaning="hear"),
         Verb(present="capio", infinitive="capire", perfect="capivi", meaning="take"),
@@ -35,11 +35,11 @@ def test_reader():
     ])
 
 def test_regenerate():
-    l = read_vocab_file(Path("tests/test_vocab_files/regular_list.txt"))
+    l = read_vocab_file(Path("tests/python_src.lego/test_vocab_files/regular_list.txt"))
     assert l == _regenerate_vocab_list(l)
 
 def test_reader_with_s():
-    l = read_vocab_file(Path("tests/test_vocab_files/regular_with_s_list.txt"))
+    l = read_vocab_file(Path("tests/python_src.lego/test_vocab_files/regular_with_s_list.txt"))
     assert l == VocabList([
         Verb(present="audio", infinitive="audire", perfect="audivi", ppp="auditus", meaning="hear"),
         Verb(present="capio", infinitive="capire", perfect="capivi", meaning="take"),
@@ -58,7 +58,7 @@ def test_reader_with_s():
     ])
 
 def test_multiple_meanings():
-    l = read_vocab_file(Path("tests/test_vocab_files/multiple_meanings_list.txt"))
+    l = read_vocab_file(Path("tests/python_src.lego/test_vocab_files/multiple_meanings_list.txt"))
     assert l == VocabList([
         Verb(present="peto", infinitive="petere", perfect="petivi", ppp="petitus", meaning=MultipleMeanings(["attack", "make for", "seek", "ask"])),
         Noun(nominative="ancilla", genitive="ancillae", gender="feminine", meaning=MultipleMeanings(["slave-girl", "maid"])),
@@ -66,45 +66,45 @@ def test_multiple_meanings():
 
 def test_invalidpos():
     with pytest.raises(InvalidVocabFileFormat) as error:
-        l = read_vocab_file(Path("tests/test_vocab_files/invalid_pos_list.txt"))
+        l = read_vocab_file(Path("tests/python_src.lego/test_vocab_files/invalid_pos_list.txt"))
     assert "Invalid part of speech: Error"==str(error.value)
 
 def test_invalidlinefmt():
     with pytest.raises(InvalidVocabFileFormat) as error:
-        l = read_vocab_file(Path("tests/test_vocab_files/invalid_linefmt_list.txt"))
+        l = read_vocab_file(Path("tests/python_src.lego/test_vocab_files/invalid_linefmt_list.txt"))
     assert "Invalid line format: error: error: error"==str(error.value)
 
 def test_nopos():
     with pytest.raises(InvalidVocabFileFormat) as error:
-        l = read_vocab_file(Path("tests/test_vocab_files/no_pos_list.txt"))
+        l = read_vocab_file(Path("tests/python_src.lego/test_vocab_files/no_pos_list.txt"))
     assert "Part of speech was not given"==str(error.value)
 
 def test_invalidverbfmt():
     with pytest.raises(InvalidVocabFileFormat) as error:
-        l = read_vocab_file(Path("tests/test_vocab_files/invalid_verbfmt_list.txt"))
+        l = read_vocab_file(Path("tests/python_src.lego/test_vocab_files/invalid_verbfmt_list.txt"))
     assert "Invalid verb format: hear: audio, audire, audivi, auditus, error, error, error"==str(error.value)
 
 def test_invalidnounfmt():
     with pytest.raises(InvalidVocabFileFormat) as error:
-        l = read_vocab_file(Path("tests/test_vocab_files/invalid_nounfmt_list.txt"))
+        l = read_vocab_file(Path("tests/python_src.lego/test_vocab_files/invalid_nounfmt_list.txt"))
     assert "Invalid noun format: dog: canis, canis, error, error"==str(error.value)
 
 def test_invalidgender():
     with pytest.raises(InvalidVocabFileFormat) as error:
-        l = read_vocab_file(Path("tests/test_vocab_files/invalid_gender_list.txt"))
+        l = read_vocab_file(Path("tests/python_src.lego/test_vocab_files/invalid_gender_list.txt"))
     assert "Invalid gender: l"==str(error.value)
 
 def test_invalidadjfmt():
     with pytest.raises(InvalidVocabFileFormat) as error:
-        l = read_vocab_file(Path("tests/test_vocab_files/invalid_adjfmt_list.txt"))
+        l = read_vocab_file(Path("tests/python_src.lego/test_vocab_files/invalid_adjfmt_list.txt"))
     assert "Invalid adjective format: good: bonus, bona, bonum, error, error"==str(error.value)
 
 def test_decl1():
     with pytest.raises(InvalidVocabFileFormat) as error:
-        l = read_vocab_file(Path("tests/test_vocab_files/invalid_decl1_list.txt"))
+        l = read_vocab_file(Path("tests/python_src.lego/test_vocab_files/invalid_decl1_list.txt"))
     assert "Invalid adjective declension: 3"==str(error.value)
 
 def test_decl2():
     with pytest.raises(InvalidVocabFileFormat) as error:
-        l = read_vocab_file(Path("tests/test_vocab_files/invalid_decl2_list.txt"))
+        l = read_vocab_file(Path("tests/python_src.lego/test_vocab_files/invalid_decl2_list.txt"))
     assert "Invalid adjective declension: 4"==str(error.value)
