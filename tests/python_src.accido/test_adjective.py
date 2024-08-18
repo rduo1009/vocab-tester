@@ -66,12 +66,12 @@ def test_errors10():
         word.get(degree="adgsf", adverb=True)
     assert "Degree 'adgsf' not recognised" == str(error.value)
 
-#def test_errors11():
-#    with pytest.raises() as error:
-#        word = Adjective("laetus", "laeta", "laetum", declension="212", meaning="happy")
-#        del word.endings["Dpos"]
-#        word.get(degree="positive", adverb=True)
-#    assert "No ending found for degree 'positive'" == str(error.value)
+# def test_errors11():
+#     with pytest.raises() as error:
+#         word = Adjective("laetus", "laeta", "laetum", declension="212", meaning="happy")
+#         del word.endings["Dpos"]
+#         word.get(degree="positive", adverb=True)
+#     assert "No ending found for degree 'positive'" == str(error.value)
 
 def test_errors12():
     with pytest.raises(InvalidInputError) as error:
@@ -79,12 +79,12 @@ def test_errors12():
         word.get(case="makinganerror", gender="masculine", number="singular", degree="adgsf")
     assert "Degree 'adgsf', gender 'masculine', case 'makinganerror' or number 'singular' not recognised" == str(error.value)
 
-#def test_errors13():
-#    with pytest.raises() as error:
-#        word = Adjective("laetus", "laeta", "laetum", declension="212", meaning="happy")
-#        del word.endings["Aposmnomsg"]
-#        word.get(case="nominative", gender="masculine", number="singular", degree="positive")
-#    assert "No ending found for degree 'positive', gender 'masculine', case 'nominative' and number 'singular'" == str(error.value)
+# def test_errors13():
+#     with pytest.raises() as error:
+#         word = Adjective("laetus", "laeta", "laetum", declension="212", meaning="happy")
+#         del word.endings["Aposmnomsg"]
+#         word.get(case="nominative", gender="masculine", number="singular", degree="positive")
+#     assert "No ending found for degree 'positive', gender 'masculine', case 'nominative' and number 'singular'" == str(error.value)
 
 def test_repr():
     word = Adjective("laetus", "laeta", "laetum", declension="212", meaning="happy")

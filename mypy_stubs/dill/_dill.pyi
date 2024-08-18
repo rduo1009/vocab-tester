@@ -1,81 +1,167 @@
-# From https://ucsc-ci.com/databiosphere/toil/-/tree/79792b70098c4c18d1d2c2832b72085893f878d1/contrib/mypy-stubs/dill
+import typing
+from pickle import (
+    DEFAULT_PROTOCOL as DEFAULT_PROTOCOL,
+)
+from pickle import (
+    HIGHEST_PROTOCOL as HIGHEST_PROTOCOL,
+)
+from pickle import (
+    PickleError as PickleError,
+)
+from pickle import (
+    PicklingError as PicklingError,
+)
+from pickle import (
+    Unpickler as StockUnpickler,
+)
+from pickle import (
+    UnpicklingError as UnpicklingError,
+)
+from pickle import (
+    _Pickler as StockPickler,
+)
+from typing import Any, Callable
 
-import sys
-from typing import IO, Any, Callable, Iterable, Protocol, Union
+from _typeshed import Incomplete
 
-from _typeshed import ReadableBuffer
-from typing_extensions import TypeAlias, final
+from .logger import adapter as logger
 
-class _ReadableFileobj(Protocol):
-    def read(self, __n: int) -> bytes: ...
-    def readline(self) -> bytes: ...
+__all__ = [
+    "dump",
+    "dumps",
+    "load",
+    "loads",
+    "copy",
+    "Pickler",
+    "Unpickler",
+    "register",
+    "pickle",
+    "pickles",
+    "check",
+    "DEFAULT_PROTOCOL",
+    "HIGHEST_PROTOCOL",
+    "HANDLE_FMODE",
+    "CONTENTS_FMODE",
+    "FILE_FMODE",
+    "PickleError",
+    "PickleWarning",
+    "PicklingError",
+    "PicklingWarning",
+    "UnpicklingError",
+    "UnpicklingWarning",
+]
 
-class _WritableFileobj(Protocol):
-    def write(self, __b: bytes) -> Any: ...
+log = logger
+BufferType = memoryview
+ClassType = type
+SliceType = slice
+TypeType = type
+XRangeType = range
+try:
+    IS_IPYTHON = __IPYTHON__  # type: ignore
+except NameError:
+    IS_IPYTHON = False
 
-if sys.version_info >= (3, 8):
-    @final
-    class PickleBuffer:
-        def __init__(self, buffer: ReadableBuffer) -> None: ...
-        def raw(self) -> memoryview: ...
-        def release(self) -> None: ...
-
-    _BufferCallback: TypeAlias = Callable[[PickleBuffer], Any] | None
-
-    def dump(
-        obj: Any,
-        file: _WritableFileobj,
-        protocol: int | None = ...,
-        *,
-        fix_imports: bool = ...,
-        buffer_callback: _BufferCallback = ...,
+class Sentinel:
+    name: str
+    __module__: Incomplete
+    def __init__(
+        self, name: str, module_name: Incomplete | None = None
     ) -> None: ...
-    def dumps(
-        obj: Any,
-        protocol: int | None = ...,
-        *,
-        fix_imports: bool = ...,
-        buffer_callback: _BufferCallback = ...,
-    ) -> bytes: ...
-    def load(
-        file: _ReadableFileobj,
-        *,
-        fix_imports: bool = ...,
-        encoding: str = ...,
-        errors: str = ...,
-        buffers: Iterable[Any] | None = ...,
-    ) -> Any: ...
-    def loads(
-        __data: ReadableBuffer,
-        *,
-        fix_imports: bool = ...,
-        encoding: str = ...,
-        errors: str = ...,
-        buffers: Iterable[Any] | None = ...,
-    ) -> Any: ...
+    def __copy__(self) -> "Sentinel": ...
+    def __deepcopy__(self, memo: Incomplete) -> "Sentinel": ...
+    def __reduce__(self) -> str: ...
+    def __reduce_ex__(self, protocol: Incomplete) -> str: ...
 
-else:
-    def dump(
-        obj: Any,
-        file: _WritableFileobj,
-        protocol: int | None = ...,
-        *,
-        fix_imports: bool = ...,
+HANDLE_FMODE: int
+CONTENTS_FMODE: int
+FILE_FMODE: int
+
+def copy(obj: object, *args: Any, **kwds: Any) -> Incomplete: ...
+def dump(
+    obj: object,
+    file: Incomplete,
+    protocol: Incomplete | None = None,
+    byref: Incomplete | None = None,
+    fmode: Incomplete | None = None,
+    recurse: Incomplete | None = None,
+    **kwds: Incomplete,
+) -> None: ...
+def dumps(
+    obj: object,
+    protocol: Incomplete | None = None,
+    byref: Incomplete | None = None,
+    fmode: Incomplete | None = None,
+    recurse: Incomplete | None = None,
+    **kwds: Incomplete,
+) -> Incomplete: ...
+def load(
+    file: Incomplete, ignore: Incomplete | None = None, **kwds: Any
+) -> Unpickler: ...
+def loads(
+    str: str | bytes, ignore: Incomplete | None = None, **kwds: Any
+) -> Unpickler: ...
+
+class MetaCatchingDict(dict):  # type: ignore
+    def get(
+        self, key: Incomplete, default: Incomplete | None = None
+    ) -> Incomplete: ...
+    def __missing__(self, key: Incomplete) -> Incomplete: ...
+
+class PickleWarning(Warning, PickleError): ...
+class PicklingWarning(PickleWarning, PicklingError): ...
+class UnpicklingWarning(PickleWarning, UnpicklingError): ...
+
+class Pickler(StockPickler):
+    dispatch: dict[type, Callable[[Pickler, typing.Any], None]]  # type: ignore
+    settings: dict[str, Any]
+    def __init__(
+        self, file: Incomplete, *args: Incomplete, **kwds: Incomplete
     ) -> None: ...
-    def dumps(
-        obj: Any, protocol: int | None = ..., *, fix_imports: bool = ...
-    ) -> bytes: ...
-    def load(
-        file: _ReadableFileobj,
-        *,
-        fix_imports: bool = ...,
-        encoding: str = ...,
-        errors: str = ...,
-    ) -> Any: ...
-    def loads(
-        data: ReadableBuffer,
-        *,
-        fix_imports: bool = ...,
-        encoding: str = ...,
-        errors: str = ...,
-    ) -> Any: ...
+    def save(
+        self, obj: Incomplete, save_persistent_id: bool = True
+    ) -> None: ...
+    def dump(self, obj: Incomplete) -> None: ...
+
+class Unpickler(StockUnpickler):
+    settings: dict[str, Any]
+    def find_class(
+        self, module: Incomplete, name: Incomplete
+    ) -> Incomplete: ...
+    def __init__(self, *args: Incomplete, **kwds: Incomplete) -> None: ...
+    def load(self) -> Incomplete: ...
+
+def pickle(t: Incomplete, func: Incomplete) -> None: ...
+def register(t: Incomplete) -> Callable: ...  # type: ignore
+
+class match:
+    value: Incomplete
+    def __init__(self, value: Incomplete) -> None: ...
+    def __enter__(self) -> "match": ...
+    def __exit__(self, *exc_info: Incomplete) -> bool: ...
+    args: Incomplete
+    def case(self, args: Any) -> bool: ...
+    @property
+    def fields(self) -> dict: ...  # type: ignore
+    def __getattr__(self, item: Any) -> Any: ...
+
+CODE_VERSION: tuple[int, ...]
+
+# class _itemgetter_helper:
+#     items: Incomplete
+#     def __init__(self) -> None: ...
+#     def __getitem__(self, item) -> None: ...
+#
+# class _attrgetter_helper:
+#     attrs: Incomplete
+#     index: Incomplete
+#     def __init__(self, attrs, index: Incomplete | None = None) -> None: ...
+#     def __getattribute__(self, attr): ...
+#
+# class _dictproxy_helper(dict):
+#     def __ror__(self, a): ...
+
+def pickles(
+    obj: object, exact: bool = False, safe: bool = False, **kwds: Any
+) -> bool | Incomplete: ...
+def check(obj: object, *args: Any, **kwds: Any) -> None: ...
