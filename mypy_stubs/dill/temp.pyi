@@ -1,3 +1,8 @@
+from __future__ import annotations
+
+from io import StringIO
+from typing import IO, Any, Iterator
+
 __all__ = [
     "dump_source",
     "dump",
@@ -9,9 +14,6 @@ __all__ = [
     "loadIO",
     "capture",
 ]
-
-from io import StringIO
-from typing import IO, Any, Iterator
 
 def capture(stream: str = ...) -> Iterator[StringIO]: ...
 def load_source(file: str, **kwds: Any) -> Any: ...

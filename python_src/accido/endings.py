@@ -3,6 +3,8 @@
 
 """Representations of Latin words with their endings calculated."""
 
+from __future__ import annotations
+
 from abc import ABC, abstractmethod
 from functools import total_ordering
 from types import SimpleNamespace

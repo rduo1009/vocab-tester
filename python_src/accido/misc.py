@@ -3,6 +3,9 @@
 
 """Contains miscellaneous functions and classes used by accido."""
 
+from __future__ import annotations
+
+import sys
 from dataclasses import dataclass
 from typing import Any
 
@@ -35,7 +38,7 @@ class MultipleMeanings:
         return self.main_meaning
 
     def __repr__(self) -> str:
-        return f"MultipleMeanings({",".join(self.meanings)})"
+        return f"MultipleMeanings({','.join(self.meanings)})"
 
     def __post_init__(self) -> None:
         """If other_meanings is a string, convert it to a list."""
@@ -111,7 +114,15 @@ def key_from_value(
     return next((key for key, val in dd.items() if val == value), None)
 
 
-# Type annotation support
-type Ending = str | MultipleEndings
-type Endings = frozendict[str, Ending]
-type Meaning = str | MultipleMeanings
+if sys.version_info >= (3, 12):
+    from .type_hints import Ending as Ending
+    from .type_hints import Endings as Endings
+    from .type_hints import Meaning as Meaning
+
+else:
+    # The type statement was added in 3.12, so TypeAlias is used instead
+    from typing import TypeAlias
+
+    Ending: TypeAlias = str | MultipleEndings
+    Endings: TypeAlias = frozendict[str, Ending]
+    Meaning: TypeAlias = str | MultipleMeanings
