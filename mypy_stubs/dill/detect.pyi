@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from typing import Callable, Dict, MappingView, Type
 
 from _typeshed import Incomplete

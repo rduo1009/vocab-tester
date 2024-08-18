@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import typing
 from pickle import (
     DEFAULT_PROTOCOL as DEFAULT_PROTOCOL,
