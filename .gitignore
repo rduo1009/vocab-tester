@@ -9,3 +9,5 @@ timing_*.py
 testdump/
 *.so
 monkeytype.sqlite3
+.tox
+.coverage
