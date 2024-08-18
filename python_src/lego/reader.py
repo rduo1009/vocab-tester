@@ -5,6 +5,7 @@
 
 import hashlib as hl
 import hmac
+import warnings
 from io import TextIOWrapper
 from pathlib import Path
 from re import match
@@ -352,6 +353,9 @@ def read_vocab_dump(filename: Path) -> VocabList:
         if output.version == src.__version__:
             return output
         else:
+            warnings.warn(
+                "Vocab dump is from a different version of vocab-tester."
+            )
             return _regenerate_vocab_list(output)
 
     raise InvalidVocabDump("Vocab dump is not valid.")
