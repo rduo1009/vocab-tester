@@ -47,15 +47,15 @@ class Card:
     last_review: datetime
     def __init__(
         self,
-        due: datetime,
-        stability: int,
-        difficulty: int,
-        elapsed_days: int,
-        scheduled_days: int,
-        reps: int,
-        lapses: int,
-        state: State,
-        last_review: datetime,
+        due: datetime | None = None,
+        stability: int = 0,
+        difficulty: int = 0,
+        elapsed_days: int = 0,
+        scheduled_days: int = 0,
+        reps: int = 0,
+        lapses: int = 0,
+        state: State = State.New,
+        last_review: datetime | None = None,
     ) -> None: ...
     def to_dict(self) -> dict[str, Any]: ...
     @staticmethod
