@@ -1,5 +1,3 @@
-dill.__diff
-dill._objects
 dill.tests
 dill.tests.__main__
 dill.tests.test_abc
