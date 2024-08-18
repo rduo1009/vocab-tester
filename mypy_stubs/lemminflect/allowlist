@@ -1,0 +1,7 @@
+lemminflect.core.Inflections.Inflections
+lemminflect.core.Inflections.Inflections.spacyGetInfl
+lemminflect.core.Lemmatizer.Lemmatizer
+lemminflect.core.Lemmatizer.Lemmatizer.spacyGetLemma
+lemminflect.kmodels.KInfer.KInferWithKeras
+lemminflect.kmodels.KInfer.KInferWithNumpy
+lemminflect.utils.Singleton.Singleton

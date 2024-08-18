@@ -5,5 +5,10 @@ from typing import Any
 from numpy import ndarray
 
 class ModelInflInData:
+    MAX_LETTER_IDX: int
+    WVEC_LEN: int
+    def __init__(self, fn: str): ...
     @classmethod
     def wordToVec(cls, word: str, category: str) -> ndarray[Any, Any]: ...
+    @staticmethod
+    def getLetterClasses() -> list[str]: ...

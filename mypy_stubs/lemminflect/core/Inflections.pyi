@@ -8,9 +8,12 @@ from typing import (
 
 from lemminflect.core.InflectionRules import MorphologyStyleModel
 
+from ..utils.Singleton import _Singleton
+
 # from spacy.tokens.token import Token
 
-class Inflections:
+class Inflections(_Singleton):
+    DICT_UPOS_TYPES: list[str]
     def __init__(self, infl_lu_fn: str = ..., overrides_fn: str = ...): ...
     @staticmethod
     def _extractForm(
@@ -42,3 +45,4 @@ class Inflections:
     #    inflect_oov: bool = ...,
     #    on_empty_ret_word: bool = ...,
     # ) -> str: ...
+    def isUsingInternalLemmatizer(self) -> bool: ...

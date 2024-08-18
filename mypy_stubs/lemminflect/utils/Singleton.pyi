@@ -7,3 +7,6 @@ class _Singleton:
     def __call__(
         cls: object, *args: list[Any], **kwargs: list[Any]
     ) -> Union[Inflections, Lemmatizer]: ...
+
+class Singleton(_Singleton):
+    pass

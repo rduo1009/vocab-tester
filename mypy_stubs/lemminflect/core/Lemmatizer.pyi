@@ -8,9 +8,12 @@ from typing import (
 
 from lemminflect.core.LemmatizerRules import LemmatizerRules
 
+from ..utils.Singleton import _Singleton
+
 # from spacy.tokens.token import Token
 
-class Lemmatizer:
+class Lemmatizer(_Singleton):
+    DICT_UPOS_TYPES: list[str]
     def __init__(self, lemma_lu_fn: str = ..., overrides_fn: str = ...): ...
     def _getLemmaDict(
         self,

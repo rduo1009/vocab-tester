@@ -7,6 +7,8 @@ from typing import (
 )
 
 class InflectionLUCodec:
+    penn_dict: dict[str, list[str]]
+    slex_dict: dict[str, list[str]]
     @classmethod
     def fromString(cls, line: str) -> Any: ...
     @classmethod
@@ -29,3 +31,10 @@ class InflectionLUCodec:
         str,
         Dict[str, Tuple[str, ...]],
     ]: ...
+    @classmethod
+    def toString(
+        cls: object,
+        word: str,
+        category: str,
+        forms_dict: dict[str, str],
+    ) -> str: ...
