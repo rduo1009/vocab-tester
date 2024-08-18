@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from ._dill import _locate_object as at  # type: ignore
 from ._dill import _proxy_helper as reference  # type: ignore
 

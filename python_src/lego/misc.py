@@ -3,6 +3,8 @@
 
 """Contains miscellaneous constants and classes used by lego."""
 
+from __future__ import annotations
+
 import ctypes as ct
 from dataclasses import dataclass
 from typing import Final

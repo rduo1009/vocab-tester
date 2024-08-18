@@ -3,6 +3,8 @@
 
 """Contains a function for saving vocabulary files."""
 
+from __future__ import annotations
+
 import hashlib as hl
 import hmac
 from pathlib import Path

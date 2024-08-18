@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from _typeshed import Incomplete
 from version import __version__ as __version__  # type: ignore
 

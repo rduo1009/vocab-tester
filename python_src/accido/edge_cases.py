@@ -3,6 +3,8 @@
 
 """Contains edge case endings."""
 
+from __future__ import annotations
+
 from typing import Final
 
 from frozendict import deepfreeze, frozendict

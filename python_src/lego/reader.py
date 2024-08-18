@@ -3,6 +3,8 @@
 
 """Contains functions for reading vocabulary files."""
 
+from __future__ import annotations
+
 import hashlib as hl
 import hmac
 import warnings
@@ -184,7 +186,7 @@ def read_vocab_file(file_path: Path) -> VocabList:
                                 )
                             except KeyError:
                                 raise InvalidVocabFileFormat(
-                                    f"Invalid gender: {latin_parts[2].split()[-1].strip("()")}"
+                                    f"Invalid gender: {latin_parts[2].split()[-1].strip('()')}"
                                 )
 
                         case "Adjective":
