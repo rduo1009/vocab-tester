@@ -684,12 +684,9 @@ class Verb(_Word):
                     f"Participle cannot have a person (person '{person}')"
                 )
 
-            try:
-                return self.endings[
-                    f"V{short_tense}{short_voice}ptc{short_gender}{short_case}{short_number}"
-                ]
-            except KeyError:
-                return None
+            return self.endings.get(
+                f"V{short_tense}{short_voice}ptc{short_gender}{short_case}{short_number}"
+            )
 
         try:
             short_tense = TENSE_SHORTHAND[tense]
@@ -998,10 +995,7 @@ class Noun(_Word):
                 f"Case '{case}' or number '{number}' not recognised"
             )
 
-        try:
-            return self.endings[f"N{short_case}{short_number}"]
-        except KeyError:
-            return None
+        return self.endings.get(f"N{short_case}{short_number}")
 
     @staticmethod
     def _create_namespace(key: str) -> EndingComponents:
@@ -1809,10 +1803,7 @@ class Adjective(_Word):
             except KeyError:
                 raise InvalidInputError(f"Degree '{degree}' not recognised")
 
-            try:
-                return self.endings[f"D{short_degree}"]
-            except KeyError:
-                return None
+            return self.endings.get(f"D{short_degree}")
 
         try:
             short_degree = DEGREE_SHORTHAND[degree]
@@ -1948,10 +1939,7 @@ class Pronoun(_Word):
                 f"Gender '{gender}', case '{case}' or number '{number}' not recognised"
             )
 
-        try:
-            return self.endings[f"P{short_gender}{short_case}{short_number}"]
-        except KeyError:
-            return None
+        return self.endings.get(f"P{short_gender}{short_case}{short_number}")
 
     @staticmethod
     def _create_namespace(key: str) -> EndingComponents:
