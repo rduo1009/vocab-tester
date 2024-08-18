@@ -12,8 +12,12 @@ class _class2:
     def __call__(self) -> None: ...
 
 class _newclass: ...
-class _newclass2: ...
-class _Struct(ctypes.Structure): ...
+
+class _newclass2:
+    descriptor: Incomplete
+
+class _Struct(ctypes.Structure):
+    next: Incomplete
 
 registered: Incomplete
 
