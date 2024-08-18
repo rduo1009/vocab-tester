@@ -44,19 +44,19 @@ def test_errors5():
         word.get(tense="present", voice="active", mood="participle", participle_case="nominative", participle_gender="masculine")
     assert "Number not given" == str(error.value)
 
-#def test_errors6():
-#    with pytest.raises() as error:
-#        word = Verb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
-#        del word.endings["Vperpasptcmnomsg"]
-#        word.get(tense="perfect", voice="passive", mood="participle", participle_case="nominative", participle_gender="masculine", number="singular")
-#    assert "No ending found for nominative singular masculine perfect passive participle" == str(error.value)
+# def test_errors6():
+#     with pytest.raises() as error:
+#         word = Verb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
+#         del word.endings["Vperpasptcmnomsg"]
+#         word.get(tense="perfect", voice="passive", mood="participle", participle_case="nominative", participle_gender="masculine", number="singular")
+#     assert "No ending found for nominative singular masculine perfect passive participle" == str(error.value)
 
-#def test_errors7():
-#    with pytest.raises() as error:
-#        word = Verb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
-#        del word.endings["Vperactindsg3"]
-#        word.get(tense="perfect", voice="active", mood="indicative", person=3, number="singular")
-#    assert "No ending found for 3 singular perfect active indicative" == str(error.value)
+# def test_errors7():
+#     with pytest.raises() as error:
+#         word = Verb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
+#         del word.endings["Vperactindsg3"]
+#         word.get(tense="perfect", voice="active", mood="indicative", person=3, number="singular")
+#     assert "No ending found for 3 singular perfect active indicative" == str(error.value)
 
 
 def test_repr():
@@ -80,9 +80,9 @@ def test_find():
     word = Verb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
     assert word.find("celabam")[0].string == "imperfect active indicative singular 1st person"
 
-#def test_pick():
-#    word = Verb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
-#    word.pick()
+# def test_pick():
+#     word = Verb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
+#     word.pick()
 
 
 def test_firstconjugation():

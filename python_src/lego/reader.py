@@ -235,9 +235,9 @@ def read_vocab_file(file_path: Path) -> VocabList:
                             )
 
                         # case _:
-                        #    raise InvalidVocabFileFormat(
-                        #        f"Invalid word type: {current}"
-                        #    )
+                        #     raise InvalidVocabFileFormat(
+                        #         f"Invalid word type: {current}"
+                        #     )
 
     return VocabList(vocab)
 

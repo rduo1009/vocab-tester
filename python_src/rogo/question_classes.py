@@ -7,7 +7,6 @@ from dataclasses import dataclass
 
 from .. import accido
 
-
 # TI = type-in
 # MC = multiple choice
 # PW = parse word
