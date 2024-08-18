@@ -1,6 +1,9 @@
 import importlib
 import os
 import sys
+import warnings
+
+warnings.filterwarnings("ignore")
 
 if __name__ == "__main__":
     sys.path.insert(
