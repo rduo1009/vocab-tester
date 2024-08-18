@@ -11,3 +11,4 @@ testdump/
 monkeytype.sqlite3
 .tox
 .coverage
+/dist
