@@ -12,3 +12,4 @@ monkeytype.sqlite3
 .coverage
 .tox
 /dist
+poetry.lock
