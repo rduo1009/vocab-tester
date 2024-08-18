@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "vocab-tester"
-version = "0.3"
+version = "0.3-dev"
 description = "An application that tests Latin vocabulary and grammar."
 authors = ["rduo1009 <robertduong09alt@gmail.com>"]
 readme = "README.md"
@@ -8,7 +8,7 @@ packages = [{ include = "python_src" }]
 
 [tool.poetry.dependencies]
 python = "^3.10"
-dill = "^0.3.8"
+dill = "^0.3-dev.8"
 nltk = "^3.8.1"
 lemminflect = "^0.2.3"
 frozendict = "^2.4.4"
