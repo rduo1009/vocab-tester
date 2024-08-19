@@ -111,7 +111,7 @@ class MultipleMeanings:
         return f"MultipleMeanings({', '.join(self.meanings)})"
 
 
-class MultipleEndings:
+class MultipleEndings(SimpleNamespace):
     """Represents multiple endings for a word, where each ending is a
     separate string.
     The fact that the attribute names can be customises means that this
@@ -126,10 +126,6 @@ class MultipleEndings:
 
     etc.
     """
-
-    def __init__(self, **kwargs: str) -> None:
-        for key, value in kwargs.items():
-            setattr(self, key, value)
 
     def get_all(self) -> list[str]:
         """Returns a list of all the possible endings.
