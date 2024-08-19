@@ -45,3 +45,7 @@ warn_return_any = true
 warn_unreachable = true
 strict_equality = true
 mypy_path = "mypy_stubs"
+exclude = 'tests/.*'
+
+[tool.coverage.run]
+omit = ["tests/*"]
