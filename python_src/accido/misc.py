@@ -92,11 +92,8 @@ class MultipleMeanings:
 
     Attributes
     ----------
-    raw_meanings : list[str]
-    meanings : set[str]
+    meanings : list[str]
         The meanings.
-    main_meaning : str
-        The main meaning.
 
     Notes
     -----
@@ -105,18 +102,13 @@ class MultipleMeanings:
     can be accepted, but not vice versa.
     """
 
-    raw_meanings: list[str]
+    meanings: list[str]
 
     def __str__(self) -> str:
-        return self.main_meaning
+        return self.meanings[0]
 
     def __repr__(self) -> str:
-        return f"MultipleMeanings({', '.join(self.raw_meanings)})"
-
-    def __post_init__(self) -> None:
-        """If other_meanings is a string, convert it to a list."""
-        self.main_meaning: str = self.raw_meanings[0]
-        self.meanings: set[str] = set(self.raw_meanings)
+        return f"MultipleMeanings({', '.join(self.meanings)})"
 
 
 class MultipleEndings:
