@@ -10,73 +10,71 @@ from functools import total_ordering
 from types import SimpleNamespace
 from typing import Any, Final, Literal, Optional
 
-from frozendict import deepfreeze, frozendict
-
 from . import edge_cases
 from .custom_exceptions import InvalidInputError
 from .misc import Ending, Endings, Meaning, MultipleEndings, key_from_value
 
 """Mapping of number values to their more concise abbreviated forms."""
-NUMBER_SHORTHAND: Final[frozendict[str, str]] = frozendict({
+NUMBER_SHORTHAND: Final[dict[str, str]] = {
     "singular": "sg",
     "plural": "pl",
-})  # fmt: skip
+}  # fmt: skip
 
 """Mapping of tense values to their more concise abbreviated forms."""
-TENSE_SHORTHAND: Final[frozendict[str, str]] = frozendict({
+TENSE_SHORTHAND: Final[dict[str, str]] = {
     "present": "pre",
     "imperfect": "imp",
     "future": "fut",
     "perfect": "per",
     "pluperfect": "plp",
     # "future perfect": "fpr",
-})  # fmt: skip
+}  # fmt: skip
 
 """Mapping of voice values to their more concise abbreviated forms."""
-VOICE_SHORTHAND: Final[frozendict[str, str]] = frozendict({
+VOICE_SHORTHAND: Final[dict[str, str]] = {
     "active": "act",
     "passive": "pas",
-})  # fmt: skip
+}  # fmt: skip
 
 """Mapping of mood values to their more concise abbreviated forms."""
-MOOD_SHORTHAND: Final[frozendict[str, str]] = frozendict({
+MOOD_SHORTHAND: Final[dict[str, str]] = {
     "indicative": "ind",
     "infinitive": "inf",
     "imperative": "ipe",
     "subjunctive": "sbj",
     "participle": "ptc",
-})  # fmt: skip
+}  # fmt: skip
 
 """Mapping of case values to their more concise abbreviated forms."""
-CASE_SHORTHAND: Final[frozendict[str, str]] = frozendict({
+CASE_SHORTHAND: Final[dict[str, str]] = {
     "nominative": "nom",
     "vocative": "voc",
     "accusative": "acc",
     "genitive": "gen",
     "dative": "dat",
     "ablative": "abl",
-})  # fmt: skip
+}  # fmt: skip
 
 """Mapping of gender values to their more concise abbreviated forms."""
-GENDER_SHORTHAND: Final[frozendict[str, str]] = frozendict({
+GENDER_SHORTHAND: Final[dict[str, str]] = {
     "masculine": "m",
     "feminine": "f",
     "neuter": "n",
-})  # fmt: skip
+}  # fmt: skip
 
 """Mapping of degree values to their more concise abbreviated forms."""
-DEGREE_SHORTHAND: Final[frozendict[str, str]] = frozendict({
+DEGREE_SHORTHAND: Final[dict[str, str]] = {
     "positive": "pos",
     "comparative": "cmp",
     "superlative": "spr",
-})  # fmt: skip
+}  # fmt: skip
 
 """Mapping of person values to their more concise abbreviated forms."""
-PERSON_SHORTHAND: Final[frozendict[int, str]] = frozendict({
+PERSON_SHORTHAND: Final[dict[int, str]] = {
     1: "1st person",
     2: "2nd person",
     3: "3rd person",
-})  # fmt: skip
+}  # fmt: skip
 
 
 class EndingComponents(SimpleNamespace):
@@ -149,12 +147,14 @@ class _Word(ABC):
 
     # Force implementation of these methods
     @abstractmethod
-    def get(self, *args: Any, **kwargs: Any) -> Ending | None:
+    def get(
+        self, *args: Any, **kwargs: Any
+    ) -> Ending | None:  # pragma: no cover
         pass
 
     @staticmethod
     @abstractmethod
-    def _create_namespace(key: str) -> EndingComponents:
+    def _create_namespace(key: str) -> EndingComponents:  # pragma: no cover
         pass
 
 
@@ -177,7 +177,7 @@ class RegularWord(_Word):
     def __init__(self, word: str, meaning: Meaning):
         self.word: str = word
         self.meaning: Meaning = meaning
-        self.endings: Endings = frozendict({"": self.word})
+        self.endings = {"": self.word}
 
     def get(self) -> str:
         """Returns the word.
@@ -196,7 +196,7 @@ class RegularWord(_Word):
         return self.word
 
     @staticmethod
-    def _create_namespace(key: str) -> EndingComponents:
+    def _create_namespace(key: str) -> EndingComponents:  # pragma: no cover
         return NotImplemented
 
     def __repr__(self) -> str:
@@ -267,7 +267,7 @@ class Verb(_Word):
         self.conjugation: Literal[0, 1, 2, 3, 4, 5]
 
         if self.present[-1:] != "o":
-            raise InvalidInputError(f"Present {self.present} is not valid")
+            raise InvalidInputError(f"Present '{self.present}' is not valid")
 
         if self.perfect[-1:] != "i":
             raise InvalidInputError(f"Perfect '{self.perfect}' is not valid")
@@ -303,7 +303,7 @@ class Verb(_Word):
 
         match self.conjugation:
             case 1:
-                self.endings = frozendict({
+                self.endings = {
                     "Vpreactindsg1": self.present,  # porto
                     "Vpreactindsg2": self._inf_stem + "as",  # portas
                     "Vpreactindsg3": self._inf_stem + "at",  # portat
@@ -343,10 +343,10 @@ class Verb(_Word):
                     "Vplpactsbjpl1": self._per_stem + "issemus",  # portavissemus
                     "Vplpactsbjpl2": self._per_stem + "issetis",  # portavissetis
                     "Vplpactsbjpl3": self._per_stem + "issent",  # portavissent
-                })  # fmt: skip
+                }  # fmt: skip
 
             case 2:
-                self.endings = frozendict({
+                self.endings = {
                     "Vpreactindsg1": self.present,  # doceo
                     "Vpreactindsg2": self._inf_stem + "es",  # doces
                     "Vpreactindsg3": self._inf_stem + "et",  # docet
@@ -386,10 +386,10 @@ class Verb(_Word):
                     "Vplpactsbjpl1": self._per_stem + "issemus",  # docuissmus
                     "Vplpactsbjpl2": self._per_stem + "issetis",  # docuissetis
                     "Vplpactsbjpl3": self._per_stem + "issent",  # docuissent
-                })  # fmt: skip
+                }  # fmt: skip
 
             case 3:
-                self.endings = frozendict({
+                self.endings = {
                     "Vpreactindsg1": self.present,  # traho
                     "Vpreactindsg2": self._inf_stem + "is",  # trahis
                     "Vpreactindsg3": self._inf_stem + "it",  # trahit
@@ -429,10 +429,10 @@ class Verb(_Word):
                     "Vplpactsbjpl1": self._per_stem + "issemus",  # traxissemus
                     "Vplpactsbjpl2": self._per_stem + "issetis",  # traxissetis
                     "Vplpactsbjpl3": self._per_stem + "issent",  # traxissent
-                })  # fmt: skip
+                }  # fmt: skip
 
             case 4:
-                self.endings = frozendict({
+                self.endings = {
                     "Vpreactindsg1": self.present,  # audio
                     "Vpreactindsg2": self._inf_stem + "is",  # audis
                     "Vpreactindsg3": self._inf_stem + "it",  # audit
@@ -472,10 +472,10 @@ class Verb(_Word):
                     "Vplpactsbjpl1": self._per_stem + "issemus",  # audivissemus
                     "Vplpactsbjpl2": self._per_stem + "issetis",  # audivissetis
                     "Vplpactsbjpl3": self._per_stem + "issent",  # audivissent
-                })  # fmt: skip
+                }  # fmt: skip
 
             case 5:
-                self.endings = frozendict({
+                self.endings = {
                     "Vpreactindsg1": self.present,  # capio
                     "Vpreactindsg2": self._inf_stem + "is",  # capis
                     "Vpreactindsg3": self._inf_stem + "it",  # capit
@@ -515,10 +515,12 @@ class Verb(_Word):
                     "Vplpactsbjpl1": self._per_stem + "issemus",  # cepissemus
                     "Vplpactsbjpl2": self._per_stem + "issetis",  # cepissetis
                     "Vplpactsbjpl3": self._per_stem + "issent",  # cepissent
-                })  # fmt: skip
+                }  # fmt: skip
 
-            # case _:
-            #     raise ValueError(f"Conjugation {self.conjugation} not recognised")
+            case _:  # pragma: no cover
+                raise ValueError(
+                    f"Conjugation {self.conjugation} not recognised"
+                )
 
         # Participles
         if self.ppp:
@@ -761,14 +763,19 @@ class Noun(_Word):
     {"Nnomsg": "ancilla", "Nvocsg": "ancilla", "Naccsg": "ancillam", ...}
 
     Note that all arguments of Noun are keyword-only.
+
+    Notes
+    -----
+    Accido relies on the assumption that there are no neuter or plurale
+    tantum fifth declension nouns (there doesn't seem to be any).
     """  # fmt: skip
 
     def __init__(
         self,
         *,
         nominative: str,
-        genitive: str,
-        gender: str,
+        genitive: Optional[str],
+        gender: Optional[str],
         meaning: Meaning,
     ) -> None:
         """Initialises Noun and determines the declension and endings.
@@ -786,12 +793,14 @@ class Noun(_Word):
         """
         super().__init__()
 
-        if gender not in GENDER_SHORTHAND:
-            raise InvalidInputError(f"Gender '{gender}' not recognised")
-        self.gender: str = gender
+        if gender:
+            if gender not in GENDER_SHORTHAND:
+                raise InvalidInputError(f"Gender '{gender}' not recognised")
+            self.gender: str = gender
 
         self.nominative: str = nominative
-        self.genitive: str = genitive
+        if genitive:
+            self.genitive: str = genitive
         self.meaning: Meaning = meaning
         self.plurale_tantum: bool = False
 
@@ -809,10 +818,6 @@ class Noun(_Word):
         if self.genitive[-2:] == "ei":
             self.declension = 5
             self._stem = self.genitive[:-2]  # diei > di-
-        elif self.genitive[-2:] == "um":
-            self.declension = 3
-            self._stem = self.genitive[:-2]  # canum -> can-
-            self.plurale_tantum = True
         elif self.genitive[-2:] == "ae":
             self.declension = 1
             self._stem = self.genitive[:-2]  # puellae -> puell-
@@ -822,11 +827,11 @@ class Noun(_Word):
         elif self.genitive[-2:] == "is":
             self.declension = 3
             self._stem = self.genitive[:-2]  # canis -> can-
-        elif genitive[-2:] == "us":
+        elif self.genitive[-2:] == "us":
             self.declension = 4
             self._stem = self.genitive[:-2]  # manus -> man-
 
-        elif self.genitive[-4:] == "uum":
+        elif self.genitive[-3:] == "uum":
             self.declension = 4
             self._stem = self.genitive[:-3]  # manuum -> man-
             self.plurale_tantum = True
@@ -838,9 +843,13 @@ class Noun(_Word):
             self.declension = 2
             self._stem = self.genitive[:-4]  # servorum -> serv-
             self.plurale_tantum = True
-        elif self.genitive[-4:] == "erum":
-            self.declension = 5
-            self._stem = self.genitive[:-4]  # dierum > di-
+        # elif self.genitive[-4:] == "erum":
+        #     self.declension = 5
+        #     self._stem = self.genitive[:-4]  # dierum > di-
+        #     self.plurale_tantum = True
+        elif self.genitive[-2:] == "um":
+            self.declension = 3
+            self._stem = self.genitive[:-2]  # canum -> can-
             self.plurale_tantum = True
 
         else:
@@ -932,7 +941,7 @@ class Noun(_Word):
                     "Nablpl": self._stem + "ebus",  # rebus
                 }
 
-            case _:
+            case _:  # pragma: no cover
                 raise ValueError(
                     f"Declension {self.declension} not recognised"
                 )
@@ -945,7 +954,7 @@ class Noun(_Word):
                 temp_endings["Nnompl"] = self._stem + "ua"  # cornua
                 temp_endings["Naccpl"] = self._stem + "ua"  # cornua
                 temp_endings["Nvocpl"] = self._stem + "ua"  # cornua
-                temp_endings["Ndatpl"] = self._stem + "ua"  # cornua
+                temp_endings["Ndatsg"] = self._stem + "u"  # cornu
             elif self.declension == 5:
                 raise InvalidInputError(
                     f"Fifth declension nouns cannot be neuter (noun '{self.nominative}')"
@@ -961,7 +970,7 @@ class Noun(_Word):
                 k: v for k, v in temp_endings.items() if not k.endswith("sg")
             }
 
-        self.endings = deepfreeze(temp_endings)
+        self.endings: Endings = temp_endings
 
     def get(self, *, case: str, number: str) -> Ending | None:
         """Returns the ending of the noun.
@@ -1018,7 +1027,21 @@ class Noun(_Word):
         return f"Noun({self.nominative}, {self.genitive}, {GENDER_SHORTHAND[self.gender]}, {self.meaning})"
 
     def __str__(self) -> str:
-        return f"{self.meaning}: {self.nominative}, {self.genitive} ({self.declension})"
+        match self.gender:
+            case "masculine":
+                return (
+                    f"{self.meaning}: {self.nominative}, {self.genitive}, (m)"
+                )
+            case "feminine":
+                return (
+                    f"{self.meaning}: {self.nominative}, {self.genitive}, (f)"
+                )
+            case "neuter":
+                return (
+                    f"{self.meaning}: {self.nominative}, {self.genitive}, (n)"
+                )
+            case _:  # pragma: no cover
+                raise ValueError(f"Gender {self.gender} not recognised")
 
 
 @total_ordering
@@ -1136,11 +1159,13 @@ class Adjective(_Word):
 
                 if self._mascnom not in edge_cases.IRREGULAR_ADJECTIVES:
                     self._cmp_stem = self._pos_stem + "ior"  # car- -> carior-
-                    if self._mascnom[:2] == "er":
+                    if self._mascnom[-2:] == "er":  # pragma: no cover
                         self._spr_stem = (
                             self._mascnom + "rim"  # miser- -> miserrim-
                         )
-                    elif self._mascnom in edge_cases.LIS_ADJECTIVES:
+                    elif (
+                        self._mascnom in edge_cases.LIS_ADJECTIVES
+                    ):  # pragma: no cover
                         self._spr_stem = (
                             self._pos_stem + "lim"  # facil- -> facillim-
                         )
@@ -1149,7 +1174,7 @@ class Adjective(_Word):
                             self._pos_stem + "issim"  # car- -> carissim-
                         )
 
-                self.endings = frozendict({
+                self.endings = {
                     "Aposmnomsg": self._mascnom,  # carus
                     "Aposmvocsg": self._pos_stem + "e",  # care
                     "Aposmaccsg": self._pos_stem + "um",  # carum
@@ -1258,7 +1283,7 @@ class Adjective(_Word):
                     "Asprngenpl": self._spr_stem + "orum",  # carrissimorum
                     "Asprndatpl": self._spr_stem + "is",  # carrissimis
                     "Asprnablpl": self._spr_stem + "is",  # carrissimis
-                })  # fmt: skip
+                }  # fmt: skip
 
                 if self.adverb_flag:
                     self.endings = self.endings | {
@@ -1296,11 +1321,13 @@ class Adjective(_Word):
                             self._cmp_stem = (
                                 self._pos_stem + "ior"
                             )  # ingent- > ingentior-
-                            if self._mascnom[:2] == "er":
+                            if self._mascnom[-2:] == "er":
                                 self._spr_stem = (
                                     self._mascnom + "rim"
                                 )  # miser- -> miserrim-
-                            elif self._mascnom in edge_cases.LIS_ADJECTIVES:
+                            elif (
+                                self._mascnom in edge_cases.LIS_ADJECTIVES
+                            ):  # pragma: no cover
                                 self._spr_stem = (
                                     self._pos_stem
                                     + "lim"  # facil- -> facillim-
@@ -1311,7 +1338,7 @@ class Adjective(_Word):
                                     + "issim"  # ingent- -> ingentissim-
                                 )
 
-                        self.endings = frozendict({
+                        self.endings = {
                             "Aposmnomsg": self._mascnom,  # ingens
                             "Aposmvocsg": self._mascnom,  # ingens
                             "Aposmaccsg": self._pos_stem + "em",  # ingentem
@@ -1420,7 +1447,7 @@ class Adjective(_Word):
                             "Asprngenpl": self._spr_stem + "orum",  # ingentissimorum
                             "Asprndatpl": self._spr_stem + "is",  # ingentissimis
                             "Asprnablpl": self._spr_stem + "is",  # ingentissimis
-                        })  # fmt: skip
+                        }  # fmt: skip
 
                         if self.adverb_flag:
                             self.endings = self.endings | {
@@ -1449,7 +1476,7 @@ class Adjective(_Word):
                             self._cmp_stem = (
                                 self._pos_stem + "ior"
                             )  # fort- -> fortior-
-                            if self._mascnom[:2] == "er":
+                            if self._mascnom[-2:] == "er":  # pragma: no cover
                                 self._spr_stem = (
                                     self._mascnom
                                     + "rim"  # miser- -> miserrim-
@@ -1465,7 +1492,7 @@ class Adjective(_Word):
                                     + "issim"  # fort- -> fortissim-
                                 )
 
-                        self.endings = frozendict({
+                        self.endings = {
                             "Aposmnomsg": self._mascnom,  # fortis
                             "Aposmvocsg": self._mascnom,  # fortis
                             "Aposmaccsg": self._pos_stem + "em",  # fortem
@@ -1574,7 +1601,7 @@ class Adjective(_Word):
                             "Asprngenpl": self._spr_stem + "orum",  # fortissimorum
                             "Asprndatpl": self._spr_stem + "is",  # fortissimis
                             "Asprnablpl": self._spr_stem + "is",  # fortissimis
-                        })  # fmt: skip
+                        }  # fmt: skip
 
                         if self.adverb_flag:
                             self.endings = self.endings | {
@@ -1609,18 +1636,20 @@ class Adjective(_Word):
                                 self._spr_stem = (
                                     self._mascnom + "rim"
                                 )  # cer- -> acerrim-
-                            elif self._mascnom in edge_cases.LIS_ADJECTIVES:
+                            elif (
+                                self._mascnom in edge_cases.LIS_ADJECTIVES
+                            ):  # pragma: no cover
                                 self._spr_stem = (
                                     self._pos_stem
                                     + "lim"  # facil- -> facillim-
                                 )
-                            else:
+                            else:  # pragma: no cover
                                 self._spr_stem = (
                                     self._pos_stem
                                     + "issim"  # levis -> levissim-
                                 )
 
-                        self.endings = frozendict({
+                        self.endings = {
                             "Aposmnomsg": self._mascnom,  # acer
                             "Aposmvocsg": self._mascnom,  # acer
                             "Aposmaccsg": self._pos_stem + "em",  # acrem
@@ -1729,7 +1758,7 @@ class Adjective(_Word):
                             "Asprngenpl": self._spr_stem + "orum",  # acerrimorum
                             "Asprndatpl": self._spr_stem + "is",  # acerrimis
                             "Asprnablpl": self._spr_stem + "is",  # acerrimis
-                        })  # fmt: skip
+                        }  # fmt: skip
 
                         if self.adverb_flag:
                             self.endings = self.endings | {
@@ -1753,8 +1782,6 @@ class Adjective(_Word):
                 raise InvalidInputError(
                     f"Declension {self.declension} not recognised"
                 )
-
-        self._endings = deepfreeze(self.endings)
 
     def get(
         self,
@@ -1827,12 +1854,9 @@ class Adjective(_Word):
                 f"Degree '{degree}', gender '{gender}', case '{case}' or number '{number}' not recognised"
             )
 
-        try:
-            return self.endings[
-                f"A{short_degree}{short_gender}{short_case}{short_number}"
-            ]
-        except KeyError:
-            return None
+        return self.endings.get(
+            f"A{short_degree}{short_gender}{short_case}{short_number}"
+        )
 
     @staticmethod
     def _create_namespace(key: str) -> EndingComponents:
@@ -1849,8 +1873,8 @@ class Adjective(_Word):
 
     def __str__(self) -> str:
         if self.declension == "3":
-            return f"{self.meaning}: {', '.join(self._principal_parts)} ({self.declension}-{self.termination})"
-        return f"{self.meaning}: {', '.join(self._principal_parts)} (2-1-2)"
+            return f"{self.meaning}: {', '.join(self._principal_parts)}, ({self.declension}-{self.termination})"
+        return f"{self.meaning}: {', '.join(self._principal_parts)}, (2-1-2)"
 
     def __repr__(self) -> str:
         return f"Adjective({', '.join(self._principal_parts)}, {self.termination}, {self.declension}, {self.meaning})"
@@ -1907,8 +1931,6 @@ class Pronoun(_Word):
         self._mascnom: Ending = self.endings["Pmnomsg"]
         self._femnom: Ending = self.endings["Pfnomsg"]
         self._neutnom: Ending = self.endings["Pnnomsg"]
-
-        self._endings = deepfreeze(self.endings)
 
     def get(self, *, gender: str, case: str, number: str) -> Ending | None:
         """Returns the ending of the pronoun.
@@ -1969,4 +1991,6 @@ class Pronoun(_Word):
         return f"Pronoun({self.pronoun}, {self.meaning})"
 
     def __str__(self) -> str:
-        return f"{self.meaning}: {self._mascnom}, {self._femnom}, {self._neutnom}\n"
+        return (
+            f"{self.meaning}: {self._mascnom}, {self._femnom}, {self._neutnom}"
+        )

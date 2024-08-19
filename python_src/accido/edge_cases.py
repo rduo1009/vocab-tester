@@ -7,8 +7,6 @@ from __future__ import annotations
 
 from typing import Final
 
-from frozendict import deepfreeze, frozendict
-
 from .misc import Endings, MultipleEndings
 
 #  NOTE: There are deponents, but am keeping them for future
@@ -75,7 +73,7 @@ def _check_io_verb(present: str) -> bool:
 
 
 """Contains irregular verbs."""
-IRREGULAR_VERBS: Final[dict[str, Endings]] = deepfreeze({
+IRREGULAR_VERBS: Final[dict[str, Endings]] = {
     "sum": {
         "Vpreactindsg1": "sum",
         "Vpreactindsg2": "es",
@@ -392,12 +390,12 @@ IRREGULAR_VERBS: Final[dict[str, Endings]] = deepfreeze({
         "Vplpactsbjpl2": "adfuissetis",
         "Vplpactsbjpl3": "adfuissent",
     }
-})  # fmt: skip
+}  # fmt: skip
 
 
 """Contains verbs that are derived from the main irregular verbs (usually 
 having a prefix)."""
-DERIVED_IRREGULAR_VERBS: Final[frozendict[str, set[str]]] = deepfreeze({
+DERIVED_IRREGULAR_VERBS: Final[dict[str, set[str]]] = {
     "eo": {
         "abeo",
         "adeo",
@@ -442,7 +440,7 @@ DERIVED_IRREGULAR_VERBS: Final[frozendict[str, set[str]]] = deepfreeze({
         "suffero",
         "transfero"
     },
-})  # fmt: skip
+}  # fmt: skip
 
 
 # NOTE: This entire thing will probably need to be reworked at some point
@@ -450,7 +448,7 @@ DERIVED_IRREGULAR_VERBS: Final[frozendict[str, set[str]]] = deepfreeze({
 # to write everything manually
 
 """Contains the endings that are used for the derived irregular verbs."""
-DERIVED_IRREGULAR_ENDINGS: Final[dict[str, Endings]] = deepfreeze({
+DERIVED_IRREGULAR_ENDINGS: Final[dict[str, Endings]] = {
     "eo": {
         "Vpreactindsg1": "eo",
         "Vpreactindsg2": "is",
@@ -533,7 +531,7 @@ DERIVED_IRREGULAR_ENDINGS: Final[dict[str, Endings]] = deepfreeze({
         "Vplpactsbjpl2": "tulissetis",
         "Vplpactsbjpl3": "tulissent",
     }
-})  # fmt: skip
+}  # fmt: skip
 
 
 def _find_irregular_endings(present: str) -> Endings | None:
@@ -554,7 +552,7 @@ def _find_irregular_endings(present: str) -> Endings | None:
     def prefix(pre: str, endings: Endings) -> dict[str, str | MultipleEndings]:
         return {key: pre + value for key, value in endings.items()}
 
-    if present in IRREGULAR_VERBS:
+    if present in IRREGULAR_VERBS:  # pragma: no cover
         return IRREGULAR_VERBS[present]
 
     for (
@@ -562,18 +560,16 @@ def _find_irregular_endings(present: str) -> Endings | None:
         suffix_list,
     ) in DERIVED_IRREGULAR_VERBS.items():
         if present in suffix_list:
-            return frozendict(
-                prefix(
-                    present.rstrip(IRREGULAR_suffix),
-                    DERIVED_IRREGULAR_ENDINGS[IRREGULAR_suffix],
-                )
+            return prefix(
+                present.rstrip(IRREGULAR_suffix),
+                DERIVED_IRREGULAR_ENDINGS[IRREGULAR_suffix],
             )
 
     return None
 
 
 """Contains irregular nouns."""
-IRREGULAR_NOUNS: Final[dict[str, Endings]] = deepfreeze({
+IRREGULAR_NOUNS: Final[dict[str, Endings]] = {
     "ego": {
         "Nnomsg": "ego",
         "Nvocsg": "ego",
@@ -612,26 +608,26 @@ IRREGULAR_NOUNS: Final[dict[str, Endings]] = deepfreeze({
         "Ndatpl": "sibi",
         "Nablpl": "se",
     },
-})  # fmt: skip
+}  # fmt: skip
 
 
 """Contains adjectives that end in -lis, and thus have irregular 
 superlatives."""
-LIS_ADJECTIVES: Final[set[str]] = deepfreeze({
+LIS_ADJECTIVES: Final[set[str]] = {
     "facilis",
     "difficilis",
     "similis",
     "dissimilis",
     "gracilis",
     "humilis",
-})  # fmt: skip
+}  # fmt: skip
 
 
 """Contains adjectives that have irregular forms in the comparative,
 superlative and adverb forms.
 Note that some of these adjectives do not have adverb forms, so the adverb
 forms are given a None value instead."""
-IRREGULAR_ADJECTIVES: Final[frozendict[str, list[str | None]]] = deepfreeze({
+IRREGULAR_ADJECTIVES: Final[dict[str, list[str | None]]] = {
     "bonus": ["melior", "optim", "bene", "melius", "optime"],
     "malus": ["peior", "pessim", "male", "peius", "pessime"],
     "magnus": ["maior", "maxim", None, None, None],
@@ -642,11 +638,11 @@ IRREGULAR_ADJECTIVES: Final[frozendict[str, list[str | None]]] = deepfreeze({
     "nequam": ["nequior", "nequissim", None, None, None],
     "frugi": ["frugalior", "frugalissim", "frugaliter", "frugalius", "frugalissime"],
     "dexter": ["dexterior", "dextim", None, None, None],
-})  # fmt: skip
+}  # fmt: skip
 
 
 """Contains pronouns, which all have irregular endings."""
-PRONOUNS: Final[dict[str, Endings]] = deepfreeze({
+PRONOUNS: Final[dict[str, Endings]] = {
     "hic": {
         "Pmnomsg": "hic",
         "Pmaccsg": "hunc",
@@ -871,4 +867,4 @@ PRONOUNS: Final[dict[str, Endings]] = deepfreeze({
         "Pndatpl": "quibusdam",
         "Pnablpl": "quibusdam",
     },
-})  # fmt: skip
+}  # fmt: skip
