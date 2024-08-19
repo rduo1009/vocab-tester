@@ -314,7 +314,7 @@ def _regenerate_vocab_list(vocab_list: VocabList) -> VocabList:
                     meaning=word.meaning,
                 )
             )
-        else:
+        else:  # pragma: no cover
             raise ValueError(f"Unknown word type: {type(word)}")
 
     return VocabList(new_vocab)
@@ -355,17 +355,19 @@ def read_vocab_dump(filename: Path) -> VocabList:
         pickled_data: bytes = content[:-64]
         signature: str = content[-64:].decode()
 
-    if hmac.new(KEY, pickled_data, hl.sha256).hexdigest() != signature:
+    if (
+        hmac.new(KEY, pickled_data, hl.sha256).hexdigest() != signature
+    ):  # pragma: no cover
         raise InvalidVocabDump("Data integrity check failed for vocab dump.")
 
     output: Any | VocabList = pickle.loads(pickled_data)
     if type(output) is VocabList:
         if output.version == src.__version__:
             return output
-        else:
+        else:  # pragma: no cover
             warnings.warn(
                 "Vocab dump is from a different version of vocab-tester."
             )
             return _regenerate_vocab_list(output)
 
-    raise InvalidVocabDump("Vocab dump is not valid.")
+    raise InvalidVocabDump("Vocab dump is not valid.")  # pragma: no cover
