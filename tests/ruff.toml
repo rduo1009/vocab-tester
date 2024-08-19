@@ -1,0 +1,5 @@
+extend = "../pyproject.toml"
+
+# Override settings
+line-length = 320
+lint.ignore = ["F401", "E741", "F841"]
