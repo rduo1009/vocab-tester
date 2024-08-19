@@ -54,7 +54,7 @@ class PW_ComptoLat_Question(_Question):
     (answer: "quaeratis")"""
 
     latin: str
-    components: accido.endings.EndingComponents
+    components: accido.misc.EndingComponents
     answers: list[str]
 
     def check(self, response: str) -> bool:
@@ -71,7 +71,7 @@ class PW_LattoComp_Question(_Question):
 
     dictionary_entry: str
     latin: str
-    answers: list[accido.endings.EndingComponents]
+    answers: list[accido.misc.EndingComponents]
 
-    def check(self, response: accido.endings.EndingComponents) -> bool:
+    def check(self, response: accido.misc.EndingComponents) -> bool:
         return response in self.answers

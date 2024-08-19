@@ -4,7 +4,8 @@ import sys  # noqa: E401
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
 import pytest  # type: ignore[import-not-found]
-from python_src.accido.endings import EndingComponents, Noun, Pronoun, Verb
+from python_src.accido.endings import Noun, Pronoun, Verb
+from python_src.accido.misc import EndingComponents
 
 
 def test_eq():
