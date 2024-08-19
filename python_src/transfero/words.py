@@ -19,7 +19,7 @@ def _get_possessive(noun: str) -> str:
 
 
 def find_noun_inflections(
-    noun: str, components: accido.endings.EndingComponents
+    noun: str, components: accido.misc.EndingComponents
 ) -> set[str]:
     # Something has gone very wrong here if this happens, but just to be safe
     if not (hasattr(components, "case") and hasattr(components, "number")):

@@ -51,7 +51,7 @@ THIRD_IO_VERBS: Final[set[str]] = {
 }
 
 
-def _check_io_verb(present: str) -> bool:
+def check_io_verb(present: str) -> bool:
     """Checks if the given word matches any of the third conjugation -io
     verbs in the THIRD_IO_VERBS set.
 
@@ -534,7 +534,7 @@ DERIVED_IRREGULAR_ENDINGS: Final[dict[str, Endings]] = {
 }  # fmt: skip
 
 
-def _find_irregular_endings(present: str) -> Endings | None:
+def find_irregular_endings(present: str) -> Endings | None:
     """Detects if a verb is irregular (using the irregular verb dictionary)
     and returns its endings.
 

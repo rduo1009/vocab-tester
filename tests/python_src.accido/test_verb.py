@@ -6,7 +6,8 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../.
 import pytest  # type: ignore[import-not-found]
 
 from python_src.accido.custom_exceptions import InvalidInputError  # isort: skip
-from python_src.accido.endings import EndingComponents, Verb
+from python_src.accido.endings import Verb
+from python_src.accido.misc import EndingComponents
 
 
 # fmt: off

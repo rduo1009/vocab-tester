@@ -1,13 +1,88 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-"""Contains miscellaneous functions and classes used by accido."""
+"""Contains miscellaneous functions, classes and constants used by accido."""
 
 from __future__ import annotations
 
 import sys
 from dataclasses import dataclass
-from typing import Any
+from types import SimpleNamespace
+from typing import Any, Final
+
+"""Mapping of number values to their more concise abbreviated forms."""
+NUMBER_SHORTHAND: Final[dict[str, str]] = {
+    "singular": "sg",
+    "plural": "pl",
+}  # fmt: skip
+
+"""Mapping of tense values to their more concise abbreviated forms."""
+TENSE_SHORTHAND: Final[dict[str, str]] = {
+    "present": "pre",
+    "imperfect": "imp",
+    "future": "fut",
+    "perfect": "per",
+    "pluperfect": "plp",
+    # "future perfect": "fpr",
+}  # fmt: skip
+
+"""Mapping of voice values to their more concise abbreviated forms."""
+VOICE_SHORTHAND: Final[dict[str, str]] = {
+    "active": "act",
+    "passive": "pas",
+}  # fmt: skip
+
+"""Mapping of mood values to their more concise abbreviated forms."""
+MOOD_SHORTHAND: Final[dict[str, str]] = {
+    "indicative": "ind",
+    "infinitive": "inf",
+    "imperative": "ipe",
+    "subjunctive": "sbj",
+    "participle": "ptc",
+}  # fmt: skip
+
+"""Mapping of case values to their more concise abbreviated forms."""
+CASE_SHORTHAND: Final[dict[str, str]] = {
+    "nominative": "nom",
+    "vocative": "voc",
+    "accusative": "acc",
+    "genitive": "gen",
+    "dative": "dat",
+    "ablative": "abl",
+}  # fmt: skip
+
+"""Mapping of gender values to their more concise abbreviated forms."""
+GENDER_SHORTHAND: Final[dict[str, str]] = {
+    "masculine": "m",
+    "feminine": "f",
+    "neuter": "n",
+}  # fmt: skip
+
+"""Mapping of degree values to their more concise abbreviated forms."""
+DEGREE_SHORTHAND: Final[dict[str, str]] = {
+    "positive": "pos",
+    "comparative": "cmp",
+    "superlative": "spr",
+}  # fmt: skip
+
+"""Mapping of person values to their more concise abbreviated forms."""
+PERSON_SHORTHAND: Final[dict[int, str]] = {
+    1: "1st person",
+    2: "2nd person",
+    3: "3rd person",
+}  # fmt: skip
+
+
+class EndingComponents(SimpleNamespace):
+    """A container for the grammatical components of an ending.
+
+    Examples
+    --------
+    >>> foo = EndingComponents(case="nominative", gender="masculine", \
+                               number="singular")
+    """
+
+    pass
 
 
 @dataclass(init=True)
