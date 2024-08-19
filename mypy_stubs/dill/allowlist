@@ -1,3 +1,5 @@
+dill._objects
+dill.__diff
 dill.tests
 dill.tests.__main__
 dill.tests.test_abc

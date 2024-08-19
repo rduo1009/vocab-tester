@@ -26,5 +26,5 @@ if __name__ == "__main__":
                         test_func = getattr(module, attr_name)
 
                         if callable(test_func):
-                            print(f"Running {test_func.__name__}...")
+                            # print(f"Running {test_func.__name__}...")
                             test_func()
