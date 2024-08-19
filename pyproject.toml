@@ -9,7 +9,6 @@ packages = [{ include = "python_src" }]
 [tool.poetry.dependencies]
 python = "^3.10"
 dill = "^0.3.8"
-frozendict = "^2.4.4"
 fsrs = "^2.5.1"
 
 [tool.poetry.group.dev.dependencies]

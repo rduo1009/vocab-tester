@@ -9,8 +9,6 @@ import sys
 from dataclasses import dataclass
 from typing import Any
 
-from frozendict import frozendict
-
 
 @dataclass(init=True)
 class MultipleMeanings:
@@ -38,7 +36,7 @@ class MultipleMeanings:
         return self.main_meaning
 
     def __repr__(self) -> str:
-        return f"MultipleMeanings({','.join(self.meanings)})"
+        return f"MultipleMeanings({', '.join(self.raw_meanings)})"
 
     def __post_init__(self) -> None:
         """If other_meanings is a string, convert it to a list."""
@@ -84,16 +82,14 @@ class MultipleEndings:
         return self.__str__() + val2
 
     # Allows for a prefix to be added to all of the endings.
-    def __radd__(self, val2: str) -> "MultipleEndings":
+    def __radd__(self, val2: str) -> "MultipleEndings":  # pragma: no cover
         prefixed = {
             key: f"{val2}{value}" for key, value in self.__dict__.items()
         }
         return MultipleEndings(**prefixed)
 
 
-def key_from_value(
-    dd: frozendict[Any, Any] | dict[Any, Any], value: Any
-) -> Any:
+def key_from_value(dd: dict[Any, Any] | dict[Any, Any], value: Any) -> Any:
     """Returns the value in a dictionary from its key.
     If no key is found with the given value, returns `None`.
 
@@ -119,10 +115,10 @@ if sys.version_info >= (3, 12):
     from .type_hints import Endings as Endings
     from .type_hints import Meaning as Meaning
 
-else:
+else:  # pragma: no cover
     # The type statement was added in 3.12, so TypeAlias is used instead
     from typing import TypeAlias
 
     Ending: TypeAlias = str | MultipleEndings
-    Endings: TypeAlias = frozendict[str, Ending]
+    Endings: TypeAlias = dict[str, Ending]
     Meaning: TypeAlias = str | MultipleMeanings
