@@ -202,7 +202,15 @@ def read_vocab_file(file_path: Path) -> VocabList:
                                     accido.endings.Adjective(
                                         *latin_parts[:-1],
                                         meaning=meaning,
-                                        declension=declension,
+                                        declension="212",
+                                    )
+                                )
+                            elif declension == "2-1-2":
+                                vocab.append(
+                                    accido.endings.Adjective(
+                                        *latin_parts[:-1],
+                                        meaning=meaning,
+                                        declension="212",
                                     )
                                 )
                             elif declension.startswith("3"):
