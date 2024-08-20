@@ -4,7 +4,6 @@
 __pycache__/
 *.pyc
 TODO.txt
-timing_*.py
 /.vscode
 testdump/
 *.so
