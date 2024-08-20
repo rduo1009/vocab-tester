@@ -4,8 +4,6 @@
 """Representations of Latin words with their endings calculated.
 A wrapper for the classes."""
 
-from __future__ import annotations
-
 from .class_adjective import Adjective as Adjective
 from .class_noun import Noun as Noun
 from .class_pronoun import Pronoun as Pronoun
