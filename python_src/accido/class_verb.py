@@ -538,15 +538,30 @@ class Verb(_Word):
 
     @staticmethod
     def _create_namespace(key: str) -> EndingComponents:
-        output: EndingComponents = EndingComponents(
-            tense=key_from_value(TENSE_SHORTHAND, key[1:4]),
-            voice=key_from_value(VOICE_SHORTHAND, key[4:7]),
-            mood=key_from_value(MOOD_SHORTHAND, key[7:10]),
-            number=key_from_value(NUMBER_SHORTHAND, key[10:12]),
-            person=PERSON_SHORTHAND[int(key[12])],
-        )
-        output.string = f"{output.tense} {output.voice} {output.mood} {output.number} {output.person}"
-        return output
+        output: EndingComponents
+        if len(key) == 13:
+            output = EndingComponents(
+                tense=key_from_value(TENSE_SHORTHAND, key[1:4]),
+                voice=key_from_value(VOICE_SHORTHAND, key[4:7]),
+                mood=key_from_value(MOOD_SHORTHAND, key[7:10]),
+                number=key_from_value(NUMBER_SHORTHAND, key[10:12]),
+                person=PERSON_SHORTHAND[int(key[12])],
+            )
+            output.string = f"{output.tense} {output.voice} {output.mood} {output.number} {output.person}"
+            return output
+        elif len(key) == 16 and key[7:10] == "ptc":
+            output = EndingComponents(
+                tense=key_from_value(TENSE_SHORTHAND, key[1:4]),
+                voice=key_from_value(VOICE_SHORTHAND, key[4:7]),
+                mood="participle",
+                gender=key_from_value(GENDER_SHORTHAND, key[10]),
+                case=key_from_value(CASE_SHORTHAND, key[11:14]),
+                number=key_from_value(NUMBER_SHORTHAND, key[14:16]),
+            )
+            output.string = f"{output.tense} {output.voice} participle {output.gender} {output.case} {output.number}"
+            return output
+        else:  # pragma: no cover
+            raise InvalidInputError(f"Key '{key}' is invalid")
 
     def __repr__(self) -> str:
         return f"Verb({self.present}, {self.infinitive}, {self.perfect}, {self.ppp}, {self.meaning})"
