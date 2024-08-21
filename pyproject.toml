@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "vocab-tester"
-version = "0.2.3-dev"
+version = "0.2.4-dev"
 description = "An application that tests Latin vocabulary and grammar."
 authors = ["rduo1009 <robertduong09alt@gmail.com>"]
 readme = "README.md"
