@@ -45,9 +45,9 @@ def _generate_meaning(meaning: str) -> accido.misc.Meaning:
     """
 
     if "/" in meaning:
-        return accido.misc.MultipleMeanings(
-            [x.strip() for x in meaning.split("/")]
-        )
+        return accido.misc.MultipleMeanings([
+            x.strip() for x in meaning.split("/")
+        ])
     else:
         return meaning
 
