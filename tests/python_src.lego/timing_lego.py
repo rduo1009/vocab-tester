@@ -5,7 +5,6 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 
 import python_src
 from codetiming import Timer
-from humanfriendly import format_timespan
 from python_src.lego.misc import VocabList
 
 l: VocabList
