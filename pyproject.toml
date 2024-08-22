@@ -28,16 +28,20 @@ codetiming = "*"
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
+[tool.ruff]
+line-length = 79
+
+[tool.ruff.lint]
+preview = true
+
 [tool.ruff.lint.pydocstyle]
 convention = "numpy"
 
 [tool.ruff.format]
+preview = true
 quote-style = "double"
 indent-style = "space"
 docstring-code-format = false
-
-[tool.ruff]
-line-length = 79
 
 [tool.mypy]
 strict = true

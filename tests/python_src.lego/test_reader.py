@@ -15,26 +15,24 @@ from python_src.lego.reader import _regenerate_vocab_list, read_vocab_file
 
 def test_reader():
     l = read_vocab_file(Path("tests/python_src.lego/test_vocab_files/regular_list.txt"))
-    assert l == VocabList(
-        [
-            Verb(present="audio", infinitive="audire", perfect="audivi", ppp="auditus", meaning="hear"),
-            Verb(present="capio", infinitive="capire", perfect="capivi", meaning="take"),
-            Noun(nominative="puella", genitive="puellae", gender="feminine", meaning="girl"),
-            Noun(nominative="agricola", genitive="agricolae", gender="masculine", meaning="farmer"),
-            Noun(nominative="puer", genitive="pueri", gender="masculine", meaning="boy"),
-            Noun(nominative="canis", genitive="canis", gender="masculine", meaning="dog"),
-            Noun(nominative="nomen", genitive="nominis", gender="neuter", meaning="name"),
-            Adjective("ingens", "ingentis", termination=1, declension="3", meaning="large"),
-            Adjective("levis", "leve", termination=2, declension="3", meaning="light"),
-            Adjective("acer", "acris", "acre", termination=3, declension="3", meaning="keen"),
-            Adjective("bonus", "bona", "bonum", declension="212", meaning="good"),
-            Adjective("bonus", "bona", "bonum", declension="212", meaning="good"),
-            RegularWord(word="in", meaning="into"),
-            RegularWord(word="e", meaning="from"),
-            Pronoun(pronoun="hic", meaning="this"),
-            Pronoun(pronoun="ille", meaning="that"),
-        ]
-    )
+    assert l == VocabList([
+        Verb(present="audio", infinitive="audire", perfect="audivi", ppp="auditus", meaning="hear"),
+        Verb(present="capio", infinitive="capire", perfect="capivi", meaning="take"),
+        Noun(nominative="puella", genitive="puellae", gender="feminine", meaning="girl"),
+        Noun(nominative="agricola", genitive="agricolae", gender="masculine", meaning="farmer"),
+        Noun(nominative="puer", genitive="pueri", gender="masculine", meaning="boy"),
+        Noun(nominative="canis", genitive="canis", gender="masculine", meaning="dog"),
+        Noun(nominative="nomen", genitive="nominis", gender="neuter", meaning="name"),
+        Adjective("ingens", "ingentis", termination=1, declension="3", meaning="large"),
+        Adjective("levis", "leve", termination=2, declension="3", meaning="light"),
+        Adjective("acer", "acris", "acre", termination=3, declension="3", meaning="keen"),
+        Adjective("bonus", "bona", "bonum", declension="212", meaning="good"),
+        Adjective("bonus", "bona", "bonum", declension="212", meaning="good"),
+        RegularWord(word="in", meaning="into"),
+        RegularWord(word="e", meaning="from"),
+        Pronoun(pronoun="hic", meaning="this"),
+        Pronoun(pronoun="ille", meaning="that"),
+    ])
 
 
 def test_regenerate():
@@ -44,34 +42,30 @@ def test_regenerate():
 
 def test_reader_with_s():
     l = read_vocab_file(Path("tests/python_src.lego/test_vocab_files/regular_with_s_list.txt"))
-    assert l == VocabList(
-        [
-            Verb(present="audio", infinitive="audire", perfect="audivi", ppp="auditus", meaning="hear"),
-            Verb(present="capio", infinitive="capire", perfect="capivi", meaning="take"),
-            Noun(nominative="puella", genitive="puellae", gender="feminine", meaning="girl"),
-            Noun(nominative="agricola", genitive="agricolae", gender="masculine", meaning="farmer"),
-            Noun(nominative="puer", genitive="pueri", gender="masculine", meaning="boy"),
-            Noun(nominative="canis", genitive="canis", gender="masculine", meaning="dog"),
-            Noun(nominative="nomen", genitive="nominis", gender="neuter", meaning="name"),
-            Adjective("ingens", "ingentis", termination=1, declension="3", meaning="large"),
-            Adjective("levis", "leve", termination=2, declension="3", meaning="light"),
-            Adjective("acer", "acris", "acre", termination=3, declension="3", meaning="keen"),
-            RegularWord(word="in", meaning="into"),
-            RegularWord(word="e", meaning="from"),
-            Pronoun(pronoun="hic", meaning="this"),
-            Pronoun(pronoun="ille", meaning="that"),
-        ]
-    )
+    assert l == VocabList([
+        Verb(present="audio", infinitive="audire", perfect="audivi", ppp="auditus", meaning="hear"),
+        Verb(present="capio", infinitive="capire", perfect="capivi", meaning="take"),
+        Noun(nominative="puella", genitive="puellae", gender="feminine", meaning="girl"),
+        Noun(nominative="agricola", genitive="agricolae", gender="masculine", meaning="farmer"),
+        Noun(nominative="puer", genitive="pueri", gender="masculine", meaning="boy"),
+        Noun(nominative="canis", genitive="canis", gender="masculine", meaning="dog"),
+        Noun(nominative="nomen", genitive="nominis", gender="neuter", meaning="name"),
+        Adjective("ingens", "ingentis", termination=1, declension="3", meaning="large"),
+        Adjective("levis", "leve", termination=2, declension="3", meaning="light"),
+        Adjective("acer", "acris", "acre", termination=3, declension="3", meaning="keen"),
+        RegularWord(word="in", meaning="into"),
+        RegularWord(word="e", meaning="from"),
+        Pronoun(pronoun="hic", meaning="this"),
+        Pronoun(pronoun="ille", meaning="that"),
+    ])
 
 
 def test_multiple_meanings():
     l = read_vocab_file(Path("tests/python_src.lego/test_vocab_files/multiple_meanings_list.txt"))
-    assert l == VocabList(
-        [
-            Verb(present="peto", infinitive="petere", perfect="petivi", ppp="petitus", meaning=MultipleMeanings(["attack", "make for", "seek", "ask"])),
-            Noun(nominative="ancilla", genitive="ancillae", gender="feminine", meaning=MultipleMeanings(["slave-girl", "maid"])),
-        ]
-    )
+    assert l == VocabList([
+        Verb(present="peto", infinitive="petere", perfect="petivi", ppp="petitus", meaning=MultipleMeanings(["attack", "make for", "seek", "ask"])),
+        Noun(nominative="ancilla", genitive="ancillae", gender="feminine", meaning=MultipleMeanings(["slave-girl", "maid"])),
+    ])
 
 
 def test_invalidpos():
