@@ -25,21 +25,22 @@ def _get_possessive(noun: str) -> str:
 def find_noun_inflections(
     noun: str, components: accido.misc.EndingComponents
 ) -> set[str]:
+    """Inflect English nouns using the case and number."""
     # Something has gone very wrong here if this happens, but just to be safe
     if not (hasattr(components, "case") and hasattr(components, "number")):
         raise ValueError("Case and number must be specified")
 
-    noun_lemma = lemminflect.getLemma(noun, "NOUN")[0]
+    lemma: str = lemminflect.getLemma(noun, "NOUN")[0]
     base_forms: set[str] = set()
 
     match components.number:
         case "singular":
-            base_forms = {lemminflect.getInflection(noun_lemma, "NN")[0]}
+            base_forms = {lemminflect.getInflection(lemma, "NN")[0]}
 
         case "plural":
-            base_forms.add(pluralinflect.plural_noun(noun_lemma))
+            base_forms.add(pluralinflect.plural_noun(lemma))
             pluralinflect.classical(all=True)
-            base_forms.add(pluralinflect.plural_noun(noun_lemma))
+            base_forms.add(pluralinflect.plural_noun(lemma))
             pluralinflect.classical(all=False)
 
         case _:
@@ -50,7 +51,7 @@ def find_noun_inflections(
             return base_forms
 
         case "genitive":
-            possessive_genitive = {
+            possessive_genitive: set[str] = {
                 _get_possessive(base_form) for base_form in base_forms
             }
 
