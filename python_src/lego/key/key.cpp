@@ -14,3 +14,5 @@ const char *get_key() {
   return obfuscatedKey;
 }
 }
+
+int main() { return 0; }
