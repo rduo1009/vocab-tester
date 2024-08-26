@@ -56,3 +56,8 @@ class TestVerbInflection:
         assert find_verb_inflections(word, EndingComponents(tense="pluperfect", voice="active", mood="indicative", number="plural", person=1)) == {"we had attacked"}
         assert find_verb_inflections(word, EndingComponents(tense="pluperfect", voice="active", mood="indicative", number="plural", person=2)) == {"you had attacked"}
         assert find_verb_inflections(word, EndingComponents(tense="pluperfect", voice="active", mood="indicative", number="plural", person=3)) == {"they had attacked"}
+
+    def test_verb_infinitive(self):
+        word = "attack"
+
+        assert find_verb_inflections(word, EndingComponents(tense="present", voice="active", mood="infinitive")) == {"to attack"}
