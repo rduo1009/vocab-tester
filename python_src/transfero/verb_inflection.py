@@ -26,15 +26,16 @@ def find_verb_inflections(
         hasattr(components, "tense")
         and hasattr(components, "voice")
         and hasattr(components, "mood")
-        and hasattr(components, "number")
     ):
-        raise ValueError("Tense, voice, mood and number must be specified")
+        raise ValueError("Tense, voice and mood must be specified")
+
+    if not (
+        hasattr(components, "number") and hasattr(components, "person")
+    ) and components.mood not in {"infinitive", "participle"}:
+        raise ValueError("Number and person must be specified")
 
     if components.mood == "participle":
         return _find_participle_inflections(verb, components)
-
-    if not hasattr(components, "person"):
-        raise ValueError("Person must be specified")
 
     lemma: str = lemminflect.getLemma(verb, "NOUN")[0]
 
