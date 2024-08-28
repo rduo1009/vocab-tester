@@ -10,6 +10,7 @@ from typing import Literal
 import lemminflect
 
 from .. import accido
+from .edge_cases import STATIVE_VERBS
 
 
 def find_verb_inflections(
@@ -119,6 +120,37 @@ def _find_impactind_inflections(
     lemma: str, number: Literal["singular", "plural"], person: Literal[1, 2, 3]
 ) -> set[str]:
     present_participle: str = lemminflect.getInflection(lemma, "VBG")[0]
+
+    if lemma in STATIVE_VERBS:
+        past: str = lemminflect.getInflection(lemma, "VBD")[0]
+
+        match (number, person):
+            case ("singular", 1):
+                return {f"I {past}", f"I was {present_participle}"}
+
+            case ("plural", 1):
+                return {f"we {past}", f"we were {present_participle}"}
+
+            case ("singular", 2) | ("plural", 2):
+                return {f"you {past}", f"you were {present_participle}"}
+
+            case ("singular", 3):
+                return {
+                    f"he {past}",
+                    f"he was {present_participle}",
+                    f"she {past}",
+                    f"she was {present_participle}",
+                    f"it {past}",
+                    f"it was {present_participle}",
+                }
+
+            case ("plural", 3):
+                return {f"they {past}", f"they were {present_participle}"}
+
+            case _:
+                raise ValueError(
+                    f"Invalid number and person: {number} {person}"
+                )
 
     match (number, person):
         case ("singular", 1):
