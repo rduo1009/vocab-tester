@@ -47,7 +47,7 @@ def find_noun_inflections(
             raise ValueError(f"Number '{components.number}' not recognised")
 
     match components.case:
-        case "nominative" | "vocative" | "accusative" | "ablative":
+        case "nominative" | "vocative" | "accusative":
             return base_forms
 
         case "genitive":
@@ -88,6 +88,33 @@ def find_noun_inflections(
                 f"to the {base_form}" for base_form in base_forms
             } | {
                 f"to {base_form}" for base_form in base_forms
+            }  # fmt: skip
+
+        case "ablative":
+            if components.number == "singular":
+                return base_forms | {
+                    f"with the {base_form}" for base_form in base_forms
+                } | {
+                    pluralinflect.inflect(f"with a('{base_form}')") 
+                    for base_form in base_forms
+                } | {
+                    f"by the {base_form}" for base_form in base_forms
+                } | {
+                    pluralinflect.inflect(f"by a('{base_form}')") 
+                    for base_form in base_forms
+                } | {
+                    f"by means of the {base_form}" for base_form in base_forms
+                } | {
+                    pluralinflect.inflect(f"by means of a('{base_form}')") 
+                    for base_form in base_forms
+                }  # fmt: skip
+
+            return base_forms | {
+                f"with the {base_form}" for base_form in base_forms
+            } | {
+                f"by the {base_form}" for base_form in base_forms
+            } | {
+                f"by means of the {base_form}" for base_form in base_forms
             }  # fmt: skip
 
         case _:
