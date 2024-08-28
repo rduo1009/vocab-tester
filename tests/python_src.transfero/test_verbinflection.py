@@ -61,3 +61,13 @@ class TestVerbInflection:
         word = "attack"
 
         assert find_verb_inflections(word, EndingComponents(tense="present", voice="active", mood="infinitive")) == {"to attack"}
+
+    def test_verb_imperfect_stative(self):
+        word = "have"
+
+        assert find_verb_inflections(word, EndingComponents(tense="imperfect", voice="active", mood="indicative", number="singular", person=1)) == {"I had", "I was having"}
+        assert find_verb_inflections(word, EndingComponents(tense="imperfect", voice="active", mood="indicative", number="singular", person=2)) == {"you had", "you were having"}
+        assert find_verb_inflections(word, EndingComponents(tense="imperfect", voice="active", mood="indicative", number="singular", person=3)) == {"he was having", "he had", "she was having", "she had", "it was having", "it had"}
+        assert find_verb_inflections(word, EndingComponents(tense="imperfect", voice="active", mood="indicative", number="plural", person=1)) == {"we were having", "we had"}
+        assert find_verb_inflections(word, EndingComponents(tense="imperfect", voice="active", mood="indicative", number="plural", person=2)) == {"you were having", "you had"}
+        assert find_verb_inflections(word, EndingComponents(tense="imperfect", voice="active", mood="indicative", number="plural", person=3)) == {"they were having", "they had"}
