@@ -83,7 +83,11 @@ def find_noun_inflections(
             return {
                 f"for the {base_form}" for base_form in base_forms
             } | {
+                f"for {base_form}" for base_form in base_forms
+            } | {
                 f"to the {base_form}" for base_form in base_forms
+            } | {
+                f"to {base_form}" for base_form in base_forms
             }  # fmt: skip
 
         case _:
