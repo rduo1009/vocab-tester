@@ -1,6 +1,5 @@
 from typing import Any
 
-from .SKey import *  # noqa: F401
 from .SPECIALISTEntry import AuxModVariant as AuxModVariant
 from .SPECIALISTEntry import SPECIALISTEntry as SPECIALISTEntry
 from .SPECIALISTEntry import StandardVariant as StandardVariant
