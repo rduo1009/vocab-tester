@@ -56,3 +56,22 @@ class TestNounInflection:
 
         assert find_noun_inflections(word, EndingComponents(case="genitive", number="plural")) == {"of the cacti", "cacti's", "of the cactuses", "cactuses'"}
         assert find_noun_inflections(word, EndingComponents(case="dative", number="plural")) == {"for the cacti", "for cacti", "to the cacti", "to cacti", "for the cactuses", "for cactuses", "to the cactuses", "to cactuses"}
+
+    def test_noun_inflections_3(self):
+        word = "apple"
+
+        assert find_noun_inflections(word, EndingComponents(case="nominative", number="singular")) == {"apple"}
+        assert find_noun_inflections(word, EndingComponents(case="vocative", number="singular")) == {"apple"}
+        assert find_noun_inflections(word, EndingComponents(case="accusative", number="singular")) == {"apple"}
+        assert find_noun_inflections(word, EndingComponents(case="ablative", number="singular")) == {"apple", "with the apple", "with an apple", "by the apple", "by an apple", "by means of the apple", "by means of an apple"}
+
+        assert find_noun_inflections(word, EndingComponents(case="genitive", number="singular")) == {"of the apple", "apple's", "of an apple"}
+        assert find_noun_inflections(word, EndingComponents(case="dative", number="singular")) == {"for the apple", "to the apple", "for an apple", "to an apple"}
+
+        assert find_noun_inflections(word, EndingComponents(case="nominative", number="plural")) == {"apples"}
+        assert find_noun_inflections(word, EndingComponents(case="vocative", number="plural")) == {"apples"}
+        assert find_noun_inflections(word, EndingComponents(case="accusative", number="plural")) == {"apples"}
+        assert find_noun_inflections(word, EndingComponents(case="ablative", number="plural")) == {"apples", "with the apples", "by the apples", "by means of the apples"}
+
+        assert find_noun_inflections(word, EndingComponents(case="genitive", number="plural")) == {"of the apples", "apples'"}
+        assert find_noun_inflections(word, EndingComponents(case="dative", number="plural")) == {"for the apples", "for apples", "to the apples", "to apples"}
