@@ -8,12 +8,56 @@ from python_src.accido.misc import EndingComponents
 from python_src.transfero.words import find_verb_inflections
 
 
-class TestParticipleInflection:
-    def test_participle_inflections_1(self):
-        word = "attack"
+class TestVerbInflectionErrors:
+    def test_verb_error_1(self):
+        with pytest.raises(ValueError) as error:
+            find_verb_inflections("attack", EndingComponents(tense="error", voice="active"))
+        assert str(error.value) == "Tense, voice and mood must be specified"
 
-        assert find_verb_inflections(word, EndingComponents(tense="perfect", voice="passive", mood="participle", number="singular", case="nominative", gender="masculine")) == {"having been attacked"}
-        assert find_verb_inflections(word, EndingComponents(tense="present", voice="active", mood="participle", number="singular", case="nominative", gender="masculine")) == {"attacking"}
+    def test_verb_error_2(self):
+        with pytest.raises(ValueError) as error:
+            find_verb_inflections("attack", EndingComponents(tense="present", voice="active", mood="indicative"))
+        assert str(error.value) == "Number and person must be specified"
+
+    def test_verb_error_3(self):
+        with pytest.raises(NotImplementedError) as error:
+            find_verb_inflections("attack", EndingComponents(tense="present", voice="passive", mood="indicative", number="singular", person=1))
+        assert str(error.value) == "The present passive indicative has not been implemented"
+
+    def test_verb_error_4(self):
+        with pytest.raises(ValueError) as error:
+            find_verb_inflections("attack", EndingComponents(tense="present", voice="active", mood="indicative", number="singular", person=4))
+        assert str(error.value) == "Invalid number and person: singular 4"
+
+    def test_verb_error_5(self):
+        with pytest.raises(ValueError) as error:
+            find_verb_inflections("attack", EndingComponents(tense="imperfect", voice="active", mood="indicative", number="singular", person=4))
+        assert str(error.value) == "Invalid number and person: singular 4"
+
+    def test_verb_error_6(self):
+        with pytest.raises(ValueError) as error:
+            find_verb_inflections("have", EndingComponents(tense="imperfect", voice="active", mood="indicative", number="singular", person=4))
+        assert str(error.value) == "Invalid number and person: singular 4"
+
+    def test_verb_error_7(self):
+        with pytest.raises(ValueError) as error:
+            find_verb_inflections("attack", EndingComponents(tense="perfect", voice="active", mood="indicative", number="singular", person=4))
+        assert str(error.value) == "Invalid number and person: singular 4"
+
+    def test_verb_error_8(self):
+        with pytest.raises(ValueError) as error:
+            find_verb_inflections("attack", EndingComponents(tense="pluperfect", voice="active", mood="indicative", number="singular", person=4))
+        assert str(error.value) == "Invalid number and person: singular 4"
+
+    def test_participle_error_1(self):
+        with pytest.raises(ValueError) as error:
+            find_verb_inflections("attack", EndingComponents(tense="present", voice="active", mood="participle"))
+        assert str(error.value) == "Case and gender must be specified"
+
+    def test_participle_error_2(self):
+        with pytest.raises(NotImplementedError) as error:
+            find_verb_inflections("attack", EndingComponents(tense="present", voice="passive", mood="participle", case="nominative", gender="masculine", number="singular"))
+        assert str(error.value) == "The present passive participle has not been implemented"
 
 
 class TestVerbInflection:
@@ -71,3 +115,10 @@ class TestVerbInflection:
         assert find_verb_inflections(word, EndingComponents(tense="imperfect", voice="active", mood="indicative", number="plural", person=1)) == {"we were having", "we had"}
         assert find_verb_inflections(word, EndingComponents(tense="imperfect", voice="active", mood="indicative", number="plural", person=2)) == {"you were having", "you had"}
         assert find_verb_inflections(word, EndingComponents(tense="imperfect", voice="active", mood="indicative", number="plural", person=3)) == {"they were having", "they had"}
+
+
+def test_participle_inflections():
+    word = "attack"
+
+    assert find_verb_inflections(word, EndingComponents(tense="perfect", voice="passive", mood="participle", number="singular", case="nominative", gender="masculine")) == {"having been attacked"}
+    assert find_verb_inflections(word, EndingComponents(tense="present", voice="active", mood="participle", number="singular", case="nominative", gender="masculine")) == {"attacking"}
