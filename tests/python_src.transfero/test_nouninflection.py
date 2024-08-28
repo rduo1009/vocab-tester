@@ -37,7 +37,7 @@ class TestNounInflection:
         assert find_noun_inflections(word, EndingComponents(case="ablative", number="plural")) == {"houses"}
 
         assert find_noun_inflections(word, EndingComponents(case="genitive", number="plural")) == {"of the houses", "houses'"}
-        assert find_noun_inflections(word, EndingComponents(case="dative", number="plural")) == {"for the houses", "to the houses"}
+        assert find_noun_inflections(word, EndingComponents(case="dative", number="plural")) == {"for the houses", "for houses", "to the houses", "to houses"}
 
     def test_noun_inflections_2(self):
         word = "cactus"
@@ -55,4 +55,4 @@ class TestNounInflection:
         assert find_noun_inflections(word, EndingComponents(case="ablative", number="plural")) == {"cacti", "cactuses"}
 
         assert find_noun_inflections(word, EndingComponents(case="genitive", number="plural")) == {"of the cacti", "cacti's", "of the cactuses", "cactuses'"}
-        assert find_noun_inflections(word, EndingComponents(case="dative", number="plural")) == {"for the cacti", "to the cacti", "for the cactuses", "to the cactuses"}
+        assert find_noun_inflections(word, EndingComponents(case="dative", number="plural")) == {"for the cacti", "for cacti", "to the cacti", "to cacti", "for the cactuses", "for cactuses", "to the cactuses", "to cactuses"}
