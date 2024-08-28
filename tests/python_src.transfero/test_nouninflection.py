@@ -26,7 +26,7 @@ class TestNounInflection:
         assert find_noun_inflections(word, EndingComponents(case="nominative", number="singular")) == {"house"}
         assert find_noun_inflections(word, EndingComponents(case="vocative", number="singular")) == {"house"}
         assert find_noun_inflections(word, EndingComponents(case="accusative", number="singular")) == {"house"}
-        assert find_noun_inflections(word, EndingComponents(case="ablative", number="singular")) == {"house"}
+        assert find_noun_inflections(word, EndingComponents(case="ablative", number="singular")) == {"house", "with the house", "with a house", "by the house", "by a house", "by means of the house", "by means of a house"}
 
         assert find_noun_inflections(word, EndingComponents(case="genitive", number="singular")) == {"of the house", "house's", "of a house"}
         assert find_noun_inflections(word, EndingComponents(case="dative", number="singular")) == {"for the house", "to the house", "for a house", "to a house"}
@@ -34,7 +34,7 @@ class TestNounInflection:
         assert find_noun_inflections(word, EndingComponents(case="nominative", number="plural")) == {"houses"}
         assert find_noun_inflections(word, EndingComponents(case="vocative", number="plural")) == {"houses"}
         assert find_noun_inflections(word, EndingComponents(case="accusative", number="plural")) == {"houses"}
-        assert find_noun_inflections(word, EndingComponents(case="ablative", number="plural")) == {"houses"}
+        assert find_noun_inflections(word, EndingComponents(case="ablative", number="plural")) == {"houses", "with the houses", "by the houses", "by means of the houses"}
 
         assert find_noun_inflections(word, EndingComponents(case="genitive", number="plural")) == {"of the houses", "houses'"}
         assert find_noun_inflections(word, EndingComponents(case="dative", number="plural")) == {"for the houses", "for houses", "to the houses", "to houses"}
@@ -45,14 +45,14 @@ class TestNounInflection:
         assert find_noun_inflections(word, EndingComponents(case="nominative", number="singular")) == {"cactus"}
         assert find_noun_inflections(word, EndingComponents(case="accusative", number="singular")) == {"cactus"}
         assert find_noun_inflections(word, EndingComponents(case="vocative", number="singular")) == {"cactus"}
-        assert find_noun_inflections(word, EndingComponents(case="ablative", number="singular")) == {"cactus"}
+        assert find_noun_inflections(word, EndingComponents(case="ablative", number="singular")) == {"cactus", "with the cactus", "with a cactus", "by the cactus", "by a cactus", "by means of the cactus", "by means of a cactus"}
         assert find_noun_inflections(word, EndingComponents(case="genitive", number="singular")) == {"of the cactus", "cactus'", "of a cactus"}
         assert find_noun_inflections(word, EndingComponents(case="dative", number="singular")) == {"for the cactus", "to the cactus", "for a cactus", "to a cactus"}
 
         assert find_noun_inflections(word, EndingComponents(case="nominative", number="plural")) == {"cacti", "cactuses"}
         assert find_noun_inflections(word, EndingComponents(case="accusative", number="plural")) == {"cacti", "cactuses"}
         assert find_noun_inflections(word, EndingComponents(case="vocative", number="plural")) == {"cacti", "cactuses"}
-        assert find_noun_inflections(word, EndingComponents(case="ablative", number="plural")) == {"cacti", "cactuses"}
+        assert find_noun_inflections(word, EndingComponents(case="ablative", number="plural")) == {"cacti", "with the cacti", "by the cacti", "by means of the cacti", "cactuses", "with the cactuses", "by the cactuses", "by means of the cactuses"}
 
         assert find_noun_inflections(word, EndingComponents(case="genitive", number="plural")) == {"of the cacti", "cacti's", "of the cactuses", "cactuses'"}
         assert find_noun_inflections(word, EndingComponents(case="dative", number="plural")) == {"for the cacti", "for cacti", "to the cacti", "to cacti", "for the cactuses", "for cactuses", "to the cactuses", "to cactuses"}
