@@ -66,7 +66,7 @@ def find_verb_inflections(
 
         case _:
             raise NotImplementedError(
-                f"The {components.tense} {components.voice} {components.mood} {components.number} verb has not been implemented."
+                f"The {components.tense} {components.voice} {components.mood} has not been implemented"
             )
 
 
@@ -250,7 +250,7 @@ def _find_participle_inflections(
     - perfect passive
     """
     if not (hasattr(components, "case") and hasattr(components, "gender")):
-        raise ValueError("Case and number must be specified")
+        raise ValueError("Case and gender must be specified")
 
     lemma: str = lemminflect.getLemma(verb, "NOUN")[0]
 
@@ -265,7 +265,7 @@ def _find_participle_inflections(
 
         case _:
             raise NotImplementedError(
-                f"The {components.tense} {components.voice} participle has not been implemented."
+                f"The {components.tense} {components.voice} participle has not been implemented"
             )
 
 
