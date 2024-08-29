@@ -64,6 +64,9 @@ def find_verb_inflections(
         case ("present", "active", "infinitive"):
             return _find_preactinf_inflections(lemma)
 
+        case ("present", "active", "imperative"):
+            return _find_preipe_inflections(lemma)
+
         case _:
             raise NotImplementedError(
                 f"The {components.tense} {components.voice} {components.mood} has not been implemented"
@@ -271,3 +274,7 @@ def _find_participle_inflections(
 
 def _find_preactinf_inflections(lemma: str) -> set[str]:
     return {f"to {lemma}"}
+
+
+def _find_preipe_inflections(lemma: str) -> set[str]:
+    return {f"{lemma}"}
