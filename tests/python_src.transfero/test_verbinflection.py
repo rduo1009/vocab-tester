@@ -106,6 +106,12 @@ class TestVerbInflection:
 
         assert find_verb_inflections(word, EndingComponents(tense="present", voice="active", mood="infinitive")) == {"to attack"}
 
+    def test_verb_present_imperative(self):
+        word = "attack"
+
+        assert find_verb_inflections(word, EndingComponents(tense="present", voice="active", mood="imperative", number="singular", person=2)) == {"attack"}
+        assert find_verb_inflections(word, EndingComponents(tense="present", voice="active", mood="imperative", number="plural", person=2)) == {"attack"}
+
     def test_verb_imperfect_stative(self):
         word = "have"
 
