@@ -26,9 +26,12 @@ def find_noun_inflections(
     noun: str, components: accido.misc.EndingComponents
 ) -> set[str]:
     """Inflect English nouns using the case and number."""
-    # Something has gone very wrong here if this happens, but just to be safe
-    if not (hasattr(components, "case") and hasattr(components, "number")):
-        raise ValueError("Case and number must be specified")
+
+    if hasattr(components, "case"):
+        raise ValueError("Case must be specified")
+
+    if hasattr(components, "number"):
+        raise ValueError("Number must be specified")
 
     lemma: str = lemminflect.getLemma(noun, "NOUN")[0]
     base_forms: set[str] = set()
@@ -44,7 +47,7 @@ def find_noun_inflections(
             pluralinflect.classical(all=False)
 
         case _:
-            raise ValueError(f"Number '{components.number}' not recognised")
+            raise ValueError(f"Invalid number: '{components.number}'")
 
     match components.case:
         case "nominative" | "vocative" | "accusative":
@@ -118,4 +121,4 @@ def find_noun_inflections(
             }  # fmt: skip
 
         case _:
-            raise ValueError(f"Case '{components.case}' not recognised")
+            raise ValueError(f"Invalid case: '{components.case}'")
