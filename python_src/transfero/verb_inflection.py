@@ -13,6 +13,62 @@ from .. import accido
 from .edge_cases import STATIVE_VERBS
 
 
+def _verify_verb_inflections(components: accido.misc.EndingComponents) -> None:
+    if not hasattr(components, "tense"):
+        raise ValueError("Tense must be specified")
+
+    if not hasattr(components, "voice"):
+        raise ValueError("Voice must be specified")
+
+    if not hasattr(components, "mood"):
+        raise ValueError("Mood must be specified")
+
+    # not an infinitive
+    if components.mood != "infinitive":
+        if not hasattr(components, "number"):
+            raise ValueError("Number must be specified")
+
+        if components.number not in {"singular", "plural"}:
+            raise ValueError(f"Invalid number: '{components.number}'")
+
+        # not a participle or an infinitive
+        if components.mood != "participle":
+            if not hasattr(components, "person"):
+                raise ValueError("Person must be specified")
+
+            if components.person not in {1, 2, 3}:
+                raise ValueError(f"Invalid person: '{components.person}'")
+
+        else:
+            if not hasattr(components, "case"):
+                raise ValueError("Case must be specified")
+
+            if not hasattr(components, "gender"):
+                raise ValueError("Gender must be specified")
+
+    if components.voice not in {"active", "passive"}:
+        raise ValueError(f"Invalid voice: '{components.voice}'")
+
+    if components.mood not in {
+        "indicative",
+        "imperative",
+        "subjunctive",
+        "infinitive",
+        "participle",
+    }:
+        raise ValueError(f"Invalid mood: '{components.mood}'")
+
+    if components.tense not in {
+        "pluperfect",
+        "perfect",
+        "imperfect",
+        "present",
+        "future",
+        "future perfect",
+    }:
+        raise ValueError(f"Invalid tense: '{components.tense}'")
+
+
 def find_verb_inflections(
     verb: str, components: accido.misc.EndingComponents
 ) -> set[str]:
@@ -23,17 +79,7 @@ def find_verb_inflections(
     translation in English.
     """
 
-    if not (
-        hasattr(components, "tense")
-        and hasattr(components, "voice")
-        and hasattr(components, "mood")
-    ):
-        raise ValueError("Tense, voice and mood must be specified")
-
-    if not (
-        hasattr(components, "number") and hasattr(components, "person")
-    ) and components.mood not in {"infinitive", "participle"}:
-        raise ValueError("Number and person must be specified")
+    _verify_verb_inflections(components)
 
     if components.mood == "participle":
         return _find_participle_inflections(verb, components)
@@ -115,8 +161,10 @@ def _find_preactind_inflections(
                 f"they are {present_participle}",
             }
 
-        case _:
-            raise ValueError(f"Invalid number and person: {number} {person}")
+        # case _:
+        #     raise ValueError(
+        #         f"Invalid number and person: '{number}' '{person}'"
+        #     )
 
 
 def _find_impactind_inflections(
@@ -150,10 +198,10 @@ def _find_impactind_inflections(
             case ("plural", 3):
                 return {f"they {past}", f"they were {present_participle}"}
 
-            case _:
-                raise ValueError(
-                    f"Invalid number and person: {number} {person}"
-                )
+            # case _:
+            #     raise ValueError(
+            #         f"Invalid number and person: '{number}' '{person}'"
+            #     )
 
     match (number, person):
         case ("singular", 1):
@@ -175,8 +223,10 @@ def _find_impactind_inflections(
         case ("plural", 3):
             return {f"they were {present_participle}"}
 
-        case _:
-            raise ValueError(f"Invalid number and person: {number} {person}")
+        # case _:
+        #     raise ValueError(
+        #         f"Invalid number and person: '{number}' '{person}'"
+        #     )
 
 
 def _find_peractind_inflections(
@@ -210,8 +260,10 @@ def _find_peractind_inflections(
         case ("plural", 3):
             return {f"they {past}", f"they have {past}", f"they did {lemma}"}
 
-        case _:
-            raise ValueError(f"Invalid number and person: {number} {person}")
+        # case _:
+        #     raise ValueError(
+        #         f"Invalid number and person: '{number}' '{person}'"
+        #     )
 
 
 def _find_plpactind_inflections(
@@ -239,8 +291,10 @@ def _find_plpactind_inflections(
         case ("plural", 3):
             return {f"they had {past_participle}"}
 
-        case _:
-            raise ValueError(f"Invalid number and person: {number} {person}")
+        # case _:
+        #     raise ValueError(
+        #         f"Invalid number and person: '{number}' '{person}'"
+        #     )
 
 
 def _find_participle_inflections(
@@ -252,8 +306,6 @@ def _find_participle_inflections(
     - present active
     - perfect passive
     """
-    if not (hasattr(components, "case") and hasattr(components, "gender")):
-        raise ValueError("Case and gender must be specified")
 
     lemma: str = lemminflect.getLemma(verb, "NOUN")[0]
 
