@@ -21,8 +21,13 @@ class TestNounInflectErrors:
 
     def test_noun_error_3(self):
         with pytest.raises(ValueError) as error:
-            find_noun_inflections("house", EndingComponents())
-        assert str(error.value) == "Case and number must be specified"
+            find_noun_inflections("house", EndingComponents(case="nominative"))
+        assert str(error.value) == "Number must be specified"
+
+    def test_noun_error_4(self):
+        with pytest.raises(ValueError) as error:
+            find_noun_inflections("house", EndingComponents(number="singular"))
+        assert str(error.value) == "Case must be specified"
 
 
 class TestNounInflection:
