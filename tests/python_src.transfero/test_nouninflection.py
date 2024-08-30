@@ -12,12 +12,12 @@ class TestNounInflectErrors:
     def test_noun_error_1(self):
         with pytest.raises(ValueError) as error:
             find_noun_inflections("house", EndingComponents(case="error", number="singular"))
-        assert str(error.value) == "Case 'error' not recognised"
+        assert str(error.value) == "Invalid case: 'error'"
 
     def test_noun_error_2(self):
         with pytest.raises(ValueError) as error:
             find_noun_inflections("house", EndingComponents(case="nominative", number="error"))
-        assert str(error.value) == "Number 'error' not recognised"
+        assert str(error.value) == "Invalid number: 'error'"
 
     def test_noun_error_3(self):
         with pytest.raises(ValueError) as error:

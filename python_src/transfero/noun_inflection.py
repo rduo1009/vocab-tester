@@ -27,10 +27,10 @@ def find_noun_inflections(
 ) -> set[str]:
     """Inflect English nouns using the case and number."""
 
-    if hasattr(components, "case"):
+    if not hasattr(components, "case"):
         raise ValueError("Case must be specified")
 
-    if hasattr(components, "number"):
+    if not hasattr(components, "number"):
         raise ValueError("Number must be specified")
 
     lemma: str = lemminflect.getLemma(noun, "NOUN")[0]
