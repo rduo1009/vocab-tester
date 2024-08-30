@@ -119,7 +119,7 @@ def find_verb_inflections(
             )
 
 
-def _find_preactind_inflections(
+def _find_preactind_inflections(  # type: ignore
     lemma: str, number: Literal["singular", "plural"], person: Literal[1, 2, 3]
 ) -> set[str]:
     present_nonthird: str = lemminflect.getInflection(lemma, "VBP")[0]
@@ -167,7 +167,7 @@ def _find_preactind_inflections(
         #     )
 
 
-def _find_impactind_inflections(
+def _find_impactind_inflections(  # type: ignore
     lemma: str, number: Literal["singular", "plural"], person: Literal[1, 2, 3]
 ) -> set[str]:
     present_participle: str = lemminflect.getInflection(lemma, "VBG")[0]
@@ -229,7 +229,7 @@ def _find_impactind_inflections(
         #     )
 
 
-def _find_peractind_inflections(
+def _find_peractind_inflections(  # type: ignore
     lemma: str, number: Literal["singular", "plural"], person: Literal[1, 2, 3]
 ) -> set[str]:
     past = lemminflect.getInflection(lemma, "VBD")[0]
@@ -266,7 +266,7 @@ def _find_peractind_inflections(
         #     )
 
 
-def _find_plpactind_inflections(
+def _find_plpactind_inflections(  # type: ignore
     lemma: str, number: Literal["singular", "plural"], person: Literal[1, 2, 3]
 ) -> set[str]:
     past_participle: str = lemminflect.getInflection(lemma, "VBN")[0]
