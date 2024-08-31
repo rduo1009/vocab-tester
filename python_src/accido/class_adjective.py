@@ -834,15 +834,23 @@ class Adjective(_Word):
 
     @staticmethod
     def _create_namespace(key: str) -> EndingComponents:
-        output: EndingComponents = EndingComponents(
-            degree=key_from_value(DEGREE_SHORTHAND, key[1:4]),
-            gender=key_from_value(GENDER_SHORTHAND, key[4]),
-            case=key_from_value(CASE_SHORTHAND, key[5:8]),
-            number=key_from_value(NUMBER_SHORTHAND, key[8:10]),
-        )
-        output.string = (
-            f"{output.degree} {output.case} {output.number} {output.gender}"
-        )
+        output: EndingComponents
+
+        if key[0] == "A":
+            output = EndingComponents(
+                degree=key_from_value(DEGREE_SHORTHAND, key[1:4]),
+                gender=key_from_value(GENDER_SHORTHAND, key[4]),
+                case=key_from_value(CASE_SHORTHAND, key[5:8]),
+                number=key_from_value(NUMBER_SHORTHAND, key[8:10]),
+            )
+            output.string = f"{output.degree} {output.case} {output.number} {output.gender}"
+
+        else:
+            output = EndingComponents(
+                degree=key_from_value(DEGREE_SHORTHAND, key[1:4])
+            )
+            output.string = output.degree
+
         return output
 
     def __str__(self) -> str:
