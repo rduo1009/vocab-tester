@@ -5,7 +5,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../.
 
 from pathlib import Path
 
-import pytest  # type: ignore[import-not-found]
+import pytest
 from python_src.accido.endings import Adjective, Noun, Pronoun, RegularWord, Verb
 from python_src.accido.misc import MultipleMeanings
 from python_src.lego.custom_exceptions import InvalidVocabFileFormat
