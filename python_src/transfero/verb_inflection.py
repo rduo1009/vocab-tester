@@ -11,6 +11,7 @@ import lemminflect
 
 from .. import accido
 from .edge_cases import STATIVE_VERBS
+from .exceptions import InvalidWordError
 
 
 def _verify_verb_inflections(components: accido.misc.EndingComponents) -> None:
@@ -84,7 +85,10 @@ def find_verb_inflections(
     if components.mood == "participle":
         return _find_participle_inflections(verb, components)
 
-    lemma: str = lemminflect.getLemma(verb, "NOUN")[0]
+    try:
+        lemma: str = lemminflect.getLemma(verb, "VERB")[0]
+    except KeyError:
+        raise InvalidWordError(f"Word {verb} is not a verb")
 
     match (components.tense, components.voice, components.mood):
         case ("present", "active", "indicative"):

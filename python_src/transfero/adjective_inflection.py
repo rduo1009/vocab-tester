@@ -8,6 +8,7 @@ from __future__ import annotations
 import lemminflect
 
 from .. import accido
+from .exceptions import InvalidWordError
 
 
 def find_adjective_inflections(
@@ -44,7 +45,10 @@ def find_adjective_inflections(
     if components.number not in {"singular", "plural"}:
         raise ValueError(f"Invalid number: '{components.number}'")
 
-    lemma: str = lemminflect.getLemma(adjective, "ADJ")[0]
+    try:
+        lemma: str = lemminflect.getLemma(adjective, "ADJ")[0]
+    except KeyError:
+        raise InvalidWordError(f"Word '{adjective}' is not an adjective")
 
     match components.degree:
         case "positive":

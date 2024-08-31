@@ -8,6 +8,7 @@ from __future__ import annotations
 import lemminflect
 
 from .. import accido
+from .exceptions import InvalidWordError
 
 
 def find_adverb_inflections(
@@ -18,7 +19,10 @@ def find_adverb_inflections(
     if not hasattr(components, "degree"):
         raise ValueError("Degree must be specified")
 
-    lemma: str = lemminflect.getLemma(adverb, "ADV")[0]
+    try:
+        lemma: str = lemminflect.getLemma(adverb, "ADV")[0]
+    except KeyError:
+        raise InvalidWordError(f"Word {adverb} is not an adverb")
 
     match components.degree:
         case "positive":

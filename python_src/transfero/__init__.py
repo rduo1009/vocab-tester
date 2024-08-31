@@ -4,6 +4,6 @@
 """A package for finding equivalent English words/phrases for Latin
 words/phrases."""
 
-from . import words
+from . import exceptions, words
 
-__all__ = ["words"]
+__all__ = ["words", "exceptions"]

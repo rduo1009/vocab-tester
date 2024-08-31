@@ -9,6 +9,7 @@ import lemminflect
 from inflect import engine
 
 from .. import accido
+from .exceptions import InvalidWordError
 
 pluralinflect = engine()  # To distinguish from the lemminflect module
 del engine
@@ -33,7 +34,11 @@ def find_noun_inflections(
     if not hasattr(components, "number"):
         raise ValueError("Number must be specified")
 
-    lemma: str = lemminflect.getLemma(noun, "NOUN")[0]
+    try:
+        lemma: str = lemminflect.getLemma(noun, "NOUN")[0]
+    except KeyError:
+        raise InvalidWordError(f"Word {noun} is not a noun")
+
     base_forms: set[str] = set()
 
     match components.number:
