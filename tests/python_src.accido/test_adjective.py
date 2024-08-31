@@ -111,6 +111,7 @@ class TestAdjectiveDunder:
             return not t
 
         word = Adjective("laetus", "laeta", "laetum", declension="212", meaning="happy")
+
         assert compare(
             word.find("laeta"),
             [
@@ -122,6 +123,8 @@ class TestAdjectiveDunder:
                 EndingComponents(degree="positive", gender="neuter", case="accusative", number="plural", string="positive accusative plural neuter"),
             ],
         )
+
+        assert compare(word.find("laete"), [EndingComponents(degree="positive", gender="masculine", case="vocative", number="singular", string="positive vocative singular masculine"), EndingComponents(degree="positive", string="positive")])
 
     def test_str_212(self):
         word = Adjective("laetus", "laeta", "laetum", declension="212", meaning="happy")
