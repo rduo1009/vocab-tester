@@ -6,5 +6,5 @@
 from . import accido, lego, transfero
 
 __all__ = ["accido", "lego", "transfero"]
-__version__ = "0.3-dev"
+__version__ = "0.3.0-dev"
 __author__ = "rduo1009"
