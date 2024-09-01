@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "vocab-tester"
-version = "0.2.5-dev"
+version = "0.3-dev"
 description = "An application that tests Latin vocabulary and grammar."
 authors = ["rduo1009 <robertduong09alt@gmail.com>"]
 readme = "README.md"
@@ -9,16 +9,19 @@ packages = [{ include = "python_src" }]
 [tool.poetry.dependencies]
 python = "^3.10"
 dill = "^0.3.8"
+nltk = "^3.8.1"
+lemminflect = "^0.2.3"
+inflect = "^7.3.1"
 
 [tool.poetry.group.dev.dependencies]
 icecream = "*"
 mypy = "*"
 ruff = "*"
 pytest = "*"
+monkeytype = "^23.3.0"
 coverage = "^7.6.1"
 pytest-cov = "^5.0.0"
 pytest-sugar = "^1.0.0"
-monkeytype = "*"
 codetiming = "*"
 
 [build-system]
