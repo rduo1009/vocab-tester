@@ -3,6 +3,6 @@
 
 """A package for determining the accidence of Latin words."""
 
-from . import edge_cases, endings, exceptions, misc
+from . import endings, exceptions, misc
 
-__all__ = ["endings", "misc", "edge_cases", "exceptions"]
+__all__ = ["endings", "misc", "exceptions"]
