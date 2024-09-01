@@ -12,30 +12,31 @@ from python_src.accido.exceptions import InvalidInputError
 
 
 class TestPronounErrors:
-    def test_errors1(self):
+    def test_errors_cannot_recognise(self):
         with pytest.raises(InvalidInputError) as error:
-            Pronoun(pronoun="b", meaning="this").endings
-        assert "Pronoun 'b' not recognised" == str(error.value)
+            Pronoun(pronoun="error", meaning="this").endings
+        assert "Pronoun 'error' not recognised" == str(error.value)
 
-    def test_errors2(self):
+    def test_errors_invalid_gender(self):
         with pytest.raises(InvalidInputError) as error:
             word = Pronoun(pronoun="hic", meaning="this")
-            word.get(gender="a", case="b", number="c")
-        assert "Gender 'a', case 'b' or number 'c' not recognised" == str(error.value)
+            word.get(gender="error", case="nominative", number="singular")
+        assert "Invalid gender: 'error'" == str(error.value)
 
-    # def test_errors3(self):
-    #     with pytest.raises() as error:
-    #         word = Pronoun(pronoun="hic", meaning="this")
-    #         del word.endings["Pmnomsg"]
-    #         word.get(gender="masculine", case="nominative", number="singular")
-    #     assert "No ending found for gender 'masculine', case 'nominative' and number 'singular'" == str(error.value)
+    def test_errors_invalid_case(self):
+        with pytest.raises(InvalidInputError) as error:
+            word = Pronoun(pronoun="hic", meaning="this")
+            word.get(gender="masculine", case="error", number="singular")
+        assert "Invalid case: 'error'" == str(error.value)
+
+    def test_errors_invalid_number(self):
+        with pytest.raises(InvalidInputError) as error:
+            word = Pronoun(pronoun="hic", meaning="this")
+            word.get(gender="masculine", case="nominative", number="error")
+        assert "Invalid number: 'error'" == str(error.value)
 
 
 class TestPronounDunder:
-    # def test_pick(self):
-    #     word = Pronoun(pronoun="ille", meaning="that")
-    #     word.pick()
-
     def test_find(self):
         word = Pronoun(pronoun="ille", meaning="that")
         assert word.find("ille") == [

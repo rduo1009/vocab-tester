@@ -11,70 +11,104 @@ from python_src.accido.misc import EndingComponents
 
 
 class TestVerbErrors:
-    def test_errors1a(self):
+    def test_errors_invalid_infinitive(self):
         with pytest.raises(InvalidInputError) as error:
-            Verb(present="test1o", infinitive="makinganerror", perfect="test3i", ppp="test4", meaning="test5")
-        assert "Infinitive 'makinganerror' is not valid" == str(error.value)
+            Verb(present="celo", infinitive="error", perfect="celavi", ppp="celatus", meaning="hide")
+        assert "Invalid infinitive form: 'error'" == str(error.value)
 
-    def test_errors1b(self):
+    def test_errors_invalid_present(self):
         with pytest.raises(InvalidInputError) as error:
-            Verb(present="test1s", infinitive="are", perfect="test3i", ppp="test4", meaning="test5")
-        assert "Present 'test1s' is not valid" == str(error.value)
+            Verb(present="error", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
+        assert "Invalid present form: 'error' (must end in '-o')" == str(error.value)
 
-    def test_errors1c(self):
+    def test_errors_invalid_perfect(self):
         with pytest.raises(InvalidInputError) as error:
-            Verb(present="test1o", infinitive="are", perfect="test3a", ppp="test4", meaning="test5")
-        assert "Perfect 'test3a' is not valid" == str(error.value)
+            Verb(present="celo", infinitive="celare", perfect="error", ppp="celatus", meaning="hide")
+        assert "Invalid perfect form: 'error' (must end in '-i')" == str(error.value)
 
-    def test_errors2(self):
-        with pytest.raises(InvalidInputError) as error:
-            word = Verb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
-            word.get(person=1, number="makinganerror", tense="past", voice="active", mood="indicative")
-        assert "Tense 'past', voice 'active', mood 'indicative', or number 'makinganerror' not recognised" == str(error.value)
-
-    def test_errors2b(self):
+    def test_errors_invalid_number(self):
         with pytest.raises(InvalidInputError) as error:
             word = Verb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
-            word.get(number="makinganerror", tense="perfect", voice="passive", mood="participle", participle_gender="masculine", participle_case="nominative")
-        assert "Tense 'perfect', voice 'passive', gender 'masculine', case 'nominative', or number 'makinganerror' not recognised" == str(error.value)
+            word.get(person=1, number="error", tense="perfect", voice="active", mood="indicative")
+        assert "Invalid number: 'error'" == str(error.value)
 
-    def test_errors2c(self):
+    def test_errors_invalid_tense(self):
+        with pytest.raises(InvalidInputError) as error:
+            word = Verb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
+            word.get(person=1, number="singular", tense="error", voice="active", mood="indicative")
+        assert "Invalid tense: 'error'" == str(error.value)
+
+    def test_errors_invalid_voice(self):
+        with pytest.raises(InvalidInputError) as error:
+            word = Verb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
+            word.get(person=1, number="singular", tense="present", voice="error", mood="indicative")
+        assert "Invalid voice: 'error'" == str(error.value)
+
+    def test_errors_invalid_mood(self):
+        with pytest.raises(InvalidInputError) as error:
+            word = Verb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
+            word.get(person=1, number="singular", tense="present", voice="active", mood="error")
+        assert "Invalid mood: 'error'" == str(error.value)
+
+    def test_errors_invalid_number_participle(self):
+        with pytest.raises(InvalidInputError) as error:
+            word = Verb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
+            word.get(number="error", tense="perfect", voice="passive", mood="participle", participle_gender="masculine", participle_case="nominative")
+        assert "Invalid number: 'error'" == str(error.value)
+
+    def test_errors_invalid_tense_participle(self):
+        with pytest.raises(InvalidInputError) as error:
+            word = Verb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
+            word.get(number="singular", tense="error", voice="passive", mood="participle", participle_gender="masculine", participle_case="nominative")
+        assert "Invalid tense: 'error'" == str(error.value)
+
+    def test_errors_invalid_voice_participle(self):
+        with pytest.raises(InvalidInputError) as error:
+            word = Verb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
+            word.get(number="singular", tense="perfect", voice="error", mood="participle", participle_gender="masculine", participle_case="nominative")
+        assert "Invalid voice: 'error'" == str(error.value)
+
+    def test_errors_invalid_gender_participle(self):
+        with pytest.raises(InvalidInputError) as error:
+            word = Verb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
+            word.get(number="singular", tense="perfect", voice="passive", mood="participle", participle_gender="error", participle_case="nominative")
+        assert "Invalid gender: 'error'" == str(error.value)
+
+    def test_errors_invalid_case_participle(self):
+        with pytest.raises(InvalidInputError) as error:
+            word = Verb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
+            word.get(number="singular", tense="perfect", voice="passive", mood="participle", participle_gender="masculine", participle_case="error")
+        assert "Invalid case: 'error'" == str(error.value)
+
+    def test_errors_person_with_participle(self):
         with pytest.raises(InvalidInputError) as error:
             word = Verb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
             word.get(number="singular", tense="perfect", voice="passive", mood="participle", participle_gender="masculine", participle_case="nominative", person=1)
         assert "Participle cannot have a person (person '1')" == str(error.value)
 
-    def test_errors3(self):
+    def test_errors_invalid_person(self):
         with pytest.raises(InvalidInputError) as error:
             word = Verb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
-            word.get(person=123415, number="singular", tense="present", voice="active", mood="indicative")
-        assert "Person '123415' not recognised" == str(error.value)
+            word.get(person=4, number="singular", tense="present", voice="active", mood="indicative")
+        assert "Invalid person: '4'" == str(error.value)
 
-    def test_errors4(self):
+    def test_errors_participle_gender_not_given(self):
         with pytest.raises(InvalidInputError) as error:
             word = Verb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
-            word.get(person=1, number="singular", tense="present", voice="active", mood="participle")
-        assert "Gender or case not given" == str(error.value)
+            word.get(number="singular", tense="present", voice="active", mood="participle", participle_case="nominative")
+        assert "Gender not given" == str(error.value)
 
-    def test_errors5(self):
+    def test_errors_participle_case_not_given(self):
+        with pytest.raises(InvalidInputError) as error:
+            word = Verb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
+            word.get(number="singular", tense="present", voice="active", mood="participle", participle_gender="masculine")
+        assert "Case not given" == str(error.value)
+
+    def test_errors_number_not_given(self):
         with pytest.raises(InvalidInputError) as error:
             word = Verb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
             word.get(tense="present", voice="active", mood="participle", participle_case="nominative", participle_gender="masculine")
         assert "Number not given" == str(error.value)
-
-    # def test_errors6(self):
-    #     with pytest.raises() -> None as error:
-    #         word = Verb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
-    #         del word.endings["Vperpasptcmnomsg"]
-    #         word.get(tense="perfect", voice="passive", mood="participle", participle_case="nominative", participle_gender="masculine", number="singular")
-    #     assert "No ending found for nominative singular masculine perfect passive participle" == str(error.value)
-
-    # def test_errors7(self):
-    #     with pytest.raises() -> None as error:
-    #         word = Verb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
-    #         del word.endings["Vperactindsg3"]
-    #         word.get(tense="perfect", voice="active", mood="indicative", person=3, number="singular")
-    #     assert "No ending found for 3 singular perfect active indicative" == str(error.value)
 
 
 class TestVerbDunder:
@@ -83,8 +117,8 @@ class TestVerbDunder:
         assert not word.get(tense="perfect", voice="passive", mood="indicative", person=2, number="plural")
 
     def test_repr(self):
-        word = Verb(present="test1o", infinitive="testare", perfect="test3i", ppp="test4", meaning="test5")
-        assert word.__repr__() == "Verb(test1o, testare, test3i, test4, test5)"
+        word = Verb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
+        assert word.__repr__() == "Verb(celo, celare, celavi, celatus, hide)"
 
     def test_verb_str(self):
         word = Verb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
@@ -95,13 +129,13 @@ class TestVerbDunder:
         assert str(word) == "hide: celo, celare, celavi"
 
     def test_eq(self):
-        word1 = Verb(present="test1o", infinitive="testare", perfect="test3i", ppp="test4", meaning="test5")
-        word2 = Verb(present="test1o", infinitive="testare", perfect="test3i", ppp="test4", meaning="test5")
+        word1 = Verb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
+        word2 = Verb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
         assert word1 == word2
 
     def test_lt(self):
-        word1 = Verb(present="test1o", infinitive="testare", perfect="test3i", ppp="test4", meaning="test5")
-        word2 = Verb(present="aaatest1o", infinitive="testare", perfect="test3i", ppp="test4", meaning="test5")
+        word1 = Verb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
+        word2 = Verb(present="amo", infinitive="amare", perfect="amavi", ppp="amatus", meaning="love")
         # word2 must be smaller than word1 as word1.first = "test1" and word2.first = "aaatest1"
         assert word1 > word2
 
@@ -112,10 +146,6 @@ class TestVerbDunder:
     def test_find_participle(self):
         word = Verb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
         assert word.find("celatus") == [EndingComponents(number="singular", case="nominative", gender="masculine", tense="perfect", voice="passive", mood="participle", string="perfect passive participle masculine nominative singular")]
-
-    # def test_pick(self):
-    #     word = Verb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
-    #     word.pick() -> None
 
 
 class TestVerbConjugation:

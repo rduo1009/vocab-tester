@@ -12,33 +12,32 @@ from python_src.accido.endings import Noun
 
 
 class TestNounErrors:
-    def test_errors1(self):
+    def test_errors_invalid_gender(self):
         with pytest.raises(InvalidInputError) as error:
-            Noun(nominative="puer", genitive="pueri", gender="a", meaning="boy")
-        assert "Gender 'a' not recognised" == str(error.value)
+            Noun(nominative="puer", genitive="pueri", gender="error", meaning="boy")
+        assert "Invalid gender: 'error'" == str(error.value)
 
-    def test_errors2(self):
+    def test_errors_invalid_genitive(self):
         with pytest.raises(InvalidInputError) as error:
-            Noun(nominative="puer", genitive="puerifaksldsnj", gender="masculine", meaning="boy")
-        assert "Genitive form 'puerifaksldsnj' is not valid" == str(error.value)
+            Noun(nominative="puer", genitive="error", gender="masculine", meaning="boy")
+        assert "Invalid genitive form: 'error'" == str(error.value)
 
-    def test_errors3(self):
+    def test_errors_fifth_declension_neuter(self):
         with pytest.raises(InvalidInputError) as error:
             Noun(nominative="puer", genitive="puerei", gender="neuter", meaning="boy")
-        assert "Fifth declension nouns cannot be neuter (noun 'puer')" == str(error.value)
+        assert "Fifth declension nouns cannot be neuter (noun 'puer' given)" == str(error.value)
 
-    def test_errors4(self):
+    def test_errors_invalid_case(self):
         with pytest.raises(InvalidInputError) as error:
             word = Noun(nominative="puer", genitive="pueri", gender="masculine", meaning="boy")
-            word.get(case="makinganerror", number="makinganerror")
-        assert "Case 'makinganerror' or number 'makinganerror' not recognised" == str(error.value)
+            word.get(case="error", number="singular")
+        assert "Invalid case: 'error'" == str(error.value)
 
-    # def test_errors5(self):
-    #     with pytest.raises() as error:
-    #         word = Noun(nominative="puer", genitive="pueri", gender="masculine", meaning="boy")
-    #         del word.endings["Nnomsg"]
-    #         word.get(case="nominative", number="singular")
-    #     assert "No ending found for case 'nominative' and number 'singular'" == str(error.value)
+    def test_errors_invalid_number(self):
+        with pytest.raises(InvalidInputError) as error:
+            word = Noun(nominative="puer", genitive="pueri", gender="masculine", meaning="boy")
+            word.get(case="nominative", number="error")
+        assert "Invalid number: 'error'" == str(error.value)
 
 
 class TestNounDunder:
@@ -73,19 +72,15 @@ class TestNounDunder:
                 SimpleNamespace(case="vocative", number="singular", string="vocative singular"), \
                     SimpleNamespace(case="ablative", number="singular", string="ablative singular")])  # fmt: skip
 
-    # def test_pick(self):
-    #     word = Noun(nominative="ancilla", genitive="ancillae", gender="feminine", meaning="slavegirl")
-    #     word.pick()
-
-    def test_str_m(self):
+    def test_str_masculine(self):
         word = Noun(nominative="servus", genitive="servi", gender="masculine", meaning="slave")
         assert word.__str__() == "slave: servus, servi, (m)"
 
-    def test_str_f(self):
+    def test_str_feminine(self):
         word = Noun(nominative="ancilla", genitive="ancillae", gender="feminine", meaning="slavegirl")
         assert word.__str__() == "slavegirl: ancilla, ancillae, (f)"
 
-    def test_str_n(self):
+    def test_str_neuter(self):
         word = Noun(nominative="templum", genitive="templi", gender="neuter", meaning="temple")
         assert word.__str__() == "temple: templum, templi, (n)"
 
@@ -106,7 +101,7 @@ class TestNounDeclension:
         assert word.get(case="dative", number="plural") == "ancillis"
         assert word.get(case="ablative", number="plural") == "ancillis"
 
-    def test_seconddeclension1(self):
+    def test_seconddeclension_regular(self):
         word = Noun(nominative="servus", genitive="servi", gender="masculine", meaning="slave")
         assert word.get(case="nominative", number="singular") == "servus"
         assert word.get(case="vocative", number="singular") == "serve"
@@ -121,7 +116,7 @@ class TestNounDeclension:
         assert word.get(case="dative", number="plural") == "servis"
         assert word.get(case="ablative", number="plural") == "servis"
 
-    def test_seconddeclension2(self):
+    def test_seconddeclension_endinginr(self):
         word = Noun(nominative="puer", genitive="pueri", gender="masculine", meaning="boy")
         assert word.get(case="nominative", number="singular") == "puer"
         assert word.get(case="vocative", number="singular") == "puer"
@@ -183,7 +178,7 @@ class TestNounDeclension:
 
 
 class TestNounNeuter:
-    def test_seconddeclension_neuter(self):
+    def test_seconddeclension(self):
         word = Noun(nominative="templum", genitive="templi", gender="neuter", meaning="temple")
         assert word.get(case="nominative", number="singular") == "templum"
         assert word.get(case="vocative", number="singular") == "templum"
@@ -198,7 +193,7 @@ class TestNounNeuter:
         assert word.get(case="dative", number="plural") == "templis"
         assert word.get(case="ablative", number="plural") == "templis"
 
-    def test_thirddeclension_neuter(self):
+    def test_thirddeclension(self):
         word = Noun(nominative="litus", genitive="litoris", gender="neuter", meaning="beach")
         assert word.get(case="nominative", number="singular") == "litus"
         assert word.get(case="vocative", number="singular") == "litus"
@@ -213,7 +208,7 @@ class TestNounNeuter:
         assert word.get(case="dative", number="plural") == "litoribus"
         assert word.get(case="ablative", number="plural") == "litoribus"
 
-    def test_fourthdeclension_neuter(self):
+    def test_fourthdeclension(self):
         word = Noun(nominative="cornu", genitive="cornus", gender="neuter", meaning="horn")
         assert word.get(case="nominative", number="singular") == "cornu"
         assert word.get(case="vocative", number="singular") == "cornu"
@@ -269,13 +264,3 @@ class TestNounPluraleTantum:
         assert word.get(case="genitive", number="plural") == "manuum"
         assert word.get(case="dative", number="plural") == "manibus"
         assert word.get(case="ablative", number="plural") == "manibus"
-
-    # def test_fifthdeclension(self):
-    #     word = Noun(nominative="res", genitive="rerum", gender="feminine", meaning="things")
-    #     assert word.declension == 5
-    #     assert word.get(case="nominative", number="plural") == "res"
-    #     assert word.get(case="vocative", number="plural") == "res"
-    #     assert word.get(case="accusative", number="plural") == "res"
-    #     assert word.get(case="genitive", number="plural") == "rerum"
-    #     assert word.get(case="dative", number="plural") == "rebus"
-    #     assert word.get(case="ablative", number="plural") == "rebus"

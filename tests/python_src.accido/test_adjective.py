@@ -12,77 +12,81 @@ from python_src.accido.misc import EndingComponents
 
 
 class TestAdjectiveErrors:
-    def test_errors1(self):
+    def test_errors_termination_with_212(self):
         with pytest.raises(InvalidInputError) as error:
             Adjective("laetus", "laeta", "laetum", declension="212", meaning="happy", termination=3)
-        assert "2-1-2 adjectives cannot have a termination (termination 3 given)" == str(error.value)
+        assert "2-1-2 adjectives cannot have a termination (termination '3' given)" == str(error.value)
 
-    def test_errors2(self):
+    def test_errors_wrong_number_principal_parts_212(self):
         with pytest.raises(InvalidInputError) as error:
             Adjective("laetus", "laeta", declension="212", meaning="happy")
         assert "2-1-2 adjectives must have 3 principal parts (adjective 'laetus' given)" == str(error.value)
 
-    def test_errors3(self):
+    def test_errors_wrong_number_principal_parts_31(self):
         with pytest.raises(InvalidInputError) as error:
             Adjective("laetus", "laeta", "laetum", declension="3", meaning="happy", termination=1)
-        assert "First-termination adjectives must have 2 principal parts (adjective 'laetus')" == str(error.value)
+        assert "First-termination adjectives must have 2 principal parts (adjective 'laetus' given)" == str(error.value)
 
-    def test_errors4(self):
+    def test_errors_invalid_genitive(self):
         with pytest.raises(InvalidInputError) as error:
             Adjective("laetus", "laeta", declension="3", meaning="happy", termination=1)
-        assert "Genitive 'laeta' not recognised" == str(error.value)
+        assert "Invalid genitive form: 'laeta' (must end in '-is')" == str(error.value)
 
-    def test_errors5(self):
+    def test_errors_wrong_number_principal_parts_32(self):
         with pytest.raises(InvalidInputError) as error:
             Adjective("laetus", "laeta", "laetum", declension="3", meaning="happy", termination=2)
-        assert "Second-termination adjectives must have 2 principal parts (adjective 'laetus')" == str(error.value)
+        assert "Second-termination adjectives must have 2 principal parts (adjective 'laetus' given)" == str(error.value)
 
-    def test_errors6(self):
+    def test_errors_wrong_number_principal_parts_33(self):
         with pytest.raises(InvalidInputError) as error:
             Adjective("laetus", "laeta", declension="3", meaning="happy", termination=3)
-        assert "Third-termination adjectives must have 3 principal parts (adjective 'laetus')" == str(error.value)
+        assert "Third-termination adjectives must have 3 principal parts (adjective 'laetus' given)" == str(error.value)
 
-    def test_errors7(self):
+    def test_errors_invalid_termination(self):
         with pytest.raises(InvalidInputError) as error:
             Adjective("laetus", "laeta", declension="3", meaning="happy", termination=7)
-        assert "Termination must be 1, 2 or 3 (given 7)" == str(error.value)
+        assert "Termination must be 1, 2 or 3 (given '7')" == str(error.value)
 
-    def test_errors8(self):
+    def test_errors_invalid_declension(self):
         with pytest.raises(InvalidInputError) as error:
-            Adjective("laetus", "laeta", "laetum", declension="332801549372", meaning="happy", termination=3)
-        assert "Declension 332801549372 not recognised" == str(error.value)
+            Adjective("laetus", "laeta", "laetum", declension="4", meaning="happy", termination=3)
+        assert "Invalid declension: '4'" == str(error.value)
 
-    def test_errors9(self):
-        with pytest.raises(InvalidInputError) as error:
-            word = Adjective("laetus", "laeta", "laetum", declension="212", meaning="happy")
-            word.get(case="makinganerror", gender="masculine", number="singular", degree="adgsf", adverb=True)
-        assert "Adverbs do not have gender, case or number (given 'masculine', 'makinganerror' and 'singular')" == str(error.value)
-
-    def test_errors10(self):
+    def test_errors_adverbs_donothave(self):
         with pytest.raises(InvalidInputError) as error:
             word = Adjective("laetus", "laeta", "laetum", declension="212", meaning="happy")
-            word.get(degree="adgsf", adverb=True)
-        assert "Degree 'adgsf' not recognised" == str(error.value)
+            word.get(case="nominative", gender="masculine", number="singular", degree="adgsf", adverb=True)
+        assert "Adverbs do not have gender, case or number (given 'masculine', 'nominative' and 'singular')" == str(error.value)
 
-    # def test_errors11(self):
-    #     with pytest.raises() as error:
-    #         word = Adjective("laetus", "laeta", "laetum", declension="212", meaning="happy")
-    #         del word.endings["Dpos"]
-    #         word.get(degree="positive", adverb=True)
-    #     assert "No ending found for degree 'positive'" == str(error.value)
-
-    def test_errors12(self):
+    def test_errors_invalid_degree_adverb(self):
         with pytest.raises(InvalidInputError) as error:
             word = Adjective("laetus", "laeta", "laetum", declension="212", meaning="happy")
-            word.get(case="makinganerror", gender="masculine", number="singular", degree="adgsf")
-        assert "Degree 'adgsf', gender 'masculine', case 'makinganerror' or number 'singular' not recognised" == str(error.value)
+            word.get(degree="error", adverb=True)
+        assert "Invalid degree: 'error'" == str(error.value)
 
-    # def test_errors13(self):
-    #     with pytest.raises() as error:
-    #         word = Adjective("laetus", "laeta", "laetum", declension="212", meaning="happy")
-    #         del word.endings["Aposmnomsg"]
-    #         word.get(case="nominative", gender="masculine", number="singular", degree="positive")
-    #     assert "No ending found for degree 'positive', gender 'masculine', case 'nominative' and number 'singular'" == str(error.value)
+    def test_errors_invalid_degree_normal(self):
+        with pytest.raises(InvalidInputError) as error:
+            word = Adjective("laetus", "laeta", "laetum", declension="212", meaning="happy")
+            word.get(case="nominative", gender="masculine", number="singular", degree="error")
+        assert "Invalid degree: 'error'" == str(error.value)
+
+    def test_errors_invalid_case(self):
+        with pytest.raises(InvalidInputError) as error:
+            word = Adjective("laetus", "laeta", "laetum", declension="212", meaning="happy")
+            word.get(case="error", gender="masculine", number="singular", degree="positive")
+        assert "Invalid case: 'error'" == str(error.value)
+
+    def test_errors_invalid_gender(self):
+        with pytest.raises(InvalidInputError) as error:
+            word = Adjective("laetus", "laeta", "laetum", declension="212", meaning="happy")
+            word.get(case="nominative", gender="error", number="singular", degree="positive")
+        assert "Invalid gender: 'error'" == str(error.value)
+
+    def test_errors_invalid_number(self):
+        with pytest.raises(InvalidInputError) as error:
+            word = Adjective("laetus", "laeta", "laetum", declension="212", meaning="happy")
+            word.get(case="nominative", gender="masculine", number="error", degree="positive")
+        assert "Invalid number: 'error'" == str(error.value)
 
 
 class TestAdjectiveDunder:
@@ -382,7 +386,7 @@ class TestAdjectiveDeclension:
         assert word.get(degree="superlative", gender="neuter", case="dative", number="plural") == "optimis"
         assert word.get(degree="superlative", gender="neuter", case="ablative", number="plural") == "optimis"
 
-    def test_declension3_1a(self):
+    def test_declension3_1_regular(self):
         word = Adjective("egens", "egentis", termination=1, declension="3", meaning="poor")
         assert word.get(degree="positive", gender="masculine", case="nominative", number="singular") == "egens"
         assert word.get(degree="positive", gender="masculine", case="vocative", number="singular") == "egens"
@@ -501,9 +505,8 @@ class TestAdjectiveDeclension:
         assert word.get(degree="superlative", gender="neuter", case="dative", number="plural") == "egentissimis"
         assert word.get(degree="superlative", gender="neuter", case="ablative", number="plural") == "egentissimis"
 
-    def test_declension3_1b(self):
+    def test_declension3_1_with_rr(self):
         word = Adjective("uber", "uberis", termination=1, declension="3", meaning="fruitful")
-        # assert word._spr_stem == "uberrim"
 
         assert word.get(degree="positive", gender="masculine", case="nominative", number="singular") == "uber"
         assert word.get(degree="positive", gender="masculine", case="vocative", number="singular") == "uber"
@@ -862,25 +865,25 @@ class TestAdjectiveDeclension:
 
 
 class TestAdverb:
-    def test_adverb1(self):
+    def test_adverb_212(self):
         word = Adjective("laetus", "laeta", "laetum", declension="212", meaning="happy")
         assert word.get(degree="positive", adverb=True) == "laete"
         assert word.get(degree="comparative", adverb=True) == "laetius"
         assert word.get(degree="superlative", adverb=True) == "laetissime"
 
-    def test_adverb2(self):
+    def test_adverb_31(self):
         word = Adjective("prudens", "prudentis", termination=1, declension="3", meaning="wise")
         assert word.get(degree="positive", adverb=True) == "prudenter"
         assert word.get(degree="comparative", adverb=True) == "prudentius"
         assert word.get(degree="superlative", adverb=True) == "prudentissime"
 
-    def test_adverb3(self):
+    def test_adverb_32(self):
         word = Adjective("fortis", "forte", termination=2, declension="3", meaning="strong")
         assert word.get(degree="positive", adverb=True) == "fortiter"
         assert word.get(degree="comparative", adverb=True) == "fortius"
         assert word.get(degree="superlative", adverb=True) == "fortissime"
 
-    def test_adverb4(self):
+    def test_adverb_33(self):
         word = Adjective("celer", "celeris", "celere", termination=3, declension="3", meaning="quick")
         assert word.get(degree="positive", adverb=True) == "celeriter"
         assert word.get(degree="comparative", adverb=True) == "celerius"
@@ -910,7 +913,7 @@ class TestAdverb:
         assert word.get(degree="comparative", adverb=True) == "melius"
         assert word.get(degree="superlative", adverb=True) == "optime"
 
-    def test_irregularadverb5(self):
+    def test_irregularadverb_noadverb(self):
         word = Adjective("magnus", "magna", "magnum", declension="212", meaning="big")
         a = word.get(degree="positive", adverb=True)
         assert a is None
