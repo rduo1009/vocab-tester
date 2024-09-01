@@ -9,8 +9,8 @@ from functools import total_ordering
 from typing import Optional
 
 from .class_word import _Word
-from .custom_exceptions import InvalidInputError
 from .edge_cases import IRREGULAR_ADJECTIVES, LIS_ADJECTIVES
+from .exceptions import InvalidInputError
 from .misc import (
     CASE_SHORTHAND,
     DEGREE_SHORTHAND,

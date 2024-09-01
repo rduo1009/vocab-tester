@@ -6,9 +6,9 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../.
 from types import SimpleNamespace
 
 import pytest
-from python_src.accido.custom_exceptions import InvalidInputError
 from python_src.accido.edge_cases import PRONOUNS
 from python_src.accido.endings import Pronoun
+from python_src.accido.exceptions import InvalidInputError
 
 
 class TestPronounErrors:

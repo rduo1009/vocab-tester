@@ -8,7 +8,7 @@ from pathlib import Path
 import pytest
 from python_src.accido.endings import Adjective, Noun, Pronoun, RegularWord, Verb
 from python_src.accido.misc import MultipleMeanings
-from python_src.lego.custom_exceptions import InvalidVocabFileFormat
+from python_src.lego.exceptions import InvalidVocabFileFormat
 from python_src.lego.misc import VocabList
 from python_src.lego.reader import _regenerate_vocab_list, read_vocab_file
 

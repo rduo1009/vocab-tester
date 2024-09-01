@@ -8,8 +8,8 @@ from __future__ import annotations
 from functools import total_ordering
 
 from .class_word import _Word
-from .custom_exceptions import InvalidInputError
 from .edge_cases import PRONOUNS
+from .exceptions import InvalidInputError
 from .misc import (
     CASE_SHORTHAND,
     GENDER_SHORTHAND,

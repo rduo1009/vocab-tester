@@ -7,7 +7,7 @@ from types import SimpleNamespace
 
 import pytest
 
-from python_src.accido.custom_exceptions import InvalidInputError  # isort: skip
+from python_src.accido.exceptions import InvalidInputError  # isort: skip
 from python_src.accido.endings import Noun
 
 
