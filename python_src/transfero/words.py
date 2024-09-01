@@ -3,6 +3,7 @@
 
 """Contains functions that inflect English words."""
 
+from .adj_to_adv import adj_to_adv as adj_to_adv
 from .adjective_inflection import (
     find_adjective_inflections as find_adjective_inflections,
 )
