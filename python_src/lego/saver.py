@@ -5,7 +5,7 @@
 
 from __future__ import annotations
 
-import hashlib as hl
+import hashlib
 import hmac
 from pathlib import Path
 from warnings import warn
@@ -57,7 +57,7 @@ def save_vocab_dump(file_path: Path, vocab_list: VocabList) -> None:
 
     pickled_data: bytes = pickle.dumps(vocab_list)
 
-    signature = hmac.new(KEY, pickled_data, hl.sha256).hexdigest()
+    signature = hmac.new(KEY, pickled_data, hashlib.sha256).hexdigest()
 
     with open(file_path, "wb") as file:
         file.write(pickled_data)

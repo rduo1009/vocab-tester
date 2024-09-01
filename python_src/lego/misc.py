@@ -5,7 +5,7 @@
 
 from __future__ import annotations
 
-import ctypes as ct
+import ctypes
 from dataclasses import dataclass
 from typing import Final
 
@@ -47,8 +47,8 @@ class VocabList:
 # Frankly, considering the code for all of this is public, this is a bit
 # on the useless side. I guess it would help if someone tried to make
 # an attack without knowledge of the source code or something.
-libkey: ct.CDLL = ct.CDLL("python_src/lego/libkey.so")
-libkey.get_key.restype = ct.c_char_p
+libkey: ctypes.CDLL = ctypes.CDLL("python_src/lego/libkey.so")
+libkey.get_key.restype = ctypes.c_char_p
 
 """The key used to sign vocabulary pickle files."""
 KEY: Final[bytes] = libkey.get_key()

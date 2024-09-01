@@ -5,7 +5,7 @@
 
 from __future__ import annotations
 
-import hashlib as hl
+import hashlib
 import hmac
 import warnings
 from io import TextIOWrapper
@@ -356,7 +356,7 @@ def read_vocab_dump(filename: Path) -> VocabList:
         signature: str = content[-64:].decode()
 
     if (
-        hmac.new(KEY, pickled_data, hl.sha256).hexdigest() != signature
+        hmac.new(KEY, pickled_data, hashlib.sha256).hexdigest() != signature
     ):  # pragma: no cover
         raise InvalidVocabDump("Data integrity check failed for vocab dump.")
 
