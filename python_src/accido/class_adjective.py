@@ -82,6 +82,7 @@ class Adjective(_Word):
         InvalidInputError
             If the input is invalid.
         """
+
         super().__init__()
 
         self._principal_parts: tuple[str, ...] = principal_parts
@@ -125,12 +126,14 @@ class Adjective(_Word):
             case "212":
                 if self.termination:
                     raise InvalidInputError(
-                        f"2-1-2 adjectives cannot have a termination (termination {self.termination} given)"
+                        f"2-1-2 adjectives cannot have a termination (termination '{self.termination}' given)"
                     )
+
                 if len(self._principal_parts) != 3:
                     raise InvalidInputError(
                         f"2-1-2 adjectives must have 3 principal parts (adjective '{self._first}' given)"
                     )
+
                 self._femnom = self._principal_parts[1]
                 self._neutnom = self._principal_parts[2]
 
@@ -281,15 +284,16 @@ class Adjective(_Word):
                         # ingens, ingentis
                         if len(self._principal_parts) != 2:
                             raise InvalidInputError(
-                                f"First-termination adjectives must have 2 principal parts (adjective '{self._first}')"
+                                f"First-termination adjectives must have 2 principal parts (adjective '{self._first}' given)"
                             )
 
                         self._mascgen: str = self._principal_parts[1]
 
                         if self._mascgen[-2:] != "is":
                             raise InvalidInputError(
-                                f"Genitive '{self._mascgen}' not recognised"
+                                f"Invalid genitive form: '{self._mascgen}' (must end in '-is')"
                             )
+
                         self._pos_stem = self._mascgen[
                             :-2  # ingentis -> ingent-
                         ]
@@ -443,7 +447,7 @@ class Adjective(_Word):
                         # fortis, forte
                         if len(self._principal_parts) != 2:
                             raise InvalidInputError(
-                                f"Second-termination adjectives must have 2 principal parts (adjective '{self._first}')"
+                                f"Second-termination adjectives must have 2 principal parts (adjective '{self._first}' given)"
                             )
 
                         self._neutnom = self._principal_parts[1]
@@ -597,7 +601,7 @@ class Adjective(_Word):
                         # acer, acris, acre
                         if len(self._principal_parts) != 3:
                             raise InvalidInputError(
-                                f"Third-termination adjectives must have 3 principal parts (adjective '{self._first}')"
+                                f"Third-termination adjectives must have 3 principal parts (adjective '{self._first}' given)"
                             )
 
                         self._mascnom = self._principal_parts[0]
@@ -752,12 +756,12 @@ class Adjective(_Word):
 
                     case _:
                         raise InvalidInputError(
-                            f"Termination must be 1, 2 or 3 (given {self.termination})"
+                            f"Termination must be 1, 2 or 3 (given '{self.termination}')"
                         )
 
             case _:
                 raise InvalidInputError(
-                    f"Declension {self.declension} not recognised"
+                    f"Invalid declension: '{self.declension}'"
                 )
 
     def get(
@@ -813,20 +817,26 @@ class Adjective(_Word):
             try:
                 short_degree = DEGREE_SHORTHAND[degree]
             except KeyError:
-                raise InvalidInputError(f"Degree '{degree}' not recognised")
+                raise InvalidInputError(f"Invalid degree: '{degree}'")
 
             return self.endings.get(f"D{short_degree}")
 
-        try:
-            short_degree = DEGREE_SHORTHAND[degree]
-            if gender and case and number:
-                short_gender: str = GENDER_SHORTHAND[gender]
-                short_case: str = CASE_SHORTHAND[case]
-                short_number: str = NUMBER_SHORTHAND[number]
-        except KeyError:
-            raise InvalidInputError(
-                f"Degree '{degree}', gender '{gender}', case '{case}' or number '{number}' not recognised"
-            )
+        if gender not in GENDER_SHORTHAND.keys():
+            raise InvalidInputError(f"Invalid gender: '{gender}'")
+
+        if case not in CASE_SHORTHAND.keys():
+            raise InvalidInputError(f"Invalid case: '{case}'")
+
+        if number not in NUMBER_SHORTHAND.keys():
+            raise InvalidInputError(f"Invalid number: '{number}'")
+
+        if degree not in DEGREE_SHORTHAND.keys():
+            raise InvalidInputError(f"Invalid degree: '{degree}'")
+
+        short_degree = DEGREE_SHORTHAND[degree]
+        short_gender: str = GENDER_SHORTHAND[gender]
+        short_case: str = CASE_SHORTHAND[case]
+        short_number: str = NUMBER_SHORTHAND[number]
 
         return self.endings.get(
             f"A{short_degree}{short_gender}{short_case}{short_number}"

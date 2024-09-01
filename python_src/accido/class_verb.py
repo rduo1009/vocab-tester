@@ -79,7 +79,9 @@ class Verb(_Word):
         InvalidInputError
             If the input is invalid (incorrect perfect or infinitive).
         """
+
         super().__init__()
+
         self.present: str = present
         self.infinitive: str = infinitive
         self.perfect: str = perfect
@@ -90,10 +92,14 @@ class Verb(_Word):
         self.conjugation: Literal[0, 1, 2, 3, 4, 5]
 
         if self.present[-1:] != "o":
-            raise InvalidInputError(f"Present '{self.present}' is not valid")
+            raise InvalidInputError(
+                f"Invalid present form: '{self.present}' (must end in '-o')"
+            )
 
         if self.perfect[-1:] != "i":
-            raise InvalidInputError(f"Perfect '{self.perfect}' is not valid")
+            raise InvalidInputError(
+                f"Invalid perfect form: '{self.perfect}' (must end in '-i')"
+            )
 
         # Conjugation edge cases
         if irregular_endings := find_irregular_endings(self.present):
@@ -115,7 +121,7 @@ class Verb(_Word):
                 self.conjugation = 3
         else:
             raise InvalidInputError(
-                f"Infinitive '{self.infinitive}' is not valid"
+                f"Invalid infinitive form: '{self.infinitive}'"
             )
 
         self._pre_stem: str = self.present[:-1]
@@ -486,55 +492,68 @@ class Verb(_Word):
         short_mood: str
         short_number: str
 
-        if mood == "participle":
-            try:
-                short_tense = TENSE_SHORTHAND[tense]
-                short_voice = VOICE_SHORTHAND[voice]
-                if number:
-                    short_number = NUMBER_SHORTHAND[number]
-                else:
-                    raise InvalidInputError("Number not given")
-                if participle_case and participle_gender:
-                    short_gender: str = GENDER_SHORTHAND[participle_gender]
-                    short_case: str = CASE_SHORTHAND[participle_case]
-                else:
-                    raise InvalidInputError("Gender or case not given")
-            except KeyError:
-                raise InvalidInputError(
-                    f"Tense '{tense}', voice '{voice}', gender '{participle_gender}', case '{participle_case}', or number '{number}' not recognised"
-                )
+        if tense not in TENSE_SHORTHAND:
+            raise InvalidInputError(f"Invalid tense: '{tense}'")
 
+        if voice not in VOICE_SHORTHAND:
+            raise InvalidInputError(f"Invalid voice: '{voice}'")
+
+        if mood == "participle":
             if person:
                 raise InvalidInputError(
                     f"Participle cannot have a person (person '{person}')"
                 )
 
+            if not participle_case:
+                raise InvalidInputError("Case not given")
+
+            if not participle_gender:
+                raise InvalidInputError("Gender not given")
+
+            if not number:
+                raise InvalidInputError("Number not given")
+
+            if participle_case not in CASE_SHORTHAND:
+                raise InvalidInputError(f"Invalid case: '{participle_case}'")
+
+            if participle_gender not in GENDER_SHORTHAND:
+                raise InvalidInputError(
+                    f"Invalid gender: '{participle_gender}'"
+                )
+
+            if number not in NUMBER_SHORTHAND:
+                raise InvalidInputError(f"Invalid number: '{number}'")
+
+            short_tense = TENSE_SHORTHAND[tense]
+            short_voice = VOICE_SHORTHAND[voice]
+            short_number = NUMBER_SHORTHAND[number]
+            short_gender: str = GENDER_SHORTHAND[participle_gender]
+            short_case: str = CASE_SHORTHAND[participle_case]
+
             return self.endings.get(
                 f"V{short_tense}{short_voice}ptc{short_gender}{short_case}{short_number}"
             )
 
-        try:
-            short_tense = TENSE_SHORTHAND[tense]
-            short_voice = VOICE_SHORTHAND[voice]
-            short_mood = MOOD_SHORTHAND[mood]
-            if number:
-                short_number = NUMBER_SHORTHAND[number]
-        except KeyError:
-            raise InvalidInputError(
-                f"Tense '{tense}', voice '{voice}', mood '{mood}', or number '{number}' not recognised"
-            )
+        if mood not in MOOD_SHORTHAND:
+            raise InvalidInputError(f"Invalid mood: '{mood}'")
+
+        if number and number not in NUMBER_SHORTHAND:
+            raise InvalidInputError(f"Invalid number: '{number}'")
 
         if person and person not in {1, 2, 3}:
-            raise InvalidInputError(f"Person '{person}' not recognised")
+            raise InvalidInputError(f"Invalid person: '{person}'")
 
-        try:
-            if mood == "infinitive":
-                return self.endings[f"V{short_tense}{short_voice}inf   "]
-            return self.endings[
-                f"V{short_tense}{short_voice}{short_mood}{short_number}{person}"
-            ]
-        except KeyError:
-            return None
+        short_tense = TENSE_SHORTHAND[tense]
+        short_voice = VOICE_SHORTHAND[voice]
+        short_mood = MOOD_SHORTHAND[mood]
+        if number:
+            short_number = NUMBER_SHORTHAND[number]
+
+        if mood == "infinitive":
+            return self.endings.get(f"V{short_tense}{short_voice}inf   ")
+        return self.endings.get(
+            f"V{short_tense}{short_voice}{short_mood}{short_number}{person}"
+        )
 
     @staticmethod
     def _create_namespace(key: str) -> EndingComponents:

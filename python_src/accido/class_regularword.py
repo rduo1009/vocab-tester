@@ -46,6 +46,7 @@ class RegularWord(_Word):
         >>> foo.get()
         "sed"
         """  # fmt: skip
+
         return self.word
 
     @staticmethod

@@ -59,6 +59,7 @@ class Pronoun(_Word):
         the pronoun endings are manually written out in the edge_cases
         module.
         """
+
         super().__init__()
         try:
             self.endings = PRONOUNS[pronoun]
@@ -104,14 +105,19 @@ class Pronoun(_Word):
 
         Note that the arguments of get are keyword-only.
         """  # fmt: skip
-        try:
-            short_gender: str = GENDER_SHORTHAND[gender]
-            short_case: str = CASE_SHORTHAND[case]
-            short_number: str = NUMBER_SHORTHAND[number]
-        except KeyError:
-            raise InvalidInputError(
-                f"Gender '{gender}', case '{case}' or number '{number}' not recognised"
-            )
+
+        if gender not in GENDER_SHORTHAND:
+            raise InvalidInputError(f"Invalid gender: '{gender}'")
+
+        if case not in CASE_SHORTHAND:
+            raise InvalidInputError(f"Invalid case: '{case}'")
+
+        if number not in NUMBER_SHORTHAND:
+            raise InvalidInputError(f"Invalid number: '{number}'")
+
+        short_gender: str = GENDER_SHORTHAND[gender]
+        short_case: str = CASE_SHORTHAND[case]
+        short_number: str = NUMBER_SHORTHAND[number]
 
         return self.endings.get(f"P{short_gender}{short_case}{short_number}")
 
