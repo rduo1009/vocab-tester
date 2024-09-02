@@ -4,7 +4,8 @@
 __pycache__/
 *.pyc
 TODO.txt
-/.vscode
+/.vscode/settings.json
+/.vscode/tests.code-snippets
 testdump/
 *.so
 monkeytype.sqlite3
