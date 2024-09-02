@@ -1,0 +1,60 @@
+{
+    "todohighlight.keywords": [
+        {
+            "text": " HACK:",
+            "color": "#000",
+            "backgroundColor": "#fab387"
+        },
+        {
+            "text": " TODO:",
+            "color": "#000",
+            "backgroundColor": "#89b4fa"
+        },
+        {
+            "text": " FIXME:",
+            "color": "#000",
+            "backgroundColor": "#f38ba8"
+        },
+        {
+            "text": " NOTE:",
+            "color": "#000",
+            "backgroundColor": "#a6e3a1"
+        }
+    ],
+    "files.exclude": {
+        "**/__pycache__": true,
+        "**/.coverage": true,
+        "**/.mypy_cache": true,
+        "**/.pytest_cache": true,
+        "**/.python-version": true,
+        "**/.ruff_cache": true,
+        "**/.tox": true,
+        "**/.venv": true,
+        "**/htmlcov": true,
+        "**/monkeytype.sqlite3": true,
+        "**/poetry.lock": true
+    },
+    "autoDocstring.docstringFormat": "numpy",
+    "ruff.nativeServer": true,
+    "python.testing.pytestEnabled": true,
+    "python.testing.unittestEnabled": false,
+    "mypy-type-checker.preferDaemon": true,
+    "mypy-type-checker.importStrategy": "fromEnvironment",
+    "mypy-type-checker.reportingScope": "workspace",
+    "mypy-type-checker.args": [
+        "--enable-incomplete-feature=NewGenericSyntax",
+        "--config-file=pyproject.toml"
+    ],
+    "python.testing.pytestPath": "pytest",
+    "python.testing.pytestArgs": [
+        "."
+    ],
+    "catppuccin-icons.associations.folders": { // or whatever icon extension you use
+        "python_src": "folder_src",
+        "mypy_stubs": "folder_types"
+    },
+    "catppuccin-icons.associations.files": { // or whatever icon extension you use
+        "requirements-dev.txt": "python-config",
+        "settings.json.sample": "json"
+    }
+}
