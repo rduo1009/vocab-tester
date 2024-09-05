@@ -18,7 +18,7 @@ import dill as pickle
 import python_src as src
 
 from .. import accido
-from .exceptions import InvalidVocabDump, InvalidVocabFileFormat
+from .exceptions import InvalidVocabDumpError, InvalidVocabFileFormatError
 from .misc import KEY, VocabList
 
 """Mapping of gender values to their more concise abbreviated forms."""
@@ -53,7 +53,7 @@ def read_vocab_file(file_path: Path) -> VocabList:
 
     Raises
     ------
-    InvalidVocabFileFormat
+    InvalidVocabFileFormatError
         If the file is not a valid vocabulary file, or if the formatting
         is incorrect.
     FileNotFoundError
@@ -100,14 +100,14 @@ def read_vocab_file(file_path: Path) -> VocabList:
                             current = line[1:-1].strip()
 
                         case _:
-                            raise InvalidVocabFileFormat(
+                            raise InvalidVocabFileFormatError(
                                 f"Invalid part of speech: {line[1:].strip()}"
                             )
 
                 case _:
                     parts: list[str] = line.strip().split(":")
                     if len(parts) != 2:
-                        raise InvalidVocabFileFormat(
+                        raise InvalidVocabFileFormatError(
                             f"Invalid line format: {line}"
                         )
 
@@ -119,13 +119,13 @@ def read_vocab_file(file_path: Path) -> VocabList:
                     ]
                     match current:
                         case "":
-                            raise InvalidVocabFileFormat(
+                            raise InvalidVocabFileFormatError(
                                 "Part of speech was not given"
                             )
 
                         case "Verb":
                             if len(latin_parts) not in {3, 4}:
-                                raise InvalidVocabFileFormat(
+                                raise InvalidVocabFileFormatError(
                                     f"Invalid verb format: {line}"
                                 )
 
@@ -151,7 +151,7 @@ def read_vocab_file(file_path: Path) -> VocabList:
 
                         case "Noun":
                             if len(latin_parts) != 3:
-                                raise InvalidVocabFileFormat(
+                                raise InvalidVocabFileFormatError(
                                     f"Invalid noun format: {line}"
                                 )
 
@@ -169,13 +169,13 @@ def read_vocab_file(file_path: Path) -> VocabList:
                                     )
                                 )
                             except KeyError:
-                                raise InvalidVocabFileFormat(
+                                raise InvalidVocabFileFormatError(
                                     f"Invalid gender: {latin_parts[2].split()[-1].strip('()')}"
                                 )
 
                         case "Adjective":
                             if len(latin_parts) not in {3, 4}:
-                                raise InvalidVocabFileFormat(
+                                raise InvalidVocabFileFormatError(
                                     f"Invalid adjective format: {line}"
                                 )
 
@@ -199,7 +199,7 @@ def read_vocab_file(file_path: Path) -> VocabList:
                                 )
                             elif declension.startswith("3"):
                                 if not match(r"^.-.$", declension):
-                                    raise InvalidVocabFileFormat(
+                                    raise InvalidVocabFileFormatError(
                                         f"Invalid adjective declension: {declension}"
                                     )
                                 vocab.append(
@@ -211,7 +211,7 @@ def read_vocab_file(file_path: Path) -> VocabList:
                                     )
                                 )
                             else:
-                                raise InvalidVocabFileFormat(
+                                raise InvalidVocabFileFormatError(
                                     f"Invalid adjective declension: {declension}"
                                 )
 
@@ -230,7 +230,7 @@ def read_vocab_file(file_path: Path) -> VocabList:
                             )
 
                         # case _:
-                        #     raise InvalidVocabFileFormat(
+                        #     raise InvalidVocabFileFormatError(
                         #         f"Invalid word type: {current}"
                         #     )
 
@@ -322,7 +322,7 @@ def read_vocab_dump(filename: Path) -> VocabList:
 
     Raises
     ------
-    InvalidVocabDump
+    InvalidVocabDumpError
         If the file is not a valid vocabulary dump, or if the data has been
         tampered with.
     FileNotFoundError
@@ -341,7 +341,9 @@ def read_vocab_dump(filename: Path) -> VocabList:
     if (
         hmac.new(KEY, pickled_data, hashlib.sha256).hexdigest() != signature
     ):  # pragma: no cover # this should never happen
-        raise InvalidVocabDump("Data integrity check failed for vocab dump.")
+        raise InvalidVocabDumpError(
+            "Data integrity check failed for vocab dump."
+        )
 
     output = pickle.loads(pickled_data)
     if type(output) is VocabList:  # type: ignore[comparison-overlap] # mypy cannot recognise this
@@ -353,6 +355,6 @@ def read_vocab_dump(filename: Path) -> VocabList:
             )
             return _regenerate_vocab_list(output)
 
-    raise InvalidVocabDump(
+    raise InvalidVocabDumpError(
         "Vocab dump is not valid."
     )  # pragma: no cover # this should never happen
