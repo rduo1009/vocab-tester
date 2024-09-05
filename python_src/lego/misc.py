@@ -48,8 +48,8 @@ class VocabList:
         self.version: str = src.__version__
 
 
-libkey: ctypes.CDLL = ctypes.CDLL("python_src/lego/libkey.so")
-libkey.get_key.restype = ctypes.c_char_p
+LIBKEY: ctypes.CDLL = ctypes.CDLL("python_src/lego/libkey.so")
+LIBKEY.get_key.restype = ctypes.c_char_p
 
 """The key used to sign vocabulary pickle files."""
-KEY: Final[bytes] = libkey.get_key()
+KEY: Final[bytes] = LIBKEY.get_key()

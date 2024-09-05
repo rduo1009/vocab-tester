@@ -30,12 +30,12 @@ def key_from_value(dd: dict[Any, Any] | dict[Any, Any], value: Any) -> Any:
     return next((key for key, val in dd.items() if val == value), None)
 
 
-def compare(s: Iterable, t: Iterable) -> bool:
-    """Compares two iterables"""
-    t = list(t)  # make a mutable copy
+def compare(first: Iterable[Any], second: Iterable[Any]) -> bool:
+    """Compares two iterables."""
+    comparison = list(second)  # make a mutable copy
     try:
-        for elem in s:
-            t.remove(elem)
+        for elem in first:
+            comparison.remove(elem)
     except ValueError:
         return False
-    return not t
+    return not comparison

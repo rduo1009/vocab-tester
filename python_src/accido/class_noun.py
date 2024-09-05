@@ -150,82 +150,84 @@ class Noun(_Word):
                 self.endings = {
                     "Nnomsg": self.nominative,  # puella
                     "Nvocsg": self.nominative,  # puella
-                    "Naccsg": self._stem + "am",  # puellam
+                    "Naccsg": f"{self._stem}am",  # puellam
                     "Ngensg": self.genitive,  # puellae
-                    "Ndatsg": self._stem + "ae",  # puellae
-                    "Nablsg": self._stem + "a",  # puella
-                    "Nnompl": self._stem + "ae",  # puellae
-                    "Nvocpl": self._stem + "ae",  # puellae
-                    "Naccpl": self._stem + "as",  # puellas
-                    "Ngenpl": self._stem + "arum",  # puellarum
-                    "Ndatpl": self._stem + "is",  # puellis
-                    "Nablpl": self._stem + "is",  # puellis
+                    "Ndatsg": f"{self._stem}ae",  # puellae
+                    "Nablsg": f"{self._stem}a",  # puella
+                    "Nnompl": f"{self._stem}ae",  # puellae
+                    "Nvocpl": f"{self._stem}ae",  # puellae
+                    "Naccpl": f"{self._stem}as",  # puellas
+                    "Ngenpl": f"{self._stem}arum",  # puellarum
+                    "Ndatpl": f"{self._stem}is",  # puellis
+                    "Nablpl": f"{self._stem}is",  # puellis
                 }
 
             case 2:
                 self.endings = {
                     "Nnomsg": self.nominative,  # servus
-                    "Nvocsg": self.nominative
-                    if self.nominative[-2:] == "er"
-                    else self._stem + "e",  # serve
-                    "Naccsg": self._stem + "um",  # servum
+                    "Nvocsg": (
+                        self.nominative  # puer
+                        if self.nominative.endswith("er")
+                        else f"{self._stem}e"  # serve
+                    ),
+                    "Naccsg": f"{self._stem}um",  # servum
                     "Ngensg": self.genitive,  # servi
-                    "Ndatsg": self._stem + "o",  # servo
-                    "Nablsg": self._stem + "o",  # servo
-                    "Nnompl": self._stem + "i",  # servi
-                    "Nvocpl": self._stem + "i",  # servi
-                    "Naccpl": self._stem + "os",  # servos
-                    "Ngenpl": self._stem + "orum",  # servorum
-                    "Ndatpl": self._stem + "is",  # servis
-                    "Nablpl": self._stem + "is",  # servis
+                    "Ndatsg": f"{self._stem}o",  # servo
+                    "Nablsg": f"{self._stem}o",  # servo
+                    "Nnompl": f"{self._stem}i",  # servi
+                    "Nvocpl": f"{self._stem}i",  # servi
+                    "Naccpl": f"{self._stem}os",  # servos
+                    "Ngenpl": f"{self._stem}orum",  # servorum
+                    "Ndatpl": f"{self._stem}is",  # servis
+                    "Nablpl": f"{self._stem}is",  # servis
                 }
 
             case 3:
                 self.endings = {
                     "Nnomsg": self.nominative,  # mercator
                     "Nvocsg": self.nominative,  # mercator
-                    "Naccsg": self._stem + "em",  # mercatorem
+                    "Naccsg": f"{self._stem}em",  # mercatorem
                     "Ngensg": self.genitive,  # mercatoris
-                    "Ndatsg": self._stem + "i",  # mercatori
-                    "Nablsg": self._stem + "e",  # mercatore
-                    "Nnompl": self._stem + "es",  # mercatores
-                    "Nvocpl": self._stem + "es",  # mercatores
-                    "Naccpl": self._stem + "es",  # mercatores
-                    "Ngenpl": self._stem + "um",  # mercatorum
-                    "Ndatpl": self._stem + "ibus",  # mercatoribus
-                    "Nablpl": self._stem + "ibus",  # mercatoribus
+                    "Ndatsg": f"{self._stem}i",  # mercatori
+                    "Nablsg": f"{self._stem}e",  # mercatore
+                    "Nnompl": f"{self._stem}es",  # mercatores
+                    "Nvocpl": f"{self._stem}es",  # mercatores
+                    "Naccpl": f"{self._stem}es",  # mercatores
+                    "Ngenpl": f"{self._stem}um",  # mercatorum
+                    "Ndatpl": f"{self._stem}ibus",  # mercatoribus
+                    "Nablpl": f"{self._stem}ibus",  # mercatoribus
                 }
 
             case 4:
                 self.endings = {
                     "Nnomsg": self.nominative,  # manus
                     "Nvocsg": self.nominative,  # manus
-                    "Naccsg": self._stem + "um",  # manum
-                    "Ngensg": self._stem + "us",  # manus
-                    "Ndatsg": self._stem + "ui",  # manui
-                    "Nablsg": self._stem + "u",  # manu
-                    "Nnompl": self._stem + "us",  # manus
-                    "Nvocpl": self._stem + "us",  # manus
-                    "Naccpl": self._stem + "us",  # manus
-                    "Ngenpl": self._stem + "uum",  # manuum
-                    "Ndatpl": self._stem + "ibus",  # manibus
-                    "Nablpl": self._stem + "ibus",  # manibus
+                    "Naccsg": f"{self._stem}um",  # manum
+                    "Ngensg": f"{self._stem}us",  # manus
+                    "Ndatsg": f"{self._stem}ui",  # manui
+                    "Nablsg": f"{self._stem}u",  # manu
+                    "Nnompl": f"{self._stem}us",  # manus
+                    "Nvocpl": f"{self._stem}us",  # manus
+                    "Naccpl": f"{self._stem}us",  # manus
+                    "Ngenpl": f"{self._stem}uum",  # manuum
+                    "Ndatpl": f"{self._stem}ibus",  # manibus
+                    "Nablpl": f"{self._stem}ibus",  # manibus
                 }
 
             case 5:
                 self.endings = {
                     "Nnomsg": self.nominative,  # res
                     "Nvocsg": self.nominative,  # res
-                    "Naccsg": self._stem + "em",  # rem
-                    "Ngensg": self._stem + "ei",  # rei
-                    "Ndatsg": self._stem + "ei",  # rei
-                    "Nablsg": self._stem + "e",  # re
-                    "Nnompl": self._stem + "es",  # res
-                    "Nvocpl": self._stem + "es",  # res
-                    "Naccpl": self._stem + "es",  # res
-                    "Ngenpl": self._stem + "erum",  # rerum
-                    "Ndatpl": self._stem + "ebus",  # rebus
-                    "Nablpl": self._stem + "ebus",  # rebus
+                    "Naccsg": f"{self._stem}em",  # rem
+                    "Ngensg": f"{self._stem}ei",  # rei
+                    "Ndatsg": f"{self._stem}ei",  # rei
+                    "Nablsg": f"{self._stem}e",  # re
+                    "Nnompl": f"{self._stem}es",  # res
+                    "Nvocpl": f"{self._stem}es",  # res
+                    "Naccpl": f"{self._stem}es",  # res
+                    "Ngenpl": f"{self._stem}erum",  # rerum
+                    "Ndatpl": f"{self._stem}ebus",  # rebus
+                    "Nablpl": f"{self._stem}ebus",  # rebus
                 }
 
             case _:  # pragma: no cover # this should never happen
@@ -315,20 +317,9 @@ class Noun(_Word):
         return f"Noun({self.nominative}, {self.genitive}, {GENDER_SHORTHAND[self.gender]}, {self.meaning})"
 
     def __str__(self) -> str:
-        match self.gender:
-            case "masculine":
-                return (
-                    f"{self.meaning}: {self.nominative}, {self.genitive}, (m)"
-                )
+        if self.gender in GENDER_SHORTHAND:
+            return f"{self.meaning}: {self.nominative}, {self.genitive}, ({GENDER_SHORTHAND[self.gender]})"
 
-            case "feminine":
-                return (
-                    f"{self.meaning}: {self.nominative}, {self.genitive}, (f)"
-                )
-
-            case "neuter":
-                return (
-                    f"{self.meaning}: {self.nominative}, {self.genitive}, (n)"
-                )
-            case _:  # pragma: no cover # this should never occur
-                raise ValueError(f"Gender {self.gender} not recognised")
+        raise ValueError(
+            f"Gender {self.gender} not recognised"
+        )  # pragma: no cover # this should never occur

@@ -66,10 +66,7 @@ def check_io_verb(present: str) -> bool:
         If the prefix matches a third conjugation -io verb
     """
 
-    for io_verb in THIRD_IO_VERBS:
-        if present.endswith(io_verb):
-            return True
-    return False
+    return any(present.endswith(io_verb) for io_verb in THIRD_IO_VERBS)
 
 
 """Contains irregular verbs."""
@@ -389,8 +386,8 @@ IRREGULAR_VERBS: Final[dict[str, Endings]] = {
         "Vplpactsbjpl1": "adfuissemus",
         "Vplpactsbjpl2": "adfuissetis",
         "Vplpactsbjpl3": "adfuissent",
-    }
-}  # fmt: skip
+    },
+}
 
 
 """Contains verbs that are derived from the main irregular verbs (usually 
@@ -438,9 +435,9 @@ DERIVED_IRREGULAR_VERBS: Final[dict[str, set[str]]] = {
         "profero",
         "refero",
         "suffero",
-        "transfero"
+        "transfero",
     },
-}  # fmt: skip
+}
 
 
 # NOTE: This entire thing will probably need to be reworked at some point
@@ -530,8 +527,8 @@ DERIVED_IRREGULAR_ENDINGS: Final[dict[str, Endings]] = {
         "Vplpactsbjpl1": "tulissemus",
         "Vplpactsbjpl2": "tulissetis",
         "Vplpactsbjpl3": "tulissent",
-    }
-}  # fmt: skip
+    },
+}
 
 
 def find_irregular_endings(present: str) -> Endings | None:
@@ -610,7 +607,7 @@ IRREGULAR_NOUNS: Final[dict[str, Endings]] = {
         "Ndatpl": "sibi",
         "Nablpl": "se",
     },
-}  # fmt: skip
+}
 
 
 """Contains adjectives that end in -lis, and thus have irregular 
@@ -622,7 +619,7 @@ LIS_ADJECTIVES: Final[set[str]] = {
     "dissimilis",
     "gracilis",
     "humilis",
-}  # fmt: skip
+}
 
 
 """Contains adjectives that have irregular forms in the comparative,
@@ -638,9 +635,15 @@ IRREGULAR_ADJECTIVES: Final[dict[str, list[str | None]]] = {
     "multus": ["plus", "plurim", None, None, None],
     # nequam should probably just be put in as a regular
     "nequam": ["nequior", "nequissim", None, None, None],
-    "frugi": ["frugalior", "frugalissim", "frugaliter", "frugalius", "frugalissime"],
+    "frugi": [
+        "frugalior",
+        "frugalissim",
+        "frugaliter",
+        "frugalius",
+        "frugalissime",
+    ],
     "dexter": ["dexterior", "dextim", None, None, None],
-}  # fmt: skip
+}
 
 
 """Contains pronouns, which all have irregular endings."""
@@ -869,4 +872,4 @@ PRONOUNS: Final[dict[str, Endings]] = {
         "Pndatpl": "quibusdam",
         "Pnablpl": "quibusdam",
     },
-}  # fmt: skip
+}

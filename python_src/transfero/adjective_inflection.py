@@ -67,8 +67,10 @@ def find_adjective_inflections(
 
     try:
         lemma: str = lemminflect.getLemma(adjective, "ADJ")[0]
-    except KeyError:
-        raise InvalidWordError(f"Word '{adjective}' is not an adjective")
+    except KeyError as e:
+        raise InvalidWordError(
+            f"Word '{adjective}' is not an adjective"
+        ) from e
 
     match components.degree:
         case "positive":

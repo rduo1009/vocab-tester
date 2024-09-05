@@ -63,8 +63,10 @@ class Pronoun(_Word):
         super().__init__()
         try:
             self.endings = PRONOUNS[pronoun]
-        except KeyError:
-            raise InvalidInputError(f"Pronoun '{pronoun}' not recognised")
+        except KeyError as e:
+            raise InvalidInputError(
+                f"Pronoun '{pronoun}' not recognised"
+            ) from e
 
         self.pronoun: str = pronoun
         self._first = self.pronoun

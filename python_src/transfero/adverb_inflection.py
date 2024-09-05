@@ -41,8 +41,8 @@ def find_adverb_inflections(
 
     try:
         lemma: str = lemminflect.getLemma(adverb, "ADV")[0]
-    except KeyError:
-        raise InvalidWordError(f"Word {adverb} is not an adverb")
+    except KeyError as e:
+        raise InvalidWordError(f"Word {adverb} is not an adverb") from e
 
     match components.degree:
         case "positive":

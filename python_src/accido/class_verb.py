@@ -113,16 +113,12 @@ class Verb(_Word):
         elif check_io_verb(self.present):
             self.conjugation = 5
 
-        # Find conjugation
-        elif self.infinitive[-3:] == "are":
+        elif self.infinitive.endswith("are"):
             self.conjugation = 1
-        elif self.infinitive[-3:] == "ire":
+        elif self.infinitive.endswith("ire"):
             self.conjugation = 4
-        elif self.infinitive[-3:] == "ere":
-            if self.present[-2:] == "eo":
-                self.conjugation = 2
-            else:
-                self.conjugation = 3
+        elif self.infinitive.endswith("ere"):
+            self.conjugation = 2 if self.present.endswith("eo") else 3
         else:
             raise InvalidInputError(
                 f"Invalid infinitive form: '{self.infinitive}'"
@@ -136,217 +132,217 @@ class Verb(_Word):
             case 1:
                 self.endings = {
                     "Vpreactindsg1": self.present,  # porto
-                    "Vpreactindsg2": self._inf_stem + "as",  # portas
-                    "Vpreactindsg3": self._inf_stem + "at",  # portat
-                    "Vpreactindpl1": self._inf_stem + "amus",  # portamus
-                    "Vpreactindpl2": self._inf_stem + "atis",  # portatis
-                    "Vpreactindpl3": self._inf_stem + "ant",  # portant
-                    "Vimpactindsg1": self._inf_stem + "abam",  # portabam
-                    "Vimpactindsg2": self._inf_stem + "abas",  # portabas
-                    "Vimpactindsg3": self._inf_stem + "abat",  # portabat
-                    "Vimpactindpl1": self._inf_stem + "abamus",  # portabamus
-                    "Vimpactindpl2": self._inf_stem + "abatis",  # portabatis
-                    "Vimpactindpl3": self._inf_stem + "abant",  # portabant
+                    "Vpreactindsg2": f"{self._inf_stem}as",  # portas
+                    "Vpreactindsg3": f"{self._inf_stem}at",  # portat
+                    "Vpreactindpl1": f"{self._inf_stem}amus",  # portamus
+                    "Vpreactindpl2": f"{self._inf_stem}atis",  # portatis
+                    "Vpreactindpl3": f"{self._inf_stem}ant",  # portant
+                    "Vimpactindsg1": f"{self._inf_stem}abam",  # portabam
+                    "Vimpactindsg2": f"{self._inf_stem}abas",  # portabas
+                    "Vimpactindsg3": f"{self._inf_stem}abat",  # portabat
+                    "Vimpactindpl1": f"{self._inf_stem}abamus",  # portabamus
+                    "Vimpactindpl2": f"{self._inf_stem}abatis",  # portabatis
+                    "Vimpactindpl3": f"{self._inf_stem}abant",  # portabant
                     "Vperactindsg1": self.perfect,  # portavi
-                    "Vperactindsg2": self._per_stem + "isti",  # portavisti
-                    "Vperactindsg3": self._per_stem + "it",  # portavit
-                    "Vperactindpl1": self._per_stem + "imus",  # portavimus
-                    "Vperactindpl2": self._per_stem + "istis",  # portavistis
-                    "Vperactindpl3": self._per_stem + "erunt",  # portaverunt
-                    "Vplpactindsg1": self._per_stem + "eram",  # portaveram
-                    "Vplpactindsg2": self._per_stem + "eras",  # portaveras
-                    "Vplpactindsg3": self._per_stem + "erat",  # portaverat
-                    "Vplpactindpl1": self._per_stem + "eramus",  # portaveramus
-                    "Vplpactindpl2": self._per_stem + "eratis",  # portaveratis
-                    "Vplpactindpl3": self._per_stem + "erant",  # portaverant
+                    "Vperactindsg2": f"{self._per_stem}isti",  # portavisti
+                    "Vperactindsg3": f"{self._per_stem}it",  # portavit
+                    "Vperactindpl1": f"{self._per_stem}imus",  # portavimus
+                    "Vperactindpl2": f"{self._per_stem}istis",  # portavistis
+                    "Vperactindpl3": f"{self._per_stem}erunt",  # portaverunt
+                    "Vplpactindsg1": f"{self._per_stem}eram",  # portaveram
+                    "Vplpactindsg2": f"{self._per_stem}eras",  # portaveras
+                    "Vplpactindsg3": f"{self._per_stem}erat",  # portaverat
+                    "Vplpactindpl1": f"{self._per_stem}eramus",  # portaveramus
+                    "Vplpactindpl2": f"{self._per_stem}eratis",  # portaveratis
+                    "Vplpactindpl3": f"{self._per_stem}erant",  # portaverant
                     "Vpreactinf   ": self.infinitive,  # portare
-                    "Vpreactipesg2": self._inf_stem + "a",  # porta
-                    "Vpreactipepl2": self._inf_stem + "ate",  # portate
-                    "Vimpactsbjsg1": self.infinitive + "m",  # portarem
-                    "Vimpactsbjsg2": self.infinitive + "s",  # portares
-                    "Vimpactsbjsg3": self.infinitive + "t",  # portaret
-                    "Vimpactsbjpl1": self.infinitive + "mus",  # portaremus
-                    "Vimpactsbjpl2": self.infinitive + "tis",  # portaretis
-                    "Vimpactsbjpl3": self.infinitive + "nt",  # portarent
-                    "Vplpactsbjsg1": self._per_stem + "issem",  # portavissem
-                    "Vplpactsbjsg2": self._per_stem + "isses",  # portavisses
-                    "Vplpactsbjsg3": self._per_stem + "isset",  # portavisset
-                    "Vplpactsbjpl1": self._per_stem + "issemus",  # portavissemus
-                    "Vplpactsbjpl2": self._per_stem + "issetis",  # portavissetis
-                    "Vplpactsbjpl3": self._per_stem + "issent",  # portavissent
-                }  # fmt: skip
+                    "Vpreactipesg2": f"{self._inf_stem}a",  # porta
+                    "Vpreactipepl2": f"{self._inf_stem}ate",  # portate
+                    "Vimpactsbjsg1": f"{self.infinitive}m",  # portarem
+                    "Vimpactsbjsg2": f"{self.infinitive}s",  # portares
+                    "Vimpactsbjsg3": f"{self.infinitive}t",  # portaret
+                    "Vimpactsbjpl1": f"{self.infinitive}mus",  # portaremus
+                    "Vimpactsbjpl2": f"{self.infinitive}tis",  # portaretis
+                    "Vimpactsbjpl3": f"{self.infinitive}nt",  # portarent
+                    "Vplpactsbjsg1": f"{self._per_stem}issem",  # portavissem
+                    "Vplpactsbjsg2": f"{self._per_stem}isses",  # portavisses
+                    "Vplpactsbjsg3": f"{self._per_stem}isset",  # portavisset
+                    "Vplpactsbjpl1": f"{self._per_stem}issemus",  # portavissemus
+                    "Vplpactsbjpl2": f"{self._per_stem}issetis",  # portavissetis
+                    "Vplpactsbjpl3": f"{self._per_stem}issent",  # portavissent
+                }
 
             case 2:
                 self.endings = {
                     "Vpreactindsg1": self.present,  # doceo
-                    "Vpreactindsg2": self._inf_stem + "es",  # doces
-                    "Vpreactindsg3": self._inf_stem + "et",  # docet
-                    "Vpreactindpl1": self._inf_stem + "emus",  # docemus
-                    "Vpreactindpl2": self._inf_stem + "etis",  # docetis
-                    "Vpreactindpl3": self._inf_stem + "ent",  # docent
-                    "Vimpactindsg1": self._inf_stem + "ebam",  # docebam
-                    "Vimpactindsg2": self._inf_stem + "ebas",  # docebas
-                    "Vimpactindsg3": self._inf_stem + "ebat",  # docebat
-                    "Vimpactindpl1": self._inf_stem + "ebamus",  # docebamus
-                    "Vimpactindpl2": self._inf_stem + "ebatis",  # docebatis
-                    "Vimpactindpl3": self._inf_stem + "ebant",  # docebant
+                    "Vpreactindsg2": f"{self._inf_stem}es",  # doces
+                    "Vpreactindsg3": f"{self._inf_stem}et",  # docet
+                    "Vpreactindpl1": f"{self._inf_stem}emus",  # docemus
+                    "Vpreactindpl2": f"{self._inf_stem}etis",  # docetis
+                    "Vpreactindpl3": f"{self._inf_stem}ent",  # docent
+                    "Vimpactindsg1": f"{self._inf_stem}ebam",  # docebam
+                    "Vimpactindsg2": f"{self._inf_stem}ebas",  # docebas
+                    "Vimpactindsg3": f"{self._inf_stem}ebat",  # docebat
+                    "Vimpactindpl1": f"{self._inf_stem}ebamus",  # docebamus
+                    "Vimpactindpl2": f"{self._inf_stem}ebatis",  # docebatis
+                    "Vimpactindpl3": f"{self._inf_stem}ebant",  # docebant
                     "Vperactindsg1": self.perfect,  # docui
-                    "Vperactindsg2": self._per_stem + "isti",  # docuisit
-                    "Vperactindsg3": self._per_stem + "it",  # docuit
-                    "Vperactindpl1": self._per_stem + "imus",  # docuimus
-                    "Vperactindpl2": self._per_stem + "istis",  # docuistis
-                    "Vperactindpl3": self._per_stem + "erunt",  # docuerunt
-                    "Vplpactindsg1": self._per_stem + "eram",  # docueram
-                    "Vplpactindsg2": self._per_stem + "eras",  # docueras
-                    "Vplpactindsg3": self._per_stem + "erat",  # docuerat
-                    "Vplpactindpl1": self._per_stem + "eramus",  # docueramus
-                    "Vplpactindpl2": self._per_stem + "eratis",  # docueratis
-                    "Vplpactindpl3": self._per_stem + "erant",  # docuerant
+                    "Vperactindsg2": f"{self._per_stem}isti",  # docuisit
+                    "Vperactindsg3": f"{self._per_stem}it",  # docuit
+                    "Vperactindpl1": f"{self._per_stem}imus",  # docuimus
+                    "Vperactindpl2": f"{self._per_stem}istis",  # docuistis
+                    "Vperactindpl3": f"{self._per_stem}erunt",  # docuerunt
+                    "Vplpactindsg1": f"{self._per_stem}eram",  # docueram
+                    "Vplpactindsg2": f"{self._per_stem}eras",  # docueras
+                    "Vplpactindsg3": f"{self._per_stem}erat",  # docuerat
+                    "Vplpactindpl1": f"{self._per_stem}eramus",  # docueramus
+                    "Vplpactindpl2": f"{self._per_stem}eratis",  # docueratis
+                    "Vplpactindpl3": f"{self._per_stem}erant",  # docuerant
                     "Vpreactinf   ": self.infinitive,  # docere
-                    "Vpreactipesg2": self._inf_stem + "e",  # doce
-                    "Vpreactipepl2": self._inf_stem + "ete",  # docete
-                    "Vimpactsbjsg1": self.infinitive + "m",  # docerem
-                    "Vimpactsbjsg2": self.infinitive + "s",  # doceres
-                    "Vimpactsbjsg3": self.infinitive + "t",  # doceret
-                    "Vimpactsbjpl1": self.infinitive + "mus",  # doceremus
-                    "Vimpactsbjpl2": self.infinitive + "tis",  # doceretis
-                    "Vimpactsbjpl3": self.infinitive + "nt",  # docerent
-                    "Vplpactsbjsg1": self._per_stem + "issem",  # docuissem
-                    "Vplpactsbjsg2": self._per_stem + "isses",  # docuisses
-                    "Vplpactsbjsg3": self._per_stem + "isset",  # docuisset
-                    "Vplpactsbjpl1": self._per_stem + "issemus",  # docuissmus
-                    "Vplpactsbjpl2": self._per_stem + "issetis",  # docuissetis
-                    "Vplpactsbjpl3": self._per_stem + "issent",  # docuissent
-                }  # fmt: skip
+                    "Vpreactipesg2": f"{self._inf_stem}e",  # doce
+                    "Vpreactipepl2": f"{self._inf_stem}ete",  # docete
+                    "Vimpactsbjsg1": f"{self.infinitive}m",  # docerem
+                    "Vimpactsbjsg2": f"{self.infinitive}s",  # doceres
+                    "Vimpactsbjsg3": f"{self.infinitive}t",  # doceret
+                    "Vimpactsbjpl1": f"{self.infinitive}mus",  # doceremus
+                    "Vimpactsbjpl2": f"{self.infinitive}tis",  # doceretis
+                    "Vimpactsbjpl3": f"{self.infinitive}nt",  # docerent
+                    "Vplpactsbjsg1": f"{self._per_stem}issem",  # docuissem
+                    "Vplpactsbjsg2": f"{self._per_stem}isses",  # docuisses
+                    "Vplpactsbjsg3": f"{self._per_stem}isset",  # docuisset
+                    "Vplpactsbjpl1": f"{self._per_stem}issemus",  # docuissmus
+                    "Vplpactsbjpl2": f"{self._per_stem}issetis",  # docuissetis
+                    "Vplpactsbjpl3": f"{self._per_stem}issent",  # docuissent
+                }
 
             case 3:
                 self.endings = {
                     "Vpreactindsg1": self.present,  # traho
-                    "Vpreactindsg2": self._inf_stem + "is",  # trahis
-                    "Vpreactindsg3": self._inf_stem + "it",  # trahit
-                    "Vpreactindpl1": self._inf_stem + "imus",  # trahimus
-                    "Vpreactindpl2": self._inf_stem + "itis",  # trahitis
-                    "Vpreactindpl3": self._inf_stem + "unt",  # trahunt
-                    "Vimpactindsg1": self._inf_stem + "ebam",  # trahebam
-                    "Vimpactindsg2": self._inf_stem + "ebas",  # trahebas
-                    "Vimpactindsg3": self._inf_stem + "ebat",  # trahebat
-                    "Vimpactindpl1": self._inf_stem + "ebamus",  # trahebamus
-                    "Vimpactindpl2": self._inf_stem + "ebatis",  # trahebatis
-                    "Vimpactindpl3": self._inf_stem + "ebant",  # trahebant
+                    "Vpreactindsg2": f"{self._inf_stem}is",  # trahis
+                    "Vpreactindsg3": f"{self._inf_stem}it",  # trahit
+                    "Vpreactindpl1": f"{self._inf_stem}imus",  # trahimus
+                    "Vpreactindpl2": f"{self._inf_stem}itis",  # trahitis
+                    "Vpreactindpl3": f"{self._inf_stem}unt",  # trahunt
+                    "Vimpactindsg1": f"{self._inf_stem}ebam",  # trahebam
+                    "Vimpactindsg2": f"{self._inf_stem}ebas",  # trahebas
+                    "Vimpactindsg3": f"{self._inf_stem}ebat",  # trahebat
+                    "Vimpactindpl1": f"{self._inf_stem}ebamus",  # trahebamus
+                    "Vimpactindpl2": f"{self._inf_stem}ebatis",  # trahebatis
+                    "Vimpactindpl3": f"{self._inf_stem}ebant",  # trahebant
                     "Vperactindsg1": self.perfect,  # traxi
-                    "Vperactindsg2": self._per_stem + "isti",  # traxisti
-                    "Vperactindsg3": self._per_stem + "it",  # traxit
-                    "Vperactindpl1": self._per_stem + "imus",  # traximus
-                    "Vperactindpl2": self._per_stem + "istis",  # traxistis
-                    "Vperactindpl3": self._per_stem + "erunt",  # traxerunt
-                    "Vplpactindsg1": self._per_stem + "eram",  # traxeram
-                    "Vplpactindsg2": self._per_stem + "eras",  # traxeras
-                    "Vplpactindsg3": self._per_stem + "erat",  # traxerat
-                    "Vplpactindpl1": self._per_stem + "eramus",  # traxeramus
-                    "Vplpactindpl2": self._per_stem + "eratis",  # traxeratis
-                    "Vplpactindpl3": self._per_stem + "erant",  # traxerant
+                    "Vperactindsg2": f"{self._per_stem}isti",  # traxisti
+                    "Vperactindsg3": f"{self._per_stem}it",  # traxit
+                    "Vperactindpl1": f"{self._per_stem}imus",  # traximus
+                    "Vperactindpl2": f"{self._per_stem}istis",  # traxistis
+                    "Vperactindpl3": f"{self._per_stem}erunt",  # traxerunt
+                    "Vplpactindsg1": f"{self._per_stem}eram",  # traxeram
+                    "Vplpactindsg2": f"{self._per_stem}eras",  # traxeras
+                    "Vplpactindsg3": f"{self._per_stem}erat",  # traxerat
+                    "Vplpactindpl1": f"{self._per_stem}eramus",  # traxeramus
+                    "Vplpactindpl2": f"{self._per_stem}eratis",  # traxeratis
+                    "Vplpactindpl3": f"{self._per_stem}erant",  # traxerant
                     "Vpreactinf   ": self.infinitive,  # trahere
-                    "Vpreactipesg2": self._inf_stem + "e",  # trahe
-                    "Vpreactipepl2": self._inf_stem + "ite",  # trahite
-                    "Vimpactsbjsg1": self.infinitive + "m",  # traherem
-                    "Vimpactsbjsg2": self.infinitive + "s",  # traheres
-                    "Vimpactsbjsg3": self.infinitive + "t",  # traheret
-                    "Vimpactsbjpl1": self.infinitive + "mus",  # traheremus
-                    "Vimpactsbjpl2": self.infinitive + "tis",  # traheretis
-                    "Vimpactsbjpl3": self.infinitive + "nt",  # traherent
-                    "Vplpactsbjsg1": self._per_stem + "issem",  # traxissem
-                    "Vplpactsbjsg2": self._per_stem + "isses",  # traxisses
-                    "Vplpactsbjsg3": self._per_stem + "isset",  # traxisset
-                    "Vplpactsbjpl1": self._per_stem + "issemus",  # traxissemus
-                    "Vplpactsbjpl2": self._per_stem + "issetis",  # traxissetis
-                    "Vplpactsbjpl3": self._per_stem + "issent",  # traxissent
-                }  # fmt: skip
+                    "Vpreactipesg2": f"{self._inf_stem}e",  # trahe
+                    "Vpreactipepl2": f"{self._inf_stem}ite",  # trahite
+                    "Vimpactsbjsg1": f"{self.infinitive}m",  # traherem
+                    "Vimpactsbjsg2": f"{self.infinitive}s",  # traheres
+                    "Vimpactsbjsg3": f"{self.infinitive}t",  # traheret
+                    "Vimpactsbjpl1": f"{self.infinitive}mus",  # traheremus
+                    "Vimpactsbjpl2": f"{self.infinitive}tis",  # traheretis
+                    "Vimpactsbjpl3": f"{self.infinitive}nt",  # traherent
+                    "Vplpactsbjsg1": f"{self._per_stem}issem",  # traxissem
+                    "Vplpactsbjsg2": f"{self._per_stem}isses",  # traxisses
+                    "Vplpactsbjsg3": f"{self._per_stem}isset",  # traxisset
+                    "Vplpactsbjpl1": f"{self._per_stem}issemus",  # traxissemus
+                    "Vplpactsbjpl2": f"{self._per_stem}issetis",  # traxissetis
+                    "Vplpactsbjpl3": f"{self._per_stem}issent",  # traxissent
+                }
 
             case 4:
                 self.endings = {
                     "Vpreactindsg1": self.present,  # audio
-                    "Vpreactindsg2": self._inf_stem + "is",  # audis
-                    "Vpreactindsg3": self._inf_stem + "it",  # audit
-                    "Vpreactindpl1": self._inf_stem + "imus",  # audimus
-                    "Vpreactindpl2": self._inf_stem + "itis",  # auditis
-                    "Vpreactindpl3": self._inf_stem + "iunt",  # audiunt
-                    "Vimpactindsg1": self._inf_stem + "iebam",  # audiebam
-                    "Vimpactindsg2": self._inf_stem + "iebas",  # audiebas
-                    "Vimpactindsg3": self._inf_stem + "iebat",  # audiebat
-                    "Vimpactindpl1": self._inf_stem + "iebamus",  # audiebamus
-                    "Vimpactindpl2": self._inf_stem + "iebatis",  # audiebatis
-                    "Vimpactindpl3": self._inf_stem + "iebant",  # audiebant
+                    "Vpreactindsg2": f"{self._inf_stem}is",  # audis
+                    "Vpreactindsg3": f"{self._inf_stem}it",  # audit
+                    "Vpreactindpl1": f"{self._inf_stem}imus",  # audimus
+                    "Vpreactindpl2": f"{self._inf_stem}itis",  # auditis
+                    "Vpreactindpl3": f"{self._inf_stem}iunt",  # audiunt
+                    "Vimpactindsg1": f"{self._inf_stem}iebam",  # audiebam
+                    "Vimpactindsg2": f"{self._inf_stem}iebas",  # audiebas
+                    "Vimpactindsg3": f"{self._inf_stem}iebat",  # audiebat
+                    "Vimpactindpl1": f"{self._inf_stem}iebamus",  # audiebamus
+                    "Vimpactindpl2": f"{self._inf_stem}iebatis",  # audiebatis
+                    "Vimpactindpl3": f"{self._inf_stem}iebant",  # audiebant
                     "Vperactindsg1": self.perfect,  # audivi
-                    "Vperactindsg2": self._per_stem + "isti",  # audivisti
-                    "Vperactindsg3": self._per_stem + "it",  # audivit
-                    "Vperactindpl1": self._per_stem + "imus",  # audivimus
-                    "Vperactindpl2": self._per_stem + "istis",  # audivistis
-                    "Vperactindpl3": self._per_stem + "erunt",  # audiverunt
-                    "Vplpactindsg1": self._per_stem + "eram",  # audiveram
-                    "Vplpactindsg2": self._per_stem + "eras",  # audiveras
-                    "Vplpactindsg3": self._per_stem + "erat",  # audiverat
-                    "Vplpactindpl1": self._per_stem + "eramus",  # audiveramus
-                    "Vplpactindpl2": self._per_stem + "eratis",  # audiveratis
-                    "Vplpactindpl3": self._per_stem + "erant",  # audiverant
+                    "Vperactindsg2": f"{self._per_stem}isti",  # audivisti
+                    "Vperactindsg3": f"{self._per_stem}it",  # audivit
+                    "Vperactindpl1": f"{self._per_stem}imus",  # audivimus
+                    "Vperactindpl2": f"{self._per_stem}istis",  # audivistis
+                    "Vperactindpl3": f"{self._per_stem}erunt",  # audiverunt
+                    "Vplpactindsg1": f"{self._per_stem}eram",  # audiveram
+                    "Vplpactindsg2": f"{self._per_stem}eras",  # audiveras
+                    "Vplpactindsg3": f"{self._per_stem}erat",  # audiverat
+                    "Vplpactindpl1": f"{self._per_stem}eramus",  # audiveramus
+                    "Vplpactindpl2": f"{self._per_stem}eratis",  # audiveratis
+                    "Vplpactindpl3": f"{self._per_stem}erant",  # audiverant
                     "Vpreactinf   ": self.infinitive,  # audire
-                    "Vpreactipesg2": self._inf_stem + "i",  # audi
-                    "Vpreactipepl2": self._inf_stem + "ite",  # audite
-                    "Vimpactsbjsg1": self.infinitive + "m",  # audirem
-                    "Vimpactsbjsg2": self.infinitive + "s",  # audires
-                    "Vimpactsbjsg3": self.infinitive + "t",  # audiret
-                    "Vimpactsbjpl1": self.infinitive + "mus",  # audiremus
-                    "Vimpactsbjpl2": self.infinitive + "tis",  # audiretis
-                    "Vimpactsbjpl3": self.infinitive + "nt",  # audirent
-                    "Vplpactsbjsg1": self._per_stem + "issem",  # audivissem
-                    "Vplpactsbjsg2": self._per_stem + "isses",  # audivisses
-                    "Vplpactsbjsg3": self._per_stem + "isset",  # audivisset
-                    "Vplpactsbjpl1": self._per_stem + "issemus",  # audivissemus
-                    "Vplpactsbjpl2": self._per_stem + "issetis",  # audivissetis
-                    "Vplpactsbjpl3": self._per_stem + "issent",  # audivissent
-                }  # fmt: skip
+                    "Vpreactipesg2": f"{self._inf_stem}i",  # audi
+                    "Vpreactipepl2": f"{self._inf_stem}ite",  # audite
+                    "Vimpactsbjsg1": f"{self.infinitive}m",  # audirem
+                    "Vimpactsbjsg2": f"{self.infinitive}s",  # audires
+                    "Vimpactsbjsg3": f"{self.infinitive}t",  # audiret
+                    "Vimpactsbjpl1": f"{self.infinitive}mus",  # audiremus
+                    "Vimpactsbjpl2": f"{self.infinitive}tis",  # audiretis
+                    "Vimpactsbjpl3": f"{self.infinitive}nt",  # audirent
+                    "Vplpactsbjsg1": f"{self._per_stem}issem",  # audivissem
+                    "Vplpactsbjsg2": f"{self._per_stem}isses",  # audivisses
+                    "Vplpactsbjsg3": f"{self._per_stem}isset",  # audivisset
+                    "Vplpactsbjpl1": f"{self._per_stem}issemus",  # audivissemus
+                    "Vplpactsbjpl2": f"{self._per_stem}issetis",  # audivissetis
+                    "Vplpactsbjpl3": f"{self._per_stem}issent",  # audivissent
+                }
 
             case 5:
                 self.endings = {
                     "Vpreactindsg1": self.present,  # capio
-                    "Vpreactindsg2": self._inf_stem + "is",  # capis
-                    "Vpreactindsg3": self._inf_stem + "it",  # capit
-                    "Vpreactindpl1": self._inf_stem + "imus",  # capimus
-                    "Vpreactindpl2": self._inf_stem + "itis",  # capitis
-                    "Vpreactindpl3": self._inf_stem + "iunt",  # capiunt
-                    "Vimpactindsg1": self._inf_stem + "iebam",  # capiebam
-                    "Vimpactindsg2": self._inf_stem + "iebas",  # capiebas
-                    "Vimpactindsg3": self._inf_stem + "iebat",  # capiebat
-                    "Vimpactindpl1": self._inf_stem + "iebamus",  # capiebamus
-                    "Vimpactindpl2": self._inf_stem + "iebatis",  # capiebatis
-                    "Vimpactindpl3": self._inf_stem + "iebant",  # capiebant
+                    "Vpreactindsg2": f"{self._inf_stem}is",  # capis
+                    "Vpreactindsg3": f"{self._inf_stem}it",  # capit
+                    "Vpreactindpl1": f"{self._inf_stem}imus",  # capimus
+                    "Vpreactindpl2": f"{self._inf_stem}itis",  # capitis
+                    "Vpreactindpl3": f"{self._inf_stem}iunt",  # capiunt
+                    "Vimpactindsg1": f"{self._inf_stem}iebam",  # capiebam
+                    "Vimpactindsg2": f"{self._inf_stem}iebas",  # capiebas
+                    "Vimpactindsg3": f"{self._inf_stem}iebat",  # capiebat
+                    "Vimpactindpl1": f"{self._inf_stem}iebamus",  # capiebamus
+                    "Vimpactindpl2": f"{self._inf_stem}iebatis",  # capiebatis
+                    "Vimpactindpl3": f"{self._inf_stem}iebant",  # capiebant
                     "Vperactindsg1": self.perfect,  # cepi
-                    "Vperactindsg2": self._per_stem + "isti",  # cepisti
-                    "Vperactindsg3": self._per_stem + "it",  # cepit
-                    "Vperactindpl1": self._per_stem + "imus",  # cepimus
-                    "Vperactindpl2": self._per_stem + "istis",  # cepistis
-                    "Vperactindpl3": self._per_stem + "erunt",  # ceperunt
-                    "Vplpactindsg1": self._per_stem + "eram",  # ceperam
-                    "Vplpactindsg2": self._per_stem + "eras",  # ceperas
-                    "Vplpactindsg3": self._per_stem + "erat",  # ceperat
-                    "Vplpactindpl1": self._per_stem + "eramus",  # ceperamus
-                    "Vplpactindpl2": self._per_stem + "eratis",  # ceperatis
-                    "Vplpactindpl3": self._per_stem + "erant",  # ceperant
+                    "Vperactindsg2": f"{self._per_stem}isti",  # cepisti
+                    "Vperactindsg3": f"{self._per_stem}it",  # cepit
+                    "Vperactindpl1": f"{self._per_stem}imus",  # cepimus
+                    "Vperactindpl2": f"{self._per_stem}istis",  # cepistis
+                    "Vperactindpl3": f"{self._per_stem}erunt",  # ceperunt
+                    "Vplpactindsg1": f"{self._per_stem}eram",  # ceperam
+                    "Vplpactindsg2": f"{self._per_stem}eras",  # ceperas
+                    "Vplpactindsg3": f"{self._per_stem}erat",  # ceperat
+                    "Vplpactindpl1": f"{self._per_stem}eramus",  # ceperamus
+                    "Vplpactindpl2": f"{self._per_stem}eratis",  # ceperatis
+                    "Vplpactindpl3": f"{self._per_stem}erant",  # ceperant
                     "Vpreactinf   ": self.infinitive,  # capere
-                    "Vpreactipesg2": self._inf_stem + "e",  # cape
-                    "Vpreactipepl2": self._inf_stem + "ite",  # capite
-                    "Vimpactsbjsg1": self.infinitive + "m",  # caperem
-                    "Vimpactsbjsg2": self.infinitive + "s",  # caperes
-                    "Vimpactsbjsg3": self.infinitive + "t",  # caperet
-                    "Vimpactsbjpl1": self.infinitive + "mus",  # caperemus
-                    "Vimpactsbjpl2": self.infinitive + "tis",  # caperetis
-                    "Vimpactsbjpl3": self.infinitive + "nt",  # caperent
-                    "Vplpactsbjsg1": self._per_stem + "issem",  # cepissem
-                    "Vplpactsbjsg2": self._per_stem + "isses",  # cepisses
-                    "Vplpactsbjsg3": self._per_stem + "isset",  # cepisset
-                    "Vplpactsbjpl1": self._per_stem + "issemus",  # cepissemus
-                    "Vplpactsbjpl2": self._per_stem + "issetis",  # cepissetis
-                    "Vplpactsbjpl3": self._per_stem + "issent",  # cepissent
-                }  # fmt: skip
+                    "Vpreactipesg2": f"{self._inf_stem}e",  # cape
+                    "Vpreactipepl2": f"{self._inf_stem}ite",  # capite
+                    "Vimpactsbjsg1": f"{self.infinitive}m",  # caperem
+                    "Vimpactsbjsg2": f"{self.infinitive}s",  # caperes
+                    "Vimpactsbjsg3": f"{self.infinitive}t",  # caperet
+                    "Vimpactsbjpl1": f"{self.infinitive}mus",  # caperemus
+                    "Vimpactsbjpl2": f"{self.infinitive}tis",  # caperetis
+                    "Vimpactsbjpl3": f"{self.infinitive}nt",  # caperent
+                    "Vplpactsbjsg1": f"{self._per_stem}issem",  # cepissem
+                    "Vplpactsbjsg2": f"{self._per_stem}isses",  # cepisses
+                    "Vplpactsbjsg3": f"{self._per_stem}isset",  # cepisset
+                    "Vplpactsbjpl1": f"{self._per_stem}issemus",  # cepissemus
+                    "Vplpactsbjpl2": f"{self._per_stem}issetis",  # cepissetis
+                    "Vplpactsbjpl3": f"{self._per_stem}issent",  # cepissent
+                }
 
             case _:  # pragma: no cover
                 raise ValueError(
@@ -357,80 +353,80 @@ class Verb(_Word):
         if self.ppp:
             self._preptc_stem: str = self.infinitive[:-2]
             self._ppp_stem: str = self.ppp[:-2]
-            self.endings = self.endings | {
-                "Vpreactptcmnomsg": self._preptc_stem + "ns",  # portans
-                "Vpreactptcmvocsg": self._preptc_stem + "ns",  # portans
-                "Vpreactptcmaccsg": self._preptc_stem + "ntem",  # portantem
-                "Vpreactptcmgensg": self._preptc_stem + "ntis",  # portantis
-                "Vpreactptcmdatsg": self._preptc_stem + "nti",  # portanti
-                "Vpreactptcmablsg": self._preptc_stem + "nte",  # portante
-                "Vpreactptcmnompl": self._preptc_stem + "ntes",  # portantes
-                "Vpreactptcmvocpl": self._preptc_stem + "ntes",  # portantes
-                "Vpreactptcmaccpl": self._preptc_stem + "ntes",  # portantes
-                "Vpreactptcmgenpl": self._preptc_stem + "ntium",  # portantium
-                "Vpreactptcmdatpl": self._preptc_stem + "ntibus",  # portantibus
-                "Vpreactptcmablpl": self._preptc_stem + "ntibus",  # portantibus
-                "Vpreactptcfnomsg": self._preptc_stem + "ns",  # portans
-                "Vpreactptcfvocsg": self._preptc_stem + "ns",  # portans
-                "Vpreactptcfaccsg": self._preptc_stem + "ntem",  # portantem
-                "Vpreactptcfgensg": self._preptc_stem + "ntis",  # portantis
-                "Vpreactptcfdatsg": self._preptc_stem + "nti",  # portanti
-                "Vpreactptcfablsg": self._preptc_stem + "nte",  # portante
-                "Vpreactptcfnompl": self._preptc_stem + "ntes",  # portantes
-                "Vpreactptcfvocpl": self._preptc_stem + "ntes",  # portantes
-                "Vpreactptcfaccpl": self._preptc_stem + "ntes",  # portantes
-                "Vpreactptcfgenpl": self._preptc_stem + "ntium",  # portantium
-                "Vpreactptcfdatpl": self._preptc_stem + "ntibus",  # portantibus
-                "Vpreactptcfablpl": self._preptc_stem + "ntibus",  # portantibus
-                "Vpreactptcnnomsg": self._preptc_stem + "ns",  # portans
-                "Vpreactptcnvocsg": self._preptc_stem + "ns",  # portans
-                "Vpreactptcnaccsg": self._preptc_stem + "ns",  # portans
-                "Vpreactptcngensg": self._preptc_stem + "ntis",  # portantis
-                "Vpreactptcndatsg": self._preptc_stem + "nti",  # portanti
-                "Vpreactptcnablsg": self._preptc_stem + "nte",  # portante
-                "Vpreactptcnnompl": self._preptc_stem + "ntia",  # portantia
-                "Vpreactptcnvocpl": self._preptc_stem + "ntia",  # portantia
-                "Vpreactptcnaccpl": self._preptc_stem + "ntia",  # portantia
-                "Vpreactptcngenpl": self._preptc_stem + "ntium",  # portantium
-                "Vpreactptcndatpl": self._preptc_stem + "ntibus",  # portantibus
-                "Vpreactptcnablpl": self._preptc_stem + "ntibus",  # portantibus
-                "Vperpasptcmnomsg": self.ppp,  # portatus
-                "Vperpasptcmvocsg": self._ppp_stem + "e",  # portate
-                "Vperpasptcmaccsg": self._ppp_stem + "um",  # portatum
-                "Vperpasptcmgensg": self._ppp_stem + "i",  # portati
-                "Vperpasptcmdatsg": self._ppp_stem + "o",  # portato
-                "Vperpasptcmablsg": self._ppp_stem + "o",  # portato
-                "Vperpasptcmnompl": self._ppp_stem + "i",  # portati
-                "Vperpasptcmvocpl": self._ppp_stem + "i",  # portati
-                "Vperpasptcmaccpl": self._ppp_stem + "os",  # portatos
-                "Vperpasptcmgenpl": self._ppp_stem + "orum",  # portatorum
-                "Vperpasptcmdatpl": self._ppp_stem + "is",  # portatis
-                "Vperpasptcmablpl": self._ppp_stem + "is",  # portatis
-                "Vperpasptcfnomsg": self._ppp_stem + "a",  # portata
-                "Vperpasptcfvocsg": self._ppp_stem + "a",  # portata
-                "Vperpasptcfaccsg": self._ppp_stem + "am",  # portatam
-                "Vperpasptcfgensg": self._ppp_stem + "ae",  # portatae
-                "Vperpasptcfdatsg": self._ppp_stem + "ae",  # portatae
-                "Vperpasptcfablsg": self._ppp_stem + "a",  # portata
-                "Vperpasptcfnompl": self._ppp_stem + "ae",  # portatae
-                "Vperpasptcfvocpl": self._ppp_stem + "ae",  # portatae
-                "Vperpasptcfaccpl": self._ppp_stem + "as",  # portatas
-                "Vperpasptcfgenpl": self._ppp_stem + "arum",  # portarum
-                "Vperpasptcfdatpl": self._ppp_stem + "is",  # portatis
-                "Vperpasptcfablpl": self._ppp_stem + "is",  # portatis
-                "Vperpasptcnnomsg": self._ppp_stem + "um",  # portatum
-                "Vperpasptcnvocsg": self._ppp_stem + "um",  # portatum
-                "Vperpasptcnaccsg": self._ppp_stem + "um",  # portatum
-                "Vperpasptcngensg": self._ppp_stem + "i",  # portati
-                "Vperpasptcndatsg": self._ppp_stem + "o",  # portato
-                "Vperpasptcnablsg": self._ppp_stem + "o",  # portato
-                "Vperpasptcnnompl": self._ppp_stem + "a",  # portata
-                "Vperpasptcnvocpl": self._ppp_stem + "a",  # portata
-                "Vperpasptcnaccpl": self._ppp_stem + "a",  # portata
-                "Vperpasptcngenpl": self._ppp_stem + "orum",  # portatorum
-                "Vperpasptcndatpl": self._ppp_stem + "is",  # portatis
-                "Vperpasptcnablpl": self._ppp_stem + "is",  # portatis
-            }  # fmt: skip
+            self.endings |= {
+                "Vpreactptcmnomsg": f"{self._preptc_stem}ns",  # portans
+                "Vpreactptcmvocsg": f"{self._preptc_stem}ns",  # portans
+                "Vpreactptcmaccsg": f"{self._preptc_stem}ntem",  # portantem
+                "Vpreactptcmgensg": f"{self._preptc_stem}ntis",  # portantis
+                "Vpreactptcmdatsg": f"{self._preptc_stem}nti",  # portanti
+                "Vpreactptcmablsg": f"{self._preptc_stem}nte",  # portante
+                "Vpreactptcmnompl": f"{self._preptc_stem}ntes",  # portantes
+                "Vpreactptcmvocpl": f"{self._preptc_stem}ntes",  # portantes
+                "Vpreactptcmaccpl": f"{self._preptc_stem}ntes",  # portantes
+                "Vpreactptcmgenpl": f"{self._preptc_stem}ntium",  # portantium
+                "Vpreactptcmdatpl": f"{self._preptc_stem}ntibus",  # portantibus
+                "Vpreactptcmablpl": f"{self._preptc_stem}ntibus",  # portantibus
+                "Vpreactptcfnomsg": f"{self._preptc_stem}ns",  # portans
+                "Vpreactptcfvocsg": f"{self._preptc_stem}ns",  # portans
+                "Vpreactptcfaccsg": f"{self._preptc_stem}ntem",  # portantem
+                "Vpreactptcfgensg": f"{self._preptc_stem}ntis",  # portantis
+                "Vpreactptcfdatsg": f"{self._preptc_stem}nti",  # portanti
+                "Vpreactptcfablsg": f"{self._preptc_stem}nte",  # portante
+                "Vpreactptcfnompl": f"{self._preptc_stem}ntes",  # portantes
+                "Vpreactptcfvocpl": f"{self._preptc_stem}ntes",  # portantes
+                "Vpreactptcfaccpl": f"{self._preptc_stem}ntes",  # portantes
+                "Vpreactptcfgenpl": f"{self._preptc_stem}ntium",  # portantium
+                "Vpreactptcfdatpl": f"{self._preptc_stem}ntibus",  # portantibus
+                "Vpreactptcfablpl": f"{self._preptc_stem}ntibus",  # portantibus
+                "Vpreactptcnnomsg": f"{self._preptc_stem}ns",  # portans
+                "Vpreactptcnvocsg": f"{self._preptc_stem}ns",  # portans
+                "Vpreactptcnaccsg": f"{self._preptc_stem}ns",  # portans
+                "Vpreactptcngensg": f"{self._preptc_stem}ntis",  # portantis
+                "Vpreactptcndatsg": f"{self._preptc_stem}nti",  # portanti
+                "Vpreactptcnablsg": f"{self._preptc_stem}nte",  # portante
+                "Vpreactptcnnompl": f"{self._preptc_stem}ntia",  # portantia
+                "Vpreactptcnvocpl": f"{self._preptc_stem}ntia",  # portantia
+                "Vpreactptcnaccpl": f"{self._preptc_stem}ntia",  # portantia
+                "Vpreactptcngenpl": f"{self._preptc_stem}ntium",  # portantium
+                "Vpreactptcndatpl": f"{self._preptc_stem}ntibus",  # portantibus
+                "Vpreactptcnablpl": f"{self._preptc_stem}ntibus",  # portantibus
+                "Vperpasptcmnomsg": self.ppp,  # portatustus
+                "Vperpasptcmvocsg": f"{self._ppp_stem}e",  # portate
+                "Vperpasptcmaccsg": f"{self._ppp_stem}um",  # portatum
+                "Vperpasptcmgensg": f"{self._ppp_stem}i",  # portati
+                "Vperpasptcmdatsg": f"{self._ppp_stem}o",  # portato
+                "Vperpasptcmablsg": f"{self._ppp_stem}o",  # portato
+                "Vperpasptcmnompl": f"{self._ppp_stem}i",  # portati
+                "Vperpasptcmvocpl": f"{self._ppp_stem}i",  # portati
+                "Vperpasptcmaccpl": f"{self._ppp_stem}os",  # portatos
+                "Vperpasptcmgenpl": f"{self._ppp_stem}orum",  # portatorum
+                "Vperpasptcmdatpl": f"{self._ppp_stem}is",  # portatis
+                "Vperpasptcmablpl": f"{self._ppp_stem}is",  # portatis
+                "Vperpasptcfnomsg": f"{self._ppp_stem}a",  # portata
+                "Vperpasptcfvocsg": f"{self._ppp_stem}a",  # portata
+                "Vperpasptcfaccsg": f"{self._ppp_stem}am",  # portatam
+                "Vperpasptcfgensg": f"{self._ppp_stem}ae",  # portatae
+                "Vperpasptcfdatsg": f"{self._ppp_stem}ae",  # portatae
+                "Vperpasptcfablsg": f"{self._ppp_stem}a",  # portata
+                "Vperpasptcfnompl": f"{self._ppp_stem}ae",  # portatae
+                "Vperpasptcfvocpl": f"{self._ppp_stem}ae",  # portatae
+                "Vperpasptcfaccpl": f"{self._ppp_stem}as",  # portatas
+                "Vperpasptcfgenpl": f"{self._ppp_stem}arum",  # portarum
+                "Vperpasptcfdatpl": f"{self._ppp_stem}is",  # portatis
+                "Vperpasptcfablpl": f"{self._ppp_stem}is",  # portatis
+                "Vperpasptcnnomsg": f"{self._ppp_stem}um",  # portatum
+                "Vperpasptcnvocsg": f"{self._ppp_stem}um",  # portatum
+                "Vperpasptcnaccsg": f"{self._ppp_stem}um",  # portatum
+                "Vperpasptcngensg": f"{self._ppp_stem}i",  # portati
+                "Vperpasptcndatsg": f"{self._ppp_stem}o",  # portato
+                "Vperpasptcnablsg": f"{self._ppp_stem}o",  # portato
+                "Vperpasptcnnompl": f"{self._ppp_stem}a",  # portata
+                "Vperpasptcnvocpl": f"{self._ppp_stem}a",  # portata
+                "Vperpasptcnaccpl": f"{self._ppp_stem}a",  # portata
+                "Vperpasptcngenpl": f"{self._ppp_stem}orum",  # portatorum
+                "Vperpasptcndatpl": f"{self._ppp_stem}is",  # portatis
+                "Vperpasptcnablpl": f"{self._ppp_stem}is",  # portatis
+            }
 
     def get(
         self,

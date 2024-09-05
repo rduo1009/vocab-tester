@@ -106,8 +106,8 @@ def find_verb_inflections(
 
     try:
         lemma: str = lemminflect.getLemma(verb, "VERB")[0]
-    except KeyError:
-        raise InvalidWordError(f"Word {verb} is not a verb")
+    except KeyError as e:
+        raise InvalidWordError(f"Word {verb} is not a verb") from e
 
     match (components.tense, components.voice, components.mood):
         case ("present", "active", "indicative"):
@@ -319,7 +319,9 @@ def _find_participle_inflections(
             return {f"having been {past_participle}"}
 
         case ("present", "active"):
-            present_participle: str = lemminflect.getInflection(lemma, "VBG")[0]  # fmt: skip
+            present_participle: str = lemminflect.getInflection(lemma, "VBG")[
+                0
+            ]
             return {present_participle}
 
         case _:

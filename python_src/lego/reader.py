@@ -168,10 +168,10 @@ def read_vocab_file(file_path: Path) -> VocabList:
                                         ],
                                     )
                                 )
-                            except KeyError:
+                            except KeyError as e:
                                 raise InvalidVocabFileFormatError(
                                     f"Invalid gender: {latin_parts[2].split()[-1].strip('()')}"
-                                )
+                                ) from e
 
                         case "Adjective":
                             if len(latin_parts) not in {3, 4}:
@@ -181,21 +181,12 @@ def read_vocab_file(file_path: Path) -> VocabList:
 
                             declension: str = latin_parts[-1].strip("()")
 
-                            if declension == "212":
-                                vocab.append(
-                                    accido.endings.Adjective(
-                                        *latin_parts[:-1],
-                                        meaning=meaning,
-                                        declension="212",
-                                    )
-                                )
-                            elif declension == "2-1-2":
-                                vocab.append(
-                                    accido.endings.Adjective(
-                                        *latin_parts[:-1],
-                                        meaning=meaning,
-                                        declension="212",
-                                    )
+                            if declension not in {
+                                "212",
+                                "2-1-2",
+                            } and not match(r"^3-.$", declension):
+                                raise InvalidVocabFileFormatError(
+                                    f"Invalid adjective declension: {declension}"
                                 )
                             elif declension.startswith("3"):
                                 if not match(r"^.-.$", declension):
@@ -211,10 +202,13 @@ def read_vocab_file(file_path: Path) -> VocabList:
                                     )
                                 )
                             else:
-                                raise InvalidVocabFileFormatError(
-                                    f"Invalid adjective declension: {declension}"
+                                vocab.append(
+                                    accido.endings.Adjective(
+                                        *latin_parts[:-1],
+                                        meaning=meaning,
+                                        declension="212",
+                                    )
                                 )
-
                         case "Regular":
                             vocab.append(
                                 accido.endings.RegularWord(
@@ -228,11 +222,6 @@ def read_vocab_file(file_path: Path) -> VocabList:
                                     meaning=meaning, pronoun=latin_parts[0]
                                 )
                             )
-
-                        # case _:
-                        #     raise InvalidVocabFileFormatError(
-                        #         f"Invalid word type: {current}"
-                        #     )
 
     return VocabList(vocab)
 
@@ -349,11 +338,10 @@ def read_vocab_dump(filename: Path) -> VocabList:
     if type(output) is VocabList:  # type: ignore[comparison-overlap] # mypy cannot recognise this
         if output.version == src.__version__:
             return output
-        else:  # pragma: no cover
-            warnings.warn(
-                "Vocab dump is from a different version of vocab-tester."
-            )
-            return _regenerate_vocab_list(output)
+        warnings.warn(
+            "Vocab dump is from a different version of vocab-tester."
+        )
+        return _regenerate_vocab_list(output)
 
     raise InvalidVocabDumpError(
         "Vocab dump is not valid."

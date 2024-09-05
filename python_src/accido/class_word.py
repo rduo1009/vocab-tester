@@ -60,21 +60,23 @@ class _Word(ABC):
             that match the given form.
         """
 
-        results = []
-        for key, value in self.endings.items():
-            if isinstance(value, MultipleEndings):
-                if form in value.get_all():
-                    results.append(self._create_namespace(key))
-            elif value == form:
-                results.append(self._create_namespace(key))
-        return results
+        return [
+            self._create_namespace(key)
+            for key, value in self.endings.items()
+            if isinstance(value, MultipleEndings)
+            and form in value.get_all()
+            or not isinstance(value, MultipleEndings)
+            and value == form
+        ]
 
     # Force implementation of these methods
     # docstr-coverage:excused `abstract method`
     @abstractmethod
     def get(
         self, *args: Any, **kwargs: Any
-    ) -> Ending | None:  # pragma: no cover
+    ) -> (
+        Ending | None
+    ):  # pragma: no cover # sourcery skip: docstrings-for-functions
         pass
 
     @staticmethod
