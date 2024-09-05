@@ -61,7 +61,7 @@ def read_vocab_file(file_path: Path) -> VocabList:
 
     Examples
     --------
-    >>> read_vocab_file(Path("path_to_file.txt"))
+    >>> read_vocab_file(Path("path_to_file.txt"))  # doctest: +SKIP
     """
     vocab: list[accido.endings._Word] = []
     file: TextIOWrapper
@@ -330,7 +330,7 @@ def read_vocab_dump(filename: Path) -> VocabList:
 
     Examples
     --------
-    >>> read_vocab_dump(Path("path_to_file.pickle"))
+    >>> read_vocab_dump(Path("path_to_file.pickle"))  # doctest: +SKIP
     """
 
     with open(filename, "rb") as file:

@@ -41,10 +41,10 @@ def adj_to_adv(adjective: str) -> str:
     Examples
     -------
     >>> adj_to_adv("happy")
-    "happily"
+    'happily'
 
     >>> adj_to_adv("sad")
-    "sadly"
+    'sadly'
     """
 
     if adjective in ADJECTIVE_TO_ADVERB:

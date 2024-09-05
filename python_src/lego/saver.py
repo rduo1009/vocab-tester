@@ -39,7 +39,9 @@ def save_vocab_dump(file_path: Path, vocab_list: VocabList) -> None:
 
     Examples
     --------
-    >>> save_vocab_dump(Path("path_to_file.pickle"), VocabList())
+    >>> save_vocab_dump(
+    ...     Path("path_to_file.pickle"), VocabList()
+    ... )  # doctest: +SKIP
     """
     file_path = Path(file_path)
 

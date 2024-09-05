@@ -41,16 +41,18 @@ class Adjective(_Word):
 
     Examples
     --------
-    >>> foo = Adjective("laetus", "laeta", "laetum", declension="212", \
-    ...                meaning="happy")
+    >>> foo = Adjective(
+    ...     "laetus", "laeta", "laetum", declension="212", meaning="happy"
+    ... )
     >>> foo["Aposmnomsg"]
     'laetus'
-    
-    Note that the declension and meaning arguments of Adjectives are 
+
+    Note that the declension and meaning arguments of Adjectives are
     keyword-only.
 
-    >>> bar = Adjective("egens", "egentis", termination=1, \
-    ...                 declension="3", meaning="poor")
+    >>> bar = Adjective(
+    ...     "egens", "egentis", termination=1, declension="3", meaning="poor"
+    ... )
     >>> bar["Aposmnomsg"]
     'egens'
 
@@ -805,14 +807,19 @@ class Adjective(_Word):
         ------
         InvalidInputError
             If the input is invalid.
-        
+
         Examples
         --------
-        >>> foo = Adjective("egens", "egentis", termination=1, \
-        ...                 declension="3", meaning="poor")
-        >>> foo.get(degree="positive", gender="masculine", \
-        ...         case="nominative", number="singular")
-        "egens"
+        >>> foo = Adjective(
+        ...     "egens", "egentis", termination=1, declension="3", meaning="poor"
+        ... )
+        >>> foo.get(
+        ...     degree="positive",
+        ...     gender="masculine",
+        ...     case="nominative",
+        ...     number="singular",
+        ... )
+        'egens'
 
         Note that the arguments of get are keyword-only.
         """

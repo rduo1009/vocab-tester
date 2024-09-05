@@ -45,11 +45,15 @@ class Verb(_Word):
 
     Examples
     --------
-    >>> foo = Verb(present="celo", infinitive="celare", \
-    ...       perfect="celavi", ppp="celatus", \
-    ...       meaning="hide")
+    >>> foo = Verb(
+    ...     present="celo",
+    ...     infinitive="celare",
+    ...     perfect="celavi",
+    ...     ppp="celatus",
+    ...     meaning="hide",
+    ... )
     >>> foo["Vpreactindsg1"]
-    "celo"
+    'celo'
 
     Note that all arguments of Verb are keyword-only.
     """
@@ -465,25 +469,39 @@ class Verb(_Word):
         InvalidInputError
             If the inputs are not valid. Note that the inputs must be the
             full words, e.g. 'singular', 'plural', 'masculine', 'feminine'.
-        
+
             If the ending cannot be found.
-        
+
 
         Examples
         --------
-        >>> foo = Verb(present="celo", infinitive="celare", \
-        ...                    perfect="celavi", ppp="celatus", \
-        ...                    meaning="hide")
-        >>> foo.get(person=1, number="singular", tense="present", \
-        ...         voice="active", mood="indicative")
-        "celo"
+        >>> foo = Verb(
+        ...     present="celo",
+        ...     infinitive="celare",
+        ...     perfect="celavi",
+        ...     ppp="celatus",
+        ...     meaning="hide",
+        ... )
+        >>> foo.get(
+        ...     person=1,
+        ...     number="singular",
+        ...     tense="present",
+        ...     voice="active",
+        ...     mood="indicative",
+        ... )
+        'celo'
 
         Note that all arguments of get are keyword-only.
 
-        >>> foo.get(number="singular", tense="perfect", voice="passive", \
-        ...         mood="participle", participle_gender="masculine", \
-        ...         participle_case="nominative")
-        "celatus"
+        >>> foo.get(
+        ...     number="singular",
+        ...     tense="perfect",
+        ...     voice="passive",
+        ...     mood="participle",
+        ...     participle_gender="masculine",
+        ...     participle_case="nominative",
+        ... )
+        'celatus'
 
         Similar with participle endings.
         """

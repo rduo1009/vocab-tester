@@ -27,11 +27,17 @@ class VocabList:
     version : str
         The version of the package. Used to regenerate the endings if the
         version of the package is different (e.g. if the package is updated).
-    
+
     Examples
     --------
-    >>> x = VocabList([Noun(nominative="ancilla", genitive="ancillae", \
-    ...                     gender="feminine", meaning="slavegirl")], 
+    >>> foo = VocabList([
+    ...     Noun(
+    ...         nominative="ancilla",
+    ...         genitive="ancillae",
+    ...         gender="feminine",
+    ...         meaning="slavegirl",
+    ...     )
+    ... ])  # doctest: +SKIP
     This will create a VocabList with a single Noun object in it.
     """
 

@@ -35,7 +35,7 @@ class Pronoun(_Word):
     --------
     >>> foo = Pronoun(pronoun="hic", meaning="this")
     >>> foo["Pmnomsg"]
-    "hic"
+    'hic'
 
     Note that the arguments of Pronoun are keyword-only.
     """
@@ -93,15 +93,14 @@ class Pronoun(_Word):
         ------
         InvalidInputError
             If the input is invalid.
-        
+
             If an ending cannot be found.
-        
+
         Examples
         --------
         >>> foo = Pronoun(pronoun="hic", meaning="this")
-        >>> foo.get(gender="masculine", case="nominative", \
-        ...         number="singular")
-        "hic"
+        >>> foo.get(gender="masculine", case="nominative", number="singular")
+        'hic'
 
         Note that the arguments of get are keyword-only.
         """

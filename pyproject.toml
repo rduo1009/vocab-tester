@@ -45,6 +45,7 @@ preview = true
 quote-style = "double"
 indent-style = "space"
 docstring-code-format = true
+docstring-code-line-length = 72
 
 [tool.mypy]
 disallow_untyped_defs = true

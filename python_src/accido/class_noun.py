@@ -37,14 +37,18 @@ class Noun(_Word):
     plurale_tantum : bool
         If the noun is a plurale tantum or not.
     gender : str
-    
+
     Examples
     --------
-    >>> foo = Noun(nominative="ancilla", genitive="ancillae", \
-    ...            gender="feminine", meaning="slavegirl")
+    >>> foo = Noun(
+    ...     nominative="ancilla",
+    ...     genitive="ancillae",
+    ...     gender="feminine",
+    ...     meaning="slavegirl",
+    ... )
     >>> foo["Nnomsg"]
-    "ancilla"
-    
+    'ancilla'
+
     Note that all arguments of Noun are keyword-only.
 
     Notes
@@ -275,10 +279,14 @@ class Noun(_Word):
 
         Examples
         --------
-        >>> foo = Noun(nominative="ancilla", genitive="ancillae", \
-        ...            gender="feminine", meaning="slavegirl")
+        >>> foo = Noun(
+        ...     nominative="ancilla",
+        ...     genitive="ancillae",
+        ...     gender="feminine",
+        ...     meaning="slavegirl",
+        ... )
         >>> foo.get(case="nominative", number="singular")
-        "ancilla"
+        'ancilla'
 
         Note that all arguments of get are keyword-only.
         """

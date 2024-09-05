@@ -24,7 +24,7 @@ class RegularWord(_Word):
     --------
     >>> foo = RegularWord(word="sed", meaning="but")
     >>> foo.endings
-    {"": "sed"}
+    {'': 'sed'}
 
     Note that the arguments of RegularWord are keyword-only.
     """
@@ -53,7 +53,7 @@ class RegularWord(_Word):
         --------
         >>> foo = RegularWord(word="sed", meaning="but")
         >>> foo.get()
-        "sed"
+        'sed'
         """
 
         return self.word

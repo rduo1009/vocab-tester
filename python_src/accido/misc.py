@@ -81,7 +81,7 @@ class EndingComponents(SimpleNamespace):
     >>> foo = EndingComponents(case="nominative", gender="masculine", \
                                number="singular")
     >>> foo.case
-    "nominative"
+    'nominative'
     """
 
     pass
@@ -107,10 +107,10 @@ class MultipleMeanings:
     --------
     >>> foo = MultipleMeanings(["hide", "conceal"])
     >>> foo.meanings
-    ["hide", "conceal"]
+    ['hide', 'conceal']
 
     >>> foo.__str__()
-    "hide"
+    'hide'
     """
 
     meanings: list[str]
@@ -141,13 +141,13 @@ class MultipleEndings(SimpleNamespace):
     --------
     >>> foo = MultipleEndings(regular="nostri", partitive="nostrum")
     >>> foo.regular
-    "nostri"
+    'nostri'
 
     >>> foo.__str__()
-    "nostri/nostrum"
+    'nostri/nostrum'
 
     >>> foo.get_all()
-    ["nostri", "nostrum"]
+    ['nostri', 'nostrum']
     """
 
     def get_all(self) -> list[str]:
