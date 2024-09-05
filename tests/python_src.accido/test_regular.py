@@ -10,11 +10,11 @@ from python_src.accido.misc import MultipleMeanings
 
 class TestRegular:
     def test_one_meaning(self):
-        word = RegularWord("test1", "test2")
+        word = RegularWord(word="test1", meaning="test2")
         assert word.meaning.__str__() == "test2"
 
     def test_multiple_meanings(self):
-        word = RegularWord("test1", MultipleMeanings(["test2", "test3", "test4"]))
+        word = RegularWord(word="test1", meaning=MultipleMeanings(["test2", "test3", "test4"]))
         assert word.meaning.__str__() == "test2"
 
 
@@ -24,9 +24,9 @@ class TestRegularDunder:
     #     word.pick()
 
     def test_get(self):
-        word = RegularWord("test1", "test2")
+        word = RegularWord(word="test1", meaning="test2")
         assert word.get() == "test1"
 
     def test_repr(self):
-        word = RegularWord("test1", "test2")
+        word = RegularWord(word="test1", meaning="test2")
         assert word.__repr__() == "RegularWord(test1, test2)"
