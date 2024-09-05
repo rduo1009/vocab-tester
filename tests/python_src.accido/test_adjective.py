@@ -9,6 +9,7 @@ import pytest  # type: ignore
 from python_src.accido.exceptions import InvalidInputError  # isort: skip
 from python_src.accido.endings import Adjective
 from python_src.accido.misc import EndingComponents
+from python_src.utils import compare
 
 
 class TestAdjectiveErrors:
@@ -105,15 +106,6 @@ class TestAdjectiveDunder:
         assert word1 < word2
 
     def test_find(self):
-        def compare(s, t):
-            t = list(t)  # make a mutable copy
-            try:
-                for elem in s:
-                    t.remove(elem)
-            except ValueError:
-                return False
-            return not t
-
         word = Adjective("laetus", "laeta", "laetum", declension="212", meaning="happy")
 
         assert compare(

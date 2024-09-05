@@ -6,6 +6,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../.
 import pytest
 from python_src.accido.endings import Noun, Pronoun, Verb
 from python_src.accido.misc import EndingComponents
+from python_src.utils import compare
 
 
 def test_eq():

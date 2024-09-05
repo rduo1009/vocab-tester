@@ -8,6 +8,7 @@ from __future__ import annotations
 from functools import total_ordering
 from typing import Literal, Optional
 
+from ..utils import key_from_value
 from .class_word import _Word
 from .edge_cases import check_io_verb, find_irregular_endings
 from .exceptions import InvalidInputError
@@ -22,7 +23,6 @@ from .misc import (
     Ending,
     EndingComponents,
     Meaning,
-    key_from_value,
 )
 
 

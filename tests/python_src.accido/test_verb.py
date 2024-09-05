@@ -8,6 +8,7 @@ import pytest
 from python_src.accido.exceptions import InvalidInputError  # isort: skip
 from python_src.accido.endings import Verb
 from python_src.accido.misc import EndingComponents
+from python_src.utils import compare
 
 
 class TestVerbErrors:
@@ -141,11 +142,11 @@ class TestVerbDunder:
 
     def test_find(self):
         word = Verb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
-        assert word.find("celabam") == [EndingComponents(person="1st person", number="singular", tense="imperfect", voice="active", mood="indicative", string="imperfect active indicative singular 1st person")]
+        assert compare(word.find("celabam"), [EndingComponents(person="1st person", number="singular", tense="imperfect", voice="active", mood="indicative", string="imperfect active indicative singular 1st person")])
 
     def test_find_participle(self):
         word = Verb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
-        assert word.find("celatus") == [EndingComponents(number="singular", case="nominative", gender="masculine", tense="perfect", voice="passive", mood="participle", string="perfect passive participle masculine nominative singular")]
+        assert compare(word.find("celatus"), [EndingComponents(number="singular", case="nominative", gender="masculine", tense="perfect", voice="passive", mood="participle", string="perfect passive participle masculine nominative singular")])
 
 
 class TestVerbConjugation:

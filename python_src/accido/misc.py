@@ -8,7 +8,7 @@ from __future__ import annotations
 import sys
 from dataclasses import dataclass
 from types import SimpleNamespace
-from typing import Any, Final
+from typing import Final
 
 """Mapping of number values to their more concise abbreviated forms."""
 NUMBER_SHORTHAND: Final[dict[str, str]] = {
@@ -173,27 +173,6 @@ class MultipleEndings(SimpleNamespace):
             key: f"{val2}{value}" for key, value in self.__dict__.items()
         }
         return MultipleEndings(**prefixed)
-
-
-def key_from_value(dd: dict[Any, Any] | dict[Any, Any], value: Any) -> Any:
-    """Returns the value in a dictionary from its key.
-    If no key is found with the given value, returns `None`.
-
-    Parameters
-    ----------
-    dd : dict[Any, Any]
-        The dictionary to search.
-    value : Any
-        The value to search for.
-
-    Returns
-    -------
-    Any
-        The first key whose value matches 'value', or None if not
-        found.
-    """
-
-    return next((key for key, val in dd.items() if val == value), None)
 
 
 if sys.version_info >= (3, 12):

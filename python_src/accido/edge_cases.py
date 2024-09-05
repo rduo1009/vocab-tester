@@ -549,7 +549,9 @@ def find_irregular_endings(present: str) -> Endings | None:
         The endings. None if the verb is not irregular.
     """
 
-    def prefix(pre: str, endings: Endings) -> dict[str, str | MultipleEndings]:
+    def _prefix(
+        pre: str, endings: Endings
+    ) -> dict[str, str | MultipleEndings]:
         return {key: pre + value for key, value in endings.items()}
 
     if present in IRREGULAR_VERBS:  # pragma: no cover
@@ -560,7 +562,7 @@ def find_irregular_endings(present: str) -> Endings | None:
         suffix_list,
     ) in DERIVED_IRREGULAR_VERBS.items():
         if present in suffix_list:
-            return prefix(
+            return _prefix(
                 present.rstrip(IRREGULAR_suffix),
                 DERIVED_IRREGULAR_ENDINGS[IRREGULAR_suffix],
             )

@@ -7,6 +7,7 @@ from __future__ import annotations
 
 from functools import total_ordering
 
+from ..utils import key_from_value
 from .class_word import _Word
 from .edge_cases import PRONOUNS
 from .exceptions import InvalidInputError
@@ -17,7 +18,6 @@ from .misc import (
     Ending,
     EndingComponents,
     Meaning,
-    key_from_value,
 )
 
 
