@@ -36,6 +36,6 @@ def compare(first: Iterable[Any], second: Iterable[Any]) -> bool:
     try:
         for elem in first:
             comparison.remove(elem)
-    except ValueError:
+    except ValueError:  # pragma: no cover
         return False
     return not comparison
