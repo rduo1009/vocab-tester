@@ -5,12 +5,15 @@
 
 from __future__ import annotations
 
-from collections.abc import Iterable
-from typing import Any
+from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:
+    from collections.abc import Iterable
 
 
-def key_from_value(dd: dict[Any, Any] | dict[Any, Any], value: Any) -> Any:
+def key_from_value(dd: dict[Any, Any], value: Any) -> Any:
     """Returns the value in a dictionary from its key.
+
     If no key is found with the given value, returns `None`.
 
     Parameters
@@ -26,12 +29,24 @@ def key_from_value(dd: dict[Any, Any] | dict[Any, Any], value: Any) -> Any:
         The first key whose value matches 'value', or None if not
         found.
     """
-
     return next((key for key, val in dd.items() if val == value), None)
 
 
 def compare(first: Iterable[Any], second: Iterable[Any]) -> bool:
-    """Compares two iterables."""
+    """Compares two iterables.
+
+    Parameters
+    ----------
+    first : Iterable[Any]
+        The first iterable to compare.
+    second : Iterable[Any]
+        The second iterable to compare.
+
+    Returns
+    -------
+    bool
+        True if the iterables are equal, False otherwise.
+    """
     comparison = list(second)  # make a mutable copy
     try:
         for elem in first:

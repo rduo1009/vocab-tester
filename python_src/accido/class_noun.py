@@ -156,7 +156,7 @@ class Noun(_Word):
 
         else:
             raise InvalidInputError(
-                f"Invalid genitive form: '{self.genitive}'"
+                f"Invalid genitive form: '{self.genitive}'",
             )
 
     def _determine_endings(self) -> Endings:
@@ -247,7 +247,7 @@ class Noun(_Word):
 
             case _:  # pragma: no cover # this should never happen
                 raise ValueError(
-                    f"Declension {self.declension} not recognised"
+                    f"Declension {self.declension} not recognised",
                 )
 
     def _neuter_endings(self) -> None:
@@ -256,10 +256,10 @@ class Noun(_Word):
 
         if self.declension == 5:
             raise InvalidInputError(
-                f"Fifth declension nouns cannot be neuter (noun '{self.nominative}' given)"
+                f"Fifth declension nouns cannot be neuter (noun '{self.nominative}' given)",
             )
 
-        elif self.declension == 4:
+        if self.declension == 4:
             self.endings["Nnompl"] = f"{self._stem}ua"  # cornua
             self.endings["Naccpl"] = f"{self._stem}ua"  # cornua
             self.endings["Nvocpl"] = f"{self._stem}ua"  # cornua
@@ -273,6 +273,7 @@ class Noun(_Word):
 
     def get(self, *, case: str, number: str) -> Ending | None:
         """Returns the ending of the noun.
+
         The function returns None if no ending is found.
 
         Parameters
@@ -304,7 +305,6 @@ class Noun(_Word):
 
         Note that all arguments of get are keyword-only.
         """
-
         if case not in CASE_SHORTHAND:
             raise InvalidInputError(f"Invalid case: '{case}'")
 
@@ -333,5 +333,5 @@ class Noun(_Word):
             return f"{self.meaning}: {self.nominative}, {self.genitive}, ({GENDER_SHORTHAND[self.gender]})"
 
         raise ValueError(
-            f"Gender {self.gender} not recognised"
+            f"Gender {self.gender} not recognised",
         )  # pragma: no cover # this should never occur

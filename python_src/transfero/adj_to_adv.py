@@ -16,7 +16,9 @@ import json
 from pathlib import Path
 from typing import Final
 
-with open(Path(__file__).parent.absolute() / "adj_to_adv.json") as file:
+with open(
+    Path(__file__).parent.absolute() / "adj_to_adv.json", encoding="utf-8"
+) as file:
     ADJECTIVE_TO_ADVERB: Final[dict[str, str]] = json.load(file)
 
 
@@ -39,14 +41,13 @@ def adj_to_adv(adjective: str) -> str:
         If the input is not an adjective.
 
     Examples
-    -------
+    --------
     >>> adj_to_adv("happy")
     'happily'
 
     >>> adj_to_adv("sad")
     'sadly'
     """
-
     if adjective in ADJECTIVE_TO_ADVERB:
         return ADJECTIVE_TO_ADVERB[adjective]
 

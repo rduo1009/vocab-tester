@@ -8,10 +8,8 @@ from __future__ import annotations
 import hashlib
 import hmac
 import warnings
-from io import TextIOWrapper
-from pathlib import Path
 from re import match
-from typing import Final
+from typing import TYPE_CHECKING, Final
 
 import dill as pickle
 
@@ -20,6 +18,10 @@ import python_src as src
 from .. import accido
 from .exceptions import InvalidVocabDumpError, InvalidVocabFileFormatError
 from .misc import KEY, VocabList
+
+if TYPE_CHECKING:
+    from io import TextIOWrapper
+    from pathlib import Path
 
 """Mapping of gender values to their more concise abbreviated forms."""
 GENDER_SHORTHAND: Final[dict[str, str]] = {
@@ -34,8 +36,7 @@ def _generate_meaning(meaning: str) -> accido.misc.Meaning:
         return accido.misc.MultipleMeanings([
             x.strip() for x in meaning.split("/")
         ])
-    else:
-        return meaning
+    return meaning
 
 
 def read_vocab_file(file_path: Path) -> VocabList:
@@ -101,30 +102,30 @@ def read_vocab_file(file_path: Path) -> VocabList:
 
                         case _:
                             raise InvalidVocabFileFormatError(
-                                f"Invalid part of speech: {line[1:].strip()}"
+                                f"Invalid part of speech: {line[1:].strip()}",
                             )
 
                 case _:
                     parts: list[str] = line.strip().split(":")
                     if len(parts) != 2:
                         raise InvalidVocabFileFormatError(
-                            f"Invalid line format: {line}"
+                            f"Invalid line format: {line}",
                         )
 
                     meaning: accido.misc.Meaning = _generate_meaning(
-                        parts[0].strip()
+                        parts[0].strip(),
                     )
                     latin_parts: list[str] = [
                         raw_part.strip() for raw_part in parts[1].split(",")
                     ]
 
-                    if current == "":
+                    if not current:
                         raise InvalidVocabFileFormatError(
-                            "Part of speech was not given"
+                            "Part of speech was not given",
                         )
 
                     vocab.append(
-                        _parse_line(current, latin_parts, meaning, line)
+                        _parse_line(current, latin_parts, meaning, line),
                     )
     return VocabList(vocab)
 
@@ -139,7 +140,7 @@ def _parse_line(
         case "Verb":
             if len(latin_parts) not in {3, 4}:
                 raise InvalidVocabFileFormatError(
-                    f"Invalid verb format: {line}"
+                    f"Invalid verb format: {line}",
                 )
 
             if len(latin_parts) > 3:
@@ -150,18 +151,17 @@ def _parse_line(
                     ppp=latin_parts[3],
                     meaning=meaning,
                 )
-            else:
-                return accido.endings.Verb(
-                    present=latin_parts[0],
-                    infinitive=latin_parts[1],
-                    perfect=latin_parts[2],
-                    meaning=meaning,
-                )
+            return accido.endings.Verb(
+                present=latin_parts[0],
+                infinitive=latin_parts[1],
+                perfect=latin_parts[2],
+                meaning=meaning,
+            )
 
         case "Noun":
             if len(latin_parts) != 3:
                 raise InvalidVocabFileFormatError(
-                    f"Invalid noun format: {line}"
+                    f"Invalid noun format: {line}",
                 )
 
             try:
@@ -175,44 +175,46 @@ def _parse_line(
                 )
             except KeyError as e:
                 raise InvalidVocabFileFormatError(
-                    f"Invalid gender: {latin_parts[2].split()[-1].strip('()')}"
+                    f"Invalid gender: {latin_parts[2].split()[-1].strip('()')}",
                 ) from e
 
         case "Adjective":
             if len(latin_parts) not in {3, 4}:
                 raise InvalidVocabFileFormatError(
-                    f"Invalid adjective format: {line}"
+                    f"Invalid adjective format: {line}",
                 )
 
             declension: str = latin_parts[-1].strip("()")
 
             if declension not in {"212", "2-1-2"} and not match(
-                r"^3-.$", declension
+                r"^3-.$",
+                declension,
             ):
                 raise InvalidVocabFileFormatError(
-                    f"Invalid adjective declension: {declension}"
+                    f"Invalid adjective declension: {declension}",
                 )
-            elif declension.startswith("3"):
+            if declension.startswith("3"):
                 return accido.endings.Adjective(
                     *latin_parts[:-1],
                     termination=int(declension[2]),
                     declension="3",
                     meaning=meaning,
                 )
-            else:
-                return accido.endings.Adjective(
-                    *latin_parts[:-1],
-                    meaning=meaning,
-                    declension="212",
-                )
+            return accido.endings.Adjective(
+                *latin_parts[:-1],
+                meaning=meaning,
+                declension="212",
+            )
         case "Regular":
             return accido.endings.RegularWord(
-                word=latin_parts[0], meaning=meaning
+                word=latin_parts[0],
+                meaning=meaning,
             )
 
         case "Pronoun":
             return accido.endings.Pronoun(
-                meaning=meaning, pronoun=latin_parts[0]
+                meaning=meaning,
+                pronoun=latin_parts[0],
             )
 
         case _:  # pragma: no cover # this should never happen
@@ -221,6 +223,7 @@ def _parse_line(
 
 def _regenerate_vocab_list(vocab_list: VocabList) -> VocabList:
     """Regenerates a VocabList from a VocabList.
+
     This is useful for regenerating a VocabList if it was created in a
     previous version of the package.
 
@@ -243,7 +246,7 @@ def _regenerate_vocab_list(vocab_list: VocabList) -> VocabList:
                 accido.endings.RegularWord(
                     word=word.word,
                     meaning=word.meaning,
-                )
+                ),
             )
         elif type(word) is accido.endings.Verb:
             new_vocab.append(
@@ -253,7 +256,7 @@ def _regenerate_vocab_list(vocab_list: VocabList) -> VocabList:
                     perfect=word.perfect,
                     ppp=word.ppp,
                     meaning=word.meaning,
-                )
+                ),
             )
         elif type(word) is accido.endings.Noun:
             new_vocab.append(
@@ -262,32 +265,33 @@ def _regenerate_vocab_list(vocab_list: VocabList) -> VocabList:
                     genitive=word.genitive,
                     meaning=word.meaning,
                     gender=word.gender,
-                )
+                ),
             )
         elif type(word) is accido.endings.Adjective:
             new_vocab.append(
                 accido.endings.Adjective(
-                    *word._principal_parts,
+                    *word._principal_parts,  # noqa: SLF001
                     termination=word.termination,
                     declension=word.declension,
                     meaning=word.meaning,
-                )
+                ),
             )
         elif type(word) is accido.endings.Pronoun:
             new_vocab.append(
                 accido.endings.Pronoun(
                     pronoun=word.pronoun,
                     meaning=word.meaning,
-                )
+                ),
             )
         else:  # pragma: no cover # this should never happen
-            raise ValueError(f"Unknown word type: {type(word)}")
+            raise ValueError(f"Unknown word type: {type(word)}")  # noqa: DOC501
 
     return VocabList(new_vocab)
 
 
 def read_vocab_dump(filename: Path) -> VocabList:
     """Reads a vocabulary dump file and returns a VocabList object.
+
     The pickle files are signed with a HMAC signature to ensure the data
     has not been tampered with. If the data is invalid, an exception is
     raised.
@@ -314,7 +318,6 @@ def read_vocab_dump(filename: Path) -> VocabList:
     --------
     >>> read_vocab_dump(Path("path_to_file.pickle"))  # doctest: +SKIP
     """
-
     with open(filename, "rb") as file:
         content: bytes = file.read()
         pickled_data: bytes = content[:-64]
@@ -324,7 +327,7 @@ def read_vocab_dump(filename: Path) -> VocabList:
         hmac.new(KEY, pickled_data, hashlib.sha256).hexdigest() != signature
     ):  # pragma: no cover # this should never happen
         raise InvalidVocabDumpError(
-            "Data integrity check failed for vocab dump."
+            "Data integrity check failed for vocab dump.",
         )
 
     output = pickle.loads(pickled_data)
@@ -332,10 +335,11 @@ def read_vocab_dump(filename: Path) -> VocabList:
         if output.version == src.__version__:
             return output
         warnings.warn(
-            "Vocab dump is from a different version of vocab-tester."
+            "Vocab dump is from a different version of vocab-tester.",
+            stacklevel=2,
         )
         return _regenerate_vocab_list(output)
 
     raise InvalidVocabDumpError(
-        "Vocab dump is not valid."
+        "Vocab dump is not valid.",
     )  # pragma: no cover # this should never happen

@@ -6,7 +6,6 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../.
 import pytest
 from python_src.accido.misc import EndingComponents
 from python_src.transfero.words import find_adjective_inflections
-from python_src.utils import compare
 
 
 class TestAdjectiveInflectErrors:

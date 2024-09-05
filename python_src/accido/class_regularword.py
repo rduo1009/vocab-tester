@@ -6,9 +6,12 @@
 from __future__ import annotations
 
 from functools import total_ordering
+from typing import TYPE_CHECKING
 
 from .class_word import _Word
-from .misc import EndingComponents, Meaning
+
+if TYPE_CHECKING:
+    from .misc import EndingComponents, Meaning
 
 
 @total_ordering
@@ -55,12 +58,11 @@ class RegularWord(_Word):
         >>> foo.get()
         'sed'
         """
-
         return self.word
 
     @staticmethod
     def _create_namespace(
-        key: str,
+        key: str,  # noqa: ARG004
     ) -> EndingComponents:  # pragma: no cover # this should never be ran
         return NotImplemented
 

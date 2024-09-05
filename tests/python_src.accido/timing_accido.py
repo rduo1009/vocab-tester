@@ -23,7 +23,7 @@ def time_adjective(run_times):
     from python_src.accido import endings
 
     for _ in range(run_times):
-        word = endings.Adjective("laetus", "laeta", "laetum", declension="212", meaning="happy")
+        endings.Adjective("laetus", "laeta", "laetum", declension="212", meaning="happy")
 
 
 @Timer(name="noun", text="{name}: {seconds:.3f} s", logger=log_timing_data)
@@ -31,7 +31,7 @@ def time_noun(run_times):
     from python_src.accido import endings
 
     for _ in range(run_times):
-        word = endings.Noun(nominative="ancilla", genitive="ancillae", gender="feminine", meaning="slavegirl")
+        endings.Noun(nominative="ancilla", genitive="ancillae", gender="feminine", meaning="slavegirl")
 
 
 @Timer(name="verb", text="{name}: {seconds:.3f} s", logger=log_timing_data)
@@ -39,7 +39,7 @@ def time_verb(run_times):
     from python_src.accido import endings
 
     for _ in range(run_times):
-        word = endings.Verb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
+        endings.Verb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
 
 
 @Timer(name="pronoun", text="{name}: {seconds:.3f} s", logger=log_timing_data)
@@ -47,7 +47,7 @@ def time_pronoun(run_times):
     from python_src.accido import endings
 
     for _ in range(run_times):
-        word = endings.Pronoun(pronoun="hic", meaning="this")
+        endings.Pronoun(pronoun="hic", meaning="this")
 
 
 if __name__ == "__main__":

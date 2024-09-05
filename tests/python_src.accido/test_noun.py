@@ -67,9 +67,9 @@ class TestNounDunder:
             return not t
 
         word = Noun(nominative="ancilla", genitive="ancillae", gender="feminine", meaning="slavegirl")
-        assert compare(word.find("ancilla"), \
-            [SimpleNamespace(case="nominative", number="singular", string="nominative singular"), \
-                SimpleNamespace(case="vocative", number="singular", string="vocative singular"), \
+        assert compare(word.find("ancilla"),
+            [SimpleNamespace(case="nominative", number="singular", string="nominative singular"),
+                SimpleNamespace(case="vocative", number="singular", string="vocative singular"),
                     SimpleNamespace(case="ablative", number="singular", string="ablative singular")])  # fmt: skip
 
     def test_str_masculine(self):

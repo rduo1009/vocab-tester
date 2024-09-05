@@ -5,11 +5,15 @@
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 import lemminflect
 from inflect import engine
 
-from .. import accido
 from .exceptions import InvalidWordError
+
+if TYPE_CHECKING:
+    from .. import accido
 
 # Distinguish from the lemminflect module
 pluralinflect = engine()  # sourcery skip: avoid-global-variables
@@ -21,7 +25,8 @@ def _get_possessive(noun: str) -> str:
 
 
 def find_noun_inflections(
-    noun: str, components: accido.misc.EndingComponents
+    noun: str,
+    components: accido.misc.EndingComponents,
 ) -> set[str]:
     """Inflect English nouns using the case and number.
 
@@ -44,7 +49,6 @@ def find_noun_inflections(
     ValueError
         If the input (other than the word itself) is invalid.
     """
-
     if not hasattr(components, "case"):
         raise ValueError("Case must be specified")
 

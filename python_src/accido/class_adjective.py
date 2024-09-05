@@ -6,7 +6,6 @@
 from __future__ import annotations
 
 from functools import total_ordering
-from typing import Optional
 
 from ..utils import key_from_value
 from .class_word import _Word
@@ -64,7 +63,7 @@ class Adjective(_Word):
     def __init__(
         self,
         *principal_parts: str,
-        termination: Optional[int] = None,
+        termination: int | None = None,
         declension: str,
         meaning: Meaning,
     ) -> None:
@@ -87,7 +86,6 @@ class Adjective(_Word):
         InvalidInputError
             If the input is invalid.
         """
-
         super().__init__()
 
         self._principal_parts: tuple[str, ...] = principal_parts
@@ -98,7 +96,7 @@ class Adjective(_Word):
         self._first = self._principal_parts[0]
         self.meaning: Meaning = meaning
         self.declension: str = declension
-        self.termination: Optional[int] = termination
+        self.termination: int | None = termination
         self.irregular_flag: bool = False
         self.adverb_flag: bool = True
 
@@ -144,23 +142,23 @@ class Adjective(_Word):
 
                     case _:
                         raise InvalidInputError(
-                            f"Termination must be 1, 2 or 3 (given '{self.termination}')"
+                            f"Termination must be 1, 2 or 3 (given '{self.termination}')",
                         )
 
             case _:
                 raise InvalidInputError(
-                    f"Invalid declension: '{self.declension}'"
+                    f"Invalid declension: '{self.declension}'",
                 )
 
     def _212_endings(self) -> Endings:
         if self.termination:
             raise InvalidInputError(
-                f"2-1-2 adjectives cannot have a termination (termination '{self.termination}' given)"
+                f"2-1-2 adjectives cannot have a termination (termination '{self.termination}' given)",
             )
 
         if len(self._principal_parts) != 3:
             raise InvalidInputError(
-                f"2-1-2 adjectives must have 3 principal parts (adjective '{self._first}' given)"
+                f"2-1-2 adjectives must have 3 principal parts (adjective '{self._first}' given)",
             )
 
         self._femnom = self._principal_parts[1]
@@ -171,7 +169,7 @@ class Adjective(_Word):
         if self._mascnom not in IRREGULAR_ADJECTIVES:
             self._cmp_stem = f"{self._pos_stem}ior"  # car- -> carior-
             if self._mascnom.endswith(
-                "er"
+                "er",
             ):  # pragma: no cover # not sure if an example of this actually occurs
                 self._spr_stem = f"{self._mascnom}rim"  # miser- -> miserrim-
             elif (
@@ -317,14 +315,14 @@ class Adjective(_Word):
     def _31_endings(self) -> Endings:
         if len(self._principal_parts) != 2:
             raise InvalidInputError(
-                f"First-termination adjectives must have 2 principal parts (adjective '{self._first}' given)"
+                f"First-termination adjectives must have 2 principal parts (adjective '{self._first}' given)",
             )
 
         self._mascgen: str = self._principal_parts[1]
 
         if self._mascgen[-2:] != "is":
             raise InvalidInputError(
-                f"Invalid genitive form: '{self._mascgen}' (must end in '-is')"
+                f"Invalid genitive form: '{self._mascgen}' (must end in '-is')",
             )
 
         self._pos_stem = self._mascgen[:-2]  # ingentis -> ingent-
@@ -478,7 +476,7 @@ class Adjective(_Word):
     def _32_endings(self) -> Endings:
         if len(self._principal_parts) != 2:
             raise InvalidInputError(
-                f"Second-termination adjectives must have 2 principal parts (adjective '{self._first}' given)"
+                f"Second-termination adjectives must have 2 principal parts (adjective '{self._first}' given)",
             )
 
         self._neutnom = self._principal_parts[1]
@@ -633,7 +631,7 @@ class Adjective(_Word):
     def _33_endings(self) -> Endings:
         if len(self._principal_parts) != 3:
             raise InvalidInputError(
-                f"Third-termination adjectives must have 3 principal parts (adjective '{self._first}' given)"
+                f"Third-termination adjectives must have 3 principal parts (adjective '{self._first}' given)",
             )
 
         self._mascnom = self._principal_parts[0]
@@ -789,12 +787,13 @@ class Adjective(_Word):
         self,
         *,
         degree: str,
-        gender: Optional[str] = None,
-        case: Optional[str] = None,
-        number: Optional[str] = None,
+        gender: str | None = None,
+        case: str | None = None,
+        number: str | None = None,
         adverb: bool = False,
     ) -> Ending | None:
         """Returns the ending of the adjective.
+
         The function returns None if no ending is found.
 
         Parameters
@@ -838,7 +837,7 @@ class Adjective(_Word):
         if adverb:
             if gender or case or number:
                 raise InvalidInputError(
-                    f"Adverbs do not have gender, case or number (given '{gender}', '{case}' and '{number}')"
+                    f"Adverbs do not have gender, case or number (given '{gender}', '{case}' and '{number}')",
                 )
             try:
                 short_degree = DEGREE_SHORTHAND[degree]
@@ -847,16 +846,16 @@ class Adjective(_Word):
 
             return self.endings.get(f"D{short_degree}")
 
-        if gender not in GENDER_SHORTHAND.keys():
+        if gender not in GENDER_SHORTHAND:
             raise InvalidInputError(f"Invalid gender: '{gender}'")
 
-        if case not in CASE_SHORTHAND.keys():
+        if case not in CASE_SHORTHAND:
             raise InvalidInputError(f"Invalid case: '{case}'")
 
-        if number not in NUMBER_SHORTHAND.keys():
+        if number not in NUMBER_SHORTHAND:
             raise InvalidInputError(f"Invalid number: '{number}'")
 
-        if degree not in DEGREE_SHORTHAND.keys():
+        if degree not in DEGREE_SHORTHAND:
             raise InvalidInputError(f"Invalid degree: '{degree}'")
 
         short_degree = DEGREE_SHORTHAND[degree]
@@ -865,7 +864,7 @@ class Adjective(_Word):
         short_number: str = NUMBER_SHORTHAND[number]
 
         return self.endings.get(
-            f"A{short_degree}{short_gender}{short_case}{short_number}"
+            f"A{short_degree}{short_gender}{short_case}{short_number}",
         )
 
     @staticmethod
@@ -883,7 +882,7 @@ class Adjective(_Word):
 
         else:
             output = EndingComponents(
-                degree=key_from_value(DEGREE_SHORTHAND, key[1:4])
+                degree=key_from_value(DEGREE_SHORTHAND, key[1:4]),
             )
             output.string = output.degree
 

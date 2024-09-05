@@ -42,7 +42,7 @@ def time_saver(run_times):
     from python_src.lego.saver import save_vocab_dump
 
     for _ in range(run_times):
-        s = save_vocab_dump(Path("tests/python_src.lego/test_vocab_files/testdump/regular_list.testdump"), l)
+        save_vocab_dump(Path("tests/python_src.lego/test_vocab_files/testdump/regular_list.testdump"), l)
 
 
 if __name__ == "__main__":

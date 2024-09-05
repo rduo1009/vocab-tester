@@ -5,13 +5,15 @@
 
 from __future__ import annotations
 
-from typing import Literal
+from typing import TYPE_CHECKING, Literal
 
 import lemminflect
 
-from .. import accido
 from .edge_cases import STATIVE_VERBS
 from .exceptions import InvalidWordError
+
+if TYPE_CHECKING:
+    from .. import accido
 
 
 def _verify_verb_inflections(components: accido.misc.EndingComponents) -> None:
@@ -71,11 +73,13 @@ def _verify_verb_inflections(components: accido.misc.EndingComponents) -> None:
 
 
 def find_verb_inflections(
-    verb: str, components: accido.misc.EndingComponents
+    verb: str,
+    components: accido.misc.EndingComponents,
 ) -> set[str]:
     """Inflect English verbs using the tense, voice, mood, number and
     person. If a participle is queried, find_participle_inflections is ran
     instead.
+
     Note that subjunctives are not supported as they do not have an exact
     translation in English.
 
@@ -97,8 +101,7 @@ def find_verb_inflections(
         If the word is not a valid English verb.
     ValueError
         If the input (other than the word itself) is invalid.
-    """
-
+    """  # noqa: D205
     _verify_verb_inflections(components)
 
     if components.mood == "participle":
@@ -112,22 +115,30 @@ def find_verb_inflections(
     match (components.tense, components.voice, components.mood):
         case ("present", "active", "indicative"):
             return _find_preactind_inflections(
-                lemma, components.number, components.person
+                lemma,
+                components.number,
+                components.person,
             )
 
         case ("imperfect", "active", "indicative"):
             return _find_impactind_inflections(
-                lemma, components.number, components.person
+                lemma,
+                components.number,
+                components.person,
             )
 
         case ("perfect", "active", "indicative"):
             return _find_peractind_inflections(
-                lemma, components.number, components.person
+                lemma,
+                components.number,
+                components.person,
             )
 
         case ("pluperfect", "active", "indicative"):
             return _find_plpactind_inflections(
-                lemma, components.number, components.person
+                lemma,
+                components.number,
+                components.person,
             )
 
         case ("present", "active", "infinitive"):
@@ -138,12 +149,14 @@ def find_verb_inflections(
 
         case _:
             raise NotImplementedError(
-                f"The {components.tense} {components.voice} {components.mood} has not been implemented"
+                f"The {components.tense} {components.voice} {components.mood} has not been implemented",
             )
 
 
 def _find_preactind_inflections(
-    lemma: str, number: Literal["singular", "plural"], person: Literal[1, 2, 3]
+    lemma: str,
+    number: Literal["singular", "plural"],
+    person: Literal[1, 2, 3],
 ) -> set[str]:
     present_nonthird: str = lemminflect.getInflection(lemma, "VBP")[0]
     present_third: str = lemminflect.getInflection(lemma, "VBZ")[0]
@@ -188,7 +201,9 @@ def _find_preactind_inflections(
 
 
 def _find_impactind_inflections(
-    lemma: str, number: Literal["singular", "plural"], person: Literal[1, 2, 3]
+    lemma: str,
+    number: Literal["singular", "plural"],
+    person: Literal[1, 2, 3],
 ) -> set[str]:
     present_participle: str = lemminflect.getInflection(lemma, "VBG")[0]
 
@@ -247,7 +262,9 @@ def _find_impactind_inflections(
 
 
 def _find_peractind_inflections(
-    lemma: str, number: Literal["singular", "plural"], person: Literal[1, 2, 3]
+    lemma: str,
+    number: Literal["singular", "plural"],
+    person: Literal[1, 2, 3],
 ) -> set[str]:
     past = lemminflect.getInflection(lemma, "VBD")[0]
 
@@ -281,7 +298,9 @@ def _find_peractind_inflections(
 
 
 def _find_plpactind_inflections(
-    lemma: str, number: Literal["singular", "plural"], person: Literal[1, 2, 3]
+    lemma: str,
+    number: Literal["singular", "plural"],
+    person: Literal[1, 2, 3],
 ) -> set[str]:
     past_participle: str = lemminflect.getInflection(lemma, "VBN")[0]
 
@@ -309,7 +328,8 @@ def _find_plpactind_inflections(
 
 
 def _find_participle_inflections(
-    verb: str, components: accido.misc.EndingComponents
+    verb: str,
+    components: accido.misc.EndingComponents,
 ) -> set[str]:
     lemma: str = lemminflect.getLemma(verb, "NOUN")[0]
 
@@ -326,7 +346,7 @@ def _find_participle_inflections(
 
         case _:
             raise NotImplementedError(
-                f"The {components.tense} {components.voice} participle has not been implemented"
+                f"The {components.tense} {components.voice} participle has not been implemented",
             )
 
 

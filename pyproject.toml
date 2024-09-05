@@ -33,9 +33,40 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.ruff]
 line-length = 79
+unsafe-fixes = true
 
 [tool.ruff.lint]
 preview = true
+select = ["ALL"]
+ignore = [
+    "UP009",
+    "S101",
+    "ERA001",
+    "EXE001",
+    "PLC0414",
+    "EM102",
+    "EM101",
+    "TRY003",
+    "ANN",
+    "E501",
+    "S403",
+    "FURB101",
+    "PTH123",
+    "DOC502",
+    "TID252",
+    "D105",
+    "D401",
+    "S301",
+    "CPY001",
+    "PLR2004",
+    "PLR0911",
+    "C901",
+    "PLR0912",
+    "PLR0913",
+    "COM812",
+    "ISC001",
+]
+
 
 [tool.ruff.lint.pydocstyle]
 convention = "numpy"
@@ -58,3 +89,5 @@ exclude = 'tests/.*'
 
 [tool.coverage.run]
 omit = ["tests/*"]
+preview = true
+select = ["ALL"]

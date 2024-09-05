@@ -56,7 +56,7 @@ def check_io_verb(present: str) -> bool:
     verbs in the THIRD_IO_VERBS set.
 
     Parameters
-    ---------
+    ----------
     present : str
         The present form verb to check
 
@@ -64,8 +64,7 @@ def check_io_verb(present: str) -> bool:
     -------
     bool
         If the prefix matches a third conjugation -io verb
-    """
-
+    """  # noqa: D205
     return any(present.endswith(io_verb) for io_verb in THIRD_IO_VERBS)
 
 
@@ -390,7 +389,7 @@ IRREGULAR_VERBS: Final[dict[str, Endings]] = {
 }
 
 
-"""Contains verbs that are derived from the main irregular verbs (usually 
+"""Contains verbs that are derived from the main irregular verbs (usually
 having a prefix)."""
 DERIVED_IRREGULAR_VERBS: Final[dict[str, set[str]]] = {
     "eo": {
@@ -536,7 +535,7 @@ def find_irregular_endings(present: str) -> Endings | None:
     and returns its endings.
 
     Parameters
-    ---------
+    ----------
     present : str
         The present form verb to check.
 
@@ -544,10 +543,11 @@ def find_irregular_endings(present: str) -> Endings | None:
     -------
     Endings | None
         The endings. None if the verb is not irregular.
-    """
+    """  # noqa: D205
 
     def _prefix(
-        pre: str, endings: Endings
+        pre: str,
+        endings: Endings,
     ) -> dict[str, str | MultipleEndings]:
         return {key: pre + value for key, value in endings.items()}
 
@@ -555,13 +555,13 @@ def find_irregular_endings(present: str) -> Endings | None:
         return IRREGULAR_VERBS[present]
 
     for (
-        IRREGULAR_suffix,
+        irregular_suffix,
         suffix_list,
     ) in DERIVED_IRREGULAR_VERBS.items():
         if present in suffix_list:
             return _prefix(
-                present.rstrip(IRREGULAR_suffix),
-                DERIVED_IRREGULAR_ENDINGS[IRREGULAR_suffix],
+                present.rstrip(irregular_suffix),
+                DERIVED_IRREGULAR_ENDINGS[irregular_suffix],
             )
 
     return None
@@ -610,7 +610,7 @@ IRREGULAR_NOUNS: Final[dict[str, Endings]] = {
 }
 
 
-"""Contains adjectives that end in -lis, and thus have irregular 
+"""Contains adjectives that end in -lis, and thus have irregular
 superlatives."""
 LIS_ADJECTIVES: Final[set[str]] = {
     "facilis",

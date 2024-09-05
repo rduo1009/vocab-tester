@@ -13,8 +13,9 @@ from .misc import Ending, EndingComponents, Endings, MultipleEndings
 
 
 @total_ordering
-class _Word(ABC):
+class _Word(ABC):  # noqa: PLW1641
     """Representation of an word.
+
     This class is not intended to be used by the user. Rather, all of the
     other classes inherit from this class.
 
@@ -27,7 +28,7 @@ class _Word(ABC):
     """
 
     def __init__(self) -> None:
-        """Initialises _Word (and all classes that inherit from it)"""
+        """Initialises _Word (and all classes that inherit from it)."""
         self.endings: Endings
         self._first: str
         self._unique_endings: set[Ending] = set()
@@ -59,21 +60,20 @@ class _Word(ABC):
             The list of EndingComponents objects that represent the endings
             that match the given form.
         """
-
         return [
             self._create_namespace(key)
             for key, value in self.endings.items()
-            if isinstance(value, MultipleEndings)
-            and form in value.get_all()
-            or not isinstance(value, MultipleEndings)
-            and value == form
+            if (isinstance(value, MultipleEndings) and form in value.get_all())
+            or (not isinstance(value, MultipleEndings) and value == form)
         ]
 
     # Force implementation of these methods
     # docstr-coverage:excused `abstract method`
     @abstractmethod
     def get(
-        self, *args: Any, **kwargs: Any
+        self,
+        *args: Any,
+        **kwargs: Any,
     ) -> (
         Ending | None
     ):  # pragma: no cover # sourcery skip: docstrings-for-functions

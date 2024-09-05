@@ -5,14 +5,19 @@
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 import lemminflect
 
-from .. import accido
 from .exceptions import InvalidWordError
+
+if TYPE_CHECKING:
+    from .. import accido
 
 
 def find_adjective_inflections(
-    adjective: str, components: accido.misc.EndingComponents
+    adjective: str,
+    components: accido.misc.EndingComponents,
 ) -> set[str]:
     """Inflect English adjectives using the degree.
 
@@ -35,7 +40,6 @@ def find_adjective_inflections(
     ValueError
         If the input (other than the word itself) is invalid.
     """
-
     # Most of these are not necessary, but it helps to catch errors earlier
     if not hasattr(components, "gender"):
         raise ValueError("Gender must be specified")
@@ -69,7 +73,7 @@ def find_adjective_inflections(
         lemma: str = lemminflect.getLemma(adjective, "ADJ")[0]
     except KeyError as e:
         raise InvalidWordError(
-            f"Word '{adjective}' is not an adjective"
+            f"Word '{adjective}' is not an adjective",
         ) from e
 
     match components.degree:

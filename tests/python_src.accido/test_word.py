@@ -6,7 +6,6 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../.
 import pytest
 from python_src.accido.endings import Noun, Pronoun, Verb
 from python_src.accido.misc import EndingComponents
-from python_src.utils import compare
 
 
 def test_eq():
@@ -15,9 +14,9 @@ def test_eq():
 
 
 def test_lt():
-    word1 = Verb(present="test1o", infinitive="testare", perfect="test3i", ppp="test4", meaning="test5")
+    Verb(present="test1o", infinitive="testare", perfect="test3i", ppp="test4", meaning="test5")
     with pytest.raises(TypeError) as error:
-        a = word1 < "error"
+        pass
     assert error
 
 

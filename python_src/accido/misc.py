@@ -84,13 +84,10 @@ class EndingComponents(SimpleNamespace):
     'nominative'
     """
 
-    pass
-
 
 @dataclass(init=True)
 class MultipleMeanings:
-    """Represents multiple meanings, with a main meaning and other
-    meanings.
+    """Represents multiple meanings, with a main meaning and other meanings.
 
     Attributes
     ----------
@@ -125,7 +122,8 @@ class MultipleMeanings:
 class MultipleEndings(SimpleNamespace):
     """Represents multiple endings for a word, where each ending is a
     separate string.
-    The fact that the attribute names can be customises means that this
+
+    The fact that the attribute names can be customised means that this
     class can be used for many use cases.
     e.g. MultipleEndings(regular="nostri", partitive="nostrum")
     would allow for nostrum being the partitive genitive, while nostri
@@ -148,7 +146,7 @@ class MultipleEndings(SimpleNamespace):
 
     >>> foo.get_all()
     ['nostri', 'nostrum']
-    """
+    """  # noqa: D205
 
     def get_all(self) -> list[str]:
         """Returns a list of all the possible endings.
@@ -158,7 +156,6 @@ class MultipleEndings(SimpleNamespace):
         list[str]
             The endings.
         """
-
         return list(self.__dict__.values())
 
     def __str__(self) -> str:
@@ -168,7 +165,7 @@ class MultipleEndings(SimpleNamespace):
         return self.__str__() + val2
 
     # Allows for a prefix to be added to all of the endings.
-    def __radd__(self, val2: str) -> "MultipleEndings":  # pragma: no cover
+    def __radd__(self, val2: str) -> MultipleEndings:  # pragma: no cover
         prefixed = {
             key: f"{val2}{value}" for key, value in self.__dict__.items()
         }

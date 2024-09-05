@@ -5,7 +5,4 @@
 
 
 class InvalidInputError(Exception):
-    """An error that is raised when an invalid input is given to a
-    accido class."""
-
-    pass
+    """An error that is raised when an invalid input is given to an accido class."""

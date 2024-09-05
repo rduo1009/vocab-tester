@@ -7,16 +7,18 @@ from __future__ import annotations
 
 import ctypes
 from dataclasses import dataclass
-from typing import Final
+from typing import TYPE_CHECKING, Final
 
 import python_src as src
 
-from .. import accido
+if TYPE_CHECKING:
+    from .. import accido
 
 
 @dataclass
 class VocabList:
     """Represents a list of Latin vocabulary.
+
     Each piece of vocabulary is represented by the classes in the accido
     package.
 

@@ -5,4 +5,4 @@
 
 from . import endings, exceptions, misc
 
-__all__ = ["endings", "misc", "exceptions"]
+__all__ = ["endings", "exceptions", "misc"]

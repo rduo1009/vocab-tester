@@ -17,6 +17,7 @@ from .misc import KEY, VocabList
 
 def save_vocab_dump(file_path: Path, vocab_list: VocabList) -> None:
     """Saves a vocabulary dump file.
+
     The pickle files are signed with a HMAC signature to ensure the data
     has not been tampered with.
 
@@ -47,13 +48,13 @@ def save_vocab_dump(file_path: Path, vocab_list: VocabList) -> None:
 
     if not file_path.parent.exists():
         raise FileNotFoundError(
-            f"The directory {file_path.parent} does not exist."
+            f"The directory {file_path.parent} does not exist.",
         )
 
     if file_path.exists():
         warn(
             f"The file {file_path} already exists and has been overwritten.",
-            UserWarning,
+            stacklevel=2,
         )
 
     pickled_data: bytes = pickle.dumps(vocab_list)

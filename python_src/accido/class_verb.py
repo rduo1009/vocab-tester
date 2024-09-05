@@ -6,7 +6,7 @@
 from __future__ import annotations
 
 from functools import total_ordering
-from typing import Literal, Optional
+from typing import Literal
 
 from ..utils import key_from_value
 from .class_word import _Word
@@ -68,8 +68,7 @@ class Verb(_Word):
         ppp: str = "",
         meaning: Meaning,
     ) -> None:
-        """Initalises Verb and determines the conjugation and
-        endings.
+        """Initalises Verb and determines the conjugation and endings.
 
         Parameters
         ----------
@@ -84,7 +83,6 @@ class Verb(_Word):
         InvalidInputError
             If the input is invalid (incorrect perfect or infinitive).
         """
-
         super().__init__()
 
         self.present: str = present
@@ -98,12 +96,12 @@ class Verb(_Word):
 
         if self.present[-1:] != "o":
             raise InvalidInputError(
-                f"Invalid present form: '{self.present}' (must end in '-o')"
+                f"Invalid present form: '{self.present}' (must end in '-o')",
             )
 
         if self.perfect[-1:] != "i":
             raise InvalidInputError(
-                f"Invalid perfect form: '{self.perfect}' (must end in '-i')"
+                f"Invalid perfect form: '{self.perfect}' (must end in '-i')",
             )
 
         # Conjugation edge cases
@@ -111,7 +109,7 @@ class Verb(_Word):
             self.endings = irregular_endings
             self.conjugation = 0
             return
-        elif check_io_verb(self.present):
+        if check_io_verb(self.present):
             self.conjugation = 5
 
         elif self.infinitive.endswith("are"):
@@ -122,7 +120,7 @@ class Verb(_Word):
             self.conjugation = 2 if self.present.endswith("eo") else 3
         else:
             raise InvalidInputError(
-                f"Invalid infinitive form: '{self.infinitive}'"
+                f"Invalid infinitive form: '{self.infinitive}'",
             )
 
         self._pre_stem: str = self.present[:-1]
@@ -146,8 +144,8 @@ class Verb(_Word):
                 self.endings = self._third_io_conjugation()
 
             case _:  # pragma: no cover
-                raise ValueError(
-                    f"Conjugation {self.conjugation} not recognised"
+                raise ValueError(  # noqa: DOC501
+                    f"Conjugation {self.conjugation} not recognised",
                 )
 
         if self.ppp:
@@ -449,15 +447,16 @@ class Verb(_Word):
     def get(
         self,
         *,
-        person: Optional[int] = None,
-        number: Optional[str] = None,
+        person: int | None = None,
+        number: str | None = None,
         tense: str,
         voice: str,
         mood: str,
-        participle_gender: Optional[str] = None,
-        participle_case: Optional[str] = None,
+        participle_gender: str | None = None,
+        participle_case: str | None = None,
     ) -> Ending | None:
         """Returns the ending of the verb.
+
         The function returns None if no ending is found.
 
         Parameters
@@ -533,7 +532,7 @@ class Verb(_Word):
         if mood == "participle":
             if person:
                 raise InvalidInputError(
-                    f"Participle cannot have a person (person '{person}')"
+                    f"Participle cannot have a person (person '{person}')",
                 )
 
             if not participle_case:
@@ -571,7 +570,7 @@ class Verb(_Word):
         if mood == "infinitive":
             return self.endings.get(f"V{short_tense}{short_voice}inf   ")
         return self.endings.get(
-            f"V{short_tense}{short_voice}{short_mood}{short_number}{person}"
+            f"V{short_tense}{short_voice}{short_mood}{short_number}{person}",
         )
 
     def _get_partciple(
@@ -599,7 +598,7 @@ class Verb(_Word):
         short_case: str = CASE_SHORTHAND[participle_case]
 
         return self.endings.get(
-            f"V{short_tense}{short_voice}ptc{short_gender}{short_case}{short_number}"
+            f"V{short_tense}{short_voice}ptc{short_gender}{short_case}{short_number}",
         )
 
     @staticmethod
@@ -615,7 +614,7 @@ class Verb(_Word):
             )
             output.string = f"{output.tense} {output.voice} {output.mood} {output.number} {output.person}"
             return output
-        elif len(key) == 16 and key[7:10] == "ptc":
+        if len(key) == 16 and key[7:10] == "ptc":
             output = EndingComponents(
                 tense=key_from_value(TENSE_SHORTHAND, key[1:4]),
                 voice=key_from_value(VOICE_SHORTHAND, key[4:7]),
@@ -626,8 +625,8 @@ class Verb(_Word):
             )
             output.string = f"{output.tense} {output.voice} participle {output.gender} {output.case} {output.number}"
             return output
-        else:  # pragma: no cover # this should never happen
-            raise InvalidInputError(f"Key '{key}' is invalid")
+        # pragma: no cover # this should never happen
+        raise InvalidInputError(f"Key '{key}' is invalid")
 
     def __repr__(self) -> str:
         return f"Verb({self.present}, {self.infinitive}, {self.perfect}, {self.ppp}, {self.meaning})"
