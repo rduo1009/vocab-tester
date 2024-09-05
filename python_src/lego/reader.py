@@ -340,11 +340,11 @@ def read_vocab_dump(filename: Path) -> VocabList:
 
     if (
         hmac.new(KEY, pickled_data, hashlib.sha256).hexdigest() != signature
-    ):  # pragma: no cover
+    ):  # pragma: no cover # this should never happen
         raise InvalidVocabDump("Data integrity check failed for vocab dump.")
 
     output = pickle.loads(pickled_data)
-    if type(output) is VocabList:
+    if type(output) is VocabList:  # type: ignore[comparison-overlap] # mypy cannot recognise this
         if output.version == src.__version__:
             return output
         else:  # pragma: no cover
@@ -353,4 +353,6 @@ def read_vocab_dump(filename: Path) -> VocabList:
             )
             return _regenerate_vocab_list(output)
 
-    raise InvalidVocabDump("Vocab dump is not valid.")  # pragma: no cover
+    raise InvalidVocabDump(
+        "Vocab dump is not valid."
+    )  # pragma: no cover # this should never happen

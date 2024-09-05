@@ -142,7 +142,7 @@ def find_verb_inflections(
             )
 
 
-def _find_preactind_inflections(  # type: ignore
+def _find_preactind_inflections(
     lemma: str, number: Literal["singular", "plural"], person: Literal[1, 2, 3]
 ) -> set[str]:
     present_nonthird: str = lemminflect.getInflection(lemma, "VBP")[0]
@@ -184,13 +184,10 @@ def _find_preactind_inflections(  # type: ignore
                 f"they are {present_participle}",
             }
 
-        # case _:
-        #     raise ValueError(
-        #         f"Invalid number and person: '{number}' '{person}'"
-        #     )
+    raise ValueError(f"Invalid number and person: '{number}' '{person}'")
 
 
-def _find_impactind_inflections(  # type: ignore
+def _find_impactind_inflections(
     lemma: str, number: Literal["singular", "plural"], person: Literal[1, 2, 3]
 ) -> set[str]:
     present_participle: str = lemminflect.getInflection(lemma, "VBG")[0]
@@ -246,13 +243,10 @@ def _find_impactind_inflections(  # type: ignore
         case ("plural", 3):
             return {f"they were {present_participle}"}
 
-        # case _:
-        #     raise ValueError(
-        #         f"Invalid number and person: '{number}' '{person}'"
-        #     )
+    raise ValueError(f"Invalid number and person: '{number}' '{person}'")
 
 
-def _find_peractind_inflections(  # type: ignore
+def _find_peractind_inflections(
     lemma: str, number: Literal["singular", "plural"], person: Literal[1, 2, 3]
 ) -> set[str]:
     past = lemminflect.getInflection(lemma, "VBD")[0]
@@ -283,13 +277,10 @@ def _find_peractind_inflections(  # type: ignore
         case ("plural", 3):
             return {f"they {past}", f"they have {past}", f"they did {lemma}"}
 
-        # case _:
-        #     raise ValueError(
-        #         f"Invalid number and person: '{number}' '{person}'"
-        #     )
+    raise ValueError(f"Invalid number and person: '{number}' '{person}'")
 
 
-def _find_plpactind_inflections(  # type: ignore
+def _find_plpactind_inflections(
     lemma: str, number: Literal["singular", "plural"], person: Literal[1, 2, 3]
 ) -> set[str]:
     past_participle: str = lemminflect.getInflection(lemma, "VBN")[0]
@@ -314,10 +305,7 @@ def _find_plpactind_inflections(  # type: ignore
         case ("plural", 3):
             return {f"they had {past_participle}"}
 
-        # case _:
-        #     raise ValueError(
-        #         f"Invalid number and person: '{number}' '{person}'"
-        #     )
+    raise ValueError(f"Invalid number and person: '{number}' '{person}'")
 
 
 def _find_participle_inflections(
