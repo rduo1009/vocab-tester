@@ -14,7 +14,27 @@ from .exceptions import InvalidWordError
 def find_adjective_inflections(
     adjective: str, components: accido.misc.EndingComponents
 ) -> set[str]:
-    """Inflect English adjectives using the degree."""
+    """Inflect English adjectives using the degree.
+
+    Parameters
+    ----------
+    adjective : str
+        The adjective to inflect.
+    components : EndingComponents
+        The components of the ending.
+
+    Returns
+    -------
+    set[str]
+        The possible forms of the adjective.
+
+    Raises
+    ------
+    InvalidWordError
+        If the word is not a valid English adjective.
+    ValueError
+        If the input (other than the word itself) is invalid.
+    """
 
     # Most of these are not necessary, but it helps to catch errors earlier
     if not hasattr(components, "gender"):

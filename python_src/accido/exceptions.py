@@ -6,12 +6,6 @@
 
 class InvalidInputError(Exception):
     """An error that is raised when an invalid input is given to a
-    accido class.
-
-    Parameters
-    ----------
-    error : str
-        The error message to be displayed
-    """
+    accido class."""
 
     pass

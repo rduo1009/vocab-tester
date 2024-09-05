@@ -78,6 +78,25 @@ def find_verb_inflections(
     instead.
     Note that subjunctives are not supported as they do not have an exact
     translation in English.
+
+    Parameters
+    ----------
+    verb : str
+        The verb to inflect.
+    components : EndingComponents
+        The components of the ending.
+
+    Returns
+    -------
+    set[str]
+        The possible forms of the verb.
+
+    Raises
+    ------
+    InvalidWordError
+        If the word is not a valid English verb.
+    ValueError
+        If the input (other than the word itself) is invalid.
     """
 
     _verify_verb_inflections(components)
@@ -304,13 +323,6 @@ def _find_plpactind_inflections(  # type: ignore
 def _find_participle_inflections(
     verb: str, components: accido.misc.EndingComponents
 ) -> set[str]:
-    """Inflect English participles using the tense, voice, number, gender
-    and case.
-    At the moment, the following participles are supported:
-    - present active
-    - perfect passive
-    """
-
     lemma: str = lemminflect.getLemma(verb, "NOUN")[0]
 
     match (components.tense, components.voice):

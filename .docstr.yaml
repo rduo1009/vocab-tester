@@ -1,0 +1,3 @@
+paths: "python_src"
+skip_magic: True
+skip_private: True

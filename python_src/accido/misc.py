@@ -14,7 +14,7 @@ from typing import Any, Final
 NUMBER_SHORTHAND: Final[dict[str, str]] = {
     "singular": "sg",
     "plural": "pl",
-}  # fmt: skip
+}
 
 """Mapping of tense values to their more concise abbreviated forms."""
 TENSE_SHORTHAND: Final[dict[str, str]] = {
@@ -24,13 +24,13 @@ TENSE_SHORTHAND: Final[dict[str, str]] = {
     "perfect": "per",
     "pluperfect": "plp",
     # "future perfect": "fpr",
-}  # fmt: skip
+}
 
 """Mapping of voice values to their more concise abbreviated forms."""
 VOICE_SHORTHAND: Final[dict[str, str]] = {
     "active": "act",
     "passive": "pas",
-}  # fmt: skip
+}
 
 """Mapping of mood values to their more concise abbreviated forms."""
 MOOD_SHORTHAND: Final[dict[str, str]] = {
@@ -39,7 +39,7 @@ MOOD_SHORTHAND: Final[dict[str, str]] = {
     "imperative": "ipe",
     "subjunctive": "sbj",
     "participle": "ptc",
-}  # fmt: skip
+}
 
 """Mapping of case values to their more concise abbreviated forms."""
 CASE_SHORTHAND: Final[dict[str, str]] = {
@@ -49,28 +49,28 @@ CASE_SHORTHAND: Final[dict[str, str]] = {
     "genitive": "gen",
     "dative": "dat",
     "ablative": "abl",
-}  # fmt: skip
+}
 
 """Mapping of gender values to their more concise abbreviated forms."""
 GENDER_SHORTHAND: Final[dict[str, str]] = {
     "masculine": "m",
     "feminine": "f",
     "neuter": "n",
-}  # fmt: skip
+}
 
 """Mapping of degree values to their more concise abbreviated forms."""
 DEGREE_SHORTHAND: Final[dict[str, str]] = {
     "positive": "pos",
     "comparative": "cmp",
     "superlative": "spr",
-}  # fmt: skip
+}
 
 """Mapping of person values to their more concise abbreviated forms."""
 PERSON_SHORTHAND: Final[dict[int, str]] = {
     1: "1st person",
     2: "2nd person",
     3: "3rd person",
-}  # fmt: skip
+}
 
 
 class EndingComponents(SimpleNamespace):
@@ -80,6 +80,8 @@ class EndingComponents(SimpleNamespace):
     --------
     >>> foo = EndingComponents(case="nominative", gender="masculine", \
                                number="singular")
+    >>> foo.case
+    "nominative"
     """
 
     pass
@@ -100,6 +102,15 @@ class MultipleMeanings:
     This class allows for there to be several English definitions of one
     Latin word. This means for translating-to-English questions, synonyms
     can be accepted, but not vice versa.
+
+    Examples
+    --------
+    >>> foo = MultipleMeanings(["hide", "conceal"])
+    >>> foo.meanings
+    ["hide", "conceal"]
+
+    >>> foo.__str__()
+    "hide"
     """
 
     meanings: list[str]
@@ -125,6 +136,18 @@ class MultipleEndings(SimpleNamespace):
     value : str
 
     etc.
+
+    Examples
+    --------
+    >>> foo = MultipleEndings(regular="nostri", partitive="nostrum")
+    >>> foo.regular
+    "nostri"
+
+    >>> foo.__str__()
+    "nostri/nostrum"
+
+    >>> foo.get_all()
+    ["nostri", "nostrum"]
     """
 
     def get_all(self) -> list[str]:

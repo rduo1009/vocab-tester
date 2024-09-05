@@ -25,9 +25,18 @@ class RegularWord(_Word):
     >>> foo = RegularWord(word="sed", meaning="but")
     >>> foo.endings
     {"": "sed"}
-    """  # fmt: skip
 
-    def __init__(self, word: str, meaning: Meaning):
+    Note that the arguments of RegularWord are keyword-only.
+    """
+
+    def __init__(self, *, word: str, meaning: Meaning) -> None:
+        """Initalises RegularWord.
+
+        Parameters
+        ----------
+        word : str
+        meaning : Meaning
+        """
         self.word: str = word
         self.meaning: Meaning = meaning
         self.endings = {"": self.word}
@@ -39,18 +48,20 @@ class RegularWord(_Word):
         -------
         str
             The word.
-        
+
         Examples
         --------
         >>> foo = RegularWord(word="sed", meaning="but")
         >>> foo.get()
         "sed"
-        """  # fmt: skip
+        """
 
         return self.word
 
     @staticmethod
-    def _create_namespace(key: str) -> EndingComponents:  # pragma: no cover
+    def _create_namespace(
+        key: str,
+    ) -> EndingComponents:  # pragma: no cover # this should never be ran
         return NotImplemented
 
     def __repr__(self) -> str:

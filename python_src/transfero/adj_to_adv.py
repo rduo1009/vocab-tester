@@ -21,6 +21,32 @@ with open(Path(__file__).parent.absolute() / "adj_to_adv.json") as file:
 
 
 def adj_to_adv(adjective: str) -> str:
+    """Convert an adjective to its corresponding adverb.
+
+    Parameters
+    ----------
+    adjective : str
+        The adjective to convert to an adverb.
+
+    Returns
+    -------
+    str
+        The adverb corresponding to the input adjective.
+
+    Raises
+    ------
+    ValueError
+        If the input is not an adjective.
+
+    Examples
+    -------
+    >>> adj_to_adv("happy")
+    "happily"
+
+    >>> adj_to_adv("sad")
+    "sadly"
+    """
+
     if adjective in ADJECTIVE_TO_ADVERB:
         return ADJECTIVE_TO_ADVERB[adjective]
 

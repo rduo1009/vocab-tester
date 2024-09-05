@@ -11,7 +11,7 @@ import warnings
 from io import TextIOWrapper
 from pathlib import Path
 from re import match
-from typing import Any, Final
+from typing import Final
 
 import dill as pickle
 
@@ -30,20 +30,6 @@ GENDER_SHORTHAND: Final[dict[str, str]] = {
 
 
 def _generate_meaning(meaning: str) -> accido.misc.Meaning:
-    """Generates a meaning (either just a string or a MultipleMeanings
-    object) from a given string.
-
-    Parameters
-    ----------
-    meaning : str
-        The meaning to generate.
-
-    Returns
-    -------
-    Meaning
-        The meaning.
-    """
-
     if "/" in meaning:
         return accido.misc.MultipleMeanings([
             x.strip() for x in meaning.split("/")
@@ -70,14 +56,12 @@ def read_vocab_file(file_path: Path) -> VocabList:
     InvalidVocabFileFormat
         If the file is not a valid vocabulary file, or if the formatting
         is incorrect.
-
     FileNotFoundError
         If the file does not exist.
 
     Examples
     --------
     >>> read_vocab_file(Path("path_to_file.txt"))
-    VocabList(...)
     """
     vocab: list[accido.endings._Word] = []
     file: TextIOWrapper
@@ -234,7 +218,7 @@ def read_vocab_file(file_path: Path) -> VocabList:
                         case "Regular":
                             vocab.append(
                                 accido.endings.RegularWord(
-                                    latin_parts[0], meaning
+                                    word=latin_parts[0], meaning=meaning
                                 )
                             )
 
@@ -275,7 +259,7 @@ def _regenerate_vocab_list(vocab_list: VocabList) -> VocabList:
         if type(word) is accido.endings.RegularWord:
             new_vocab.append(
                 accido.endings.RegularWord(
-                    word.word,
+                    word=word.word,
                     meaning=word.meaning,
                 )
             )
@@ -314,7 +298,7 @@ def _regenerate_vocab_list(vocab_list: VocabList) -> VocabList:
                     meaning=word.meaning,
                 )
             )
-        else:  # pragma: no cover
+        else:  # pragma: no cover # this should never happen
             raise ValueError(f"Unknown word type: {type(word)}")
 
     return VocabList(new_vocab)
@@ -347,7 +331,6 @@ def read_vocab_dump(filename: Path) -> VocabList:
     Examples
     --------
     >>> read_vocab_dump(Path("path_to_file.pickle"))
-    VocabList(...)
     """
 
     with open(filename, "rb") as file:
@@ -360,7 +343,7 @@ def read_vocab_dump(filename: Path) -> VocabList:
     ):  # pragma: no cover
         raise InvalidVocabDump("Data integrity check failed for vocab dump.")
 
-    output: Any | VocabList = pickle.loads(pickled_data)
+    output = pickle.loads(pickled_data)
     if type(output) is VocabList:
         if output.version == src.__version__:
             return output

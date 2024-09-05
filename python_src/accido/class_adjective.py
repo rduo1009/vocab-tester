@@ -31,7 +31,7 @@ class Adjective(_Word):
     ----------
     meaning : Meaning
     endings : Endings
-    declension : {"212", "3"}
+    declension : str
         The declension of the adjective. "212" represents a 2-1-2
         adjective, while "3" represents a third declension adjective.
     termination : Optional[int]
@@ -42,19 +42,21 @@ class Adjective(_Word):
     Examples
     --------
     >>> foo = Adjective("laetus", "laeta", "laetum", declension="212", \
-    ...                  meaning="happy")
-    >>> foo.endings
-    {"Aposmnomsg": "laetus", "Aposmvocsg": "laete", ...}
-
+    ...                meaning="happy")
+    >>> foo["Aposmnomsg"]
+    'laetus'
+    
     Note that the declension and meaning arguments of Adjectives are 
     keyword-only.
 
-    >>> foo = Adjective("egens", "egentis", termination=1, \
+    >>> bar = Adjective("egens", "egentis", termination=1, \
     ...                 declension="3", meaning="poor")
+    >>> bar["Aposmnomsg"]
+    'egens'
 
     The same can be said with the termination argument for third declension
     adjectives.
-    """  # fmt: skip
+    """
 
     def __init__(
         self,
@@ -72,7 +74,7 @@ class Adjective(_Word):
         termination : Optional[int], default = None
             The termination of the adjective if applicable (only third
             declension adjectives).
-        declension : {"212", "3"}
+        declension : str
             The declension of the adjective. "212" represents a 2-1-2
             adjective, while "3" represents a third declension adjective.
         meaning: Meaning
@@ -102,23 +104,24 @@ class Adjective(_Word):
         self._cmp_stem: str
         self._spr_stem: str
 
-        self._irregular_posadv: str
-        self._irregular_cmpadv: str
-        self._irregular_spradv: str
-
         if self._mascnom in IRREGULAR_ADJECTIVES:
             self.irregular_flag = True
             irregular_data = IRREGULAR_ADJECTIVES[self._mascnom]
 
-            self._cmp_stem = irregular_data[0]  # type: ignore
-            self._spr_stem = irregular_data[1]  # type: ignore
+            assert irregular_data[0] is not None
+            assert irregular_data[1] is not None
+
+            self._cmp_stem = irregular_data[0]
+            self._spr_stem = irregular_data[1]
 
             if None not in irregular_data[2:]:
-                (
-                    self._irregular_posadv,
-                    self._irregular_cmpadv,
-                    self._irregular_spradv,
-                ) = irregular_data[2:]  # type: ignore
+                assert irregular_data[2] is not None
+                assert irregular_data[3] is not None
+                assert irregular_data[4] is not None
+
+                self._irregular_posadv: str = irregular_data[2]
+                self._irregular_cmpadv: str = irregular_data[3]
+                self._irregular_spradv: str = irregular_data[4]
             else:
                 self.adverb_flag = False
 
@@ -141,11 +144,15 @@ class Adjective(_Word):
 
                 if self._mascnom not in IRREGULAR_ADJECTIVES:
                     self._cmp_stem = self._pos_stem + "ior"  # car- -> carior-
-                    if self._mascnom[-2:] == "er":  # pragma: no cover
+                    if (
+                        self._mascnom[-2:] == "er"
+                    ):  # pragma: no cover # not sure if an example of this actually occurs
                         self._spr_stem = (
                             self._mascnom + "rim"  # miser- -> miserrim-
                         )
-                    elif self._mascnom in LIS_ADJECTIVES:  # pragma: no cover
+                    elif (
+                        self._mascnom in LIS_ADJECTIVES
+                    ):  # pragma: no cover # not sure if an example of this actually occurs
                         self._spr_stem = (
                             self._pos_stem + "lim"  # facil- -> facillim-
                         )
@@ -280,8 +287,8 @@ class Adjective(_Word):
 
             case "3":
                 match self.termination:
+                    # ingens, ingentis
                     case 1:
-                        # ingens, ingentis
                         if len(self._principal_parts) != 2:
                             raise InvalidInputError(
                                 f"First-termination adjectives must have 2 principal parts (adjective '{self._first}' given)"
@@ -308,7 +315,7 @@ class Adjective(_Word):
                                 )  # miser- -> miserrim-
                             elif (
                                 self._mascnom in LIS_ADJECTIVES
-                            ):  # pragma: no cover
+                            ):  # pragma: no cover # not sure if an example of this actually occurs
                                 self._spr_stem = (
                                     self._pos_stem
                                     + "lim"  # facil- -> facillim-
@@ -443,8 +450,8 @@ class Adjective(_Word):
                                 else self._spr_stem + "e",  # atrocissime
                             }
 
+                    # fortis, forte
                     case 2:
-                        # fortis, forte
                         if len(self._principal_parts) != 2:
                             raise InvalidInputError(
                                 f"Second-termination adjectives must have 2 principal parts (adjective '{self._first}' given)"
@@ -457,7 +464,9 @@ class Adjective(_Word):
                             self._cmp_stem = (
                                 self._pos_stem + "ior"
                             )  # fort- -> fortior-
-                            if self._mascnom[-2:] == "er":  # pragma: no cover
+                            if (
+                                self._mascnom[-2:] == "er"
+                            ):  # pragma: no cover # not sure if an example of this actually occurs
                                 self._spr_stem = (
                                     self._mascnom
                                     + "rim"  # miser- -> miserrim-
@@ -597,8 +606,8 @@ class Adjective(_Word):
                                 else self._spr_stem + "e",  # fortissime
                             }
 
+                    # acer, acris, acre
                     case 3:
-                        # acer, acris, acre
                         if len(self._principal_parts) != 3:
                             raise InvalidInputError(
                                 f"Third-termination adjectives must have 3 principal parts (adjective '{self._first}' given)"
@@ -619,12 +628,12 @@ class Adjective(_Word):
                                 )  # cer- -> acerrim-
                             elif (
                                 self._mascnom in LIS_ADJECTIVES
-                            ):  # pragma: no cover
+                            ):  # pragma: no cover # not sure if an example of this actually occurs
                                 self._spr_stem = (
                                     self._pos_stem
                                     + "lim"  # facil- -> facillim-
                                 )
-                            else:  # pragma: no cover
+                            else:  # pragma: no cover # not sure if an example of this actually occurs
                                 self._spr_stem = (
                                     self._pos_stem
                                     + "issim"  # levis -> levissim-
@@ -806,7 +815,7 @@ class Adjective(_Word):
         "egens"
 
         Note that the arguments of get are keyword-only.
-        """  # fmt: skip
+        """
         short_degree: str
 
         if adverb:

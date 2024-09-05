@@ -24,7 +24,6 @@ def save_vocab_dump(file_path: Path, vocab_list: VocabList) -> None:
     ----------
     file_path : pathlib.Path
         The path to the vocabulary dump file.
-
     vocab_list : VocabList
         The vocabulary to save.
 
@@ -40,7 +39,7 @@ def save_vocab_dump(file_path: Path, vocab_list: VocabList) -> None:
 
     Examples
     --------
-    >>> save_vocab_dump(Path("path_to_file.pickle"), VocabList(...))
+    >>> save_vocab_dump(Path("path_to_file.pickle"), VocabList())
     """
     file_path = Path(file_path)
 

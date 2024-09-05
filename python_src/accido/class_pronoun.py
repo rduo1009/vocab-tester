@@ -34,13 +34,13 @@ class Pronoun(_Word):
     Examples
     --------
     >>> foo = Pronoun(pronoun="hic", meaning="this")
-    >>> foo.endings
-    {"Pmnomsg": "hic", "Pmaccsg": "hunc", "Pmgensg": "huius", ...}
+    >>> foo["Pmnomsg"]
+    "hic"
 
     Note that the arguments of Pronoun are keyword-only.
-    """  # fmt: skip
+    """
 
-    def __init__(self, *, pronoun: str, meaning: Meaning):
+    def __init__(self, *, pronoun: str, meaning: Meaning) -> None:
         """Intialises Pronoun and determines the endings.
 
         Parameters
@@ -104,7 +104,7 @@ class Pronoun(_Word):
         "hic"
 
         Note that the arguments of get are keyword-only.
-        """  # fmt: skip
+        """
 
         if gender not in GENDER_SHORTHAND:
             raise InvalidInputError(f"Invalid gender: '{gender}'")

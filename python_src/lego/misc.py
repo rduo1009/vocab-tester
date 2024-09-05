@@ -42,11 +42,6 @@ class VocabList:
         self.version: str = src.__version__
 
 
-# Imports the c++ library containing the key. This is used to sign the
-# vocabulary pickle files for additional security.
-# Frankly, considering the code for all of this is public, this is a bit
-# on the useless side. I guess it would help if someone tried to make
-# an attack without knowledge of the source code or something.
 libkey: ctypes.CDLL = ctypes.CDLL("python_src/lego/libkey.so")
 libkey.get_key.restype = ctypes.c_char_p
 

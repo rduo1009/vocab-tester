@@ -36,22 +36,22 @@ class Noun(_Word):
     endings : Endings
     plurale_tantum : bool
         If the noun is a plurale tantum or not.
-    gender : {"masculine", "feminine", "neuter"}
+    gender : str
     
     Examples
     --------
     >>> foo = Noun(nominative="ancilla", genitive="ancillae", \
     ...            gender="feminine", meaning="slavegirl")
-    >>> foo.endings
-    {"Nnomsg": "ancilla", "Nvocsg": "ancilla", "Naccsg": "ancillam", ...}
-
+    >>> foo["Nnomsg"]
+    "ancilla"
+    
     Note that all arguments of Noun are keyword-only.
 
     Notes
     -----
     Accido relies on the assumption that there are no neuter or plurale
     tantum fifth declension nouns (there doesn't seem to be any).
-    """  # fmt: skip
+    """
 
     def __init__(
         self,
@@ -66,7 +66,7 @@ class Noun(_Word):
         Parameters
         ----------
         nominative, genitive : str
-        gender : {"masculine", "feminine", "neuter"}
+        gender : str
         meaning : Meaning
 
         Raises
@@ -79,6 +79,7 @@ class Noun(_Word):
         if gender:
             if gender not in GENDER_SHORTHAND:
                 raise InvalidInputError(f"Invalid gender: '{gender}'")
+
             self.gender: str = gender
 
         self.nominative: str = nominative
@@ -223,7 +224,7 @@ class Noun(_Word):
                     "Nablpl": self._stem + "ebus",  # rebus
                 }
 
-            case _:  # pragma: no cover
+            case _:  # pragma: no cover # this should never happen
                 raise ValueError(
                     f"Declension {self.declension} not recognised"
                 )
@@ -321,5 +322,5 @@ class Noun(_Word):
                 return (
                     f"{self.meaning}: {self.nominative}, {self.genitive}, (n)"
                 )
-            case _:  # pragma: no cover
+            case _:  # pragma: no cover # this should never occur
                 raise ValueError(f"Gender {self.gender} not recognised")

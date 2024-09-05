@@ -16,7 +16,6 @@ del engine
 
 
 def _get_possessive(noun: str) -> str:
-    """Return the possessive form of a given noun."""
     if noun.endswith("s"):
         return noun + "'"
     else:
@@ -26,7 +25,27 @@ def _get_possessive(noun: str) -> str:
 def find_noun_inflections(
     noun: str, components: accido.misc.EndingComponents
 ) -> set[str]:
-    """Inflect English nouns using the case and number."""
+    """Inflect English nouns using the case and number.
+
+    Parameters
+    ----------
+    noun : str
+        The noun to inflect.
+    components : EndingComponents
+        The components of the ending.
+
+    Returns
+    -------
+    set[str]
+        The possible forms of the noun.
+
+    Raises
+    ------
+    InvalidWordError
+        If the word is not a valid English noun.
+    ValueError
+        If the input (other than the word itself) is invalid.
+    """
 
     if not hasattr(components, "case"):
         raise ValueError("Case must be specified")

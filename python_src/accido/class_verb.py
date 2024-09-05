@@ -48,8 +48,8 @@ class Verb(_Word):
     >>> foo = Verb(present="celo", infinitive="celare", \
     ...       perfect="celavi", ppp="celatus", \
     ...       meaning="hide")
-    >>> foo.endings
-    {"Vpreactindsg1": "celo", "Vpreactindsg2": "celas", ...}
+    >>> foo["Vpreactindsg1"]
+    "celo"
 
     Note that all arguments of Verb are keyword-only.
     """
@@ -450,7 +450,7 @@ class Verb(_Word):
             The number of the ending, if applicable (not participle).
         tense, voice, mood : str
             The tense, voice and mood of the ending.
-        participle_gender, participle_case : Optional[str]
+        participle_gender, participle_case : Optional[str], default = None
             The case and gender of the ending, if applicable (participle).
 
         Returns
@@ -579,7 +579,7 @@ class Verb(_Word):
             )
             output.string = f"{output.tense} {output.voice} participle {output.gender} {output.case} {output.number}"
             return output
-        else:  # pragma: no cover
+        else:  # pragma: no cover # this should never happen
             raise InvalidInputError(f"Key '{key}' is invalid")
 
     def __repr__(self) -> str:
