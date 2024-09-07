@@ -37,7 +37,7 @@ jobs:
           version: latest
           platform: x64
       - name: Compile cpp code
-        run: clang++ -shared -o python_src/lego/key/key.cpp python_src/lego/libkey.so
+        run: clang++ -shared -o python_src/lego/libkey.so python_src/lego/key/key.cpp
       - name: Setup python for test ${{ matrix.py }}
         uses: actions/setup-python@v4
         with:
