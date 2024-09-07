@@ -5,6 +5,10 @@
 
 from __future__ import annotations
 
+import sys
+
+assert sys.version_info <= (3, 10)
+
 import hashlib
 import hmac
 import warnings

@@ -5,6 +5,10 @@
 
 from __future__ import annotations
 
+import sys
+
+assert sys.version_info <= (3, 10)
+
 from functools import total_ordering
 from typing import TYPE_CHECKING
 
@@ -21,7 +25,7 @@ from ...accido.misc import (
 from ...utils import key_from_value
 
 if TYPE_CHECKING:
-    from .typealiases import Ending, Endings, Meaning
+    from .type_aliases import Ending, Endings, Meaning
 
 
 @total_ordering

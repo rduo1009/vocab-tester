@@ -5,6 +5,10 @@
 
 from __future__ import annotations
 
+import sys
+
+assert sys.version_info >= (3, 12)
+
 from ...accido.misc import MultipleEndings, MultipleMeanings
 
 type Ending = str | MultipleEndings
