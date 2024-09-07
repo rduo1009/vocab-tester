@@ -8,20 +8,20 @@ from __future__ import annotations
 from functools import total_ordering
 from typing import TYPE_CHECKING
 
-from ..utils import key_from_value
-from .class_word import _Word
-from .edge_cases import IRREGULAR_ADJECTIVES, LIS_ADJECTIVES
-from .exceptions import InvalidInputError
-from .misc import (
+from ...accido.class_word import _Word
+from ...accido.edge_cases import IRREGULAR_ADJECTIVES, LIS_ADJECTIVES
+from ...accido.exceptions import InvalidInputError
+from ...accido.misc import (
     CASE_SHORTHAND,
     DEGREE_SHORTHAND,
     GENDER_SHORTHAND,
     NUMBER_SHORTHAND,
     EndingComponents,
 )
+from ...utils import key_from_value
 
 if TYPE_CHECKING:
-    from .type_aliases import Ending, Endings, Meaning
+    from .typealiases import Ending, Endings, Meaning
 
 
 @total_ordering
@@ -126,30 +126,28 @@ class Adjective(_Word):
             else:
                 self.adverb_flag = False
 
-        match self.declension:
-            case "212":
-                self.endings = self._212_endings()
+        if self.declension == "212":
+            self.endings = self._212_endings()
 
-            case "3":
-                match self.termination:
-                    case 1:
-                        self.endings = self._31_endings()
+        elif self.declension == "3":
+            if self.termination == 1:
+                self.endings = self._31_endings()
 
-                    case 2:
-                        self.endings = self._32_endings()
+            elif self.termination == 2:
+                self.endings = self._32_endings()
 
-                    case 3:
-                        self.endings = self._33_endings()
+            elif self.termination == 3:
+                self.endings = self._33_endings()
 
-                    case _:
-                        raise InvalidInputError(
-                            f"Termination must be 1, 2 or 3 (given '{self.termination}')",
-                        )
-
-            case _:
+            else:
                 raise InvalidInputError(
-                    f"Invalid declension: '{self.declension}'",
+                    f"Termination must be 1, 2 or 3 (given '{self.termination}')",
                 )
+
+        else:
+            raise InvalidInputError(
+                f"Invalid declension: '{self.declension}'",
+            )
 
     def _212_endings(self) -> Endings:
         if self.termination:
@@ -293,7 +291,7 @@ class Adjective(_Word):
         }
 
         if self.adverb_flag:
-            endings |= {
+            endings.update({
                 "Dpos": (
                     self._irregular_posadv
                     if self.irregular_flag
@@ -309,7 +307,7 @@ class Adjective(_Word):
                     if self.irregular_flag
                     else f"{self._spr_stem}e"
                 ),  # laetissime
-            }
+            })
 
         return endings
 
@@ -454,7 +452,7 @@ class Adjective(_Word):
         }
 
         if self.adverb_flag:
-            endings |= {
+            endings.update({
                 "Dpos": (
                     self._irregular_posadv
                     if self.irregular_flag
@@ -470,7 +468,7 @@ class Adjective(_Word):
                     if self.irregular_flag
                     else f"{self._spr_stem}e"
                 ),  # atrocissime
-            }
+            })
 
         return endings
 
@@ -609,7 +607,7 @@ class Adjective(_Word):
         }
 
         if self.adverb_flag:
-            endings |= {
+            endings.update({
                 "Dpos": (
                     self._irregular_posadv
                     if self.irregular_flag
@@ -625,7 +623,7 @@ class Adjective(_Word):
                     if self.irregular_flag
                     else f"{self._spr_stem}e"
                 ),  # fortissime
-            }
+            })
 
         return endings
 
@@ -764,7 +762,7 @@ class Adjective(_Word):
         }
 
         if self.adverb_flag:
-            endings |= {
+            endings.update({
                 "Dpos": (
                     self._irregular_posadv
                     if self.irregular_flag
@@ -780,7 +778,7 @@ class Adjective(_Word):
                     if self.irregular_flag
                     else f"{self._spr_stem}e"
                 ),  # acerrime
-            }
+            })
 
         return endings
 

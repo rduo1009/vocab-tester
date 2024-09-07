@@ -14,9 +14,9 @@ def test_eq():
 
 
 def test_lt():
-    Verb(present="test1o", infinitive="testare", perfect="test3i", ppp="test4", meaning="test5")
+    foo = Verb(present="test1o", infinitive="testare", perfect="test3i", ppp="test4", meaning="test5")
     with pytest.raises(TypeError) as error:
-        pass
+        foo < "2"
     assert error
 
 

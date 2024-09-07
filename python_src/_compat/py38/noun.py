@@ -8,19 +8,19 @@ from __future__ import annotations
 from functools import total_ordering
 from typing import TYPE_CHECKING, Literal
 
-from ..utils import key_from_value
-from .class_word import _Word
-from .edge_cases import IRREGULAR_NOUNS
-from .exceptions import InvalidInputError
-from .misc import (
+from ...accido.class_word import _Word
+from ...accido.edge_cases import IRREGULAR_NOUNS
+from ...accido.exceptions import InvalidInputError
+from ...accido.misc import (
     CASE_SHORTHAND,
     GENDER_SHORTHAND,
     NUMBER_SHORTHAND,
     EndingComponents,
 )
+from ...utils import key_from_value
 
 if TYPE_CHECKING:
-    from .type_aliases import Ending, Endings, Meaning
+    from .typealiases import Ending, Endings, Meaning
 
 
 @total_ordering
@@ -160,95 +160,94 @@ class Noun(_Word):
             )
 
     def _determine_endings(self) -> Endings:
-        match self.declension:
-            case 1:
-                return {
-                    "Nnomsg": self.nominative,  # puella
-                    "Nvocsg": self.nominative,  # puella
-                    "Naccsg": f"{self._stem}am",  # puellam
-                    "Ngensg": self.genitive,  # puellae
-                    "Ndatsg": f"{self._stem}ae",  # puellae
-                    "Nablsg": f"{self._stem}a",  # puella
-                    "Nnompl": f"{self._stem}ae",  # puellae
-                    "Nvocpl": f"{self._stem}ae",  # puellae
-                    "Naccpl": f"{self._stem}as",  # puellas
-                    "Ngenpl": f"{self._stem}arum",  # puellarum
-                    "Ndatpl": f"{self._stem}is",  # puellis
-                    "Nablpl": f"{self._stem}is",  # puellis
-                }
+        if self.declension == 1:
+            return {
+                "Nnomsg": self.nominative,  # puella
+                "Nvocsg": self.nominative,  # puella
+                "Naccsg": f"{self._stem}am",  # puellam
+                "Ngensg": self.genitive,  # puellae
+                "Ndatsg": f"{self._stem}ae",  # puellae
+                "Nablsg": f"{self._stem}a",  # puella
+                "Nnompl": f"{self._stem}ae",  # puellae
+                "Nvocpl": f"{self._stem}ae",  # puellae
+                "Naccpl": f"{self._stem}as",  # puellas
+                "Ngenpl": f"{self._stem}arum",  # puellarum
+                "Ndatpl": f"{self._stem}is",  # puellis
+                "Nablpl": f"{self._stem}is",  # puellis
+            }
 
-            case 2:
-                return {
-                    "Nnomsg": self.nominative,  # servus
-                    "Nvocsg": (
-                        self.nominative  # puer
-                        if self.nominative.endswith("er")
-                        else f"{self._stem}e"  # serve
-                    ),
-                    "Naccsg": f"{self._stem}um",  # servum
-                    "Ngensg": self.genitive,  # servi
-                    "Ndatsg": f"{self._stem}o",  # servo
-                    "Nablsg": f"{self._stem}o",  # servo
-                    "Nnompl": f"{self._stem}i",  # servi
-                    "Nvocpl": f"{self._stem}i",  # servi
-                    "Naccpl": f"{self._stem}os",  # servos
-                    "Ngenpl": f"{self._stem}orum",  # servorum
-                    "Ndatpl": f"{self._stem}is",  # servis
-                    "Nablpl": f"{self._stem}is",  # servis
-                }
+        if self.declension == 2:
+            return {
+                "Nnomsg": self.nominative,  # servus
+                "Nvocsg": (
+                    self.nominative  # puer
+                    if self.nominative.endswith("er")
+                    else f"{self._stem}e"  # serve
+                ),
+                "Naccsg": f"{self._stem}um",  # servum
+                "Ngensg": self.genitive,  # servi
+                "Ndatsg": f"{self._stem}o",  # servo
+                "Nablsg": f"{self._stem}o",  # servo
+                "Nnompl": f"{self._stem}i",  # servi
+                "Nvocpl": f"{self._stem}i",  # servi
+                "Naccpl": f"{self._stem}os",  # servos
+                "Ngenpl": f"{self._stem}orum",  # servorum
+                "Ndatpl": f"{self._stem}is",  # servis
+                "Nablpl": f"{self._stem}is",  # servis
+            }
 
-            case 3:
-                return {
-                    "Nnomsg": self.nominative,  # mercator
-                    "Nvocsg": self.nominative,  # mercator
-                    "Naccsg": f"{self._stem}em",  # mercatorem
-                    "Ngensg": self.genitive,  # mercatoris
-                    "Ndatsg": f"{self._stem}i",  # mercatori
-                    "Nablsg": f"{self._stem}e",  # mercatore
-                    "Nnompl": f"{self._stem}es",  # mercatores
-                    "Nvocpl": f"{self._stem}es",  # mercatores
-                    "Naccpl": f"{self._stem}es",  # mercatores
-                    "Ngenpl": f"{self._stem}um",  # mercatorum
-                    "Ndatpl": f"{self._stem}ibus",  # mercatoribus
-                    "Nablpl": f"{self._stem}ibus",  # mercatoribus
-                }
+        if self.declension == 3:
+            return {
+                "Nnomsg": self.nominative,  # mercator
+                "Nvocsg": self.nominative,  # mercator
+                "Naccsg": f"{self._stem}em",  # mercatorem
+                "Ngensg": self.genitive,  # mercatoris
+                "Ndatsg": f"{self._stem}i",  # mercatori
+                "Nablsg": f"{self._stem}e",  # mercatore
+                "Nnompl": f"{self._stem}es",  # mercatores
+                "Nvocpl": f"{self._stem}es",  # mercatores
+                "Naccpl": f"{self._stem}es",  # mercatores
+                "Ngenpl": f"{self._stem}um",  # mercatorum
+                "Ndatpl": f"{self._stem}ibus",  # mercatoribus
+                "Nablpl": f"{self._stem}ibus",  # mercatoribus
+            }
 
-            case 4:
-                return {
-                    "Nnomsg": self.nominative,  # manus
-                    "Nvocsg": self.nominative,  # manus
-                    "Naccsg": f"{self._stem}um",  # manum
-                    "Ngensg": f"{self._stem}us",  # manus
-                    "Ndatsg": f"{self._stem}ui",  # manui
-                    "Nablsg": f"{self._stem}u",  # manu
-                    "Nnompl": f"{self._stem}us",  # manus
-                    "Nvocpl": f"{self._stem}us",  # manus
-                    "Naccpl": f"{self._stem}us",  # manus
-                    "Ngenpl": f"{self._stem}uum",  # manuum
-                    "Ndatpl": f"{self._stem}ibus",  # manibus
-                    "Nablpl": f"{self._stem}ibus",  # manibus
-                }
+        if self.declension == 4:
+            return {
+                "Nnomsg": self.nominative,  # manus
+                "Nvocsg": self.nominative,  # manus
+                "Naccsg": f"{self._stem}um",  # manum
+                "Ngensg": f"{self._stem}us",  # manus
+                "Ndatsg": f"{self._stem}ui",  # manui
+                "Nablsg": f"{self._stem}u",  # manu
+                "Nnompl": f"{self._stem}us",  # manus
+                "Nvocpl": f"{self._stem}us",  # manus
+                "Naccpl": f"{self._stem}us",  # manus
+                "Ngenpl": f"{self._stem}uum",  # manuum
+                "Ndatpl": f"{self._stem}ibus",  # manibus
+                "Nablpl": f"{self._stem}ibus",  # manibus
+            }
 
-            case 5:
-                return {
-                    "Nnomsg": self.nominative,  # res
-                    "Nvocsg": self.nominative,  # res
-                    "Naccsg": f"{self._stem}em",  # rem
-                    "Ngensg": f"{self._stem}ei",  # rei
-                    "Ndatsg": f"{self._stem}ei",  # rei
-                    "Nablsg": f"{self._stem}e",  # re
-                    "Nnompl": f"{self._stem}es",  # res
-                    "Nvocpl": f"{self._stem}es",  # res
-                    "Naccpl": f"{self._stem}es",  # res
-                    "Ngenpl": f"{self._stem}erum",  # rerum
-                    "Ndatpl": f"{self._stem}ebus",  # rebus
-                    "Nablpl": f"{self._stem}ebus",  # rebus
-                }
+        if self.declension == 5:
+            return {
+                "Nnomsg": self.nominative,  # res
+                "Nvocsg": self.nominative,  # res
+                "Naccsg": f"{self._stem}em",  # rem
+                "Ngensg": f"{self._stem}ei",  # rei
+                "Ndatsg": f"{self._stem}ei",  # rei
+                "Nablsg": f"{self._stem}e",  # re
+                "Nnompl": f"{self._stem}es",  # res
+                "Nvocpl": f"{self._stem}es",  # res
+                "Naccpl": f"{self._stem}es",  # res
+                "Ngenpl": f"{self._stem}erum",  # rerum
+                "Ndatpl": f"{self._stem}ebus",  # rebus
+                "Nablpl": f"{self._stem}ebus",  # rebus
+            }
 
-            case _:  # pragma: no cover # this should never happen
-                raise ValueError(
-                    f"Declension {self.declension} not recognised",
-                )
+        # pragma: no cover # this should never happen
+        raise ValueError(
+            f"Declension {self.declension} not recognised",
+        )
 
     def _neuter_endings(self) -> None:
         self.endings["Naccsg"] = self.nominative  # templum

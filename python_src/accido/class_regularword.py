@@ -11,7 +11,8 @@ from typing import TYPE_CHECKING
 from .class_word import _Word
 
 if TYPE_CHECKING:
-    from .misc import EndingComponents, Meaning
+    from .misc import EndingComponents
+    from .type_aliases import Meaning
 
 
 @total_ordering

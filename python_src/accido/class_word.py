@@ -7,9 +7,12 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from functools import total_ordering
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
-from .misc import Ending, EndingComponents, Endings, MultipleEndings
+from .misc import EndingComponents, MultipleEndings
+
+if TYPE_CHECKING:
+    from .type_aliases import Ending, Endings
 
 
 @total_ordering

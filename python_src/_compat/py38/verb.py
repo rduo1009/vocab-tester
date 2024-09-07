@@ -8,11 +8,10 @@ from __future__ import annotations
 from functools import total_ordering
 from typing import TYPE_CHECKING, Literal
 
-from ..utils import key_from_value
-from .class_word import _Word
-from .edge_cases import check_io_verb, find_irregular_endings
-from .exceptions import InvalidInputError
-from .misc import (
+from ...accido.class_word import _Word
+from ...accido.edge_cases import check_io_verb, find_irregular_endings
+from ...accido.exceptions import InvalidInputError
+from ...accido.misc import (
     CASE_SHORTHAND,
     GENDER_SHORTHAND,
     MOOD_SHORTHAND,
@@ -22,9 +21,10 @@ from .misc import (
     VOICE_SHORTHAND,
     EndingComponents,
 )
+from ...utils import key_from_value
 
 if TYPE_CHECKING:
-    from .type_aliases import Ending, Endings, Meaning
+    from .typealiases import Ending, Endings, Meaning
 
 
 @total_ordering
@@ -127,29 +127,28 @@ class Verb(_Word):
         self._inf_stem: str = self.infinitive[:-3]
         self._per_stem: str = self.perfect[:-1]
 
-        match self.conjugation:
-            case 1:
-                self.endings = self._first_conjugation()
+        if self.conjugation == 1:
+            self.endings = self._first_conjugation()
 
-            case 2:
-                self.endings = self._second_conjugation()
+        elif self.conjugation == 2:
+            self.endings = self._second_conjugation()
 
-            case 3:
-                self.endings = self._third_conjugation()
+        elif self.conjugation == 3:
+            self.endings = self._third_conjugation()
 
-            case 4:
-                self.endings = self._fourth_conjugation()
+        elif self.conjugation == 4:
+            self.endings = self._fourth_conjugation()
 
-            case 5:
-                self.endings = self._third_io_conjugation()
+        elif self.conjugation == 5:
+            self.endings = self._third_io_conjugation()
 
-            case _:  # pragma: no cover
-                raise ValueError(  # noqa: DOC501
-                    f"Conjugation {self.conjugation} not recognised",
-                )
+        else:  # pragma: no cover
+            raise ValueError(  # noqa: DOC501
+                f"Conjugation {self.conjugation} not recognised",
+            )
 
         if self.ppp:
-            self.endings |= self._participles()
+            self.endings.update(self._participles())
 
     def _first_conjugation(self) -> Endings:
         return {

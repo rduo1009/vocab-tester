@@ -6,6 +6,7 @@
 from __future__ import annotations
 
 from functools import total_ordering
+from typing import TYPE_CHECKING
 
 from ..utils import key_from_value
 from .class_word import _Word
@@ -15,10 +16,11 @@ from .misc import (
     CASE_SHORTHAND,
     GENDER_SHORTHAND,
     NUMBER_SHORTHAND,
-    Ending,
     EndingComponents,
-    Meaning,
 )
+
+if TYPE_CHECKING:
+    from .type_aliases import Ending, Meaning
 
 
 @total_ordering

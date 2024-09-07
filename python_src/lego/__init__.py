@@ -7,4 +7,8 @@ containing the words. Also, it can save the word list to a pickle file.
 
 from . import exceptions, reader, saver
 
-__all__ = ["exceptions", "reader", "saver"]
+__all__ = [
+    "exceptions",
+    "reader",
+    "saver",
+]

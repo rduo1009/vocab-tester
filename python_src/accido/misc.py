@@ -5,7 +5,6 @@
 
 from __future__ import annotations
 
-import sys
 from dataclasses import dataclass
 from types import SimpleNamespace
 from typing import Final
@@ -170,17 +169,3 @@ class MultipleEndings(SimpleNamespace):
             key: f"{val2}{value}" for key, value in self.__dict__.items()
         }
         return MultipleEndings(**prefixed)
-
-
-if sys.version_info >= (3, 12):
-    from .type_hints import Ending as Ending
-    from .type_hints import Endings as Endings
-    from .type_hints import Meaning as Meaning
-
-else:  # pragma: no cover
-    # The type statement was added in 3.12, so TypeAlias is used instead
-    from typing import TypeAlias
-
-    Ending: TypeAlias = str | MultipleEndings
-    Endings: TypeAlias = dict[str, Ending]
-    Meaning: TypeAlias = str | MultipleMeanings

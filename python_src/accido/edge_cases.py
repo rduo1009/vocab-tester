@@ -5,9 +5,12 @@
 
 from __future__ import annotations
 
-from typing import Final
+from typing import TYPE_CHECKING, Final
 
-from .misc import Endings, MultipleEndings
+from .misc import MultipleEndings
+
+if TYPE_CHECKING:
+    from .type_aliases import Endings
 
 #  NOTE: There are deponents, but am keeping them for future
 # There also may be missing verbs
