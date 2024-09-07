@@ -25,7 +25,6 @@ jobs:
           - "3.8.19"
         os:
           - ubuntu-latest
-          - macos-latest
           - windows-latest
     steps:
       - uses: actions/checkout@v3
@@ -37,7 +36,7 @@ jobs:
           version: latest
           platform: x64
       - name: Compile cpp code
-        run: clang++ -shared -o python_src/lego/libkey.so python_src/lego/key/key.cpp
+        run: clang++ -shared -fPIC -o python_src/lego/libkey.so python_src/lego/key/key.cpp
       - name: Setup python for test ${{ matrix.py }}
         uses: actions/setup-python@v4
         with:
