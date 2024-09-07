@@ -15,6 +15,7 @@ from typing import (
 )
 
 from _typeshed import Incomplete
+
 from dill._dill import Pickler
 
 __all__ = ["adapter", "logger", "trace"]
