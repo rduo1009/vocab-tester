@@ -3,23 +3,151 @@
 
 """Contains functions for reading vocabulary files."""
 
+import hashlib
+import hmac
 import sys
+import warnings
+from pathlib import Path
+
+import dill as pickle
+
+import python_src as src
+
+from .. import accido
+from .exceptions import InvalidVocabDumpError
+from .misc import KEY, VocabList
 
 if sys.version_info >= (3, 10):
-    from .._compat.latest.reader import (
+    from .reader_latest import (
         _generate_meaning as _generate_meaning,
     )
-    from .._compat.latest.reader import _parse_line as _parse_line
-    from .._compat.latest.reader import (
-        _regenerate_vocab_list as _regenerate_vocab_list,
-    )
-    from .._compat.latest.reader import read_vocab_dump as read_vocab_dump
-    from .._compat.latest.reader import read_vocab_file as read_vocab_file
+    from .reader_latest import _parse_line as _parse_line
+    from .reader_latest import read_vocab_file as read_vocab_file
 else:
     from .._compat.py38.reader import _generate_meaning as _generate_meaning
     from .._compat.py38.reader import _parse_line as _parse_line
-    from .._compat.py38.reader import (
-        _regenerate_vocab_list as _regenerate_vocab_list,
-    )
-    from .._compat.py38.reader import read_vocab_dump as read_vocab_dump
     from .._compat.py38.reader import read_vocab_file as read_vocab_file
+
+
+def _regenerate_vocab_list(vocab_list: VocabList) -> VocabList:
+    """Regenerates a VocabList from a VocabList.
+
+    This is useful for regenerating a VocabList if it was created in a
+    previous version of the package.
+
+    Parameters
+    ----------
+    vocab_list : VocabList
+        The VocabList to regenerate.
+
+    Returns
+    -------
+    VocabList
+        The regenerated VocabList.
+    """
+    word: accido.endings._Word
+    new_vocab: list[accido.endings._Word] = []
+
+    for word in vocab_list.vocab:
+        if type(word) is accido.endings.RegularWord:
+            new_vocab.append(
+                accido.endings.RegularWord(
+                    word=word.word,
+                    meaning=word.meaning,
+                ),
+            )
+        elif type(word) is accido.endings.Verb:
+            new_vocab.append(
+                accido.endings.Verb(
+                    present=word.present,
+                    infinitive=word.infinitive,
+                    perfect=word.perfect,
+                    ppp=word.ppp,
+                    meaning=word.meaning,
+                ),
+            )
+        elif type(word) is accido.endings.Noun:
+            new_vocab.append(
+                accido.endings.Noun(
+                    nominative=word.nominative,
+                    genitive=word.genitive,
+                    meaning=word.meaning,
+                    gender=word.gender,
+                ),
+            )
+        elif type(word) is accido.endings.Adjective:
+            new_vocab.append(
+                accido.endings.Adjective(
+                    *word._principal_parts,  # noqa: SLF001
+                    termination=word.termination,
+                    declension=word.declension,
+                    meaning=word.meaning,
+                ),
+            )
+        elif type(word) is accido.endings.Pronoun:
+            new_vocab.append(
+                accido.endings.Pronoun(
+                    pronoun=word.pronoun,
+                    meaning=word.meaning,
+                ),
+            )
+        else:  # pragma: no cover # this should never happen
+            raise ValueError(f"Unknown word type: {type(word)}")  # noqa: DOC501
+
+    return VocabList(new_vocab)
+
+
+def read_vocab_dump(filename: Path) -> VocabList:
+    """Reads a vocabulary dump file and returns a VocabList object.
+
+    The pickle files are signed with a HMAC signature to ensure the data
+    has not been tampered with. If the data is invalid, an exception is
+    raised.
+
+    Parameters
+    ----------
+    filename : pathlib.Path
+        The path to the vocabulary dump file.
+
+    Returns
+    -------
+    VocabList
+        The vocabulary from the file.
+
+    Raises
+    ------
+    InvalidVocabDumpError
+        If the file is not a valid vocabulary dump, or if the data has been
+        tampered with.
+    FileNotFoundError
+        If the file does not exist.
+
+    Examples
+    --------
+    >>> read_vocab_dump(Path("path_to_file.pickle"))  # doctest: +SKIP
+    """
+    with open(filename, "rb") as file:
+        content: bytes = file.read()
+        pickled_data: bytes = content[:-64]
+        signature: str = content[-64:].decode()
+
+    if (
+        hmac.new(KEY, pickled_data, hashlib.sha256).hexdigest() != signature
+    ):  # pragma: no cover # this should never happen
+        raise InvalidVocabDumpError(
+            "Data integrity check failed for vocab dump.",
+        )
+
+    output = pickle.loads(pickled_data)
+    if type(output) is VocabList:  # type: ignore[comparison-overlap] # mypy cannot recognise this
+        if output.version == src.__version__:
+            return output
+        warnings.warn(
+            "Vocab dump is from a different version of vocab-tester.",
+            stacklevel=2,
+        )
+        return _regenerate_vocab_list(output)
+
+    raise InvalidVocabDumpError(
+        "Vocab dump is not valid.",
+    )  # pragma: no cover # this should never happen
