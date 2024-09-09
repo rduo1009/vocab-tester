@@ -7,7 +7,7 @@ from __future__ import annotations
 
 import sys
 
-assert sys.version_info >= (3, 12)
+assert sys.version_info >= (3, 10)
 
 from re import match
 from typing import TYPE_CHECKING, Final
