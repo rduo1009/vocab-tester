@@ -12,7 +12,6 @@ if sys.version_info >= (3, 10):
     from .class_adjective import Adjective as Adjective
     from .class_noun import Noun as Noun
     from .class_verb import Verb as Verb
-    from .class_word import _Word as _Word
 else:
     from .._compat.py38.adjective import Adjective as Adjective
     from .._compat.py38.noun import Noun as Noun
@@ -20,3 +19,4 @@ else:
 
 from .class_pronoun import Pronoun as Pronoun
 from .class_regularword import RegularWord as RegularWord
+from .class_word import _Word as _Word

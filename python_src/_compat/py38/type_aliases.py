@@ -6,6 +6,7 @@
 from __future__ import annotations
 
 import sys
+from typing import Dict
 
 assert sys.version_info <= (3, 10)
 
@@ -14,5 +15,5 @@ from typing import Union
 from ...accido.misc import MultipleEndings, MultipleMeanings
 
 Ending = Union[str, MultipleEndings]
-Endings = dict[str, Ending]
+Endings = Dict[str, Ending]
 Meaning = Union[str, MultipleMeanings]

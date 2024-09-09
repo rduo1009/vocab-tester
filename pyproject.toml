@@ -12,6 +12,7 @@ dill = "==0.3.8"
 nltk = "==3.9.1"
 lemminflect = "==0.2.3"
 inflect = "==7.4.0"
+future-typing = "==0.4.1"
 numpy = [
     { version = "1.24.4", python = "~3.8" },
     { version = "1.26.4", python = ">=3.9 <3.13" },
