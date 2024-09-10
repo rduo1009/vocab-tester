@@ -1,4 +1,4 @@
-extend = "../pyproject.toml"
+extend = "../ruff.toml"
 
 # Override settings
 line-length = 320

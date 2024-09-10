@@ -42,8 +42,7 @@
     "mypy-type-checker.importStrategy": "fromEnvironment",
     "mypy-type-checker.reportingScope": "workspace",
     "mypy-type-checker.args": [
-        "--enable-incomplete-feature=NewGenericSyntax",
-        "--config-file=pyproject.toml"
+        "--enable-incomplete-feature=NewGenericSyntax"
     ],
     "python.testing.pytestPath": "pytest",
     "python.testing.pytestArgs": [
