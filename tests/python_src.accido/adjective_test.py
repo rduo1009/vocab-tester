@@ -4,7 +4,7 @@ import sys  # noqa: E401
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
 
-import pytest  # type: ignore
+import pytest
 
 from python_src.accido.exceptions import InvalidInputError  # isort: skip
 from python_src.accido.endings import Adjective
