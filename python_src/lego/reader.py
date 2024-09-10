@@ -18,9 +18,7 @@ from .exceptions import InvalidVocabDumpError
 from .misc import KEY, VocabList
 
 if sys.version_info >= (3, 10):
-    from .reader_latest import (
-        _generate_meaning as _generate_meaning,
-    )
+    from .reader_latest import _generate_meaning as _generate_meaning
     from .reader_latest import _parse_line as _parse_line
     from .reader_latest import read_vocab_file as read_vocab_file
 else:
