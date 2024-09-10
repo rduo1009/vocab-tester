@@ -28,6 +28,10 @@ def key_from_value(dd: dict[Any, Any], value: Any) -> Any:
     Any
         The first key whose value matches 'value', or None if not
         found.
+
+    Notes
+    -----
+    Code taken from https://stackoverflow.com/a/2569076
     """
     return next((key for key, val in dd.items() if val == value), None)
 
@@ -46,6 +50,10 @@ def compare(first: Iterable[Any], second: Iterable[Any]) -> bool:
     -------
     bool
         True if the iterables are equal, False otherwise.
+
+    Notes
+    -----
+    Code taken from https://stackoverflow.com/a/7829388
     """
     comparison = list(second)  # make a mutable copy
     try:
