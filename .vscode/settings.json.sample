@@ -48,12 +48,17 @@
     "python.testing.pytestArgs": [
         "."
     ],
+    "files.associations": {
+        "settings.json.sample": "jsonc",
+        ".coveragerc": "toml"
+    },
     "catppuccin-icons.associations.folders": { // or whatever icon extension you use
         "python_src": "folder_src",
         "mypy_stubs": "folder_types"
     },
     "catppuccin-icons.associations.files": { // or whatever icon extension you use
         "requirements-dev.txt": "python-config",
-        "settings.json.sample": "json"
+        "settings.json.sample": "json",
+        ".coveragerc": "toml"
     }
 }
