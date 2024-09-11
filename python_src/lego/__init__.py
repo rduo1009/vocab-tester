@@ -5,9 +5,10 @@
 containing the words. Also, it can save the word list to a pickle file.
 """  # noqa: D205
 
-from . import exceptions, reader, saver
+from . import cache, exceptions, reader, saver
 
 __all__ = [
+    "cache",
     "exceptions",
     "reader",
     "saver",

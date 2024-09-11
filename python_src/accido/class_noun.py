@@ -330,7 +330,7 @@ class Noun(_Word):
         return output
 
     def __repr__(self) -> str:
-        return f"Noun({self.nominative}, {self.genitive}, {GENDER_SHORTHAND[self.gender]}, {self.meaning})"
+        return f"Noun({self.nominative}, {self.genitive}, {self.gender}, {self.meaning})"
 
     def __str__(self) -> str:
         if self.gender in GENDER_SHORTHAND:

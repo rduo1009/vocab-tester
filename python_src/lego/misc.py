@@ -49,6 +49,10 @@ class VocabList:
         # Set the version using the package version.
         self.version: str = src.__version__
 
+    def __repr__(self) -> str:
+        object_reprs: str = ", ".join(repr(word) for word in self.vocab)
+        return f"VocabList([{object_reprs}], version={self.version})"
+
 
 LIBKEY: ctypes.CDLL = ctypes.CDLL("python_src/lego/libkey.so")
 LIBKEY.get_key.restype = ctypes.c_char_p
