@@ -20,6 +20,11 @@ import hashlib
 def _sha256sum(filename: Path) -> str:
     """Hashes a file.
 
+    Parameters
+    ----------
+    filename : Path
+        The file to hash.
+
     Returns
     -------
     str
