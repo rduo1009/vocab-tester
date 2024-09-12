@@ -3,19 +3,10 @@
 
 """Contains type aliases used by accido."""
 
-import sys
+from __future__ import annotations
 
-if sys.version_info >= (3, 12):
-    from .type_aliases_latest import Ending as Ending
-    from .type_aliases_latest import Endings as Endings
-    from .type_aliases_latest import Meaning as Meaning
+from ..accido.misc import MultipleEndings, MultipleMeanings
 
-elif sys.version_info >= (3, 10):
-    from .._compat.py310.type_aliases import Ending as Ending
-    from .._compat.py310.type_aliases import Endings as Endings
-    from .._compat.py310.type_aliases import Meaning as Meaning
-
-else:  # pragma: no cover
-    from .._compat.py38.type_aliases import Ending as Ending
-    from .._compat.py38.type_aliases import Endings as Endings
-    from .._compat.py38.type_aliases import Meaning as Meaning
+type Ending = str | MultipleEndings
+type Endings = dict[str, Ending]
+type Meaning = str | MultipleMeanings
