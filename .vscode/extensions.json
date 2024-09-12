@@ -9,6 +9,7 @@
         "rodolphebarbanneau.python-docstring-highlighter",
         "charliermarsh.ruff",
         "wayou.vscode-todo-highlight",
-        "redhat.vscode-yaml"
+        "redhat.vscode-yaml",
+        "evhub.coconut"
     ]
 }
