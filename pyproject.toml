@@ -13,6 +13,7 @@ nltk = "==3.9.1"
 lemminflect = "==0.2.3"
 inflect = "==7.4.0"
 numpy = "==2.1.0"
+coconut = "==3.1.2"
 
 [tool.poetry.group.dev.dependencies]
 icecream = "==2.1.3"
