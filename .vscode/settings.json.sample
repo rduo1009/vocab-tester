@@ -50,7 +50,7 @@
     ],
     "files.associations": {
         "settings.json.sample": "jsonc",
-        ".coveragerc": "toml"
+        ".coveragerc": "ini"
     },
     "catppuccin-icons.associations.folders": { // or whatever icon extension you use
         "python_src": "folder_src",
@@ -59,6 +59,6 @@
     "catppuccin-icons.associations.files": { // or whatever icon extension you use
         "requirements-dev.txt": "python-config",
         "settings.json.sample": "json",
-        ".coveragerc": "toml"
+        ".coveragerc": "ini"
     }
 }
