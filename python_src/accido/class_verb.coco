@@ -84,7 +84,10 @@ class Verb(_Word):
         self.infinitive: str = infinitive
         self.perfect: str = perfect
         self.ppp: str = ppp
-        self.meaning: Meaning = meaning
+        if meaning:
+            self.meaning: Meaning = meaning
+        else:
+            raise ValueError
 
         self._first = self.present
         self.conjugation: Literal[0, 1, 2, 3, 4, 5]

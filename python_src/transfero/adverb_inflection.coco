@@ -1,6 +1,7 @@
 """Contains functions that inflect English adverbs."""
 
 import lemminflect
+from typing import no_type_check
 
 from .exceptions import InvalidWordError
 
@@ -8,6 +9,7 @@ if TYPE_CHECKING:
     from .. import accido
 
 
+@no_type_check
 def find_adverb_inflections(
     adverb: str,
     components: accido.misc.EndingComponents,

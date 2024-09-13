@@ -4,7 +4,7 @@ import hashlib
 import hmac
 import warnings
 from re import match
-from typing import Final
+from typing import Final, no_type_check
 
 import dill as pickle
 
@@ -249,6 +249,7 @@ def read_vocab_file(file_path: Path) -> VocabList:
     return VocabList(vocab)
 
 
+@no_type_check
 def _parse_line(
     current: str,
     latin_parts: list[str],

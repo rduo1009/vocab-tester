@@ -102,8 +102,14 @@ class Adjective(_Word):
         self._neutnom: str
 
         self._first = self._principal_parts[0]
-        self.meaning: Meaning = meaning
-        self.declension: str = declension
+        if meaning:
+            self.meaning: Meaning = meaning
+        else:
+            raise ValueError
+        if declension:
+            self.declension: str = declension
+        else:
+            raise ValueError
         self.termination: int | None = termination
         self.irregular_flag: bool = False
         self.adverb_flag: bool = True

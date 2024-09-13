@@ -1,7 +1,7 @@
 """Representation of a Latin noun with endings."""
 
 from functools import total_ordering
-from typing import Literal
+from typing import Literal, no_type_check
 
 from ..utils import key_from_value
 from .class_word import _Word
@@ -153,6 +153,7 @@ class Noun(_Word):
                 f"Invalid genitive form: '{self.genitive}'",
             )
 
+    @no_type_check
     def _determine_endings(self) -> Endings:
         match self.declension:
             case 1:
