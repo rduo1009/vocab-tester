@@ -1,11 +1,6 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-
 """Contains edge case endings."""
 
-from __future__ import annotations
-
-from typing import TYPE_CHECKING, Final
+from typing import Final
 
 from .misc import MultipleEndings
 

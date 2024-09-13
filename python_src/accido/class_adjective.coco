@@ -1,12 +1,6 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-
 """Representation of a Latin adjective with endings."""
 
-from __future__ import annotations
-
 from functools import total_ordering
-from typing import TYPE_CHECKING
 
 from ..utils import key_from_value
 from .class_word import _Word
@@ -61,12 +55,15 @@ class Adjective(_Word):
     adjectives.
     """
 
+    # HACK: Extra optional stuff to avoid syntax errors
     def __init__(
         self,
-        *principal_parts: str,
+        first_principal_part: str,
+        second_principal_part: str,
+        third_principal_part: str | None = None,
         termination: int | None = None,
-        declension: str,
-        meaning: Meaning,
+        declension: str | None = None,
+        meaning: Meaning | None = None,
     ) -> None:
         """Initialises Adjective and determines the endings.
 
@@ -88,8 +85,18 @@ class Adjective(_Word):
             If the input is invalid.
         """
         super().__init__()
-
-        self._principal_parts: tuple[str, ...] = principal_parts
+        self._principal_parts: tuple[str, ...]
+        if third_principal_part:
+            self._principal_parts = (
+                first_principal_part,
+                second_principal_part,
+                third_principal_part,
+            )
+        else:
+            self._principal_parts = (
+                first_principal_part,
+                second_principal_part,
+            )
         self._mascnom: str = self._principal_parts[0]
         self._femnom: str
         self._neutnom: str
@@ -786,7 +793,6 @@ class Adjective(_Word):
 
     def get(
         self,
-        *,
         degree: str,
         gender: str | None = None,
         case: str | None = None,

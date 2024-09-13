@@ -1,6 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-
 """Contains a function that converts an adjective to an adverb.
 
 Notes
@@ -9,8 +6,6 @@ The code and json file is taken from github.com/gutfeeling/word_forms. The
 original python package is not used as it has been unmaintained for a few
 years now.
 """
-
-from __future__ import annotations
 
 import json
 from pathlib import Path

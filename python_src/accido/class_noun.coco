@@ -1,12 +1,7 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-
 """Representation of a Latin noun with endings."""
 
-from __future__ import annotations
-
 from functools import total_ordering
-from typing import TYPE_CHECKING, Literal
+from typing import Literal
 
 from ..utils import key_from_value
 from .class_word import _Word
@@ -60,7 +55,6 @@ class Noun(_Word):
 
     def __init__(
         self,
-        *,
         nominative: str,
         genitive: str,
         gender: str,
@@ -271,7 +265,7 @@ class Noun(_Word):
             self.endings["Naccpl"] = f"{self._stem}a"  # templa
             self.endings["Nvocpl"] = f"{self._stem}a"  # templa
 
-    def get(self, *, case: str, number: str) -> Ending | None:
+    def get(self, case: str, number: str) -> Ending | None:
         """Returns the ending of the noun.
 
         The function returns None if no ending is found.
