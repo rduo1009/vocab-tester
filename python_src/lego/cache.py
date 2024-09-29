@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# __coconut_hash__ = 0x6b871d7b
+# __coconut_hash__ = 0xc3c980c
 
 # Compiled with Coconut version 3.1.2
 
@@ -71,6 +71,7 @@ if TYPE_CHECKING:  #9: if TYPE_CHECKING:
 import hashlib  #11: import hashlib
 
 
+@_coconut_tco  #14: def _sha256sum(filename: Path) -> str:
 def _sha256sum(filename  # type: Path  #14: def _sha256sum(filename: Path) -> str:
     ):  #14: def _sha256sum(filename: Path) -> str:
 # type: (...) -> str
@@ -90,14 +91,19 @@ def _sha256sum(filename  # type: Path  #14: def _sha256sum(filename: Path) -> st
     -----
     Code taken from https://stackoverflow.com/a/44873382
     """  #30:     """
-    with open(filename, "rb", buffering=0) as file:  #31:     with open(filename, "rb", buffering=0) as file:
-        return hashlib.file_digest(file, "sha256").hexdigest()  # type: ignore[arg-type] # mypy cannot handle this  #32:         return hashlib.file_digest(
+    h = hashlib.sha256()  #31:     h = hashlib.sha256()
+    b = bytearray(128 * 1024)  #32:     b = bytearray(128 * 1024)
+    mv = memoryview(b)  #33:     mv = memoryview(b)
+    with open(filename, "rb", buffering=0) as f:  #34:     with open(filename, "rb", buffering=0) as f:
+        for n in iter(lambda _=None: f.readinto(mv), 0):  # type: ignore[misc]  #35:         for n in iter(=> f.readinto(mv), 0): # type: ignore[misc]
+            h.update(mv[:n])  #36:             h.update(mv[:n])
+    return _coconut_tail_call(h.hexdigest)  #37:     return h.hexdigest()
 
 
 
-def cache_vocab_file(cache_folder,  # type: Path  #38: def cache_vocab_file(
-    vocab_file_path  # type: Path  #38: def cache_vocab_file(
-    ):  #38: def cache_vocab_file(
+def cache_vocab_file(cache_folder,  # type: Path  #40: def cache_vocab_file(
+    vocab_file_path  # type: Path  #40: def cache_vocab_file(
+    ):  #40: def cache_vocab_file(
 # type: (...) -> tuple[VocabList, bool]
     """Reads a vocab file, and saves the vocab dump inside a cache folder.
 
@@ -121,26 +127,26 @@ def cache_vocab_file(cache_folder,  # type: Path  #38: def cache_vocab_file(
     --------
     UserWarning
         If the cache folder did not exist and had to be created.
-    """  #63:     """
-    if not cache_folder.exists():  #64:     if not cache_folder.exists():
-        cache_folder.mkdir(parents=True, exist_ok=True)  #65:         cache_folder.mkdir(parents=True, exist_ok=True)
-        warnings.warn("The directory {_coconut_format_0} did not exist and has been created".format(_coconut_format_0=(cache_folder)), stacklevel=2)  #66:         warnings.warn(
+    """  #65:     """
+    if not cache_folder.exists():  #66:     if not cache_folder.exists():
+        cache_folder.mkdir(parents=True, exist_ok=True)  #67:         cache_folder.mkdir(parents=True, exist_ok=True)
+        warnings.warn("The directory {_coconut_format_0} did not exist and has been created".format(_coconut_format_0=(cache_folder)), stacklevel=2)  #68:         warnings.warn(
 
-    cache_file_name = _sha256sum(vocab_file_path)  # type: str  #71:     cache_file_name: str = _sha256sum(vocab_file_path)
-    if "__annotations__" not in _coconut.locals():  #71:     cache_file_name: str = _sha256sum(vocab_file_path)
-        __annotations__ = {}  # type: ignore  #71:     cache_file_name: str = _sha256sum(vocab_file_path)
-    __annotations__["cache_file_name"] = 'str'  #71:     cache_file_name: str = _sha256sum(vocab_file_path)
-    cache_path = Path(cache_folder / cache_file_name)  # type: Path  #72:     cache_path: Path = Path(cache_folder / cache_file_name)
-    if "__annotations__" not in _coconut.locals():  #72:     cache_path: Path = Path(cache_folder / cache_file_name)
-        __annotations__ = {}  # type: ignore  #72:     cache_path: Path = Path(cache_folder / cache_file_name)
-    __annotations__["cache_path"] = 'Path'  #72:     cache_path: Path = Path(cache_folder / cache_file_name)
+    cache_file_name = _sha256sum(vocab_file_path)  # type: str  #73:     cache_file_name: str = _sha256sum(vocab_file_path)
+    if "__annotations__" not in _coconut.locals():  #73:     cache_file_name: str = _sha256sum(vocab_file_path)
+        __annotations__ = {}  # type: ignore  #73:     cache_file_name: str = _sha256sum(vocab_file_path)
+    __annotations__["cache_file_name"] = 'str'  #73:     cache_file_name: str = _sha256sum(vocab_file_path)
+    cache_path = Path(cache_folder / cache_file_name)  # type: Path  #74:     cache_path: Path = Path(cache_folder / cache_file_name)
+    if "__annotations__" not in _coconut.locals():  #74:     cache_path: Path = Path(cache_folder / cache_file_name)
+        __annotations__ = {}  # type: ignore  #74:     cache_path: Path = Path(cache_folder / cache_file_name)
+    __annotations__["cache_path"] = 'Path'  #74:     cache_path: Path = Path(cache_folder / cache_file_name)
 
-    if cache_path.exists():  #74:     if cache_path.exists():
-        return (read_vocab_dump(cache_path), True)  #75:         return (read_vocab_dump(cache_path), True)
+    if cache_path.exists():  #76:     if cache_path.exists():
+        return (read_vocab_dump(cache_path), True)  #77:         return (read_vocab_dump(cache_path), True)
 
-    vocab_list = read_vocab_file(vocab_file_path)  # type: VocabList  #77:     vocab_list: VocabList = read_vocab_file(vocab_file_path)
-    if "__annotations__" not in _coconut.locals():  #77:     vocab_list: VocabList = read_vocab_file(vocab_file_path)
-        __annotations__ = {}  # type: ignore  #77:     vocab_list: VocabList = read_vocab_file(vocab_file_path)
-    __annotations__["vocab_list"] = 'VocabList'  #77:     vocab_list: VocabList = read_vocab_file(vocab_file_path)
-    save_vocab_dump(cache_path, vocab_list)  #78:     save_vocab_dump(cache_path, vocab_list)
-    return (vocab_list, False)  #79:     return (vocab_list, False)
+    vocab_list = read_vocab_file(vocab_file_path)  # type: VocabList  #79:     vocab_list: VocabList = read_vocab_file(vocab_file_path)
+    if "__annotations__" not in _coconut.locals():  #79:     vocab_list: VocabList = read_vocab_file(vocab_file_path)
+        __annotations__ = {}  # type: ignore  #79:     vocab_list: VocabList = read_vocab_file(vocab_file_path)
+    __annotations__["vocab_list"] = 'VocabList'  #79:     vocab_list: VocabList = read_vocab_file(vocab_file_path)
+    save_vocab_dump(cache_path, vocab_list)  #80:     save_vocab_dump(cache_path, vocab_list)
+    return (vocab_list, False)  #81:     return (vocab_list, False)
