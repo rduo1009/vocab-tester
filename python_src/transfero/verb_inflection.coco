@@ -1,6 +1,6 @@
 """Contains functions that inflect English verbs."""
 
-from typing import Literal, no_type_check
+from typing import Literal
 
 
 import lemminflect
@@ -68,8 +68,7 @@ def _verify_verb_inflections(components: accido.misc.EndingComponents) -> None:
         raise ValueError(f"Invalid tense: '{components.tense}'")
 
 
-@no_type_check
-def find_verb_inflections(
+def find_verb_inflections(  # type: ignore[return]
     verb: str,
     components: accido.misc.EndingComponents,
 ) -> set[str]:
@@ -324,8 +323,7 @@ def _find_plpactind_inflections(
     raise ValueError(f"Invalid number and person: '{number}' '{person}'")
 
 
-@no_type_check
-def _find_participle_inflections(
+def _find_participle_inflections(  # type: ignore[return]
     verb: str,
     components: accido.misc.EndingComponents,
 ) -> set[str]:

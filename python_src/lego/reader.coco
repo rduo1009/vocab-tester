@@ -4,7 +4,7 @@ import hashlib
 import hmac
 import warnings
 from re import match
-from typing import Final, no_type_check
+from typing import Final
 
 import dill as pickle
 
@@ -74,8 +74,8 @@ def _regenerate_vocab_list(vocab_list: VocabList) -> VocabList:
             )
         elif type(word) is accido.endings.Adjective:
             new_vocab.append(
-                accido.endings.Adjective(
-                    *word._principal_parts,  # noqa: SLF001
+                accido.endings.Adjective(  # type: ignore[misc, arg-type]
+                    *word._principal_parts,
                     termination=word.termination,
                     declension=word.declension,
                     meaning=word.meaning,
@@ -249,8 +249,7 @@ def read_vocab_file(file_path: Path) -> VocabList:
     return VocabList(vocab)
 
 
-@no_type_check
-def _parse_line(
+def _parse_line(  # type: ignore[return]
     current: str,
     latin_parts: list[str],
     meaning: accido.type_aliases.Meaning,

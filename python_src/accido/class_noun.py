@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# __coconut_hash__ = 0xd34e1d80
+# __coconut_hash__ = 0x8afc1f3
 
 # Compiled with Coconut version 3.1.2
 
@@ -60,30 +60,23 @@ else:
 
 
 from functools import total_ordering  #3: from functools import total_ordering
-try:  #4: from typing import Literal, no_type_check
-    _coconut_sys_0 = sys  # type: ignore  #4: from typing import Literal, no_type_check
-except _coconut.NameError:  #4: from typing import Literal, no_type_check
-    _coconut_sys_0 = _coconut_sentinel  #4: from typing import Literal, no_type_check
-sys = _coconut_sys  #4: from typing import Literal, no_type_check
-if sys.version_info >= (3, 8):  #4: from typing import Literal, no_type_check
-    if _coconut.typing.TYPE_CHECKING:  #4: from typing import Literal, no_type_check
-        from typing import Literal  #4: from typing import Literal, no_type_check
-    else:  #4: from typing import Literal, no_type_check
-        try:  #4: from typing import Literal, no_type_check
-            Literal = _coconut.typing.Literal  #4: from typing import Literal, no_type_check
-        except _coconut.AttributeError as _coconut_imp_err:  #4: from typing import Literal, no_type_check
-            raise _coconut.ImportError(_coconut.str(_coconut_imp_err))  #4: from typing import Literal, no_type_check
-else:  #4: from typing import Literal, no_type_check
-    from typing_extensions import Literal  #4: from typing import Literal, no_type_check
-if _coconut_sys_0 is not _coconut_sentinel:  #4: from typing import Literal, no_type_check
-    sys = _coconut_sys_0  #4: from typing import Literal, no_type_check
-if _coconut.typing.TYPE_CHECKING:  #4: from typing import Literal, no_type_check
-    from typing import no_type_check  #4: from typing import Literal, no_type_check
-else:  #4: from typing import Literal, no_type_check
-    try:  #4: from typing import Literal, no_type_check
-        no_type_check = _coconut.typing.no_type_check  #4: from typing import Literal, no_type_check
-    except _coconut.AttributeError as _coconut_imp_err:  #4: from typing import Literal, no_type_check
-        raise _coconut.ImportError(_coconut.str(_coconut_imp_err))  #4: from typing import Literal, no_type_check
+try:  #4: from typing import Literal
+    _coconut_sys_0 = sys  # type: ignore  #4: from typing import Literal
+except _coconut.NameError:  #4: from typing import Literal
+    _coconut_sys_0 = _coconut_sentinel  #4: from typing import Literal
+sys = _coconut_sys  #4: from typing import Literal
+if sys.version_info >= (3, 8):  #4: from typing import Literal
+    if _coconut.typing.TYPE_CHECKING:  #4: from typing import Literal
+        from typing import Literal  #4: from typing import Literal
+    else:  #4: from typing import Literal
+        try:  #4: from typing import Literal
+            Literal = _coconut.typing.Literal  #4: from typing import Literal
+        except _coconut.AttributeError as _coconut_imp_err:  #4: from typing import Literal
+            raise _coconut.ImportError(_coconut.str(_coconut_imp_err))  #4: from typing import Literal
+else:  #4: from typing import Literal
+    from typing_extensions import Literal  #4: from typing import Literal
+if _coconut_sys_0 is not _coconut_sentinel:  #4: from typing import Literal
+    sys = _coconut_sys_0  #4: from typing import Literal
 
 from ..utils import key_from_value  #6: from ..utils import key_from_value
 from .class_word import _Word  #7: from .class_word import _Word
@@ -258,73 +251,72 @@ class Noun(_Word):  #22: class Noun(_Word):
         else:  #151:         else:
             raise InvalidInputError("Invalid genitive form: '{_coconut_format_0}'".format(_coconut_format_0=(self.genitive)))  #152:             raise InvalidInputError(
 
+# type: ignore[return]
+    @_coconut_tco  # type: ignore[return]  #156:     def _determine_endings(self) -> Endings:  # type: ignore[return]
+    def _determine_endings(self):  # type: ignore[return]  #156:     def _determine_endings(self) -> Endings:  # type: ignore[return]
+# type: (...) -> Endings  # type: ignore[return]
+        _coconut_case_match_to_0 = self.declension  #157:         match self.declension:
+        _coconut_case_match_check_0 = False  #157:         match self.declension:
+        if _coconut_case_match_to_0 == 1:  #157:         match self.declension:
+            _coconut_case_match_check_0 = True  #157:         match self.declension:
+        if _coconut_case_match_check_0:  #157:         match self.declension:
+            return _coconut_tail_call(_coconut.dict, (("Nnomsg", self.nominative), ("Nvocsg", self.nominative), ("Naccsg", "{_coconut_format_0}am".format(_coconut_format_0=(self._stem))), ("Ngensg", self.genitive), ("Ndatsg", "{_coconut_format_0}ae".format(_coconut_format_0=(self._stem))), ("Nablsg", "{_coconut_format_0}a".format(_coconut_format_0=(self._stem))), ("Nnompl", "{_coconut_format_0}ae".format(_coconut_format_0=(self._stem))), ("Nvocpl", "{_coconut_format_0}ae".format(_coconut_format_0=(self._stem))), ("Naccpl", "{_coconut_format_0}as".format(_coconut_format_0=(self._stem))), ("Ngenpl", "{_coconut_format_0}arum".format(_coconut_format_0=(self._stem))), ("Ndatpl", "{_coconut_format_0}is".format(_coconut_format_0=(self._stem))), ("Nablpl", "{_coconut_format_0}is".format(_coconut_format_0=(self._stem)))))  # puella  # puellae  # puellae  # puellis  # puellam  # puellarum  # puellae  # puella  # puellis  # puellas  # puellae  # puella  #159:                 return {
 
-    @no_type_check  #156:     @no_type_check
-    @_coconut_tco  #157:     def _determine_endings(self) -> Endings:
-    def _determine_endings(self):  #157:     def _determine_endings(self) -> Endings:
-# type: (...) -> Endings
-        _coconut_case_match_to_0 = self.declension  #158:         match self.declension:
-        _coconut_case_match_check_0 = False  #158:         match self.declension:
-        if _coconut_case_match_to_0 == 1:  #158:         match self.declension:
-            _coconut_case_match_check_0 = True  #158:         match self.declension:
-        if _coconut_case_match_check_0:  #158:         match self.declension:
-            return _coconut_tail_call(_coconut.dict, (("Nnomsg", self.nominative), ("Nvocsg", self.nominative), ("Naccsg", "{_coconut_format_0}am".format(_coconut_format_0=(self._stem))), ("Ngensg", self.genitive), ("Ndatsg", "{_coconut_format_0}ae".format(_coconut_format_0=(self._stem))), ("Nablsg", "{_coconut_format_0}a".format(_coconut_format_0=(self._stem))), ("Nnompl", "{_coconut_format_0}ae".format(_coconut_format_0=(self._stem))), ("Nvocpl", "{_coconut_format_0}ae".format(_coconut_format_0=(self._stem))), ("Naccpl", "{_coconut_format_0}as".format(_coconut_format_0=(self._stem))), ("Ngenpl", "{_coconut_format_0}arum".format(_coconut_format_0=(self._stem))), ("Ndatpl", "{_coconut_format_0}is".format(_coconut_format_0=(self._stem))), ("Nablpl", "{_coconut_format_0}is".format(_coconut_format_0=(self._stem)))))  # puellae  # puellarum  # puella  # puellae  # puellae  # puellas  # puellae  # puellam  # puella  # puella  # puellis  # puellis  #160:                 return {
+        if not _coconut_case_match_check_0:  #174:             case 2:
+            if _coconut_case_match_to_0 == 2:  #174:             case 2:
+                _coconut_case_match_check_0 = True  #174:             case 2:
+            if _coconut_case_match_check_0:  #174:             case 2:
+                return _coconut_tail_call(_coconut.dict, (("Nnomsg", self.nominative), ("Nvocsg", (self.nominative if self.nominative.endswith("er") else "{_coconut_format_0}e".format(_coconut_format_0=(self._stem)))), ("Naccsg", "{_coconut_format_0}um".format(_coconut_format_0=(self._stem))), ("Ngensg", self.genitive), ("Ndatsg", "{_coconut_format_0}o".format(_coconut_format_0=(self._stem))), ("Nablsg", "{_coconut_format_0}o".format(_coconut_format_0=(self._stem))), ("Nnompl", "{_coconut_format_0}i".format(_coconut_format_0=(self._stem))), ("Nvocpl", "{_coconut_format_0}i".format(_coconut_format_0=(self._stem))), ("Naccpl", "{_coconut_format_0}os".format(_coconut_format_0=(self._stem))), ("Ngenpl", "{_coconut_format_0}orum".format(_coconut_format_0=(self._stem))), ("Ndatpl", "{_coconut_format_0}is".format(_coconut_format_0=(self._stem))), ("Nablpl", "{_coconut_format_0}is".format(_coconut_format_0=(self._stem)))))  # servo  # servorum  # servus  # puer  # servo  # servi  # servis  # servi  # servum  # serve  # servos  # servis  # servi  #175:                 return {
 
-        if not _coconut_case_match_check_0:  #175:             case 2:
-            if _coconut_case_match_to_0 == 2:  #175:             case 2:
-                _coconut_case_match_check_0 = True  #175:             case 2:
-            if _coconut_case_match_check_0:  #175:             case 2:
-                return _coconut_tail_call(_coconut.dict, (("Nnomsg", self.nominative), ("Nvocsg", (self.nominative if self.nominative.endswith("er") else "{_coconut_format_0}e".format(_coconut_format_0=(self._stem)))), ("Naccsg", "{_coconut_format_0}um".format(_coconut_format_0=(self._stem))), ("Ngensg", self.genitive), ("Ndatsg", "{_coconut_format_0}o".format(_coconut_format_0=(self._stem))), ("Nablsg", "{_coconut_format_0}o".format(_coconut_format_0=(self._stem))), ("Nnompl", "{_coconut_format_0}i".format(_coconut_format_0=(self._stem))), ("Nvocpl", "{_coconut_format_0}i".format(_coconut_format_0=(self._stem))), ("Naccpl", "{_coconut_format_0}os".format(_coconut_format_0=(self._stem))), ("Ngenpl", "{_coconut_format_0}orum".format(_coconut_format_0=(self._stem))), ("Ndatpl", "{_coconut_format_0}is".format(_coconut_format_0=(self._stem))), ("Nablpl", "{_coconut_format_0}is".format(_coconut_format_0=(self._stem)))))  # servum  # servi  # servis  # servo  # servorum  # servis  # serve  # servi  # servo  # servos  # servi  # puer  # servus  #176:                 return {
+        if not _coconut_case_match_check_0:  #194:             case 3:
+            if _coconut_case_match_to_0 == 3:  #194:             case 3:
+                _coconut_case_match_check_0 = True  #194:             case 3:
+            if _coconut_case_match_check_0:  #194:             case 3:
+                return _coconut_tail_call(_coconut.dict, (("Nnomsg", self.nominative), ("Nvocsg", self.nominative), ("Naccsg", "{_coconut_format_0}em".format(_coconut_format_0=(self._stem))), ("Ngensg", self.genitive), ("Ndatsg", "{_coconut_format_0}i".format(_coconut_format_0=(self._stem))), ("Nablsg", "{_coconut_format_0}e".format(_coconut_format_0=(self._stem))), ("Nnompl", "{_coconut_format_0}es".format(_coconut_format_0=(self._stem))), ("Nvocpl", "{_coconut_format_0}es".format(_coconut_format_0=(self._stem))), ("Naccpl", "{_coconut_format_0}es".format(_coconut_format_0=(self._stem))), ("Ngenpl", "{_coconut_format_0}um".format(_coconut_format_0=(self._stem))), ("Ndatpl", "{_coconut_format_0}ibus".format(_coconut_format_0=(self._stem))), ("Nablpl", "{_coconut_format_0}ibus".format(_coconut_format_0=(self._stem)))))  # mercatores  # mercatoribus  # mercatoris  # mercatoribus  # mercatore  # mercatorum  # mercator  # mercatores  # mercator  # mercatori  # mercatores  # mercatorem  #195:                 return {
 
-        if not _coconut_case_match_check_0:  #195:             case 3:
-            if _coconut_case_match_to_0 == 3:  #195:             case 3:
-                _coconut_case_match_check_0 = True  #195:             case 3:
-            if _coconut_case_match_check_0:  #195:             case 3:
-                return _coconut_tail_call(_coconut.dict, (("Nnomsg", self.nominative), ("Nvocsg", self.nominative), ("Naccsg", "{_coconut_format_0}em".format(_coconut_format_0=(self._stem))), ("Ngensg", self.genitive), ("Ndatsg", "{_coconut_format_0}i".format(_coconut_format_0=(self._stem))), ("Nablsg", "{_coconut_format_0}e".format(_coconut_format_0=(self._stem))), ("Nnompl", "{_coconut_format_0}es".format(_coconut_format_0=(self._stem))), ("Nvocpl", "{_coconut_format_0}es".format(_coconut_format_0=(self._stem))), ("Naccpl", "{_coconut_format_0}es".format(_coconut_format_0=(self._stem))), ("Ngenpl", "{_coconut_format_0}um".format(_coconut_format_0=(self._stem))), ("Ndatpl", "{_coconut_format_0}ibus".format(_coconut_format_0=(self._stem))), ("Nablpl", "{_coconut_format_0}ibus".format(_coconut_format_0=(self._stem)))))  # mercatoribus  # mercatorum  # mercatores  # mercatoribus  # mercatore  # mercatores  # mercatori  # mercatorem  # mercator  # mercatoris  # mercator  # mercatores  #196:                 return {
+        if not _coconut_case_match_check_0:  #210:             case 4:
+            if _coconut_case_match_to_0 == 4:  #210:             case 4:
+                _coconut_case_match_check_0 = True  #210:             case 4:
+            if _coconut_case_match_check_0:  #210:             case 4:
+                return _coconut_tail_call(_coconut.dict, (("Nnomsg", self.nominative), ("Nvocsg", self.nominative), ("Naccsg", "{_coconut_format_0}um".format(_coconut_format_0=(self._stem))), ("Ngensg", "{_coconut_format_0}us".format(_coconut_format_0=(self._stem))), ("Ndatsg", "{_coconut_format_0}ui".format(_coconut_format_0=(self._stem))), ("Nablsg", "{_coconut_format_0}u".format(_coconut_format_0=(self._stem))), ("Nnompl", "{_coconut_format_0}us".format(_coconut_format_0=(self._stem))), ("Nvocpl", "{_coconut_format_0}us".format(_coconut_format_0=(self._stem))), ("Naccpl", "{_coconut_format_0}us".format(_coconut_format_0=(self._stem))), ("Ngenpl", "{_coconut_format_0}uum".format(_coconut_format_0=(self._stem))), ("Ndatpl", "{_coconut_format_0}ibus".format(_coconut_format_0=(self._stem))), ("Nablpl", "{_coconut_format_0}ibus".format(_coconut_format_0=(self._stem)))))  # manus  # manus  # manus  # manibus  # manui  # manum  # manus  # manus  # manu  # manuum  # manus  # manibus  #211:                 return {
 
-        if not _coconut_case_match_check_0:  #211:             case 4:
-            if _coconut_case_match_to_0 == 4:  #211:             case 4:
-                _coconut_case_match_check_0 = True  #211:             case 4:
-            if _coconut_case_match_check_0:  #211:             case 4:
-                return _coconut_tail_call(_coconut.dict, (("Nnomsg", self.nominative), ("Nvocsg", self.nominative), ("Naccsg", "{_coconut_format_0}um".format(_coconut_format_0=(self._stem))), ("Ngensg", "{_coconut_format_0}us".format(_coconut_format_0=(self._stem))), ("Ndatsg", "{_coconut_format_0}ui".format(_coconut_format_0=(self._stem))), ("Nablsg", "{_coconut_format_0}u".format(_coconut_format_0=(self._stem))), ("Nnompl", "{_coconut_format_0}us".format(_coconut_format_0=(self._stem))), ("Nvocpl", "{_coconut_format_0}us".format(_coconut_format_0=(self._stem))), ("Naccpl", "{_coconut_format_0}us".format(_coconut_format_0=(self._stem))), ("Ngenpl", "{_coconut_format_0}uum".format(_coconut_format_0=(self._stem))), ("Ndatpl", "{_coconut_format_0}ibus".format(_coconut_format_0=(self._stem))), ("Nablpl", "{_coconut_format_0}ibus".format(_coconut_format_0=(self._stem)))))  # manibus  # manus  # manuum  # manus  # manui  # manus  # manum  # manibus  # manus  # manus  # manu  # manus  #212:                 return {
+        if not _coconut_case_match_check_0:  #226:             case 5:
+            if _coconut_case_match_to_0 == 5:  #226:             case 5:
+                _coconut_case_match_check_0 = True  #226:             case 5:
+            if _coconut_case_match_check_0:  #226:             case 5:
+                return _coconut_tail_call(_coconut.dict, (("Nnomsg", self.nominative), ("Nvocsg", self.nominative), ("Naccsg", "{_coconut_format_0}em".format(_coconut_format_0=(self._stem))), ("Ngensg", "{_coconut_format_0}ei".format(_coconut_format_0=(self._stem))), ("Ndatsg", "{_coconut_format_0}ei".format(_coconut_format_0=(self._stem))), ("Nablsg", "{_coconut_format_0}e".format(_coconut_format_0=(self._stem))), ("Nnompl", "{_coconut_format_0}es".format(_coconut_format_0=(self._stem))), ("Nvocpl", "{_coconut_format_0}es".format(_coconut_format_0=(self._stem))), ("Naccpl", "{_coconut_format_0}es".format(_coconut_format_0=(self._stem))), ("Ngenpl", "{_coconut_format_0}erum".format(_coconut_format_0=(self._stem))), ("Ndatpl", "{_coconut_format_0}ebus".format(_coconut_format_0=(self._stem))), ("Nablpl", "{_coconut_format_0}ebus".format(_coconut_format_0=(self._stem)))))  # res  # res  # res  # rem  # res  # rei  # rerum  # rebus  # res  # rebus  # rei  # re  #227:                 return {
 
-        if not _coconut_case_match_check_0:  #227:             case 5:
-            if _coconut_case_match_to_0 == 5:  #227:             case 5:
-                _coconut_case_match_check_0 = True  #227:             case 5:
-            if _coconut_case_match_check_0:  #227:             case 5:
-                return _coconut_tail_call(_coconut.dict, (("Nnomsg", self.nominative), ("Nvocsg", self.nominative), ("Naccsg", "{_coconut_format_0}em".format(_coconut_format_0=(self._stem))), ("Ngensg", "{_coconut_format_0}ei".format(_coconut_format_0=(self._stem))), ("Ndatsg", "{_coconut_format_0}ei".format(_coconut_format_0=(self._stem))), ("Nablsg", "{_coconut_format_0}e".format(_coconut_format_0=(self._stem))), ("Nnompl", "{_coconut_format_0}es".format(_coconut_format_0=(self._stem))), ("Nvocpl", "{_coconut_format_0}es".format(_coconut_format_0=(self._stem))), ("Naccpl", "{_coconut_format_0}es".format(_coconut_format_0=(self._stem))), ("Ngenpl", "{_coconut_format_0}erum".format(_coconut_format_0=(self._stem))), ("Ndatpl", "{_coconut_format_0}ebus".format(_coconut_format_0=(self._stem))), ("Nablpl", "{_coconut_format_0}ebus".format(_coconut_format_0=(self._stem)))))  # res  # rebus  # rebus  # rei  # rei  # rerum  # re  # res  # res  # res  # res  # rem  #228:                 return {
-
-        if not _coconut_case_match_check_0:  # pragma: no cover # this should never happen  #243:             case _:  # pragma: no cover # this should never happen
-            _coconut_case_match_check_0 = True  # pragma: no cover # this should never happen  #243:             case _:  # pragma: no cover # this should never happen
-            if _coconut_case_match_check_0:  # pragma: no cover # this should never happen  #243:             case _:  # pragma: no cover # this should never happen
-                raise ValueError("Declension {_coconut_format_0} not recognised".format(_coconut_format_0=(self.declension)))  #244:                 raise ValueError(
+        if not _coconut_case_match_check_0:  # pragma: no cover # this should never happen  #242:             case _:  # pragma: no cover # this should never happen
+            _coconut_case_match_check_0 = True  # pragma: no cover # this should never happen  #242:             case _:  # pragma: no cover # this should never happen
+            if _coconut_case_match_check_0:  # pragma: no cover # this should never happen  #242:             case _:  # pragma: no cover # this should never happen
+                raise ValueError("Declension {_coconut_format_0} not recognised".format(_coconut_format_0=(self.declension)))  #243:                 raise ValueError(
 
 
-    def _neuter_endings(self):  #248:     def _neuter_endings(self) -> None:
+    def _neuter_endings(self):  #247:     def _neuter_endings(self) -> None:
 # type: (...) -> None
-        self.endings["Naccsg"] = self.nominative  # templum  #249:         self.endings["Naccsg"] = self.nominative  # templum
-        self.endings["Nvocsg"] = self.nominative  # templum  #250:         self.endings["Nvocsg"] = self.nominative  # templum
+        self.endings["Naccsg"] = self.nominative  # templum  #248:         self.endings["Naccsg"] = self.nominative  # templum
+        self.endings["Nvocsg"] = self.nominative  # templum  #249:         self.endings["Nvocsg"] = self.nominative  # templum
 
-        if self.declension == 5:  #252:         if self.declension == 5:
-            raise InvalidInputError("Fifth declension nouns cannot be neuter (noun '{_coconut_format_0}' given)".format(_coconut_format_0=(self.nominative)))  #253:             raise InvalidInputError(
+        if self.declension == 5:  #251:         if self.declension == 5:
+            raise InvalidInputError("Fifth declension nouns cannot be neuter (noun '{_coconut_format_0}' given)".format(_coconut_format_0=(self.nominative)))  #252:             raise InvalidInputError(
 
-        if self.declension == 4:  #257:         if self.declension == 4:
-            self.endings["Nnompl"] = "{_coconut_format_0}ua".format(_coconut_format_0=(self._stem))  # cornua  #258:             self.endings["Nnompl"] = f"{self._stem}ua"  # cornua
-            self.endings["Naccpl"] = "{_coconut_format_0}ua".format(_coconut_format_0=(self._stem))  # cornua  #259:             self.endings["Naccpl"] = f"{self._stem}ua"  # cornua
-            self.endings["Nvocpl"] = "{_coconut_format_0}ua".format(_coconut_format_0=(self._stem))  # cornua  #260:             self.endings["Nvocpl"] = f"{self._stem}ua"  # cornua
-            self.endings["Ndatsg"] = "{_coconut_format_0}u".format(_coconut_format_0=(self._stem))  # cornu  #261:             self.endings["Ndatsg"] = f"{self._stem}u"  # cornu
+        if self.declension == 4:  #256:         if self.declension == 4:
+            self.endings["Nnompl"] = "{_coconut_format_0}ua".format(_coconut_format_0=(self._stem))  # cornua  #257:             self.endings["Nnompl"] = f"{self._stem}ua"  # cornua
+            self.endings["Naccpl"] = "{_coconut_format_0}ua".format(_coconut_format_0=(self._stem))  # cornua  #258:             self.endings["Naccpl"] = f"{self._stem}ua"  # cornua
+            self.endings["Nvocpl"] = "{_coconut_format_0}ua".format(_coconut_format_0=(self._stem))  # cornua  #259:             self.endings["Nvocpl"] = f"{self._stem}ua"  # cornua
+            self.endings["Ndatsg"] = "{_coconut_format_0}u".format(_coconut_format_0=(self._stem))  # cornu  #260:             self.endings["Ndatsg"] = f"{self._stem}u"  # cornu
 
-        else:  #263:         else:
+        else:  #262:         else:
 # For the other declensions
-            self.endings["Nnompl"] = "{_coconut_format_0}a".format(_coconut_format_0=(self._stem))  # templa  #265:             self.endings["Nnompl"] = f"{self._stem}a"  # templa
-            self.endings["Naccpl"] = "{_coconut_format_0}a".format(_coconut_format_0=(self._stem))  # templa  #266:             self.endings["Naccpl"] = f"{self._stem}a"  # templa
-            self.endings["Nvocpl"] = "{_coconut_format_0}a".format(_coconut_format_0=(self._stem))  # templa  #267:             self.endings["Nvocpl"] = f"{self._stem}a"  # templa
+            self.endings["Nnompl"] = "{_coconut_format_0}a".format(_coconut_format_0=(self._stem))  # templa  #264:             self.endings["Nnompl"] = f"{self._stem}a"  # templa
+            self.endings["Naccpl"] = "{_coconut_format_0}a".format(_coconut_format_0=(self._stem))  # templa  #265:             self.endings["Naccpl"] = f"{self._stem}a"  # templa
+            self.endings["Nvocpl"] = "{_coconut_format_0}a".format(_coconut_format_0=(self._stem))  # templa  #266:             self.endings["Nvocpl"] = f"{self._stem}a"  # templa
 
 
-    @_coconut_tco  #269:     def get(self, case: str, number: str) -> Ending | None:
-    def get(self, case,  # type: str  #269:     def get(self, case: str, number: str) -> Ending | None:
-        number  # type: str  #269:     def get(self, case: str, number: str) -> Ending | None:
-        ):  #269:     def get(self, case: str, number: str) -> Ending | None:
+    @_coconut_tco  #268:     def get(self, case: str, number: str) -> Ending | None:
+    def get(self, case,  # type: str  #268:     def get(self, case: str, number: str) -> Ending | None:
+        number  # type: str  #268:     def get(self, case: str, number: str) -> Ending | None:
+        ):  #268:     def get(self, case: str, number: str) -> Ending | None:
 # type: (...) -> _coconut.typing.Union[Ending, None]
         """Returns the ending of the noun.
 
@@ -358,50 +350,50 @@ class Noun(_Word):  #22: class Noun(_Word):
         'ancilla'
 
         Note that all arguments of get are keyword-only.
-        """  #302:         """
-        if case not in CASE_SHORTHAND:  #303:         if case not in CASE_SHORTHAND:
-            raise InvalidInputError("Invalid case: '{_coconut_format_0}'".format(_coconut_format_0=(case)))  #304:             raise InvalidInputError(f"Invalid case: '{case}'")
+        """  #301:         """
+        if case not in CASE_SHORTHAND:  #302:         if case not in CASE_SHORTHAND:
+            raise InvalidInputError("Invalid case: '{_coconut_format_0}'".format(_coconut_format_0=(case)))  #303:             raise InvalidInputError(f"Invalid case: '{case}'")
 
-        if number not in NUMBER_SHORTHAND:  #306:         if number not in NUMBER_SHORTHAND:
-            raise InvalidInputError("Invalid number: '{_coconut_format_0}'".format(_coconut_format_0=(number)))  #307:             raise InvalidInputError(f"Invalid number: '{number}'")
+        if number not in NUMBER_SHORTHAND:  #305:         if number not in NUMBER_SHORTHAND:
+            raise InvalidInputError("Invalid number: '{_coconut_format_0}'".format(_coconut_format_0=(number)))  #306:             raise InvalidInputError(f"Invalid number: '{number}'")
 
-        short_case = CASE_SHORTHAND[case]  # type: str  #309:         short_case: str = CASE_SHORTHAND[case]
-        if "__annotations__" not in _coconut.locals():  #309:         short_case: str = CASE_SHORTHAND[case]
-            __annotations__ = {}  # type: ignore  #309:         short_case: str = CASE_SHORTHAND[case]
-        __annotations__["short_case"] = 'str'  #309:         short_case: str = CASE_SHORTHAND[case]
-        short_number = NUMBER_SHORTHAND[number]  # type: str  #310:         short_number: str = NUMBER_SHORTHAND[number]
-        if "__annotations__" not in _coconut.locals():  #310:         short_number: str = NUMBER_SHORTHAND[number]
-            __annotations__ = {}  # type: ignore  #310:         short_number: str = NUMBER_SHORTHAND[number]
-        __annotations__["short_number"] = 'str'  #310:         short_number: str = NUMBER_SHORTHAND[number]
+        short_case = CASE_SHORTHAND[case]  # type: str  #308:         short_case: str = CASE_SHORTHAND[case]
+        if "__annotations__" not in _coconut.locals():  #308:         short_case: str = CASE_SHORTHAND[case]
+            __annotations__ = {}  # type: ignore  #308:         short_case: str = CASE_SHORTHAND[case]
+        __annotations__["short_case"] = 'str'  #308:         short_case: str = CASE_SHORTHAND[case]
+        short_number = NUMBER_SHORTHAND[number]  # type: str  #309:         short_number: str = NUMBER_SHORTHAND[number]
+        if "__annotations__" not in _coconut.locals():  #309:         short_number: str = NUMBER_SHORTHAND[number]
+            __annotations__ = {}  # type: ignore  #309:         short_number: str = NUMBER_SHORTHAND[number]
+        __annotations__["short_number"] = 'str'  #309:         short_number: str = NUMBER_SHORTHAND[number]
 
-        return _coconut_tail_call(self.endings.get, "N{_coconut_format_0}{_coconut_format_1}".format(_coconut_format_0=(short_case), _coconut_format_1=(short_number)))  #312:         return self.endings.get(f"N{short_case}{short_number}")
+        return _coconut_tail_call(self.endings.get, "N{_coconut_format_0}{_coconut_format_1}".format(_coconut_format_0=(short_case), _coconut_format_1=(short_number)))  #311:         return self.endings.get(f"N{short_case}{short_number}")
 
 
-    @staticmethod  #314:     @staticmethod
-    def _create_namespace(key  # type: str  #315:     def _create_namespace(key: str) -> EndingComponents:
-        ):  #315:     def _create_namespace(key: str) -> EndingComponents:
+    @staticmethod  #313:     @staticmethod
+    def _create_namespace(key  # type: str  #314:     def _create_namespace(key: str) -> EndingComponents:
+        ):  #314:     def _create_namespace(key: str) -> EndingComponents:
 # type: (...) -> EndingComponents
-        output = EndingComponents(case=key_from_value(CASE_SHORTHAND, key[1:4]), number=key_from_value(NUMBER_SHORTHAND, key[4:6]))  # type: EndingComponents  #316:         output: EndingComponents = EndingComponents(
-        if "__annotations__" not in _coconut.locals():  #316:         output: EndingComponents = EndingComponents(
-            __annotations__ = {}  # type: ignore  #316:         output: EndingComponents = EndingComponents(
-        __annotations__["output"] = 'EndingComponents'  #316:         output: EndingComponents = EndingComponents(
-        output.string = "{_coconut_format_0} {_coconut_format_1}".format(_coconut_format_0=(output.case), _coconut_format_1=(output.number))  #320:         output.string = f"{output.case} {output.number}"
-        return output  #321:         return output
+        output = EndingComponents(case=key_from_value(CASE_SHORTHAND, key[1:4]), number=key_from_value(NUMBER_SHORTHAND, key[4:6]))  # type: EndingComponents  #315:         output: EndingComponents = EndingComponents(
+        if "__annotations__" not in _coconut.locals():  #315:         output: EndingComponents = EndingComponents(
+            __annotations__ = {}  # type: ignore  #315:         output: EndingComponents = EndingComponents(
+        __annotations__["output"] = 'EndingComponents'  #315:         output: EndingComponents = EndingComponents(
+        output.string = "{_coconut_format_0} {_coconut_format_1}".format(_coconut_format_0=(output.case), _coconut_format_1=(output.number))  #319:         output.string = f"{output.case} {output.number}"
+        return output  #320:         return output
 
 
-    @_coconut_tco  #323:     def __repr__(self) -> str:
-    def __repr__(self):  #323:     def __repr__(self) -> str:
+    @_coconut_tco  #322:     def __repr__(self) -> str:
+    def __repr__(self):  #322:     def __repr__(self) -> str:
 # type: (...) -> str
-        return _coconut_tail_call("Noun({_coconut_format_0}, {_coconut_format_1}, {_coconut_format_2}, {_coconut_format_3})".format, _coconut_format_0=(self.nominative), _coconut_format_1=(self.genitive), _coconut_format_2=(self.gender), _coconut_format_3=(self.meaning))  #324:         return f"Noun({self.nominative}, {self.genitive}, {self.gender}, {self.meaning})"
+        return _coconut_tail_call("Noun({_coconut_format_0}, {_coconut_format_1}, {_coconut_format_2}, {_coconut_format_3})".format, _coconut_format_0=(self.nominative), _coconut_format_1=(self.genitive), _coconut_format_2=(self.gender), _coconut_format_3=(self.meaning))  #323:         return f"Noun({self.nominative}, {self.genitive}, {self.gender}, {self.meaning})"
 
 
-    @_coconut_tco  #326:     def __str__(self) -> str:
-    def __str__(self):  #326:     def __str__(self) -> str:
+    @_coconut_tco  #325:     def __str__(self) -> str:
+    def __str__(self):  #325:     def __str__(self) -> str:
 # type: (...) -> str
-        if self.gender in GENDER_SHORTHAND:  #327:         if self.gender in GENDER_SHORTHAND:
-            return _coconut_tail_call("{_coconut_format_0}: {_coconut_format_1}, {_coconut_format_2}, ({_coconut_format_3})".format, _coconut_format_0=(self.meaning), _coconut_format_1=(self.nominative), _coconut_format_2=(self.genitive), _coconut_format_3=(GENDER_SHORTHAND[self.gender]))  #328:             return f"{self.meaning}: {self.nominative}, {self.genitive}, ({GENDER_SHORTHAND[self.gender]})"
+        if self.gender in GENDER_SHORTHAND:  #326:         if self.gender in GENDER_SHORTHAND:
+            return _coconut_tail_call("{_coconut_format_0}: {_coconut_format_1}, {_coconut_format_2}, ({_coconut_format_3})".format, _coconut_format_0=(self.meaning), _coconut_format_1=(self.nominative), _coconut_format_2=(self.genitive), _coconut_format_3=(GENDER_SHORTHAND[self.gender]))  #327:             return f"{self.meaning}: {self.nominative}, {self.genitive}, ({GENDER_SHORTHAND[self.gender]})"
 
-        raise ValueError("Gender {_coconut_format_0} not recognised".format(_coconut_format_0=(self.gender)))  # pragma: no cover # this should never occur  #330:         raise ValueError(
+        raise ValueError("Gender {_coconut_format_0} not recognised".format(_coconut_format_0=(self.gender)))  # pragma: no cover # this should never occur  #329:         raise ValueError(
 
 
-_coconut_call_set_names(Noun)  #334:         )  # pragma: no cover # this should never occur
+_coconut_call_set_names(Noun)  #333:         )  # pragma: no cover # this should never occur

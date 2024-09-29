@@ -3,14 +3,13 @@
 import lemminflect
 
 from .exceptions import InvalidWordError
-from typing import no_type_check
+
 
 if TYPE_CHECKING:
     from .. import accido
 
 
-@no_type_check
-def find_adjective_inflections(
+def find_adjective_inflections(  # type: ignore[return]
     adjective: str,
     components: accido.misc.EndingComponents,
 ) -> set[str]:

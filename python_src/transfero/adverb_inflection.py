@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# __coconut_hash__ = 0xcbea2ffe
+# __coconut_hash__ = 0xcfc4081d
 
 # Compiled with Coconut version 3.1.2
 
@@ -60,13 +60,7 @@ else:
 
 
 import lemminflect  #3: import lemminflect
-if _coconut.typing.TYPE_CHECKING:  #4: from typing import no_type_check
-    from typing import no_type_check  #4: from typing import no_type_check
-else:  #4: from typing import no_type_check
-    try:  #4: from typing import no_type_check
-        no_type_check = _coconut.typing.no_type_check  #4: from typing import no_type_check
-    except _coconut.AttributeError as _coconut_imp_err:  #4: from typing import no_type_check
-        raise _coconut.ImportError(_coconut.str(_coconut_imp_err))  #4: from typing import no_type_check
+
 
 from .exceptions import InvalidWordError  #6: from .exceptions import InvalidWordError
 
@@ -74,12 +68,11 @@ if TYPE_CHECKING:  #8: if TYPE_CHECKING:
     from .. import accido  #9:     from .. import accido
 
 
-@no_type_check  #12: @no_type_check
-@_coconut_tco  #13: def find_adverb_inflections(
-def find_adverb_inflections(adverb,  # type: str  #13: def find_adverb_inflections(
-    components,  # type: accido.misc.EndingComponents  #13: def find_adverb_inflections(
-    ):  #13: def find_adverb_inflections(
-# type: (...) -> set[str]
+@_coconut_tco  # type: ignore[return]  #12: def find_adverb_inflections(  # type: ignore[return]
+def find_adverb_inflections(adverb,  # type: str  # type: ignore[return]  #12: def find_adverb_inflections(  # type: ignore[return]
+    components,  # type: accido.misc.EndingComponents  # type: ignore[return]  #12: def find_adverb_inflections(  # type: ignore[return]
+    ):  # type: ignore[return]  #12: def find_adverb_inflections(  # type: ignore[return]
+# type: (...) -> set[str]  # type: ignore[return]
     """Inflect English adverbs using the degree.
 
     Parameters
@@ -100,40 +93,40 @@ def find_adverb_inflections(adverb,  # type: str  #13: def find_adverb_inflectio
         If the word is not a valid English adverb.
     ValueError
         If the input (other than the word itself) is invalid.
-    """  #37:     """
-    if not hasattr(components, "degree"):  #38:     if not hasattr(components, "degree"):
-        raise ValueError("Degree must be specified")  #39:         raise ValueError("Degree must be specified")
+    """  #36:     """
+    if not hasattr(components, "degree"):  #37:     if not hasattr(components, "degree"):
+        raise ValueError("Degree must be specified")  #38:         raise ValueError("Degree must be specified")
 
-    try:  #41:     try:
-        lemma = lemminflect.getLemma(adverb, "ADV")[0]  # type: str  #42:         lemma: str = lemminflect.getLemma(adverb, "ADV")[0]
-        if "__annotations__" not in _coconut.locals():  #42:         lemma: str = lemminflect.getLemma(adverb, "ADV")[0]
-            __annotations__ = {}  # type: ignore  #42:         lemma: str = lemminflect.getLemma(adverb, "ADV")[0]
-        __annotations__["lemma"] = 'str'  #42:         lemma: str = lemminflect.getLemma(adverb, "ADV")[0]
-    except KeyError as e:  #43:     except KeyError as e:
-        _coconut_raise_from_0 = InvalidWordError("Word {_coconut_format_0} is not an adverb".format(_coconut_format_0=(adverb)))  #44:         raise InvalidWordError(f"Word {adverb} is not an adverb") from e
-        _coconut_raise_from_0.__cause__ = e  #44:         raise InvalidWordError(f"Word {adverb} is not an adverb") from e
-        raise _coconut_raise_from_0  #44:         raise InvalidWordError(f"Word {adverb} is not an adverb") from e
+    try:  #40:     try:
+        lemma = lemminflect.getLemma(adverb, "ADV")[0]  # type: str  #41:         lemma: str = lemminflect.getLemma(adverb, "ADV")[0]
+        if "__annotations__" not in _coconut.locals():  #41:         lemma: str = lemminflect.getLemma(adverb, "ADV")[0]
+            __annotations__ = {}  # type: ignore  #41:         lemma: str = lemminflect.getLemma(adverb, "ADV")[0]
+        __annotations__["lemma"] = 'str'  #41:         lemma: str = lemminflect.getLemma(adverb, "ADV")[0]
+    except KeyError as e:  #42:     except KeyError as e:
+        _coconut_raise_from_0 = InvalidWordError("Word {_coconut_format_0} is not an adverb".format(_coconut_format_0=(adverb)))  #43:         raise InvalidWordError(f"Word {adverb} is not an adverb") from e
+        _coconut_raise_from_0.__cause__ = e  #43:         raise InvalidWordError(f"Word {adverb} is not an adverb") from e
+        raise _coconut_raise_from_0  #43:         raise InvalidWordError(f"Word {adverb} is not an adverb") from e
 
-    _coconut_case_match_to_0 = components.degree  #46:     match components.degree:
-    _coconut_case_match_check_0 = False  #46:     match components.degree:
-    if _coconut_case_match_to_0 == "positive":  #46:     match components.degree:
-        _coconut_case_match_check_0 = True  #46:     match components.degree:
-    if _coconut_case_match_check_0:  #46:     match components.degree:
-        return _coconut_tail_call(_coconut.set, (lemma,))  #48:             return {lemma}
+    _coconut_case_match_to_0 = components.degree  #45:     match components.degree:
+    _coconut_case_match_check_0 = False  #45:     match components.degree:
+    if _coconut_case_match_to_0 == "positive":  #45:     match components.degree:
+        _coconut_case_match_check_0 = True  #45:     match components.degree:
+    if _coconut_case_match_check_0:  #45:     match components.degree:
+        return _coconut_tail_call(_coconut.set, (lemma,))  #47:             return {lemma}
 
-    if not _coconut_case_match_check_0:  #50:         case "comparative":
-        if _coconut_case_match_to_0 == "comparative":  #50:         case "comparative":
-            _coconut_case_match_check_0 = True  #50:         case "comparative":
-        if _coconut_case_match_check_0:  #50:         case "comparative":
-            return _coconut_tail_call(_coconut.set, ("more {_coconut_format_0}".format(_coconut_format_0=(lemma)),))  #51:             return {f"more {lemma}"}
+    if not _coconut_case_match_check_0:  #49:         case "comparative":
+        if _coconut_case_match_to_0 == "comparative":  #49:         case "comparative":
+            _coconut_case_match_check_0 = True  #49:         case "comparative":
+        if _coconut_case_match_check_0:  #49:         case "comparative":
+            return _coconut_tail_call(_coconut.set, ("more {_coconut_format_0}".format(_coconut_format_0=(lemma)),))  #50:             return {f"more {lemma}"}
 
-    if not _coconut_case_match_check_0:  #53:         case "superlative":
-        if _coconut_case_match_to_0 == "superlative":  #53:         case "superlative":
-            _coconut_case_match_check_0 = True  #53:         case "superlative":
-        if _coconut_case_match_check_0:  #53:         case "superlative":
-            return _coconut_tail_call(_coconut.set, ("most {_coconut_format_0}".format(_coconut_format_0=(lemma)), "very {_coconut_format_0}".format(_coconut_format_0=(lemma)), "extremely {_coconut_format_0}".format(_coconut_format_0=(lemma)), "rather {_coconut_format_0}".format(_coconut_format_0=(lemma)), "too {_coconut_format_0}".format(_coconut_format_0=(lemma)), "quite {_coconut_format_0}".format(_coconut_format_0=(lemma)),))  #54:             return {
+    if not _coconut_case_match_check_0:  #52:         case "superlative":
+        if _coconut_case_match_to_0 == "superlative":  #52:         case "superlative":
+            _coconut_case_match_check_0 = True  #52:         case "superlative":
+        if _coconut_case_match_check_0:  #52:         case "superlative":
+            return _coconut_tail_call(_coconut.set, ("most {_coconut_format_0}".format(_coconut_format_0=(lemma)), "very {_coconut_format_0}".format(_coconut_format_0=(lemma)), "extremely {_coconut_format_0}".format(_coconut_format_0=(lemma)), "rather {_coconut_format_0}".format(_coconut_format_0=(lemma)), "too {_coconut_format_0}".format(_coconut_format_0=(lemma)), "quite {_coconut_format_0}".format(_coconut_format_0=(lemma)),))  #53:             return {
 
-    if not _coconut_case_match_check_0:  #63:         case _:
-        _coconut_case_match_check_0 = True  #63:         case _:
-        if _coconut_case_match_check_0:  #63:         case _:
-            raise ValueError("Invalid degree: '{_coconut_format_0}'".format(_coconut_format_0=(components.degree)))  #64:             raise ValueError(f"Invalid degree: '{components.degree}'")
+    if not _coconut_case_match_check_0:  #62:         case _:
+        _coconut_case_match_check_0 = True  #62:         case _:
+        if _coconut_case_match_check_0:  #62:         case _:
+            raise ValueError("Invalid degree: '{_coconut_format_0}'".format(_coconut_format_0=(components.degree)))  #63:             raise ValueError(f"Invalid degree: '{components.degree}'")

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# __coconut_hash__ = 0x3524bfde
+# __coconut_hash__ = 0xb2b48ae6
 
 # Compiled with Coconut version 3.1.2
 
@@ -59,30 +59,23 @@ else:
 
 
 
-try:  #3: from typing import Literal, no_type_check
-    _coconut_sys_0 = sys  # type: ignore  #3: from typing import Literal, no_type_check
-except _coconut.NameError:  #3: from typing import Literal, no_type_check
-    _coconut_sys_0 = _coconut_sentinel  #3: from typing import Literal, no_type_check
-sys = _coconut_sys  #3: from typing import Literal, no_type_check
-if sys.version_info >= (3, 8):  #3: from typing import Literal, no_type_check
-    if _coconut.typing.TYPE_CHECKING:  #3: from typing import Literal, no_type_check
-        from typing import Literal  #3: from typing import Literal, no_type_check
-    else:  #3: from typing import Literal, no_type_check
-        try:  #3: from typing import Literal, no_type_check
-            Literal = _coconut.typing.Literal  #3: from typing import Literal, no_type_check
-        except _coconut.AttributeError as _coconut_imp_err:  #3: from typing import Literal, no_type_check
-            raise _coconut.ImportError(_coconut.str(_coconut_imp_err))  #3: from typing import Literal, no_type_check
-else:  #3: from typing import Literal, no_type_check
-    from typing_extensions import Literal  #3: from typing import Literal, no_type_check
-if _coconut_sys_0 is not _coconut_sentinel:  #3: from typing import Literal, no_type_check
-    sys = _coconut_sys_0  #3: from typing import Literal, no_type_check
-if _coconut.typing.TYPE_CHECKING:  #3: from typing import Literal, no_type_check
-    from typing import no_type_check  #3: from typing import Literal, no_type_check
-else:  #3: from typing import Literal, no_type_check
-    try:  #3: from typing import Literal, no_type_check
-        no_type_check = _coconut.typing.no_type_check  #3: from typing import Literal, no_type_check
-    except _coconut.AttributeError as _coconut_imp_err:  #3: from typing import Literal, no_type_check
-        raise _coconut.ImportError(_coconut.str(_coconut_imp_err))  #3: from typing import Literal, no_type_check
+try:  #3: from typing import Literal
+    _coconut_sys_0 = sys  # type: ignore  #3: from typing import Literal
+except _coconut.NameError:  #3: from typing import Literal
+    _coconut_sys_0 = _coconut_sentinel  #3: from typing import Literal
+sys = _coconut_sys  #3: from typing import Literal
+if sys.version_info >= (3, 8):  #3: from typing import Literal
+    if _coconut.typing.TYPE_CHECKING:  #3: from typing import Literal
+        from typing import Literal  #3: from typing import Literal
+    else:  #3: from typing import Literal
+        try:  #3: from typing import Literal
+            Literal = _coconut.typing.Literal  #3: from typing import Literal
+        except _coconut.AttributeError as _coconut_imp_err:  #3: from typing import Literal
+            raise _coconut.ImportError(_coconut.str(_coconut_imp_err))  #3: from typing import Literal
+else:  #3: from typing import Literal
+    from typing_extensions import Literal  #3: from typing import Literal
+if _coconut_sys_0 is not _coconut_sentinel:  #3: from typing import Literal
+    sys = _coconut_sys_0  #3: from typing import Literal
 
 
 import lemminflect  #6: import lemminflect
@@ -139,13 +132,12 @@ def _verify_verb_inflections(components  # type: accido.misc.EndingComponents  #
         raise ValueError("Invalid tense: '{_coconut_format_0}'".format(_coconut_format_0=(components.tense)))  #68:         raise ValueError(f"Invalid tense: '{components.tense}'")
 
 
-
-@no_type_check  #71: @no_type_check
-@_coconut_tco  #72: def find_verb_inflections(
-def find_verb_inflections(verb,  # type: str  #72: def find_verb_inflections(
-    components,  # type: accido.misc.EndingComponents  #72: def find_verb_inflections(
-    ):  #72: def find_verb_inflections(
-# type: (...) -> set[str]
+# type: ignore[return]
+@_coconut_tco  # type: ignore[return]  #71: def find_verb_inflections(  # type: ignore[return]
+def find_verb_inflections(verb,  # type: str  # type: ignore[return]  #71: def find_verb_inflections(  # type: ignore[return]
+    components,  # type: accido.misc.EndingComponents  # type: ignore[return]  #71: def find_verb_inflections(  # type: ignore[return]
+    ):  # type: ignore[return]  #71: def find_verb_inflections(  # type: ignore[return]
+# type: (...) -> set[str]  # type: ignore[return]
     """Inflect English verbs using the tense, voice, mood, number and
     person. If a participle is queried, find_participle_inflections is ran
     instead.
@@ -171,396 +163,395 @@ def find_verb_inflections(verb,  # type: str  #72: def find_verb_inflections(
         If the word is not a valid English verb.
     ValueError
         If the input (other than the word itself) is invalid.
-    """  # noqa: D205  #101:     """  # noqa: D205
-    _verify_verb_inflections(components)  #102:     _verify_verb_inflections(components)
+    """  # noqa: D205  #100:     """  # noqa: D205
+    _verify_verb_inflections(components)  #101:     _verify_verb_inflections(components)
 
-    if components.mood == "participle":  #104:     if components.mood == "participle":
-        return _coconut_tail_call(_find_participle_inflections, verb, components)  #105:         return _find_participle_inflections(verb, components)
+    if components.mood == "participle":  #103:     if components.mood == "participle":
+        return _coconut_tail_call(_find_participle_inflections, verb, components)  #104:         return _find_participle_inflections(verb, components)
 
-    try:  #107:     try:
-        lemma = lemminflect.getLemma(verb, "VERB")[0]  # type: str  #108:         lemma: str = lemminflect.getLemma(verb, "VERB")[0]
-        if "__annotations__" not in _coconut.locals():  #108:         lemma: str = lemminflect.getLemma(verb, "VERB")[0]
-            __annotations__ = {}  # type: ignore  #108:         lemma: str = lemminflect.getLemma(verb, "VERB")[0]
-        __annotations__["lemma"] = 'str'  #108:         lemma: str = lemminflect.getLemma(verb, "VERB")[0]
-    except KeyError as e:  #109:     except KeyError as e:
-        _coconut_raise_from_0 = InvalidWordError("Word {_coconut_format_0} is not a verb".format(_coconut_format_0=(verb)))  #110:         raise InvalidWordError(f"Word {verb} is not a verb") from e
-        _coconut_raise_from_0.__cause__ = e  #110:         raise InvalidWordError(f"Word {verb} is not a verb") from e
-        raise _coconut_raise_from_0  #110:         raise InvalidWordError(f"Word {verb} is not a verb") from e
+    try:  #106:     try:
+        lemma = lemminflect.getLemma(verb, "VERB")[0]  # type: str  #107:         lemma: str = lemminflect.getLemma(verb, "VERB")[0]
+        if "__annotations__" not in _coconut.locals():  #107:         lemma: str = lemminflect.getLemma(verb, "VERB")[0]
+            __annotations__ = {}  # type: ignore  #107:         lemma: str = lemminflect.getLemma(verb, "VERB")[0]
+        __annotations__["lemma"] = 'str'  #107:         lemma: str = lemminflect.getLemma(verb, "VERB")[0]
+    except KeyError as e:  #108:     except KeyError as e:
+        _coconut_raise_from_0 = InvalidWordError("Word {_coconut_format_0} is not a verb".format(_coconut_format_0=(verb)))  #109:         raise InvalidWordError(f"Word {verb} is not a verb") from e
+        _coconut_raise_from_0.__cause__ = e  #109:         raise InvalidWordError(f"Word {verb} is not a verb") from e
+        raise _coconut_raise_from_0  #109:         raise InvalidWordError(f"Word {verb} is not a verb") from e
 
-    _coconut_case_match_to_0 = (components.tense, components.voice, components.mood)  #112:     match (components.tense, components.voice, components.mood):
-    _coconut_case_match_check_0 = False  #112:     match (components.tense, components.voice, components.mood):
-    if (_coconut.isinstance(_coconut_case_match_to_0, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_0) == 3) and (_coconut_case_match_to_0[0] == "present") and (_coconut_case_match_to_0[1] == "active") and (_coconut_case_match_to_0[2] == "indicative"):  #112:     match (components.tense, components.voice, components.mood):
-        _coconut_case_match_check_0 = True  #112:     match (components.tense, components.voice, components.mood):
-    if _coconut_case_match_check_0:  #112:     match (components.tense, components.voice, components.mood):
-        return _coconut_tail_call(_find_preactind_inflections, lemma, components.number, components.person)  #114:             return _find_preactind_inflections(
+    _coconut_case_match_to_0 = (components.tense, components.voice, components.mood)  #111:     match (components.tense, components.voice, components.mood):
+    _coconut_case_match_check_0 = False  #111:     match (components.tense, components.voice, components.mood):
+    if (_coconut.isinstance(_coconut_case_match_to_0, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_0) == 3) and (_coconut_case_match_to_0[0] == "present") and (_coconut_case_match_to_0[1] == "active") and (_coconut_case_match_to_0[2] == "indicative"):  #111:     match (components.tense, components.voice, components.mood):
+        _coconut_case_match_check_0 = True  #111:     match (components.tense, components.voice, components.mood):
+    if _coconut_case_match_check_0:  #111:     match (components.tense, components.voice, components.mood):
+        return _coconut_tail_call(_find_preactind_inflections, lemma, components.number, components.person)  #113:             return _find_preactind_inflections(
 
-    if not _coconut_case_match_check_0:  #120:         case ("imperfect", "active", "indicative"):
-        if (_coconut.isinstance(_coconut_case_match_to_0, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_0) == 3) and (_coconut_case_match_to_0[0] == "imperfect") and (_coconut_case_match_to_0[1] == "active") and (_coconut_case_match_to_0[2] == "indicative"):  #120:         case ("imperfect", "active", "indicative"):
-            _coconut_case_match_check_0 = True  #120:         case ("imperfect", "active", "indicative"):
-        if _coconut_case_match_check_0:  #120:         case ("imperfect", "active", "indicative"):
-            return _coconut_tail_call(_find_impactind_inflections, lemma, components.number, components.person)  #121:             return _find_impactind_inflections(
+    if not _coconut_case_match_check_0:  #119:         case ("imperfect", "active", "indicative"):
+        if (_coconut.isinstance(_coconut_case_match_to_0, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_0) == 3) and (_coconut_case_match_to_0[0] == "imperfect") and (_coconut_case_match_to_0[1] == "active") and (_coconut_case_match_to_0[2] == "indicative"):  #119:         case ("imperfect", "active", "indicative"):
+            _coconut_case_match_check_0 = True  #119:         case ("imperfect", "active", "indicative"):
+        if _coconut_case_match_check_0:  #119:         case ("imperfect", "active", "indicative"):
+            return _coconut_tail_call(_find_impactind_inflections, lemma, components.number, components.person)  #120:             return _find_impactind_inflections(
 
-    if not _coconut_case_match_check_0:  #127:         case ("perfect", "active", "indicative"):
-        if (_coconut.isinstance(_coconut_case_match_to_0, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_0) == 3) and (_coconut_case_match_to_0[0] == "perfect") and (_coconut_case_match_to_0[1] == "active") and (_coconut_case_match_to_0[2] == "indicative"):  #127:         case ("perfect", "active", "indicative"):
-            _coconut_case_match_check_0 = True  #127:         case ("perfect", "active", "indicative"):
-        if _coconut_case_match_check_0:  #127:         case ("perfect", "active", "indicative"):
-            return _coconut_tail_call(_find_peractind_inflections, lemma, components.number, components.person)  #128:             return _find_peractind_inflections(
+    if not _coconut_case_match_check_0:  #126:         case ("perfect", "active", "indicative"):
+        if (_coconut.isinstance(_coconut_case_match_to_0, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_0) == 3) and (_coconut_case_match_to_0[0] == "perfect") and (_coconut_case_match_to_0[1] == "active") and (_coconut_case_match_to_0[2] == "indicative"):  #126:         case ("perfect", "active", "indicative"):
+            _coconut_case_match_check_0 = True  #126:         case ("perfect", "active", "indicative"):
+        if _coconut_case_match_check_0:  #126:         case ("perfect", "active", "indicative"):
+            return _coconut_tail_call(_find_peractind_inflections, lemma, components.number, components.person)  #127:             return _find_peractind_inflections(
 
-    if not _coconut_case_match_check_0:  #134:         case ("pluperfect", "active", "indicative"):
-        if (_coconut.isinstance(_coconut_case_match_to_0, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_0) == 3) and (_coconut_case_match_to_0[0] == "pluperfect") and (_coconut_case_match_to_0[1] == "active") and (_coconut_case_match_to_0[2] == "indicative"):  #134:         case ("pluperfect", "active", "indicative"):
-            _coconut_case_match_check_0 = True  #134:         case ("pluperfect", "active", "indicative"):
-        if _coconut_case_match_check_0:  #134:         case ("pluperfect", "active", "indicative"):
-            return _coconut_tail_call(_find_plpactind_inflections, lemma, components.number, components.person)  #135:             return _find_plpactind_inflections(
+    if not _coconut_case_match_check_0:  #133:         case ("pluperfect", "active", "indicative"):
+        if (_coconut.isinstance(_coconut_case_match_to_0, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_0) == 3) and (_coconut_case_match_to_0[0] == "pluperfect") and (_coconut_case_match_to_0[1] == "active") and (_coconut_case_match_to_0[2] == "indicative"):  #133:         case ("pluperfect", "active", "indicative"):
+            _coconut_case_match_check_0 = True  #133:         case ("pluperfect", "active", "indicative"):
+        if _coconut_case_match_check_0:  #133:         case ("pluperfect", "active", "indicative"):
+            return _coconut_tail_call(_find_plpactind_inflections, lemma, components.number, components.person)  #134:             return _find_plpactind_inflections(
 
-    if not _coconut_case_match_check_0:  #141:         case ("present", "active", "infinitive"):
-        if (_coconut.isinstance(_coconut_case_match_to_0, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_0) == 3) and (_coconut_case_match_to_0[0] == "present") and (_coconut_case_match_to_0[1] == "active") and (_coconut_case_match_to_0[2] == "infinitive"):  #141:         case ("present", "active", "infinitive"):
-            _coconut_case_match_check_0 = True  #141:         case ("present", "active", "infinitive"):
-        if _coconut_case_match_check_0:  #141:         case ("present", "active", "infinitive"):
-            return _coconut_tail_call(_find_preactinf_inflections, lemma)  #142:             return _find_preactinf_inflections(lemma)
+    if not _coconut_case_match_check_0:  #140:         case ("present", "active", "infinitive"):
+        if (_coconut.isinstance(_coconut_case_match_to_0, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_0) == 3) and (_coconut_case_match_to_0[0] == "present") and (_coconut_case_match_to_0[1] == "active") and (_coconut_case_match_to_0[2] == "infinitive"):  #140:         case ("present", "active", "infinitive"):
+            _coconut_case_match_check_0 = True  #140:         case ("present", "active", "infinitive"):
+        if _coconut_case_match_check_0:  #140:         case ("present", "active", "infinitive"):
+            return _coconut_tail_call(_find_preactinf_inflections, lemma)  #141:             return _find_preactinf_inflections(lemma)
 
-    if not _coconut_case_match_check_0:  #144:         case ("present", "active", "imperative"):
-        if (_coconut.isinstance(_coconut_case_match_to_0, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_0) == 3) and (_coconut_case_match_to_0[0] == "present") and (_coconut_case_match_to_0[1] == "active") and (_coconut_case_match_to_0[2] == "imperative"):  #144:         case ("present", "active", "imperative"):
-            _coconut_case_match_check_0 = True  #144:         case ("present", "active", "imperative"):
-        if _coconut_case_match_check_0:  #144:         case ("present", "active", "imperative"):
-            return _coconut_tail_call(_find_preipe_inflections, lemma)  #145:             return _find_preipe_inflections(lemma)
+    if not _coconut_case_match_check_0:  #143:         case ("present", "active", "imperative"):
+        if (_coconut.isinstance(_coconut_case_match_to_0, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_0) == 3) and (_coconut_case_match_to_0[0] == "present") and (_coconut_case_match_to_0[1] == "active") and (_coconut_case_match_to_0[2] == "imperative"):  #143:         case ("present", "active", "imperative"):
+            _coconut_case_match_check_0 = True  #143:         case ("present", "active", "imperative"):
+        if _coconut_case_match_check_0:  #143:         case ("present", "active", "imperative"):
+            return _coconut_tail_call(_find_preipe_inflections, lemma)  #144:             return _find_preipe_inflections(lemma)
 
-    if not _coconut_case_match_check_0:  #147:         case _:
-        _coconut_case_match_check_0 = True  #147:         case _:
-        if _coconut_case_match_check_0:  #147:         case _:
-            raise NotImplementedError("The {_coconut_format_0} {_coconut_format_1} {_coconut_format_2} has not been implemented".format(_coconut_format_0=(components.tense), _coconut_format_1=(components.voice), _coconut_format_2=(components.mood)))  #148:             raise NotImplementedError(
+    if not _coconut_case_match_check_0:  #146:         case _:
+        _coconut_case_match_check_0 = True  #146:         case _:
+        if _coconut_case_match_check_0:  #146:         case _:
+            raise NotImplementedError("The {_coconut_format_0} {_coconut_format_1} {_coconut_format_2} has not been implemented".format(_coconut_format_0=(components.tense), _coconut_format_1=(components.voice), _coconut_format_2=(components.mood)))  #147:             raise NotImplementedError(
 
 
 
-@_coconut_tco  #153: def _find_preactind_inflections(
-def _find_preactind_inflections(lemma,  # type: str  #153: def _find_preactind_inflections(
-    number,  # type: Literal["singular", "plural"]  #153: def _find_preactind_inflections(
-    person,  # type: Literal[1, 2, 3]  #153: def _find_preactind_inflections(
-    ):  #153: def _find_preactind_inflections(
+@_coconut_tco  #152: def _find_preactind_inflections(
+def _find_preactind_inflections(lemma,  # type: str  #152: def _find_preactind_inflections(
+    number,  # type: Literal["singular", "plural"]  #152: def _find_preactind_inflections(
+    person,  # type: Literal[1, 2, 3]  #152: def _find_preactind_inflections(
+    ):  #152: def _find_preactind_inflections(
 # type: (...) -> set[str]
-    present_nonthird = lemminflect.getInflection(lemma, "VBP")[0]  # type: str  #158:     present_nonthird: str = lemminflect.getInflection(lemma, "VBP")[0]
-    if "__annotations__" not in _coconut.locals():  #158:     present_nonthird: str = lemminflect.getInflection(lemma, "VBP")[0]
-        __annotations__ = {}  # type: ignore  #158:     present_nonthird: str = lemminflect.getInflection(lemma, "VBP")[0]
-    __annotations__["present_nonthird"] = 'str'  #158:     present_nonthird: str = lemminflect.getInflection(lemma, "VBP")[0]
-    present_third = lemminflect.getInflection(lemma, "VBZ")[0]  # type: str  #159:     present_third: str = lemminflect.getInflection(lemma, "VBZ")[0]
-    if "__annotations__" not in _coconut.locals():  #159:     present_third: str = lemminflect.getInflection(lemma, "VBZ")[0]
-        __annotations__ = {}  # type: ignore  #159:     present_third: str = lemminflect.getInflection(lemma, "VBZ")[0]
-    __annotations__["present_third"] = 'str'  #159:     present_third: str = lemminflect.getInflection(lemma, "VBZ")[0]
-    present_participle = lemminflect.getInflection(lemma, "VBG")[0]  # type: str  #160:     present_participle: str = lemminflect.getInflection(lemma, "VBG")[0]
-    if "__annotations__" not in _coconut.locals():  #160:     present_participle: str = lemminflect.getInflection(lemma, "VBG")[0]
-        __annotations__ = {}  # type: ignore  #160:     present_participle: str = lemminflect.getInflection(lemma, "VBG")[0]
-    __annotations__["present_participle"] = 'str'  #160:     present_participle: str = lemminflect.getInflection(lemma, "VBG")[0]
+    present_nonthird = lemminflect.getInflection(lemma, "VBP")[0]  # type: str  #157:     present_nonthird: str = lemminflect.getInflection(lemma, "VBP")[0]
+    if "__annotations__" not in _coconut.locals():  #157:     present_nonthird: str = lemminflect.getInflection(lemma, "VBP")[0]
+        __annotations__ = {}  # type: ignore  #157:     present_nonthird: str = lemminflect.getInflection(lemma, "VBP")[0]
+    __annotations__["present_nonthird"] = 'str'  #157:     present_nonthird: str = lemminflect.getInflection(lemma, "VBP")[0]
+    present_third = lemminflect.getInflection(lemma, "VBZ")[0]  # type: str  #158:     present_third: str = lemminflect.getInflection(lemma, "VBZ")[0]
+    if "__annotations__" not in _coconut.locals():  #158:     present_third: str = lemminflect.getInflection(lemma, "VBZ")[0]
+        __annotations__ = {}  # type: ignore  #158:     present_third: str = lemminflect.getInflection(lemma, "VBZ")[0]
+    __annotations__["present_third"] = 'str'  #158:     present_third: str = lemminflect.getInflection(lemma, "VBZ")[0]
+    present_participle = lemminflect.getInflection(lemma, "VBG")[0]  # type: str  #159:     present_participle: str = lemminflect.getInflection(lemma, "VBG")[0]
+    if "__annotations__" not in _coconut.locals():  #159:     present_participle: str = lemminflect.getInflection(lemma, "VBG")[0]
+        __annotations__ = {}  # type: ignore  #159:     present_participle: str = lemminflect.getInflection(lemma, "VBG")[0]
+    __annotations__["present_participle"] = 'str'  #159:     present_participle: str = lemminflect.getInflection(lemma, "VBG")[0]
 
-    _coconut_case_match_to_1 = (number, person)  #162:     match (number, person):
-    _coconut_case_match_check_1 = False  #162:     match (number, person):
-    if (_coconut.isinstance(_coconut_case_match_to_1, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_1) == 2) and (_coconut_case_match_to_1[0] == "singular") and (_coconut_case_match_to_1[1] == 1):  #162:     match (number, person):
-        _coconut_case_match_check_1 = True  #162:     match (number, person):
-    if _coconut_case_match_check_1:  #162:     match (number, person):
-        return _coconut_tail_call(_coconut.set, ("I {_coconut_format_0}".format(_coconut_format_0=(present_nonthird)), "I am {_coconut_format_0}".format(_coconut_format_0=(present_participle)),))  #164:             return {
+    _coconut_case_match_to_1 = (number, person)  #161:     match (number, person):
+    _coconut_case_match_check_1 = False  #161:     match (number, person):
+    if (_coconut.isinstance(_coconut_case_match_to_1, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_1) == 2) and (_coconut_case_match_to_1[0] == "singular") and (_coconut_case_match_to_1[1] == 1):  #161:     match (number, person):
+        _coconut_case_match_check_1 = True  #161:     match (number, person):
+    if _coconut_case_match_check_1:  #161:     match (number, person):
+        return _coconut_tail_call(_coconut.set, ("I {_coconut_format_0}".format(_coconut_format_0=(present_nonthird)), "I am {_coconut_format_0}".format(_coconut_format_0=(present_participle)),))  #163:             return {
 
-    if not _coconut_case_match_check_1:  #169:         case ("plural", 1):
-        if (_coconut.isinstance(_coconut_case_match_to_1, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_1) == 2) and (_coconut_case_match_to_1[0] == "plural") and (_coconut_case_match_to_1[1] == 1):  #169:         case ("plural", 1):
-            _coconut_case_match_check_1 = True  #169:         case ("plural", 1):
-        if _coconut_case_match_check_1:  #169:         case ("plural", 1):
-            return _coconut_tail_call(_coconut.set, ("we {_coconut_format_0}".format(_coconut_format_0=(present_nonthird)), "we are {_coconut_format_0}".format(_coconut_format_0=(present_participle)),))  #170:             return {
+    if not _coconut_case_match_check_1:  #168:         case ("plural", 1):
+        if (_coconut.isinstance(_coconut_case_match_to_1, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_1) == 2) and (_coconut_case_match_to_1[0] == "plural") and (_coconut_case_match_to_1[1] == 1):  #168:         case ("plural", 1):
+            _coconut_case_match_check_1 = True  #168:         case ("plural", 1):
+        if _coconut_case_match_check_1:  #168:         case ("plural", 1):
+            return _coconut_tail_call(_coconut.set, ("we {_coconut_format_0}".format(_coconut_format_0=(present_nonthird)), "we are {_coconut_format_0}".format(_coconut_format_0=(present_participle)),))  #169:             return {
 
-    if not _coconut_case_match_check_1:  #175:         case ("singular", 2) | ("plural", 2):
-        _coconut_case_match_check_1 = True  #175:         case ("singular", 2) | ("plural", 2):
-        if _coconut_case_match_check_1:  #175:         case ("singular", 2) | ("plural", 2):
-            _coconut_case_match_check_1 = False  #175:         case ("singular", 2) | ("plural", 2):
-            if not _coconut_case_match_check_1:  #175:         case ("singular", 2) | ("plural", 2):
-                if (_coconut.isinstance(_coconut_case_match_to_1, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_1) == 2) and (_coconut_case_match_to_1[0] == "singular") and (_coconut_case_match_to_1[1] == 2):  #175:         case ("singular", 2) | ("plural", 2):
-                    _coconut_case_match_check_1 = True  #175:         case ("singular", 2) | ("plural", 2):
+    if not _coconut_case_match_check_1:  #174:         case ("singular", 2) | ("plural", 2):
+        _coconut_case_match_check_1 = True  #174:         case ("singular", 2) | ("plural", 2):
+        if _coconut_case_match_check_1:  #174:         case ("singular", 2) | ("plural", 2):
+            _coconut_case_match_check_1 = False  #174:         case ("singular", 2) | ("plural", 2):
+            if not _coconut_case_match_check_1:  #174:         case ("singular", 2) | ("plural", 2):
+                if (_coconut.isinstance(_coconut_case_match_to_1, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_1) == 2) and (_coconut_case_match_to_1[0] == "singular") and (_coconut_case_match_to_1[1] == 2):  #174:         case ("singular", 2) | ("plural", 2):
+                    _coconut_case_match_check_1 = True  #174:         case ("singular", 2) | ("plural", 2):
 
-            if not _coconut_case_match_check_1:  #175:         case ("singular", 2) | ("plural", 2):
-                if (_coconut.isinstance(_coconut_case_match_to_1, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_1) == 2) and (_coconut_case_match_to_1[0] == "plural") and (_coconut_case_match_to_1[1] == 2):  #175:         case ("singular", 2) | ("plural", 2):
-                    _coconut_case_match_check_1 = True  #175:         case ("singular", 2) | ("plural", 2):
-
-
-        if _coconut_case_match_check_1:  #175:         case ("singular", 2) | ("plural", 2):
-            return _coconut_tail_call(_coconut.set, ("you {_coconut_format_0}".format(_coconut_format_0=(present_nonthird)), "you are {_coconut_format_0}".format(_coconut_format_0=(present_participle)),))  #176:             return {
-
-    if not _coconut_case_match_check_1:  #181:         case ("singular", 3):
-        if (_coconut.isinstance(_coconut_case_match_to_1, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_1) == 2) and (_coconut_case_match_to_1[0] == "singular") and (_coconut_case_match_to_1[1] == 3):  #181:         case ("singular", 3):
-            _coconut_case_match_check_1 = True  #181:         case ("singular", 3):
-        if _coconut_case_match_check_1:  #181:         case ("singular", 3):
-            return _coconut_tail_call(_coconut.set, ("he {_coconut_format_0}".format(_coconut_format_0=(present_third)), "he is {_coconut_format_0}".format(_coconut_format_0=(present_participle)), "she {_coconut_format_0}".format(_coconut_format_0=(present_third)), "she is {_coconut_format_0}".format(_coconut_format_0=(present_participle)), "it {_coconut_format_0}".format(_coconut_format_0=(present_third)), "it is {_coconut_format_0}".format(_coconut_format_0=(present_participle)),))  #182:             return {
-
-    if not _coconut_case_match_check_1:  #191:         case ("plural", 3):
-        if (_coconut.isinstance(_coconut_case_match_to_1, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_1) == 2) and (_coconut_case_match_to_1[0] == "plural") and (_coconut_case_match_to_1[1] == 3):  #191:         case ("plural", 3):
-            _coconut_case_match_check_1 = True  #191:         case ("plural", 3):
-        if _coconut_case_match_check_1:  #191:         case ("plural", 3):
-            return _coconut_tail_call(_coconut.set, ("they {_coconut_format_0}".format(_coconut_format_0=(present_nonthird)), "they are {_coconut_format_0}".format(_coconut_format_0=(present_participle)),))  #192:             return {
-
-    raise ValueError("Invalid number and person: '{_coconut_format_0}' '{_coconut_format_1}'".format(_coconut_format_0=(number), _coconut_format_1=(person)))  #197:     raise ValueError(f"Invalid number and person: '{number}' '{person}'")
+            if not _coconut_case_match_check_1:  #174:         case ("singular", 2) | ("plural", 2):
+                if (_coconut.isinstance(_coconut_case_match_to_1, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_1) == 2) and (_coconut_case_match_to_1[0] == "plural") and (_coconut_case_match_to_1[1] == 2):  #174:         case ("singular", 2) | ("plural", 2):
+                    _coconut_case_match_check_1 = True  #174:         case ("singular", 2) | ("plural", 2):
 
 
+        if _coconut_case_match_check_1:  #174:         case ("singular", 2) | ("plural", 2):
+            return _coconut_tail_call(_coconut.set, ("you {_coconut_format_0}".format(_coconut_format_0=(present_nonthird)), "you are {_coconut_format_0}".format(_coconut_format_0=(present_participle)),))  #175:             return {
 
-@_coconut_tco  #200: def _find_impactind_inflections(
-def _find_impactind_inflections(lemma,  # type: str  #200: def _find_impactind_inflections(
-    number,  # type: Literal["singular", "plural"]  #200: def _find_impactind_inflections(
-    person,  # type: Literal[1, 2, 3]  #200: def _find_impactind_inflections(
-    ):  #200: def _find_impactind_inflections(
+    if not _coconut_case_match_check_1:  #180:         case ("singular", 3):
+        if (_coconut.isinstance(_coconut_case_match_to_1, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_1) == 2) and (_coconut_case_match_to_1[0] == "singular") and (_coconut_case_match_to_1[1] == 3):  #180:         case ("singular", 3):
+            _coconut_case_match_check_1 = True  #180:         case ("singular", 3):
+        if _coconut_case_match_check_1:  #180:         case ("singular", 3):
+            return _coconut_tail_call(_coconut.set, ("he {_coconut_format_0}".format(_coconut_format_0=(present_third)), "he is {_coconut_format_0}".format(_coconut_format_0=(present_participle)), "she {_coconut_format_0}".format(_coconut_format_0=(present_third)), "she is {_coconut_format_0}".format(_coconut_format_0=(present_participle)), "it {_coconut_format_0}".format(_coconut_format_0=(present_third)), "it is {_coconut_format_0}".format(_coconut_format_0=(present_participle)),))  #181:             return {
+
+    if not _coconut_case_match_check_1:  #190:         case ("plural", 3):
+        if (_coconut.isinstance(_coconut_case_match_to_1, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_1) == 2) and (_coconut_case_match_to_1[0] == "plural") and (_coconut_case_match_to_1[1] == 3):  #190:         case ("plural", 3):
+            _coconut_case_match_check_1 = True  #190:         case ("plural", 3):
+        if _coconut_case_match_check_1:  #190:         case ("plural", 3):
+            return _coconut_tail_call(_coconut.set, ("they {_coconut_format_0}".format(_coconut_format_0=(present_nonthird)), "they are {_coconut_format_0}".format(_coconut_format_0=(present_participle)),))  #191:             return {
+
+    raise ValueError("Invalid number and person: '{_coconut_format_0}' '{_coconut_format_1}'".format(_coconut_format_0=(number), _coconut_format_1=(person)))  #196:     raise ValueError(f"Invalid number and person: '{number}' '{person}'")
+
+
+
+@_coconut_tco  #199: def _find_impactind_inflections(
+def _find_impactind_inflections(lemma,  # type: str  #199: def _find_impactind_inflections(
+    number,  # type: Literal["singular", "plural"]  #199: def _find_impactind_inflections(
+    person,  # type: Literal[1, 2, 3]  #199: def _find_impactind_inflections(
+    ):  #199: def _find_impactind_inflections(
 # type: (...) -> set[str]
-    present_participle = lemminflect.getInflection(lemma, "VBG")[0]  # type: str  #205:     present_participle: str = lemminflect.getInflection(lemma, "VBG")[0]
-    if "__annotations__" not in _coconut.locals():  #205:     present_participle: str = lemminflect.getInflection(lemma, "VBG")[0]
-        __annotations__ = {}  # type: ignore  #205:     present_participle: str = lemminflect.getInflection(lemma, "VBG")[0]
-    __annotations__["present_participle"] = 'str'  #205:     present_participle: str = lemminflect.getInflection(lemma, "VBG")[0]
+    present_participle = lemminflect.getInflection(lemma, "VBG")[0]  # type: str  #204:     present_participle: str = lemminflect.getInflection(lemma, "VBG")[0]
+    if "__annotations__" not in _coconut.locals():  #204:     present_participle: str = lemminflect.getInflection(lemma, "VBG")[0]
+        __annotations__ = {}  # type: ignore  #204:     present_participle: str = lemminflect.getInflection(lemma, "VBG")[0]
+    __annotations__["present_participle"] = 'str'  #204:     present_participle: str = lemminflect.getInflection(lemma, "VBG")[0]
 
-    if lemma in STATIVE_VERBS:  #207:     if lemma in STATIVE_VERBS:
-        past = lemminflect.getInflection(lemma, "VBD")[0]  # type: str  #208:         past: str = lemminflect.getInflection(lemma, "VBD")[0]
-        if "__annotations__" not in _coconut.locals():  #208:         past: str = lemminflect.getInflection(lemma, "VBD")[0]
-            __annotations__ = {}  # type: ignore  #208:         past: str = lemminflect.getInflection(lemma, "VBD")[0]
-        __annotations__["past"] = 'str'  #208:         past: str = lemminflect.getInflection(lemma, "VBD")[0]
+    if lemma in STATIVE_VERBS:  #206:     if lemma in STATIVE_VERBS:
+        past = lemminflect.getInflection(lemma, "VBD")[0]  # type: str  #207:         past: str = lemminflect.getInflection(lemma, "VBD")[0]
+        if "__annotations__" not in _coconut.locals():  #207:         past: str = lemminflect.getInflection(lemma, "VBD")[0]
+            __annotations__ = {}  # type: ignore  #207:         past: str = lemminflect.getInflection(lemma, "VBD")[0]
+        __annotations__["past"] = 'str'  #207:         past: str = lemminflect.getInflection(lemma, "VBD")[0]
 
-        _coconut_case_match_to_2 = (number, person)  #210:         match (number, person):
-        _coconut_case_match_check_2 = False  #210:         match (number, person):
-        if (_coconut.isinstance(_coconut_case_match_to_2, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_2) == 2) and (_coconut_case_match_to_2[0] == "singular") and (_coconut_case_match_to_2[1] == 1):  #210:         match (number, person):
-            _coconut_case_match_check_2 = True  #210:         match (number, person):
-        if _coconut_case_match_check_2:  #210:         match (number, person):
-            return _coconut_tail_call(_coconut.set, ("I {_coconut_format_0}".format(_coconut_format_0=(past)), "I was {_coconut_format_0}".format(_coconut_format_0=(present_participle))))  #212:                 return {f"I {past}", f"I was {present_participle}"}
+        _coconut_case_match_to_2 = (number, person)  #209:         match (number, person):
+        _coconut_case_match_check_2 = False  #209:         match (number, person):
+        if (_coconut.isinstance(_coconut_case_match_to_2, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_2) == 2) and (_coconut_case_match_to_2[0] == "singular") and (_coconut_case_match_to_2[1] == 1):  #209:         match (number, person):
+            _coconut_case_match_check_2 = True  #209:         match (number, person):
+        if _coconut_case_match_check_2:  #209:         match (number, person):
+            return _coconut_tail_call(_coconut.set, ("I {_coconut_format_0}".format(_coconut_format_0=(past)), "I was {_coconut_format_0}".format(_coconut_format_0=(present_participle))))  #211:                 return {f"I {past}", f"I was {present_participle}"}
 
-        if not _coconut_case_match_check_2:  #214:             case ("plural", 1):
-            if (_coconut.isinstance(_coconut_case_match_to_2, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_2) == 2) and (_coconut_case_match_to_2[0] == "plural") and (_coconut_case_match_to_2[1] == 1):  #214:             case ("plural", 1):
-                _coconut_case_match_check_2 = True  #214:             case ("plural", 1):
-            if _coconut_case_match_check_2:  #214:             case ("plural", 1):
-                return _coconut_tail_call(_coconut.set, ("we {_coconut_format_0}".format(_coconut_format_0=(past)), "we were {_coconut_format_0}".format(_coconut_format_0=(present_participle))))  #215:                 return {f"we {past}", f"we were {present_participle}"}
+        if not _coconut_case_match_check_2:  #213:             case ("plural", 1):
+            if (_coconut.isinstance(_coconut_case_match_to_2, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_2) == 2) and (_coconut_case_match_to_2[0] == "plural") and (_coconut_case_match_to_2[1] == 1):  #213:             case ("plural", 1):
+                _coconut_case_match_check_2 = True  #213:             case ("plural", 1):
+            if _coconut_case_match_check_2:  #213:             case ("plural", 1):
+                return _coconut_tail_call(_coconut.set, ("we {_coconut_format_0}".format(_coconut_format_0=(past)), "we were {_coconut_format_0}".format(_coconut_format_0=(present_participle))))  #214:                 return {f"we {past}", f"we were {present_participle}"}
 
-        if not _coconut_case_match_check_2:  #217:             case ("singular", 2) | ("plural", 2):
-            _coconut_case_match_check_2 = True  #217:             case ("singular", 2) | ("plural", 2):
-            if _coconut_case_match_check_2:  #217:             case ("singular", 2) | ("plural", 2):
-                _coconut_case_match_check_2 = False  #217:             case ("singular", 2) | ("plural", 2):
-                if not _coconut_case_match_check_2:  #217:             case ("singular", 2) | ("plural", 2):
-                    if (_coconut.isinstance(_coconut_case_match_to_2, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_2) == 2) and (_coconut_case_match_to_2[0] == "singular") and (_coconut_case_match_to_2[1] == 2):  #217:             case ("singular", 2) | ("plural", 2):
-                        _coconut_case_match_check_2 = True  #217:             case ("singular", 2) | ("plural", 2):
+        if not _coconut_case_match_check_2:  #216:             case ("singular", 2) | ("plural", 2):
+            _coconut_case_match_check_2 = True  #216:             case ("singular", 2) | ("plural", 2):
+            if _coconut_case_match_check_2:  #216:             case ("singular", 2) | ("plural", 2):
+                _coconut_case_match_check_2 = False  #216:             case ("singular", 2) | ("plural", 2):
+                if not _coconut_case_match_check_2:  #216:             case ("singular", 2) | ("plural", 2):
+                    if (_coconut.isinstance(_coconut_case_match_to_2, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_2) == 2) and (_coconut_case_match_to_2[0] == "singular") and (_coconut_case_match_to_2[1] == 2):  #216:             case ("singular", 2) | ("plural", 2):
+                        _coconut_case_match_check_2 = True  #216:             case ("singular", 2) | ("plural", 2):
 
-                if not _coconut_case_match_check_2:  #217:             case ("singular", 2) | ("plural", 2):
-                    if (_coconut.isinstance(_coconut_case_match_to_2, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_2) == 2) and (_coconut_case_match_to_2[0] == "plural") and (_coconut_case_match_to_2[1] == 2):  #217:             case ("singular", 2) | ("plural", 2):
-                        _coconut_case_match_check_2 = True  #217:             case ("singular", 2) | ("plural", 2):
+                if not _coconut_case_match_check_2:  #216:             case ("singular", 2) | ("plural", 2):
+                    if (_coconut.isinstance(_coconut_case_match_to_2, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_2) == 2) and (_coconut_case_match_to_2[0] == "plural") and (_coconut_case_match_to_2[1] == 2):  #216:             case ("singular", 2) | ("plural", 2):
+                        _coconut_case_match_check_2 = True  #216:             case ("singular", 2) | ("plural", 2):
 
 
-            if _coconut_case_match_check_2:  #217:             case ("singular", 2) | ("plural", 2):
-                return _coconut_tail_call(_coconut.set, ("you {_coconut_format_0}".format(_coconut_format_0=(past)), "you were {_coconut_format_0}".format(_coconut_format_0=(present_participle))))  #218:                 return {f"you {past}", f"you were {present_participle}"}
+            if _coconut_case_match_check_2:  #216:             case ("singular", 2) | ("plural", 2):
+                return _coconut_tail_call(_coconut.set, ("you {_coconut_format_0}".format(_coconut_format_0=(past)), "you were {_coconut_format_0}".format(_coconut_format_0=(present_participle))))  #217:                 return {f"you {past}", f"you were {present_participle}"}
 
-        if not _coconut_case_match_check_2:  #220:             case ("singular", 3):
-            if (_coconut.isinstance(_coconut_case_match_to_2, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_2) == 2) and (_coconut_case_match_to_2[0] == "singular") and (_coconut_case_match_to_2[1] == 3):  #220:             case ("singular", 3):
-                _coconut_case_match_check_2 = True  #220:             case ("singular", 3):
-            if _coconut_case_match_check_2:  #220:             case ("singular", 3):
-                return _coconut_tail_call(_coconut.set, ("he {_coconut_format_0}".format(_coconut_format_0=(past)), "he was {_coconut_format_0}".format(_coconut_format_0=(present_participle)), "she {_coconut_format_0}".format(_coconut_format_0=(past)), "she was {_coconut_format_0}".format(_coconut_format_0=(present_participle)), "it {_coconut_format_0}".format(_coconut_format_0=(past)), "it was {_coconut_format_0}".format(_coconut_format_0=(present_participle)),))  #221:                 return {
+        if not _coconut_case_match_check_2:  #219:             case ("singular", 3):
+            if (_coconut.isinstance(_coconut_case_match_to_2, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_2) == 2) and (_coconut_case_match_to_2[0] == "singular") and (_coconut_case_match_to_2[1] == 3):  #219:             case ("singular", 3):
+                _coconut_case_match_check_2 = True  #219:             case ("singular", 3):
+            if _coconut_case_match_check_2:  #219:             case ("singular", 3):
+                return _coconut_tail_call(_coconut.set, ("he {_coconut_format_0}".format(_coconut_format_0=(past)), "he was {_coconut_format_0}".format(_coconut_format_0=(present_participle)), "she {_coconut_format_0}".format(_coconut_format_0=(past)), "she was {_coconut_format_0}".format(_coconut_format_0=(present_participle)), "it {_coconut_format_0}".format(_coconut_format_0=(past)), "it was {_coconut_format_0}".format(_coconut_format_0=(present_participle)),))  #220:                 return {
 
-        if not _coconut_case_match_check_2:  #230:             case ("plural", 3):
-            if (_coconut.isinstance(_coconut_case_match_to_2, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_2) == 2) and (_coconut_case_match_to_2[0] == "plural") and (_coconut_case_match_to_2[1] == 3):  #230:             case ("plural", 3):
-                _coconut_case_match_check_2 = True  #230:             case ("plural", 3):
-            if _coconut_case_match_check_2:  #230:             case ("plural", 3):
-                return _coconut_tail_call(_coconut.set, ("they {_coconut_format_0}".format(_coconut_format_0=(past)), "they were {_coconut_format_0}".format(_coconut_format_0=(present_participle))))  #231:                 return {f"they {past}", f"they were {present_participle}"}
+        if not _coconut_case_match_check_2:  #229:             case ("plural", 3):
+            if (_coconut.isinstance(_coconut_case_match_to_2, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_2) == 2) and (_coconut_case_match_to_2[0] == "plural") and (_coconut_case_match_to_2[1] == 3):  #229:             case ("plural", 3):
+                _coconut_case_match_check_2 = True  #229:             case ("plural", 3):
+            if _coconut_case_match_check_2:  #229:             case ("plural", 3):
+                return _coconut_tail_call(_coconut.set, ("they {_coconut_format_0}".format(_coconut_format_0=(past)), "they were {_coconut_format_0}".format(_coconut_format_0=(present_participle))))  #230:                 return {f"they {past}", f"they were {present_participle}"}
 
 # case _:
 #     raise ValueError(
 #         f"Invalid number and person: '{number}' '{person}'"
 #     )
 
-    _coconut_case_match_to_3 = (number, person)  #238:     match (number, person):
-    _coconut_case_match_check_3 = False  #238:     match (number, person):
-    if (_coconut.isinstance(_coconut_case_match_to_3, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_3) == 2) and (_coconut_case_match_to_3[0] == "singular") and (_coconut_case_match_to_3[1] == 1):  #238:     match (number, person):
-        _coconut_case_match_check_3 = True  #238:     match (number, person):
-    if _coconut_case_match_check_3:  #238:     match (number, person):
-        return _coconut_tail_call(_coconut.set, ("I was {_coconut_format_0}".format(_coconut_format_0=(present_participle)),))  #240:             return {f"I was {present_participle}"}
+    _coconut_case_match_to_3 = (number, person)  #237:     match (number, person):
+    _coconut_case_match_check_3 = False  #237:     match (number, person):
+    if (_coconut.isinstance(_coconut_case_match_to_3, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_3) == 2) and (_coconut_case_match_to_3[0] == "singular") and (_coconut_case_match_to_3[1] == 1):  #237:     match (number, person):
+        _coconut_case_match_check_3 = True  #237:     match (number, person):
+    if _coconut_case_match_check_3:  #237:     match (number, person):
+        return _coconut_tail_call(_coconut.set, ("I was {_coconut_format_0}".format(_coconut_format_0=(present_participle)),))  #239:             return {f"I was {present_participle}"}
 
-    if not _coconut_case_match_check_3:  #242:         case ("plural", 1):
-        if (_coconut.isinstance(_coconut_case_match_to_3, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_3) == 2) and (_coconut_case_match_to_3[0] == "plural") and (_coconut_case_match_to_3[1] == 1):  #242:         case ("plural", 1):
-            _coconut_case_match_check_3 = True  #242:         case ("plural", 1):
-        if _coconut_case_match_check_3:  #242:         case ("plural", 1):
-            return _coconut_tail_call(_coconut.set, ("we were {_coconut_format_0}".format(_coconut_format_0=(present_participle)),))  #243:             return {f"we were {present_participle}"}
+    if not _coconut_case_match_check_3:  #241:         case ("plural", 1):
+        if (_coconut.isinstance(_coconut_case_match_to_3, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_3) == 2) and (_coconut_case_match_to_3[0] == "plural") and (_coconut_case_match_to_3[1] == 1):  #241:         case ("plural", 1):
+            _coconut_case_match_check_3 = True  #241:         case ("plural", 1):
+        if _coconut_case_match_check_3:  #241:         case ("plural", 1):
+            return _coconut_tail_call(_coconut.set, ("we were {_coconut_format_0}".format(_coconut_format_0=(present_participle)),))  #242:             return {f"we were {present_participle}"}
 
-    if not _coconut_case_match_check_3:  #245:         case ("singular", 2) | ("plural", 2):
-        _coconut_case_match_check_3 = True  #245:         case ("singular", 2) | ("plural", 2):
-        if _coconut_case_match_check_3:  #245:         case ("singular", 2) | ("plural", 2):
-            _coconut_case_match_check_3 = False  #245:         case ("singular", 2) | ("plural", 2):
-            if not _coconut_case_match_check_3:  #245:         case ("singular", 2) | ("plural", 2):
-                if (_coconut.isinstance(_coconut_case_match_to_3, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_3) == 2) and (_coconut_case_match_to_3[0] == "singular") and (_coconut_case_match_to_3[1] == 2):  #245:         case ("singular", 2) | ("plural", 2):
-                    _coconut_case_match_check_3 = True  #245:         case ("singular", 2) | ("plural", 2):
+    if not _coconut_case_match_check_3:  #244:         case ("singular", 2) | ("plural", 2):
+        _coconut_case_match_check_3 = True  #244:         case ("singular", 2) | ("plural", 2):
+        if _coconut_case_match_check_3:  #244:         case ("singular", 2) | ("plural", 2):
+            _coconut_case_match_check_3 = False  #244:         case ("singular", 2) | ("plural", 2):
+            if not _coconut_case_match_check_3:  #244:         case ("singular", 2) | ("plural", 2):
+                if (_coconut.isinstance(_coconut_case_match_to_3, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_3) == 2) and (_coconut_case_match_to_3[0] == "singular") and (_coconut_case_match_to_3[1] == 2):  #244:         case ("singular", 2) | ("plural", 2):
+                    _coconut_case_match_check_3 = True  #244:         case ("singular", 2) | ("plural", 2):
 
-            if not _coconut_case_match_check_3:  #245:         case ("singular", 2) | ("plural", 2):
-                if (_coconut.isinstance(_coconut_case_match_to_3, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_3) == 2) and (_coconut_case_match_to_3[0] == "plural") and (_coconut_case_match_to_3[1] == 2):  #245:         case ("singular", 2) | ("plural", 2):
-                    _coconut_case_match_check_3 = True  #245:         case ("singular", 2) | ("plural", 2):
-
-
-        if _coconut_case_match_check_3:  #245:         case ("singular", 2) | ("plural", 2):
-            return _coconut_tail_call(_coconut.set, ("you were {_coconut_format_0}".format(_coconut_format_0=(present_participle)),))  #246:             return {f"you were {present_participle}"}
-
-    if not _coconut_case_match_check_3:  #248:         case ("singular", 3):
-        if (_coconut.isinstance(_coconut_case_match_to_3, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_3) == 2) and (_coconut_case_match_to_3[0] == "singular") and (_coconut_case_match_to_3[1] == 3):  #248:         case ("singular", 3):
-            _coconut_case_match_check_3 = True  #248:         case ("singular", 3):
-        if _coconut_case_match_check_3:  #248:         case ("singular", 3):
-            return _coconut_tail_call(_coconut.set, ("he was {_coconut_format_0}".format(_coconut_format_0=(present_participle)), "she was {_coconut_format_0}".format(_coconut_format_0=(present_participle)), "it was {_coconut_format_0}".format(_coconut_format_0=(present_participle)),))  #249:             return {
-
-    if not _coconut_case_match_check_3:  #255:         case ("plural", 3):
-        if (_coconut.isinstance(_coconut_case_match_to_3, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_3) == 2) and (_coconut_case_match_to_3[0] == "plural") and (_coconut_case_match_to_3[1] == 3):  #255:         case ("plural", 3):
-            _coconut_case_match_check_3 = True  #255:         case ("plural", 3):
-        if _coconut_case_match_check_3:  #255:         case ("plural", 3):
-            return _coconut_tail_call(_coconut.set, ("they were {_coconut_format_0}".format(_coconut_format_0=(present_participle)),))  #256:             return {f"they were {present_participle}"}
-
-    raise ValueError("Invalid number and person: '{_coconut_format_0}' '{_coconut_format_1}'".format(_coconut_format_0=(number), _coconut_format_1=(person)))  #258:     raise ValueError(f"Invalid number and person: '{number}' '{person}'")
+            if not _coconut_case_match_check_3:  #244:         case ("singular", 2) | ("plural", 2):
+                if (_coconut.isinstance(_coconut_case_match_to_3, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_3) == 2) and (_coconut_case_match_to_3[0] == "plural") and (_coconut_case_match_to_3[1] == 2):  #244:         case ("singular", 2) | ("plural", 2):
+                    _coconut_case_match_check_3 = True  #244:         case ("singular", 2) | ("plural", 2):
 
 
+        if _coconut_case_match_check_3:  #244:         case ("singular", 2) | ("plural", 2):
+            return _coconut_tail_call(_coconut.set, ("you were {_coconut_format_0}".format(_coconut_format_0=(present_participle)),))  #245:             return {f"you were {present_participle}"}
 
-@_coconut_tco  #261: def _find_peractind_inflections(
-def _find_peractind_inflections(lemma,  # type: str  #261: def _find_peractind_inflections(
-    number,  # type: Literal["singular", "plural"]  #261: def _find_peractind_inflections(
-    person,  # type: Literal[1, 2, 3]  #261: def _find_peractind_inflections(
-    ):  #261: def _find_peractind_inflections(
+    if not _coconut_case_match_check_3:  #247:         case ("singular", 3):
+        if (_coconut.isinstance(_coconut_case_match_to_3, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_3) == 2) and (_coconut_case_match_to_3[0] == "singular") and (_coconut_case_match_to_3[1] == 3):  #247:         case ("singular", 3):
+            _coconut_case_match_check_3 = True  #247:         case ("singular", 3):
+        if _coconut_case_match_check_3:  #247:         case ("singular", 3):
+            return _coconut_tail_call(_coconut.set, ("he was {_coconut_format_0}".format(_coconut_format_0=(present_participle)), "she was {_coconut_format_0}".format(_coconut_format_0=(present_participle)), "it was {_coconut_format_0}".format(_coconut_format_0=(present_participle)),))  #248:             return {
+
+    if not _coconut_case_match_check_3:  #254:         case ("plural", 3):
+        if (_coconut.isinstance(_coconut_case_match_to_3, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_3) == 2) and (_coconut_case_match_to_3[0] == "plural") and (_coconut_case_match_to_3[1] == 3):  #254:         case ("plural", 3):
+            _coconut_case_match_check_3 = True  #254:         case ("plural", 3):
+        if _coconut_case_match_check_3:  #254:         case ("plural", 3):
+            return _coconut_tail_call(_coconut.set, ("they were {_coconut_format_0}".format(_coconut_format_0=(present_participle)),))  #255:             return {f"they were {present_participle}"}
+
+    raise ValueError("Invalid number and person: '{_coconut_format_0}' '{_coconut_format_1}'".format(_coconut_format_0=(number), _coconut_format_1=(person)))  #257:     raise ValueError(f"Invalid number and person: '{number}' '{person}'")
+
+
+
+@_coconut_tco  #260: def _find_peractind_inflections(
+def _find_peractind_inflections(lemma,  # type: str  #260: def _find_peractind_inflections(
+    number,  # type: Literal["singular", "plural"]  #260: def _find_peractind_inflections(
+    person,  # type: Literal[1, 2, 3]  #260: def _find_peractind_inflections(
+    ):  #260: def _find_peractind_inflections(
 # type: (...) -> set[str]
-    past = lemminflect.getInflection(lemma, "VBD")[0]  #266:     past = lemminflect.getInflection(lemma, "VBD")[0]
+    past = lemminflect.getInflection(lemma, "VBD")[0]  #265:     past = lemminflect.getInflection(lemma, "VBD")[0]
 
-    _coconut_case_match_to_4 = (number, person)  #268:     match (number, person):
-    _coconut_case_match_check_4 = False  #268:     match (number, person):
-    if (_coconut.isinstance(_coconut_case_match_to_4, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_4) == 2) and (_coconut_case_match_to_4[0] == "singular") and (_coconut_case_match_to_4[1] == 1):  #268:     match (number, person):
-        _coconut_case_match_check_4 = True  #268:     match (number, person):
-    if _coconut_case_match_check_4:  #268:     match (number, person):
-        return _coconut_tail_call(_coconut.set, ("I {_coconut_format_0}".format(_coconut_format_0=(past)), "I have {_coconut_format_0}".format(_coconut_format_0=(past)), "I did {_coconut_format_0}".format(_coconut_format_0=(lemma))))  #270:             return {f"I {past}", f"I have {past}", f"I did {lemma}"}
+    _coconut_case_match_to_4 = (number, person)  #267:     match (number, person):
+    _coconut_case_match_check_4 = False  #267:     match (number, person):
+    if (_coconut.isinstance(_coconut_case_match_to_4, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_4) == 2) and (_coconut_case_match_to_4[0] == "singular") and (_coconut_case_match_to_4[1] == 1):  #267:     match (number, person):
+        _coconut_case_match_check_4 = True  #267:     match (number, person):
+    if _coconut_case_match_check_4:  #267:     match (number, person):
+        return _coconut_tail_call(_coconut.set, ("I {_coconut_format_0}".format(_coconut_format_0=(past)), "I have {_coconut_format_0}".format(_coconut_format_0=(past)), "I did {_coconut_format_0}".format(_coconut_format_0=(lemma))))  #269:             return {f"I {past}", f"I have {past}", f"I did {lemma}"}
 
-    if not _coconut_case_match_check_4:  #272:         case ("plural", 1):
-        if (_coconut.isinstance(_coconut_case_match_to_4, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_4) == 2) and (_coconut_case_match_to_4[0] == "plural") and (_coconut_case_match_to_4[1] == 1):  #272:         case ("plural", 1):
-            _coconut_case_match_check_4 = True  #272:         case ("plural", 1):
-        if _coconut_case_match_check_4:  #272:         case ("plural", 1):
-            return _coconut_tail_call(_coconut.set, ("we {_coconut_format_0}".format(_coconut_format_0=(past)), "we have {_coconut_format_0}".format(_coconut_format_0=(past)), "we did {_coconut_format_0}".format(_coconut_format_0=(lemma))))  #273:             return {f"we {past}", f"we have {past}", f"we did {lemma}"}
+    if not _coconut_case_match_check_4:  #271:         case ("plural", 1):
+        if (_coconut.isinstance(_coconut_case_match_to_4, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_4) == 2) and (_coconut_case_match_to_4[0] == "plural") and (_coconut_case_match_to_4[1] == 1):  #271:         case ("plural", 1):
+            _coconut_case_match_check_4 = True  #271:         case ("plural", 1):
+        if _coconut_case_match_check_4:  #271:         case ("plural", 1):
+            return _coconut_tail_call(_coconut.set, ("we {_coconut_format_0}".format(_coconut_format_0=(past)), "we have {_coconut_format_0}".format(_coconut_format_0=(past)), "we did {_coconut_format_0}".format(_coconut_format_0=(lemma))))  #272:             return {f"we {past}", f"we have {past}", f"we did {lemma}"}
 
-    if not _coconut_case_match_check_4:  #275:         case ("singular", 2) | ("plural", 2):
-        _coconut_case_match_check_4 = True  #275:         case ("singular", 2) | ("plural", 2):
-        if _coconut_case_match_check_4:  #275:         case ("singular", 2) | ("plural", 2):
-            _coconut_case_match_check_4 = False  #275:         case ("singular", 2) | ("plural", 2):
-            if not _coconut_case_match_check_4:  #275:         case ("singular", 2) | ("plural", 2):
-                if (_coconut.isinstance(_coconut_case_match_to_4, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_4) == 2) and (_coconut_case_match_to_4[0] == "singular") and (_coconut_case_match_to_4[1] == 2):  #275:         case ("singular", 2) | ("plural", 2):
-                    _coconut_case_match_check_4 = True  #275:         case ("singular", 2) | ("plural", 2):
+    if not _coconut_case_match_check_4:  #274:         case ("singular", 2) | ("plural", 2):
+        _coconut_case_match_check_4 = True  #274:         case ("singular", 2) | ("plural", 2):
+        if _coconut_case_match_check_4:  #274:         case ("singular", 2) | ("plural", 2):
+            _coconut_case_match_check_4 = False  #274:         case ("singular", 2) | ("plural", 2):
+            if not _coconut_case_match_check_4:  #274:         case ("singular", 2) | ("plural", 2):
+                if (_coconut.isinstance(_coconut_case_match_to_4, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_4) == 2) and (_coconut_case_match_to_4[0] == "singular") and (_coconut_case_match_to_4[1] == 2):  #274:         case ("singular", 2) | ("plural", 2):
+                    _coconut_case_match_check_4 = True  #274:         case ("singular", 2) | ("plural", 2):
 
-            if not _coconut_case_match_check_4:  #275:         case ("singular", 2) | ("plural", 2):
-                if (_coconut.isinstance(_coconut_case_match_to_4, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_4) == 2) and (_coconut_case_match_to_4[0] == "plural") and (_coconut_case_match_to_4[1] == 2):  #275:         case ("singular", 2) | ("plural", 2):
-                    _coconut_case_match_check_4 = True  #275:         case ("singular", 2) | ("plural", 2):
-
-
-        if _coconut_case_match_check_4:  #275:         case ("singular", 2) | ("plural", 2):
-            return _coconut_tail_call(_coconut.set, ("you {_coconut_format_0}".format(_coconut_format_0=(past)), "you have {_coconut_format_0}".format(_coconut_format_0=(past)), "you did {_coconut_format_0}".format(_coconut_format_0=(lemma))))  #276:             return {f"you {past}", f"you have {past}", f"you did {lemma}"}
-
-    if not _coconut_case_match_check_4:  #278:         case ("singular", 3):
-        if (_coconut.isinstance(_coconut_case_match_to_4, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_4) == 2) and (_coconut_case_match_to_4[0] == "singular") and (_coconut_case_match_to_4[1] == 3):  #278:         case ("singular", 3):
-            _coconut_case_match_check_4 = True  #278:         case ("singular", 3):
-        if _coconut_case_match_check_4:  #278:         case ("singular", 3):
-            return _coconut_tail_call(_coconut.set, ("he {_coconut_format_0}".format(_coconut_format_0=(past)), "he has {_coconut_format_0}".format(_coconut_format_0=(past)), "he did {_coconut_format_0}".format(_coconut_format_0=(lemma)), "she {_coconut_format_0}".format(_coconut_format_0=(past)), "she has {_coconut_format_0}".format(_coconut_format_0=(past)), "she did {_coconut_format_0}".format(_coconut_format_0=(lemma)), "it {_coconut_format_0}".format(_coconut_format_0=(past)), "it has {_coconut_format_0}".format(_coconut_format_0=(past)), "it did {_coconut_format_0}".format(_coconut_format_0=(lemma)),))  #279:             return {
-
-    if not _coconut_case_match_check_4:  #291:         case ("plural", 3):
-        if (_coconut.isinstance(_coconut_case_match_to_4, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_4) == 2) and (_coconut_case_match_to_4[0] == "plural") and (_coconut_case_match_to_4[1] == 3):  #291:         case ("plural", 3):
-            _coconut_case_match_check_4 = True  #291:         case ("plural", 3):
-        if _coconut_case_match_check_4:  #291:         case ("plural", 3):
-            return _coconut_tail_call(_coconut.set, ("they {_coconut_format_0}".format(_coconut_format_0=(past)), "they have {_coconut_format_0}".format(_coconut_format_0=(past)), "they did {_coconut_format_0}".format(_coconut_format_0=(lemma))))  #292:             return {f"they {past}", f"they have {past}", f"they did {lemma}"}
-
-    raise ValueError("Invalid number and person: '{_coconut_format_0}' '{_coconut_format_1}'".format(_coconut_format_0=(number), _coconut_format_1=(person)))  #294:     raise ValueError(f"Invalid number and person: '{number}' '{person}'")
+            if not _coconut_case_match_check_4:  #274:         case ("singular", 2) | ("plural", 2):
+                if (_coconut.isinstance(_coconut_case_match_to_4, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_4) == 2) and (_coconut_case_match_to_4[0] == "plural") and (_coconut_case_match_to_4[1] == 2):  #274:         case ("singular", 2) | ("plural", 2):
+                    _coconut_case_match_check_4 = True  #274:         case ("singular", 2) | ("plural", 2):
 
 
+        if _coconut_case_match_check_4:  #274:         case ("singular", 2) | ("plural", 2):
+            return _coconut_tail_call(_coconut.set, ("you {_coconut_format_0}".format(_coconut_format_0=(past)), "you have {_coconut_format_0}".format(_coconut_format_0=(past)), "you did {_coconut_format_0}".format(_coconut_format_0=(lemma))))  #275:             return {f"you {past}", f"you have {past}", f"you did {lemma}"}
 
-@_coconut_tco  #297: def _find_plpactind_inflections(
-def _find_plpactind_inflections(lemma,  # type: str  #297: def _find_plpactind_inflections(
-    number,  # type: Literal["singular", "plural"]  #297: def _find_plpactind_inflections(
-    person,  # type: Literal[1, 2, 3]  #297: def _find_plpactind_inflections(
-    ):  #297: def _find_plpactind_inflections(
+    if not _coconut_case_match_check_4:  #277:         case ("singular", 3):
+        if (_coconut.isinstance(_coconut_case_match_to_4, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_4) == 2) and (_coconut_case_match_to_4[0] == "singular") and (_coconut_case_match_to_4[1] == 3):  #277:         case ("singular", 3):
+            _coconut_case_match_check_4 = True  #277:         case ("singular", 3):
+        if _coconut_case_match_check_4:  #277:         case ("singular", 3):
+            return _coconut_tail_call(_coconut.set, ("he {_coconut_format_0}".format(_coconut_format_0=(past)), "he has {_coconut_format_0}".format(_coconut_format_0=(past)), "he did {_coconut_format_0}".format(_coconut_format_0=(lemma)), "she {_coconut_format_0}".format(_coconut_format_0=(past)), "she has {_coconut_format_0}".format(_coconut_format_0=(past)), "she did {_coconut_format_0}".format(_coconut_format_0=(lemma)), "it {_coconut_format_0}".format(_coconut_format_0=(past)), "it has {_coconut_format_0}".format(_coconut_format_0=(past)), "it did {_coconut_format_0}".format(_coconut_format_0=(lemma)),))  #278:             return {
+
+    if not _coconut_case_match_check_4:  #290:         case ("plural", 3):
+        if (_coconut.isinstance(_coconut_case_match_to_4, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_4) == 2) and (_coconut_case_match_to_4[0] == "plural") and (_coconut_case_match_to_4[1] == 3):  #290:         case ("plural", 3):
+            _coconut_case_match_check_4 = True  #290:         case ("plural", 3):
+        if _coconut_case_match_check_4:  #290:         case ("plural", 3):
+            return _coconut_tail_call(_coconut.set, ("they {_coconut_format_0}".format(_coconut_format_0=(past)), "they have {_coconut_format_0}".format(_coconut_format_0=(past)), "they did {_coconut_format_0}".format(_coconut_format_0=(lemma))))  #291:             return {f"they {past}", f"they have {past}", f"they did {lemma}"}
+
+    raise ValueError("Invalid number and person: '{_coconut_format_0}' '{_coconut_format_1}'".format(_coconut_format_0=(number), _coconut_format_1=(person)))  #293:     raise ValueError(f"Invalid number and person: '{number}' '{person}'")
+
+
+
+@_coconut_tco  #296: def _find_plpactind_inflections(
+def _find_plpactind_inflections(lemma,  # type: str  #296: def _find_plpactind_inflections(
+    number,  # type: Literal["singular", "plural"]  #296: def _find_plpactind_inflections(
+    person,  # type: Literal[1, 2, 3]  #296: def _find_plpactind_inflections(
+    ):  #296: def _find_plpactind_inflections(
 # type: (...) -> set[str]
-    past_participle = lemminflect.getInflection(lemma, "VBN")[0]  # type: str  #302:     past_participle: str = lemminflect.getInflection(lemma, "VBN")[0]
-    if "__annotations__" not in _coconut.locals():  #302:     past_participle: str = lemminflect.getInflection(lemma, "VBN")[0]
-        __annotations__ = {}  # type: ignore  #302:     past_participle: str = lemminflect.getInflection(lemma, "VBN")[0]
-    __annotations__["past_participle"] = 'str'  #302:     past_participle: str = lemminflect.getInflection(lemma, "VBN")[0]
+    past_participle = lemminflect.getInflection(lemma, "VBN")[0]  # type: str  #301:     past_participle: str = lemminflect.getInflection(lemma, "VBN")[0]
+    if "__annotations__" not in _coconut.locals():  #301:     past_participle: str = lemminflect.getInflection(lemma, "VBN")[0]
+        __annotations__ = {}  # type: ignore  #301:     past_participle: str = lemminflect.getInflection(lemma, "VBN")[0]
+    __annotations__["past_participle"] = 'str'  #301:     past_participle: str = lemminflect.getInflection(lemma, "VBN")[0]
 
-    _coconut_case_match_to_5 = (number, person)  #304:     match (number, person):
-    _coconut_case_match_check_5 = False  #304:     match (number, person):
-    if (_coconut.isinstance(_coconut_case_match_to_5, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_5) == 2) and (_coconut_case_match_to_5[0] == "singular") and (_coconut_case_match_to_5[1] == 1):  #304:     match (number, person):
-        _coconut_case_match_check_5 = True  #304:     match (number, person):
-    if _coconut_case_match_check_5:  #304:     match (number, person):
-        return _coconut_tail_call(_coconut.set, ("I had {_coconut_format_0}".format(_coconut_format_0=(past_participle)),))  #306:             return {f"I had {past_participle}"}
+    _coconut_case_match_to_5 = (number, person)  #303:     match (number, person):
+    _coconut_case_match_check_5 = False  #303:     match (number, person):
+    if (_coconut.isinstance(_coconut_case_match_to_5, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_5) == 2) and (_coconut_case_match_to_5[0] == "singular") and (_coconut_case_match_to_5[1] == 1):  #303:     match (number, person):
+        _coconut_case_match_check_5 = True  #303:     match (number, person):
+    if _coconut_case_match_check_5:  #303:     match (number, person):
+        return _coconut_tail_call(_coconut.set, ("I had {_coconut_format_0}".format(_coconut_format_0=(past_participle)),))  #305:             return {f"I had {past_participle}"}
 
-    if not _coconut_case_match_check_5:  #308:         case ("plural", 1):
-        if (_coconut.isinstance(_coconut_case_match_to_5, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_5) == 2) and (_coconut_case_match_to_5[0] == "plural") and (_coconut_case_match_to_5[1] == 1):  #308:         case ("plural", 1):
-            _coconut_case_match_check_5 = True  #308:         case ("plural", 1):
-        if _coconut_case_match_check_5:  #308:         case ("plural", 1):
-            return _coconut_tail_call(_coconut.set, ("we had {_coconut_format_0}".format(_coconut_format_0=(past_participle)),))  #309:             return {f"we had {past_participle}"}
+    if not _coconut_case_match_check_5:  #307:         case ("plural", 1):
+        if (_coconut.isinstance(_coconut_case_match_to_5, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_5) == 2) and (_coconut_case_match_to_5[0] == "plural") and (_coconut_case_match_to_5[1] == 1):  #307:         case ("plural", 1):
+            _coconut_case_match_check_5 = True  #307:         case ("plural", 1):
+        if _coconut_case_match_check_5:  #307:         case ("plural", 1):
+            return _coconut_tail_call(_coconut.set, ("we had {_coconut_format_0}".format(_coconut_format_0=(past_participle)),))  #308:             return {f"we had {past_participle}"}
 
-    if not _coconut_case_match_check_5:  #311:         case ("singular", 2) | ("plural", 2):
-        _coconut_case_match_check_5 = True  #311:         case ("singular", 2) | ("plural", 2):
-        if _coconut_case_match_check_5:  #311:         case ("singular", 2) | ("plural", 2):
-            _coconut_case_match_check_5 = False  #311:         case ("singular", 2) | ("plural", 2):
-            if not _coconut_case_match_check_5:  #311:         case ("singular", 2) | ("plural", 2):
-                if (_coconut.isinstance(_coconut_case_match_to_5, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_5) == 2) and (_coconut_case_match_to_5[0] == "singular") and (_coconut_case_match_to_5[1] == 2):  #311:         case ("singular", 2) | ("plural", 2):
-                    _coconut_case_match_check_5 = True  #311:         case ("singular", 2) | ("plural", 2):
+    if not _coconut_case_match_check_5:  #310:         case ("singular", 2) | ("plural", 2):
+        _coconut_case_match_check_5 = True  #310:         case ("singular", 2) | ("plural", 2):
+        if _coconut_case_match_check_5:  #310:         case ("singular", 2) | ("plural", 2):
+            _coconut_case_match_check_5 = False  #310:         case ("singular", 2) | ("plural", 2):
+            if not _coconut_case_match_check_5:  #310:         case ("singular", 2) | ("plural", 2):
+                if (_coconut.isinstance(_coconut_case_match_to_5, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_5) == 2) and (_coconut_case_match_to_5[0] == "singular") and (_coconut_case_match_to_5[1] == 2):  #310:         case ("singular", 2) | ("plural", 2):
+                    _coconut_case_match_check_5 = True  #310:         case ("singular", 2) | ("plural", 2):
 
-            if not _coconut_case_match_check_5:  #311:         case ("singular", 2) | ("plural", 2):
-                if (_coconut.isinstance(_coconut_case_match_to_5, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_5) == 2) and (_coconut_case_match_to_5[0] == "plural") and (_coconut_case_match_to_5[1] == 2):  #311:         case ("singular", 2) | ("plural", 2):
-                    _coconut_case_match_check_5 = True  #311:         case ("singular", 2) | ("plural", 2):
-
-
-        if _coconut_case_match_check_5:  #311:         case ("singular", 2) | ("plural", 2):
-            return _coconut_tail_call(_coconut.set, ("you had {_coconut_format_0}".format(_coconut_format_0=(past_participle)),))  #312:             return {f"you had {past_participle}"}
-
-    if not _coconut_case_match_check_5:  #314:         case ("singular", 3):
-        if (_coconut.isinstance(_coconut_case_match_to_5, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_5) == 2) and (_coconut_case_match_to_5[0] == "singular") and (_coconut_case_match_to_5[1] == 3):  #314:         case ("singular", 3):
-            _coconut_case_match_check_5 = True  #314:         case ("singular", 3):
-        if _coconut_case_match_check_5:  #314:         case ("singular", 3):
-            return _coconut_tail_call(_coconut.set, ("he had {_coconut_format_0}".format(_coconut_format_0=(past_participle)), "she had {_coconut_format_0}".format(_coconut_format_0=(past_participle)), "it had {_coconut_format_0}".format(_coconut_format_0=(past_participle)),))  #315:             return {
-
-    if not _coconut_case_match_check_5:  #321:         case ("plural", 3):
-        if (_coconut.isinstance(_coconut_case_match_to_5, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_5) == 2) and (_coconut_case_match_to_5[0] == "plural") and (_coconut_case_match_to_5[1] == 3):  #321:         case ("plural", 3):
-            _coconut_case_match_check_5 = True  #321:         case ("plural", 3):
-        if _coconut_case_match_check_5:  #321:         case ("plural", 3):
-            return _coconut_tail_call(_coconut.set, ("they had {_coconut_format_0}".format(_coconut_format_0=(past_participle)),))  #322:             return {f"they had {past_participle}"}
-
-    raise ValueError("Invalid number and person: '{_coconut_format_0}' '{_coconut_format_1}'".format(_coconut_format_0=(number), _coconut_format_1=(person)))  #324:     raise ValueError(f"Invalid number and person: '{number}' '{person}'")
+            if not _coconut_case_match_check_5:  #310:         case ("singular", 2) | ("plural", 2):
+                if (_coconut.isinstance(_coconut_case_match_to_5, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_5) == 2) and (_coconut_case_match_to_5[0] == "plural") and (_coconut_case_match_to_5[1] == 2):  #310:         case ("singular", 2) | ("plural", 2):
+                    _coconut_case_match_check_5 = True  #310:         case ("singular", 2) | ("plural", 2):
 
 
+        if _coconut_case_match_check_5:  #310:         case ("singular", 2) | ("plural", 2):
+            return _coconut_tail_call(_coconut.set, ("you had {_coconut_format_0}".format(_coconut_format_0=(past_participle)),))  #311:             return {f"you had {past_participle}"}
 
-@no_type_check  #327: @no_type_check
-@_coconut_tco  #328: def _find_participle_inflections(
-def _find_participle_inflections(verb,  # type: str  #328: def _find_participle_inflections(
-    components,  # type: accido.misc.EndingComponents  #328: def _find_participle_inflections(
-    ):  #328: def _find_participle_inflections(
+    if not _coconut_case_match_check_5:  #313:         case ("singular", 3):
+        if (_coconut.isinstance(_coconut_case_match_to_5, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_5) == 2) and (_coconut_case_match_to_5[0] == "singular") and (_coconut_case_match_to_5[1] == 3):  #313:         case ("singular", 3):
+            _coconut_case_match_check_5 = True  #313:         case ("singular", 3):
+        if _coconut_case_match_check_5:  #313:         case ("singular", 3):
+            return _coconut_tail_call(_coconut.set, ("he had {_coconut_format_0}".format(_coconut_format_0=(past_participle)), "she had {_coconut_format_0}".format(_coconut_format_0=(past_participle)), "it had {_coconut_format_0}".format(_coconut_format_0=(past_participle)),))  #314:             return {
+
+    if not _coconut_case_match_check_5:  #320:         case ("plural", 3):
+        if (_coconut.isinstance(_coconut_case_match_to_5, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_5) == 2) and (_coconut_case_match_to_5[0] == "plural") and (_coconut_case_match_to_5[1] == 3):  #320:         case ("plural", 3):
+            _coconut_case_match_check_5 = True  #320:         case ("plural", 3):
+        if _coconut_case_match_check_5:  #320:         case ("plural", 3):
+            return _coconut_tail_call(_coconut.set, ("they had {_coconut_format_0}".format(_coconut_format_0=(past_participle)),))  #321:             return {f"they had {past_participle}"}
+
+    raise ValueError("Invalid number and person: '{_coconut_format_0}' '{_coconut_format_1}'".format(_coconut_format_0=(number), _coconut_format_1=(person)))  #323:     raise ValueError(f"Invalid number and person: '{number}' '{person}'")
+
+
+# type: ignore[return]
+@_coconut_tco  # type: ignore[return]  #326: def _find_participle_inflections(  # type: ignore[return]
+def _find_participle_inflections(verb,  # type: str  # type: ignore[return]  #326: def _find_participle_inflections(  # type: ignore[return]
+    components,  # type: accido.misc.EndingComponents  # type: ignore[return]  #326: def _find_participle_inflections(  # type: ignore[return]
+    ):  # type: ignore[return]  #326: def _find_participle_inflections(  # type: ignore[return]
+# type: (...) -> set[str]  # type: ignore[return]
+    lemma = lemminflect.getLemma(verb, "NOUN")[0]  # type: str  #330:     lemma: str = lemminflect.getLemma(verb, "NOUN")[0]
+    if "__annotations__" not in _coconut.locals():  #330:     lemma: str = lemminflect.getLemma(verb, "NOUN")[0]
+        __annotations__ = {}  # type: ignore  #330:     lemma: str = lemminflect.getLemma(verb, "NOUN")[0]
+    __annotations__["lemma"] = 'str'  #330:     lemma: str = lemminflect.getLemma(verb, "NOUN")[0]
+
+    _coconut_case_match_to_6 = (components.tense, components.voice)  #332:     match (components.tense, components.voice):
+    _coconut_case_match_check_6 = False  #332:     match (components.tense, components.voice):
+    if (_coconut.isinstance(_coconut_case_match_to_6, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_6) == 2) and (_coconut_case_match_to_6[0] == "perfect") and (_coconut_case_match_to_6[1] == "passive"):  #332:     match (components.tense, components.voice):
+        _coconut_case_match_check_6 = True  #332:     match (components.tense, components.voice):
+    if _coconut_case_match_check_6:  #332:     match (components.tense, components.voice):
+        past_participle = lemminflect.getInflection(lemma, "VBN")[0]  # type: str  #332:     match (components.tense, components.voice):
+        if "__annotations__" not in _coconut.locals():  #332:     match (components.tense, components.voice):
+            __annotations__ = {}  # type: ignore  #332:     match (components.tense, components.voice):
+        __annotations__["past_participle"] = 'str'  #334:             past_participle: str = lemminflect.getInflection(lemma, "VBN")[0]
+        return _coconut_tail_call(_coconut.set, ("having been {_coconut_format_0}".format(_coconut_format_0=(past_participle)),))  #335:             return {f"having been {past_participle}"}
+
+    if not _coconut_case_match_check_6:  #337:         case ("present", "active"):
+        if (_coconut.isinstance(_coconut_case_match_to_6, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_6) == 2) and (_coconut_case_match_to_6[0] == "present") and (_coconut_case_match_to_6[1] == "active"):  #337:         case ("present", "active"):
+            _coconut_case_match_check_6 = True  #337:         case ("present", "active"):
+        if _coconut_case_match_check_6:  #337:         case ("present", "active"):
+            present_participle = lemminflect.getInflection(lemma, "VBG")[0]  # type: str  #337:         case ("present", "active"):
+            if "__annotations__" not in _coconut.locals():  #337:         case ("present", "active"):
+                __annotations__ = {}  # type: ignore  #337:         case ("present", "active"):
+            __annotations__["present_participle"] = 'str'  #338:             present_participle: str = lemminflect.getInflection(lemma, "VBG")[
+            return _coconut_tail_call(_coconut.set, (present_participle,))  #341:             return {present_participle}
+
+    if not _coconut_case_match_check_6:  #343:         case _:
+        _coconut_case_match_check_6 = True  #343:         case _:
+        if _coconut_case_match_check_6:  #343:         case _:
+            raise NotImplementedError("The {_coconut_format_0} {_coconut_format_1} participle has not been implemented".format(_coconut_format_0=(components.tense), _coconut_format_1=(components.voice)))  #344:             raise NotImplementedError(
+
+
+
+@_coconut_tco  #349: def _find_preactinf_inflections(lemma: str) -> set[str]:
+def _find_preactinf_inflections(lemma  # type: str  #349: def _find_preactinf_inflections(lemma: str) -> set[str]:
+    ):  #349: def _find_preactinf_inflections(lemma: str) -> set[str]:
 # type: (...) -> set[str]
-    lemma = lemminflect.getLemma(verb, "NOUN")[0]  # type: str  #332:     lemma: str = lemminflect.getLemma(verb, "NOUN")[0]
-    if "__annotations__" not in _coconut.locals():  #332:     lemma: str = lemminflect.getLemma(verb, "NOUN")[0]
-        __annotations__ = {}  # type: ignore  #332:     lemma: str = lemminflect.getLemma(verb, "NOUN")[0]
-    __annotations__["lemma"] = 'str'  #332:     lemma: str = lemminflect.getLemma(verb, "NOUN")[0]
-
-    _coconut_case_match_to_6 = (components.tense, components.voice)  #334:     match (components.tense, components.voice):
-    _coconut_case_match_check_6 = False  #334:     match (components.tense, components.voice):
-    if (_coconut.isinstance(_coconut_case_match_to_6, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_6) == 2) and (_coconut_case_match_to_6[0] == "perfect") and (_coconut_case_match_to_6[1] == "passive"):  #334:     match (components.tense, components.voice):
-        _coconut_case_match_check_6 = True  #334:     match (components.tense, components.voice):
-    if _coconut_case_match_check_6:  #334:     match (components.tense, components.voice):
-        past_participle = lemminflect.getInflection(lemma, "VBN")[0]  # type: str  #334:     match (components.tense, components.voice):
-        if "__annotations__" not in _coconut.locals():  #334:     match (components.tense, components.voice):
-            __annotations__ = {}  # type: ignore  #334:     match (components.tense, components.voice):
-        __annotations__["past_participle"] = 'str'  #336:             past_participle: str = lemminflect.getInflection(lemma, "VBN")[0]
-        return _coconut_tail_call(_coconut.set, ("having been {_coconut_format_0}".format(_coconut_format_0=(past_participle)),))  #337:             return {f"having been {past_participle}"}
-
-    if not _coconut_case_match_check_6:  #339:         case ("present", "active"):
-        if (_coconut.isinstance(_coconut_case_match_to_6, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_6) == 2) and (_coconut_case_match_to_6[0] == "present") and (_coconut_case_match_to_6[1] == "active"):  #339:         case ("present", "active"):
-            _coconut_case_match_check_6 = True  #339:         case ("present", "active"):
-        if _coconut_case_match_check_6:  #339:         case ("present", "active"):
-            present_participle = lemminflect.getInflection(lemma, "VBG")[0]  # type: str  #339:         case ("present", "active"):
-            if "__annotations__" not in _coconut.locals():  #339:         case ("present", "active"):
-                __annotations__ = {}  # type: ignore  #339:         case ("present", "active"):
-            __annotations__["present_participle"] = 'str'  #340:             present_participle: str = lemminflect.getInflection(lemma, "VBG")[
-            return _coconut_tail_call(_coconut.set, (present_participle,))  #343:             return {present_participle}
-
-    if not _coconut_case_match_check_6:  #345:         case _:
-        _coconut_case_match_check_6 = True  #345:         case _:
-        if _coconut_case_match_check_6:  #345:         case _:
-            raise NotImplementedError("The {_coconut_format_0} {_coconut_format_1} participle has not been implemented".format(_coconut_format_0=(components.tense), _coconut_format_1=(components.voice)))  #346:             raise NotImplementedError(
+    return _coconut_tail_call(_coconut.set, ("to {_coconut_format_0}".format(_coconut_format_0=(lemma)),))  #350:     return {f"to {lemma}"}
 
 
 
-@_coconut_tco  #351: def _find_preactinf_inflections(lemma: str) -> set[str]:
-def _find_preactinf_inflections(lemma  # type: str  #351: def _find_preactinf_inflections(lemma: str) -> set[str]:
-    ):  #351: def _find_preactinf_inflections(lemma: str) -> set[str]:
+@_coconut_tco  #353: def _find_preipe_inflections(lemma: str) -> set[str]:
+def _find_preipe_inflections(lemma  # type: str  #353: def _find_preipe_inflections(lemma: str) -> set[str]:
+    ):  #353: def _find_preipe_inflections(lemma: str) -> set[str]:
 # type: (...) -> set[str]
-    return _coconut_tail_call(_coconut.set, ("to {_coconut_format_0}".format(_coconut_format_0=(lemma)),))  #352:     return {f"to {lemma}"}
-
-
-
-@_coconut_tco  #355: def _find_preipe_inflections(lemma: str) -> set[str]:
-def _find_preipe_inflections(lemma  # type: str  #355: def _find_preipe_inflections(lemma: str) -> set[str]:
-    ):  #355: def _find_preipe_inflections(lemma: str) -> set[str]:
-# type: (...) -> set[str]
-    return _coconut_tail_call(_coconut.set, ("{_coconut_format_0}".format(_coconut_format_0=(lemma)),))  #356:     return {f"{lemma}"}
+    return _coconut_tail_call(_coconut.set, ("{_coconut_format_0}".format(_coconut_format_0=(lemma)),))  #354:     return {f"{lemma}"}

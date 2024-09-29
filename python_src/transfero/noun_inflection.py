@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# __coconut_hash__ = 0xa043cad6
+# __coconut_hash__ = 0xf1602bdd
 
 # Compiled with Coconut version 3.1.2
 
@@ -61,13 +61,7 @@ else:
 
 import lemminflect  #3: import lemminflect
 from inflect import engine  #4: from inflect import engine
-if _coconut.typing.TYPE_CHECKING:  #5: from typing import no_type_check
-    from typing import no_type_check  #5: from typing import no_type_check
-else:  #5: from typing import no_type_check
-    try:  #5: from typing import no_type_check
-        no_type_check = _coconut.typing.no_type_check  #5: from typing import no_type_check
-    except _coconut.AttributeError as _coconut_imp_err:  #5: from typing import no_type_check
-        raise _coconut.ImportError(_coconut.str(_coconut_imp_err))  #5: from typing import no_type_check
+
 from .exceptions import InvalidWordError  #6: from .exceptions import InvalidWordError
 
 if TYPE_CHECKING:  #8: if TYPE_CHECKING:
@@ -84,12 +78,11 @@ def _get_possessive(noun  # type: str  #16: def _get_possessive(noun: str) -> st
     return "{_coconut_format_0}'".format(_coconut_format_0=(noun)) if noun.endswith("s") else "{_coconut_format_0}'s".format(_coconut_format_0=(noun))  #17:     return f"{noun}'" if noun.endswith("s") else f"{noun}'s"
 
 
-
-@no_type_check  #20: @no_type_check
-def find_noun_inflections(noun,  # type: str  #21: def find_noun_inflections(
-    components,  # type: accido.misc.EndingComponents  #21: def find_noun_inflections(
-    ):  #21: def find_noun_inflections(
-# type: (...) -> set[str]
+# type: ignore[return]
+def find_noun_inflections(noun,  # type: str  # type: ignore[return]  #20: def find_noun_inflections(  # type: ignore[return]
+    components,  # type: accido.misc.EndingComponents  # type: ignore[return]  #20: def find_noun_inflections(  # type: ignore[return]
+    ):  # type: ignore[return]  #20: def find_noun_inflections(  # type: ignore[return]
+# type: (...) -> set[str]  # type: ignore[return]
     """Inflect English nouns using the case and number.
 
     Parameters
@@ -110,103 +103,103 @@ def find_noun_inflections(noun,  # type: str  #21: def find_noun_inflections(
         If the word is not a valid English noun.
     ValueError
         If the input (other than the word itself) is invalid.
-    """  #45:     """
-    if not hasattr(components, "case"):  #46:     if not hasattr(components, "case"):
-        raise ValueError("Case must be specified")  #47:         raise ValueError("Case must be specified")
+    """  #44:     """
+    if not hasattr(components, "case"):  #45:     if not hasattr(components, "case"):
+        raise ValueError("Case must be specified")  #46:         raise ValueError("Case must be specified")
 
-    if not hasattr(components, "number"):  #49:     if not hasattr(components, "number"):
-        raise ValueError("Number must be specified")  #50:         raise ValueError("Number must be specified")
+    if not hasattr(components, "number"):  #48:     if not hasattr(components, "number"):
+        raise ValueError("Number must be specified")  #49:         raise ValueError("Number must be specified")
 
-    try:  #52:     try:
-        lemma = lemminflect.getLemma(noun, "NOUN")[0]  # type: str  #53:         lemma: str = lemminflect.getLemma(noun, "NOUN")[0]
-        if "__annotations__" not in _coconut.locals():  #53:         lemma: str = lemminflect.getLemma(noun, "NOUN")[0]
-            __annotations__ = {}  # type: ignore  #53:         lemma: str = lemminflect.getLemma(noun, "NOUN")[0]
-        __annotations__["lemma"] = 'str'  #53:         lemma: str = lemminflect.getLemma(noun, "NOUN")[0]
-    except KeyError as e:  #54:     except KeyError as e:
-        _coconut_raise_from_0 = InvalidWordError("Word {_coconut_format_0} is not a noun".format(_coconut_format_0=(noun)))  #55:         raise InvalidWordError(f"Word {noun} is not a noun") from e
-        _coconut_raise_from_0.__cause__ = e  #55:         raise InvalidWordError(f"Word {noun} is not a noun") from e
-        raise _coconut_raise_from_0  #55:         raise InvalidWordError(f"Word {noun} is not a noun") from e
+    try:  #51:     try:
+        lemma = lemminflect.getLemma(noun, "NOUN")[0]  # type: str  #52:         lemma: str = lemminflect.getLemma(noun, "NOUN")[0]
+        if "__annotations__" not in _coconut.locals():  #52:         lemma: str = lemminflect.getLemma(noun, "NOUN")[0]
+            __annotations__ = {}  # type: ignore  #52:         lemma: str = lemminflect.getLemma(noun, "NOUN")[0]
+        __annotations__["lemma"] = 'str'  #52:         lemma: str = lemminflect.getLemma(noun, "NOUN")[0]
+    except KeyError as e:  #53:     except KeyError as e:
+        _coconut_raise_from_0 = InvalidWordError("Word {_coconut_format_0} is not a noun".format(_coconut_format_0=(noun)))  #54:         raise InvalidWordError(f"Word {noun} is not a noun") from e
+        _coconut_raise_from_0.__cause__ = e  #54:         raise InvalidWordError(f"Word {noun} is not a noun") from e
+        raise _coconut_raise_from_0  #54:         raise InvalidWordError(f"Word {noun} is not a noun") from e
 
-    base_forms = set()  # type: set[str]  #57:     base_forms: set[str] = set()
-    if "__annotations__" not in _coconut.locals():  #57:     base_forms: set[str] = set()
-        __annotations__ = {}  # type: ignore  #57:     base_forms: set[str] = set()
-    __annotations__["base_forms"] = 'set[str]'  #57:     base_forms: set[str] = set()
+    base_forms = set()  # type: set[str]  #56:     base_forms: set[str] = set()
+    if "__annotations__" not in _coconut.locals():  #56:     base_forms: set[str] = set()
+        __annotations__ = {}  # type: ignore  #56:     base_forms: set[str] = set()
+    __annotations__["base_forms"] = 'set[str]'  #56:     base_forms: set[str] = set()
 
-    _coconut_case_match_to_0 = components.number  #59:     match components.number:
-    _coconut_case_match_check_0 = False  #59:     match components.number:
-    if _coconut_case_match_to_0 == "singular":  #59:     match components.number:
-        _coconut_case_match_check_0 = True  #59:     match components.number:
-    if _coconut_case_match_check_0:  #59:     match components.number:
-        base_forms = _coconut.set((lemminflect.getInflection(lemma, "NN")[0],))  #61:             base_forms = {lemminflect.getInflection(lemma, "NN")[0]}
+    _coconut_case_match_to_0 = components.number  #58:     match components.number:
+    _coconut_case_match_check_0 = False  #58:     match components.number:
+    if _coconut_case_match_to_0 == "singular":  #58:     match components.number:
+        _coconut_case_match_check_0 = True  #58:     match components.number:
+    if _coconut_case_match_check_0:  #58:     match components.number:
+        base_forms = _coconut.set((lemminflect.getInflection(lemma, "NN")[0],))  #60:             base_forms = {lemminflect.getInflection(lemma, "NN")[0]}
 
-    if not _coconut_case_match_check_0:  #63:         case "plural":
-        if _coconut_case_match_to_0 == "plural":  #63:         case "plural":
-            _coconut_case_match_check_0 = True  #63:         case "plural":
-        if _coconut_case_match_check_0:  #63:         case "plural":
-            base_forms.add(pluralinflect.plural_noun(lemma))  #64:             base_forms.add(pluralinflect.plural_noun(lemma))
-            pluralinflect.classical(all=True)  #65:             pluralinflect.classical(all=True)
-            base_forms.add(pluralinflect.plural_noun(lemma))  #66:             base_forms.add(pluralinflect.plural_noun(lemma))
-            pluralinflect.classical(all=False)  #67:             pluralinflect.classical(all=False)
+    if not _coconut_case_match_check_0:  #62:         case "plural":
+        if _coconut_case_match_to_0 == "plural":  #62:         case "plural":
+            _coconut_case_match_check_0 = True  #62:         case "plural":
+        if _coconut_case_match_check_0:  #62:         case "plural":
+            base_forms.add(pluralinflect.plural_noun(lemma))  #63:             base_forms.add(pluralinflect.plural_noun(lemma))
+            pluralinflect.classical(all=True)  #64:             pluralinflect.classical(all=True)
+            base_forms.add(pluralinflect.plural_noun(lemma))  #65:             base_forms.add(pluralinflect.plural_noun(lemma))
+            pluralinflect.classical(all=False)  #66:             pluralinflect.classical(all=False)
 
-    if not _coconut_case_match_check_0:  #69:         case _:
-        _coconut_case_match_check_0 = True  #69:         case _:
-        if _coconut_case_match_check_0:  #69:         case _:
-            raise ValueError("Invalid number: '{_coconut_format_0}'".format(_coconut_format_0=(components.number)))  #70:             raise ValueError(f"Invalid number: '{components.number}'")
+    if not _coconut_case_match_check_0:  #68:         case _:
+        _coconut_case_match_check_0 = True  #68:         case _:
+        if _coconut_case_match_check_0:  #68:         case _:
+            raise ValueError("Invalid number: '{_coconut_format_0}'".format(_coconut_format_0=(components.number)))  #69:             raise ValueError(f"Invalid number: '{components.number}'")
 
-    _coconut_case_match_to_1 = components.case  #72:     match components.case:
-    _coconut_case_match_check_1 = False  #72:     match components.case:
-    _coconut_case_match_check_1 = True  #72:     match components.case:
-    if _coconut_case_match_check_1:  #72:     match components.case:
-        _coconut_case_match_check_1 = False  #72:     match components.case:
-        if not _coconut_case_match_check_1:  #72:     match components.case:
-            if _coconut_case_match_to_1 == "nominative":  #72:     match components.case:
-                _coconut_case_match_check_1 = True  #72:     match components.case:
+    _coconut_case_match_to_1 = components.case  #71:     match components.case:
+    _coconut_case_match_check_1 = False  #71:     match components.case:
+    _coconut_case_match_check_1 = True  #71:     match components.case:
+    if _coconut_case_match_check_1:  #71:     match components.case:
+        _coconut_case_match_check_1 = False  #71:     match components.case:
+        if not _coconut_case_match_check_1:  #71:     match components.case:
+            if _coconut_case_match_to_1 == "nominative":  #71:     match components.case:
+                _coconut_case_match_check_1 = True  #71:     match components.case:
 
-        if not _coconut_case_match_check_1:  #72:     match components.case:
-            if _coconut_case_match_to_1 == "vocative":  #72:     match components.case:
-                _coconut_case_match_check_1 = True  #72:     match components.case:
+        if not _coconut_case_match_check_1:  #71:     match components.case:
+            if _coconut_case_match_to_1 == "vocative":  #71:     match components.case:
+                _coconut_case_match_check_1 = True  #71:     match components.case:
 
-        if not _coconut_case_match_check_1:  #72:     match components.case:
-            if _coconut_case_match_to_1 == "accusative":  #72:     match components.case:
-                _coconut_case_match_check_1 = True  #72:     match components.case:
+        if not _coconut_case_match_check_1:  #71:     match components.case:
+            if _coconut_case_match_to_1 == "accusative":  #71:     match components.case:
+                _coconut_case_match_check_1 = True  #71:     match components.case:
 
 
-    if _coconut_case_match_check_1:  #72:     match components.case:
-        return base_forms  #74:             return base_forms
+    if _coconut_case_match_check_1:  #71:     match components.case:
+        return base_forms  #73:             return base_forms
 
-    if not _coconut_case_match_check_1:  #76:         case "genitive":
-        if _coconut_case_match_to_1 == "genitive":  #76:         case "genitive":
-            _coconut_case_match_check_1 = True  #76:         case "genitive":
-        if _coconut_case_match_check_1:  #76:         case "genitive":
-            possessive_genitive = _coconut.set((_get_possessive(base_form) for base_form in base_forms))  # type: set[str]  #76:         case "genitive":
-            if "__annotations__" not in _coconut.locals():  #76:         case "genitive":
-                __annotations__ = {}  # type: ignore  #76:         case "genitive":
-            __annotations__["possessive_genitive"] = 'set[str]'  #77:             possessive_genitive: set[str] = {
+    if not _coconut_case_match_check_1:  #75:         case "genitive":
+        if _coconut_case_match_to_1 == "genitive":  #75:         case "genitive":
+            _coconut_case_match_check_1 = True  #75:         case "genitive":
+        if _coconut_case_match_check_1:  #75:         case "genitive":
+            possessive_genitive = _coconut.set((_get_possessive(base_form) for base_form in base_forms))  # type: set[str]  #75:         case "genitive":
+            if "__annotations__" not in _coconut.locals():  #75:         case "genitive":
+                __annotations__ = {}  # type: ignore  #75:         case "genitive":
+            __annotations__["possessive_genitive"] = 'set[str]'  #76:             possessive_genitive: set[str] = {
 
-            if components.number == "singular":  #81:             if components.number == "singular":
-                return (possessive_genitive | _coconut.set(("of the {_coconut_format_0}".format(_coconut_format_0=(base_form)) for base_form in base_forms)) | _coconut.set((pluralinflect.inflect("of a('{_coconut_format_0}')".format(_coconut_format_0=(base_form))) for base_form in base_forms)))  #82:                 return (
+            if components.number == "singular":  #80:             if components.number == "singular":
+                return (possessive_genitive | _coconut.set(("of the {_coconut_format_0}".format(_coconut_format_0=(base_form)) for base_form in base_forms)) | _coconut.set((pluralinflect.inflect("of a('{_coconut_format_0}')".format(_coconut_format_0=(base_form))) for base_form in base_forms)))  #81:                 return (
 
-            return possessive_genitive | _coconut.set(("of the {_coconut_format_0}".format(_coconut_format_0=(base_form)) for base_form in base_forms))  #91:             return possessive_genitive | {
+            return possessive_genitive | _coconut.set(("of the {_coconut_format_0}".format(_coconut_format_0=(base_form)) for base_form in base_forms))  #90:             return possessive_genitive | {
 
-    if not _coconut_case_match_check_1:  #95:         case "dative":
-        if _coconut_case_match_to_1 == "dative":  #95:         case "dative":
-            _coconut_case_match_check_1 = True  #95:         case "dative":
-        if _coconut_case_match_check_1:  #95:         case "dative":
-            if components.number == "singular":  #96:             if components.number == "singular":
-                return (_coconut.set(("for the {_coconut_format_0}".format(_coconut_format_0=(base_form)) for base_form in base_forms)) | _coconut.set((pluralinflect.inflect("for a('{_coconut_format_0}')".format(_coconut_format_0=(base_form))) for base_form in base_forms)) | _coconut.set(("to the {_coconut_format_0}".format(_coconut_format_0=(base_form)) for base_form in base_forms)) | _coconut.set((pluralinflect.inflect("to a('{_coconut_format_0}')".format(_coconut_format_0=(base_form))) for base_form in base_forms)))  #97:                 return (
+    if not _coconut_case_match_check_1:  #94:         case "dative":
+        if _coconut_case_match_to_1 == "dative":  #94:         case "dative":
+            _coconut_case_match_check_1 = True  #94:         case "dative":
+        if _coconut_case_match_check_1:  #94:         case "dative":
+            if components.number == "singular":  #95:             if components.number == "singular":
+                return (_coconut.set(("for the {_coconut_format_0}".format(_coconut_format_0=(base_form)) for base_form in base_forms)) | _coconut.set((pluralinflect.inflect("for a('{_coconut_format_0}')".format(_coconut_format_0=(base_form))) for base_form in base_forms)) | _coconut.set(("to the {_coconut_format_0}".format(_coconut_format_0=(base_form)) for base_form in base_forms)) | _coconut.set((pluralinflect.inflect("to a('{_coconut_format_0}')".format(_coconut_format_0=(base_form))) for base_form in base_forms)))  #96:                 return (
 
-            return (_coconut.set(("for the {_coconut_format_0}".format(_coconut_format_0=(base_form)) for base_form in base_forms)) | _coconut.set(("for {_coconut_format_0}".format(_coconut_format_0=(base_form)) for base_form in base_forms)) | _coconut.set(("to the {_coconut_format_0}".format(_coconut_format_0=(base_form)) for base_form in base_forms)) | _coconut.set(("to {_coconut_format_0}".format(_coconut_format_0=(base_form)) for base_form in base_forms)))  #110:             return (
+            return (_coconut.set(("for the {_coconut_format_0}".format(_coconut_format_0=(base_form)) for base_form in base_forms)) | _coconut.set(("for {_coconut_format_0}".format(_coconut_format_0=(base_form)) for base_form in base_forms)) | _coconut.set(("to the {_coconut_format_0}".format(_coconut_format_0=(base_form)) for base_form in base_forms)) | _coconut.set(("to {_coconut_format_0}".format(_coconut_format_0=(base_form)) for base_form in base_forms)))  #109:             return (
 
-    if not _coconut_case_match_check_1:  #117:         case "ablative":
-        if _coconut_case_match_to_1 == "ablative":  #117:         case "ablative":
-            _coconut_case_match_check_1 = True  #117:         case "ablative":
-        if _coconut_case_match_check_1:  #117:         case "ablative":
-            if components.number == "singular":  #118:             if components.number == "singular":
-                return (base_forms | _coconut.set(("with the {_coconut_format_0}".format(_coconut_format_0=(base_form)) for base_form in base_forms)) | _coconut.set((pluralinflect.inflect("with a('{_coconut_format_0}')".format(_coconut_format_0=(base_form))) for base_form in base_forms)) | _coconut.set(("by the {_coconut_format_0}".format(_coconut_format_0=(base_form)) for base_form in base_forms)) | _coconut.set((pluralinflect.inflect("by a('{_coconut_format_0}')".format(_coconut_format_0=(base_form))) for base_form in base_forms)) | _coconut.set(("by means of the {_coconut_format_0}".format(_coconut_format_0=(base_form)) for base_form in base_forms)) | _coconut.set((pluralinflect.inflect("by means of a('{_coconut_format_0}')".format(_coconut_format_0=(base_form))) for base_form in base_forms)))  #119:                 return (
+    if not _coconut_case_match_check_1:  #116:         case "ablative":
+        if _coconut_case_match_to_1 == "ablative":  #116:         case "ablative":
+            _coconut_case_match_check_1 = True  #116:         case "ablative":
+        if _coconut_case_match_check_1:  #116:         case "ablative":
+            if components.number == "singular":  #117:             if components.number == "singular":
+                return (base_forms | _coconut.set(("with the {_coconut_format_0}".format(_coconut_format_0=(base_form)) for base_form in base_forms)) | _coconut.set((pluralinflect.inflect("with a('{_coconut_format_0}')".format(_coconut_format_0=(base_form))) for base_form in base_forms)) | _coconut.set(("by the {_coconut_format_0}".format(_coconut_format_0=(base_form)) for base_form in base_forms)) | _coconut.set((pluralinflect.inflect("by a('{_coconut_format_0}')".format(_coconut_format_0=(base_form))) for base_form in base_forms)) | _coconut.set(("by means of the {_coconut_format_0}".format(_coconut_format_0=(base_form)) for base_form in base_forms)) | _coconut.set((pluralinflect.inflect("by means of a('{_coconut_format_0}')".format(_coconut_format_0=(base_form))) for base_form in base_forms)))  #118:                 return (
 
-            return (base_forms | _coconut.set(("with the {_coconut_format_0}".format(_coconut_format_0=(base_form)) for base_form in base_forms)) | _coconut.set(("by the {_coconut_format_0}".format(_coconut_format_0=(base_form)) for base_form in base_forms)) | _coconut.set(("by means of the {_coconut_format_0}".format(_coconut_format_0=(base_form)) for base_form in base_forms)))  #141:             return (
+            return (base_forms | _coconut.set(("with the {_coconut_format_0}".format(_coconut_format_0=(base_form)) for base_form in base_forms)) | _coconut.set(("by the {_coconut_format_0}".format(_coconut_format_0=(base_form)) for base_form in base_forms)) | _coconut.set(("by means of the {_coconut_format_0}".format(_coconut_format_0=(base_form)) for base_form in base_forms)))  #140:             return (
 
-    if not _coconut_case_match_check_1:  #148:         case _:
-        _coconut_case_match_check_1 = True  #148:         case _:
-        if _coconut_case_match_check_1:  #148:         case _:
-            raise ValueError("Invalid case: '{_coconut_format_0}'".format(_coconut_format_0=(components.case)))  #149:             raise ValueError(f"Invalid case: '{components.case}'")
+    if not _coconut_case_match_check_1:  #147:         case _:
+        _coconut_case_match_check_1 = True  #147:         case _:
+        if _coconut_case_match_check_1:  #147:         case _:
+            raise ValueError("Invalid case: '{_coconut_format_0}'".format(_coconut_format_0=(components.case)))  #148:             raise ValueError(f"Invalid case: '{components.case}'")

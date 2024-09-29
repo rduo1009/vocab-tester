@@ -2,7 +2,7 @@
 
 import lemminflect
 from inflect import engine
-from typing import no_type_check
+
 from .exceptions import InvalidWordError
 
 if TYPE_CHECKING:
@@ -17,8 +17,7 @@ def _get_possessive(noun: str) -> str:
     return f"{noun}'" if noun.endswith("s") else f"{noun}'s"
 
 
-@no_type_check
-def find_noun_inflections(
+def find_noun_inflections(  # type: ignore[return]
     noun: str,
     components: accido.misc.EndingComponents,
 ) -> set[str]:
