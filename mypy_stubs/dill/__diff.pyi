@@ -5,7 +5,7 @@ from typing import Any
 from _typeshed import Incomplete
 
 HAS_NUMPY: bool
-getrefcount: Incomplete
+getrefcount: Incomplete  # type: ignore
 memo: dict  # type: ignore
 id_to_obj: dict  # type: ignore
 builtins_types: set[tuple[type, ...]]
@@ -22,7 +22,7 @@ def whats_changed(
     seen: Incomplete | None = None,
     simple: bool = False,
     first: bool = True,
-) -> Incomplete: ...
-def has_changed(*args: Incomplete, **kwds: Incomplete) -> Incomplete: ...
+) -> Incomplete: ...  # type: ignore
+def has_changed(*args: Incomplete, **kwds: Incomplete) -> Incomplete: ...  # type: ignore
 
 __import__ = __import__
