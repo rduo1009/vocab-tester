@@ -1,5 +1,3 @@
-dill._objects
-dill.__diff
 dill.tests
 dill.tests.__main__
 dill.tests.test_abc
@@ -28,5 +26,8 @@ dill.tests.test_restricted
 dill.tests.test_selected
 dill.tests.test_session
 dill.tests.test_source
+dill.tests.test_sources
 dill.tests.test_temp
+dill.tests.test_threads
 dill.tests.test_weakref
+dill.__diff.pyi
