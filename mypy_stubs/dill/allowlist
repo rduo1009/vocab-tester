@@ -29,4 +29,6 @@ dill.tests.test_selected
 dill.tests.test_session
 dill.tests.test_source
 dill.tests.test_temp
+dill.tests.test_threads
 dill.tests.test_weakref
+dill.__diff.pyi
