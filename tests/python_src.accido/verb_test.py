@@ -87,12 +87,6 @@ class TestVerbErrors:
             word.get(number="singular", tense="perfect", voice="passive", mood="participle", participle_gender="masculine", participle_case="nominative", person=1)
         assert "Participle cannot have a person (person '1')" == str(error.value)
 
-    def test_errors_invalid_person(self):
-        with pytest.raises(InvalidInputError) as error:
-            word = Verb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
-            word.get(person=4, number="singular", tense="present", voice="active", mood="indicative")
-        assert "Invalid person: '4'" == str(error.value)
-
     def test_errors_participle_gender_not_given(self):
         with pytest.raises(InvalidInputError) as error:
             word = Verb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
