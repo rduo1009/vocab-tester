@@ -9,6 +9,7 @@ import pytest
 
 from python_src.accido.exceptions import InvalidInputError  # isort: skip
 from python_src.accido.endings import Noun
+from python_src.utils import compare
 
 
 class TestNounErrors:
@@ -57,15 +58,6 @@ class TestNounDunder:
         assert word1 > word2
 
     def test_find(self):
-        def compare(s, t):
-            t = list(t)  # make a mutable copy
-            try:
-                for elem in s:
-                    t.remove(elem)
-            except ValueError:
-                return False
-            return not t
-
         word = Noun(nominative="ancilla", genitive="ancillae", gender="feminine", meaning="slavegirl")
         assert compare(word.find("ancilla"),
             [SimpleNamespace(case="nominative", number="singular", string="nominative singular"),
