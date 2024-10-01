@@ -149,7 +149,8 @@ def find_verb_inflections(
 
         case _:
             raise NotImplementedError(
-                f"The {components.tense} {components.voice} {components.mood} has not been implemented",
+                f"The {components.tense} {components.voice} "
+                f"{components.mood} has not been implemented",
             )
 
 
@@ -346,7 +347,8 @@ def _find_participle_inflections(
 
         case _:
             raise NotImplementedError(
-                f"The {components.tense} {components.voice} participle has not been implemented",
+                f"The {components.tense} {components.voice} participle has "
+                "not been implemented",
             )
 
 

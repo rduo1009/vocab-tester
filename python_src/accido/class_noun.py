@@ -115,7 +115,8 @@ class Noun(_Word):
             }
 
     def _find_declension(self) -> None:
-        # The ordering of this is strange because e.g. ending -ei ends in 'i' as well as 'ei'
+        # The ordering of this is strange because
+        # e.g. ending -ei ends in 'i' as well as 'ei'
         # so 5th declension check must come before 2nd declension check, etc.
         if self.genitive[-2:] == "ei":
             self.declension = 5
@@ -256,7 +257,8 @@ class Noun(_Word):
 
         if self.declension == 5:
             raise InvalidInputError(
-                f"Fifth declension nouns cannot be neuter (noun '{self.nominative}' given)",
+                "Fifth declension nouns cannot be neuter "
+                f"(noun '{self.nominative}' given)",
             )
 
         if self.declension == 4:
@@ -326,11 +328,17 @@ class Noun(_Word):
         return output
 
     def __repr__(self) -> str:
-        return f"Noun({self.nominative}, {self.genitive}, {self.gender}, {self.meaning})"
+        return (
+            f"Noun({self.nominative}, {self.genitive}, "
+            f"{self.gender}, {self.meaning})"
+        )
 
     def __str__(self) -> str:
         if self.gender in GENDER_SHORTHAND:
-            return f"{self.meaning}: {self.nominative}, {self.genitive}, ({GENDER_SHORTHAND[self.gender]})"
+            return (
+                f"{self.meaning}: {self.nominative}, "
+                f"{self.genitive}, ({GENDER_SHORTHAND[self.gender]})"
+            )
 
         raise ValueError(
             f"Gender {self.gender} not recognised",

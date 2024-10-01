@@ -78,7 +78,8 @@ def save_vocab_dump(
         # Add lz4 extension if it is not already there
         if file_path.suffix != ".lz4":
             warnings.warn(
-                f"The file '{file_path}' is being compressed, but the '.lz4' extension is not present and is being added.",
+                f"The file '{file_path}' is being compressed, "
+                "but the '.lz4' extension is not present and is being added.",
                 category=MisleadingFilenameWarning,
                 stacklevel=2,
             )
@@ -91,7 +92,8 @@ def save_vocab_dump(
 
     if file_path.suffix == ".lz4":
         warnings.warn(
-            f"The file '{file_path}' is not being compressed, but the file extension ('.lz4') suggests it is.",
+            f"The file '{file_path}' is not being compressed,"
+            "but the file extension ('.lz4') suggests it is.",
             category=MisleadingFilenameWarning,
             stacklevel=2,
         )

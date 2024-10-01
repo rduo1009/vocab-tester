@@ -14,7 +14,6 @@ ignore = [
     "EM101",
     "TRY003",
     "ANN",
-    "E501",
     "S403",
     "FURB101",
     "PTH123",
@@ -36,7 +35,7 @@ ignore = [
     "I",
     "FIX004",
 ]
-
+extend-select = ["E501", "W505"]
 
 [lint.pydocstyle]
 convention = "numpy"

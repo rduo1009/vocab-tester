@@ -143,7 +143,8 @@ class Adjective(_Word):
 
                     case _:
                         raise InvalidInputError(
-                            f"Termination must be 1, 2 or 3 (given '{self.termination}')",
+                            "Termination must be 1, 2 or 3 "
+                            f"(given '{self.termination}')",
                         )
 
             case _:
@@ -154,12 +155,14 @@ class Adjective(_Word):
     def _212_endings(self) -> Endings:
         if self.termination:
             raise InvalidInputError(
-                f"2-1-2 adjectives cannot have a termination (termination '{self.termination}' given)",
+                "2-1-2 adjectives cannot have a termination "
+                f"(termination '{self.termination}' given)",
             )
 
         if len(self._principal_parts) != 3:
             raise InvalidInputError(
-                f"2-1-2 adjectives must have 3 principal parts (adjective '{self._first}' given)",
+                "2-1-2 adjectives must have 3 principal parts "
+                f"(adjective '{self._first}' given)",
             )
 
         self._femnom = self._principal_parts[1]
@@ -171,11 +174,9 @@ class Adjective(_Word):
             self._cmp_stem = f"{self._pos_stem}ior"  # car- -> carior-
             if self._mascnom.endswith(
                 "er",
-            ):  # pragma: no cover # not sure if an example of this actually occurs
+            ):  # pragma: no cover
                 self._spr_stem = f"{self._mascnom}rim"  # miser- -> miserrim-
-            elif (
-                self._mascnom in LIS_ADJECTIVES
-            ):  # pragma: no cover # not sure if an example of this actually occurs
+            elif self._mascnom in LIS_ADJECTIVES:  # pragma: no cover
                 self._spr_stem = f"{self._pos_stem}lim"  # facil- -> facillim-
             else:
                 self._spr_stem = f"{self._pos_stem}issim"  # car- -> carissim-
@@ -316,14 +317,16 @@ class Adjective(_Word):
     def _31_endings(self) -> Endings:
         if len(self._principal_parts) != 2:
             raise InvalidInputError(
-                f"First-termination adjectives must have 2 principal parts (adjective '{self._first}' given)",
+                "First-termination adjectives must have 2 principal parts "
+                f"(adjective '{self._first}' given)",
             )
 
         self._mascgen: str = self._principal_parts[1]
 
         if self._mascgen[-2:] != "is":
             raise InvalidInputError(
-                f"Invalid genitive form: '{self._mascgen}' (must end in '-is')",
+                f"Invalid genitive form: '{self._mascgen}' "
+                "(must end in '-is')",
             )
 
         self._pos_stem = self._mascgen[:-2]  # ingentis -> ingent-
@@ -332,9 +335,7 @@ class Adjective(_Word):
             self._cmp_stem = f"{self._pos_stem}ior"  # ingent- > ingentior-
             if self._mascnom.endswith("er"):
                 self._spr_stem = f"{self._mascnom}rim"  # miser- -> miserrim-
-            elif (
-                self._mascnom in LIS_ADJECTIVES
-            ):  # pragma: no cover # not sure if an example of this actually occurs
+            elif self._mascnom in LIS_ADJECTIVES:  # pragma: no cover
                 self._spr_stem = f"{self._pos_stem}lim"  # facil- -> facillim-
             else:
                 self._spr_stem = (
@@ -477,7 +478,8 @@ class Adjective(_Word):
     def _32_endings(self) -> Endings:
         if len(self._principal_parts) != 2:
             raise InvalidInputError(
-                f"Second-termination adjectives must have 2 principal parts (adjective '{self._first}' given)",
+                "Second-termination adjectives must have 2 principal parts "
+                f"(adjective '{self._first}' given)",
             )
 
         self._neutnom = self._principal_parts[1]
@@ -485,9 +487,7 @@ class Adjective(_Word):
         self._pos_stem = self._mascnom[:-2]  # fortis -> fort-
         if not self.irregular_flag:
             self._cmp_stem = f"{self._pos_stem}ior"  # fort- -> fortior-
-            if (
-                self._mascnom[-2:] == "er"
-            ):  # pragma: no cover # not sure if an example of this actually occurs
+            if self._mascnom[-2:] == "er":  # pragma: no cover
                 self._spr_stem = f"{self._mascnom}rim"  # miser- -> miserrim-
             elif self._mascnom in LIS_ADJECTIVES:
                 self._spr_stem = f"{self._pos_stem}lim"  # facil- -> facillim-
@@ -632,7 +632,8 @@ class Adjective(_Word):
     def _33_endings(self) -> Endings:
         if len(self._principal_parts) != 3:
             raise InvalidInputError(
-                f"Third-termination adjectives must have 3 principal parts (adjective '{self._first}' given)",
+                "Third-termination adjectives must have 3 principal parts "
+                f"(adjective '{self._first}' given)",
             )
 
         self._mascnom = self._principal_parts[0]
@@ -644,11 +645,9 @@ class Adjective(_Word):
             self._cmp_stem = f"{self._pos_stem}ior"  # acr- -> acrior-
             if self._mascnom[-2:] == "er":
                 self._spr_stem = f"{self._mascnom}rim"  # cer- -> acerrim-
-            elif (
-                self._mascnom in LIS_ADJECTIVES
-            ):  # pragma: no cover # not sure if an example of this actually occurs
+            elif self._mascnom in LIS_ADJECTIVES:  # pragma: no cover
                 self._spr_stem = f"{self._pos_stem}lim"  # facil- -> facillim-
-            else:  # pragma: no cover # not sure if an example of this actually occurs
+            else:  # pragma: no cover
                 self._spr_stem = f"{self._pos_stem}issim"  # levis -> levissim-
 
         endings: Endings
@@ -832,13 +831,14 @@ class Adjective(_Word):
         'egens'
 
         Note that the arguments of get are keyword-only.
-        """
+        """  # noqa: E501
         short_degree: str
 
         if adverb:
             if gender or case or number:
                 raise InvalidInputError(
-                    f"Adverbs do not have gender, case or number (given '{gender}', '{case}' and '{number}')",
+                    "Adverbs do not have gender, case or number "
+                    f"(given '{gender}', '{case}' and '{number}')",
                 )
             try:
                 short_degree = DEGREE_SHORTHAND[degree]
@@ -879,7 +879,10 @@ class Adjective(_Word):
                 case=key_from_value(CASE_SHORTHAND, key[5:8]),
                 number=key_from_value(NUMBER_SHORTHAND, key[8:10]),
             )
-            output.string = f"{output.degree} {output.case} {output.number} {output.gender}"
+            output.string = (
+                f"{output.degree} {output.case} "
+                f"{output.number} {output.gender}"
+            )
 
         else:
             output = EndingComponents(
@@ -891,8 +894,14 @@ class Adjective(_Word):
 
     def __str__(self) -> str:
         if self.declension == "3":
-            return f"{self.meaning}: {', '.join(self._principal_parts)}, ({self.declension}-{self.termination})"
+            return (
+                f"{self.meaning}: {', '.join(self._principal_parts)},"
+                f"({self.declension}-{self.termination})"
+            )
         return f"{self.meaning}: {', '.join(self._principal_parts)}, (2-1-2)"
 
     def __repr__(self) -> str:
-        return f"Adjective({', '.join(self._principal_parts)}, {self.termination}, {self.declension}, {self.meaning})"
+        return (
+            f"Adjective({', '.join(self._principal_parts)}, "
+            f"{self.termination}, {self.declension}, {self.meaning})"
+        )
