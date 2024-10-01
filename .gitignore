@@ -12,5 +12,4 @@ monkeytype.sqlite3
 .coverage
 .tox
 /dist
-poetry.lock
 **/__coconut_cache__
