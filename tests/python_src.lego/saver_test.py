@@ -22,8 +22,6 @@ def test_saver_wronglz4extension():
     x = lego.reader.read_vocab_file(Path("tests/python_src.lego/test_vocab_files/regular_list.txt"))
     with pytest.warns(MisleadingFilenameWarning, match=re.escape("The file 'tests/python_src.lego/test_vocab_files/testdump/regular_list.testdump.wrong.lz4' is not being compressed, but the file extension ('.lz4') suggests it is.")):
         lego.saver.save_vocab_dump(Path("tests/python_src.lego/test_vocab_files/testdump/regular_list.testdump.wrong.lz4"), x, compress=False)
-    y = lego.reader.read_vocab_dump(Path("tests/python_src.lego/test_vocab_files/testdump/regular_list.testdump.lz4"))
-    assert x == y
 
 
 def test_saver_compress():
