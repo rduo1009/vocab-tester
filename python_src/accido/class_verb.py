@@ -649,6 +649,6 @@ class Verb(_Word):
                 f"{self.perfect}, {self.ppp}"
             )
         return (
-            f"{self.meaning}: {self.present},"
+            f"{self.meaning}: {self.present}, "
             f"{self.infinitive}, {self.perfect}"
         )
