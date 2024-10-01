@@ -34,7 +34,7 @@ class RegularWord(_Word):
     """
 
     def __init__(self, *, word: str, meaning: Meaning) -> None:
-        """Initalises RegularWord.
+        """Initialises RegularWord.
 
         Parameters
         ----------

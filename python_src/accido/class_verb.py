@@ -68,7 +68,7 @@ class Verb(_Word):
         ppp: str = "",
         meaning: Meaning,
     ) -> None:
-        """Initalises Verb and determines the conjugation and endings.
+        """Initialises Verb and determines the conjugation and endings.
 
         Parameters
         ----------
@@ -562,7 +562,7 @@ class Verb(_Word):
             if not number:
                 raise InvalidInputError("Number not given")
 
-            return self._get_partciple(
+            return self._get_participle(
                 tense=tense,
                 voice=voice,
                 number=number,
@@ -589,7 +589,7 @@ class Verb(_Word):
             f"V{short_tense}{short_voice}{short_mood}{short_number}{person}",
         )
 
-    def _get_partciple(
+    def _get_participle(
         self,
         *,
         tense: Tense,

@@ -42,7 +42,7 @@ class Pronoun(_Word):
     """
 
     def __init__(self, *, pronoun: str, meaning: Meaning) -> None:
-        """Intialises Pronoun and determines the endings.
+        """Initialises Pronoun and determines the endings.
 
         Parameters
         ----------
