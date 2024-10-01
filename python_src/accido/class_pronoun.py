@@ -6,19 +6,20 @@
 from __future__ import annotations
 
 from functools import total_ordering
+from typing import TYPE_CHECKING
 
 from .class_word import _Word
-from .custom_exceptions import InvalidInputError
 from .edge_cases import PRONOUNS
+from .exceptions import InvalidInputError
 from .misc import (
-    CASE_SHORTHAND,
-    GENDER_SHORTHAND,
-    NUMBER_SHORTHAND,
-    Ending,
+    Case,
     EndingComponents,
-    Meaning,
-    key_from_value,
+    Gender,
+    Number,
 )
+
+if TYPE_CHECKING:
+    from .type_aliases import Ending, Meaning
 
 
 @total_ordering
@@ -34,14 +35,14 @@ class Pronoun(_Word):
     Examples
     --------
     >>> foo = Pronoun(pronoun="hic", meaning="this")
-    >>> foo.endings
-    {"Pmnomsg": "hic", "Pmaccsg": "hunc", "Pmgensg": "huius", ...}
+    >>> foo["Pmnomsg"]
+    'hic'
 
     Note that the arguments of Pronoun are keyword-only.
-    """  # fmt: skip
+    """
 
-    def __init__(self, *, pronoun: str, meaning: Meaning):
-        """Intialises Pronoun and determines the endings.
+    def __init__(self, *, pronoun: str, meaning: Meaning) -> None:
+        """Initialises Pronoun and determines the endings.
 
         Parameters
         ----------
@@ -62,8 +63,10 @@ class Pronoun(_Word):
         super().__init__()
         try:
             self.endings = PRONOUNS[pronoun]
-        except KeyError:
-            raise InvalidInputError(f"Pronoun '{pronoun}' not recognised")
+        except KeyError as e:
+            raise InvalidInputError(
+                f"Pronoun '{pronoun}' not recognised",
+            ) from e
 
         self.pronoun: str = pronoun
         self._first = self.pronoun
@@ -73,8 +76,11 @@ class Pronoun(_Word):
         self._femnom: Ending = self.endings["Pfnomsg"]
         self._neutnom: Ending = self.endings["Pnnomsg"]
 
-    def get(self, *, gender: str, case: str, number: str) -> Ending | None:
+    def get(
+        self, *, gender: Gender | str, case: Case | str, number: Number | str
+    ) -> Ending | None:
         """Returns the ending of the pronoun.
+
         The function returns None if no ending is found.
 
         Parameters
@@ -92,35 +98,51 @@ class Pronoun(_Word):
         ------
         InvalidInputError
             If the input is invalid.
-        
+
             If an ending cannot be found.
-        
+
         Examples
         --------
         >>> foo = Pronoun(pronoun="hic", meaning="this")
-        >>> foo.get(gender="masculine", case="nominative", \
-        ...         number="singular")
-        "hic"
+        >>> foo.get(
+        ...     gender=Gender.MASCULINE,
+        ...     case=Case.NOMINATIVE,
+        ...     number=Number.SINGULAR,
+        ... )
+        'hic'
 
         Note that the arguments of get are keyword-only.
-        """  # fmt: skip
-        try:
-            short_gender: str = GENDER_SHORTHAND[gender]
-            short_case: str = CASE_SHORTHAND[case]
-            short_number: str = NUMBER_SHORTHAND[number]
-        except KeyError:
-            raise InvalidInputError(
-                f"Gender '{gender}', case '{case}' or number '{number}' not recognised"
-            )
+        """
+        if isinstance(gender, str):
+            try:
+                gender = Gender(gender.lower())
+            except ValueError as e:
+                raise InvalidInputError(f"Invalid gender: '{gender}'") from e
+
+        if isinstance(case, str):
+            try:
+                case = Case(case.lower())
+            except ValueError as e:
+                raise InvalidInputError(f"Invalid case: '{case}'") from e
+
+        if isinstance(number, str):
+            try:
+                number = Number(number.lower())
+            except ValueError as e:
+                raise InvalidInputError(f"Invalid number: '{number}'") from e
+
+        short_gender: str = gender.shorthand
+        short_case: str = case.shorthand
+        short_number: str = number.shorthand
 
         return self.endings.get(f"P{short_gender}{short_case}{short_number}")
 
     @staticmethod
     def _create_namespace(key: str) -> EndingComponents:
         output: EndingComponents = EndingComponents(
-            gender=key_from_value(GENDER_SHORTHAND, key[1]),
-            case=key_from_value(CASE_SHORTHAND, key[2:5]),
-            number=key_from_value(NUMBER_SHORTHAND, key[5:7]),
+            gender=Gender(key[1]).regular,
+            case=Case(key[2:5]).regular,
+            number=Number(key[5:7]).regular,
         )
         output.string = f"{output.case} {output.number} {output.gender}"
         return output

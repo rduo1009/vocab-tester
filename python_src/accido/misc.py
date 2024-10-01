@@ -5,72 +5,110 @@
 
 from __future__ import annotations
 
-import sys
 from dataclasses import dataclass
 from types import SimpleNamespace
-from typing import Any, Final
+from typing import TYPE_CHECKING, Final, Literal
 
-"""Mapping of number values to their more concise abbreviated forms."""
-NUMBER_SHORTHAND: Final[dict[str, str]] = {
-    "singular": "sg",
-    "plural": "pl",
-}  # fmt: skip
+if TYPE_CHECKING:
+    # HACK: To avoid mypy errors.
+    from enum import Enum
+else:
+    from aenum import Enum
 
-"""Mapping of tense values to their more concise abbreviated forms."""
-TENSE_SHORTHAND: Final[dict[str, str]] = {
-    "present": "pre",
-    "imperfect": "imp",
-    "future": "fut",
-    "perfect": "per",
-    "pluperfect": "plp",
-    # "future perfect": "fpr",
-}  # fmt: skip
+from aenum import MultiValue  # type: ignore[import-untyped]
 
-"""Mapping of voice values to their more concise abbreviated forms."""
-VOICE_SHORTHAND: Final[dict[str, str]] = {
-    "active": "act",
-    "passive": "pas",
-}  # fmt: skip
 
-"""Mapping of mood values to their more concise abbreviated forms."""
-MOOD_SHORTHAND: Final[dict[str, str]] = {
-    "indicative": "ind",
-    "infinitive": "inf",
-    "imperative": "ipe",
-    "subjunctive": "sbj",
-    "participle": "ptc",
-}  # fmt: skip
+class Number(Enum, settings=MultiValue, init="regular shorthand"):
+    """Represents the grammatical number."""
 
-"""Mapping of case values to their more concise abbreviated forms."""
-CASE_SHORTHAND: Final[dict[str, str]] = {
-    "nominative": "nom",
-    "vocative": "voc",
-    "accusative": "acc",
-    "genitive": "gen",
-    "dative": "dat",
-    "ablative": "abl",
-}  # fmt: skip
+    SINGULAR = "singular", "sg"
+    PLURAL = "plural", "pl"
 
-"""Mapping of gender values to their more concise abbreviated forms."""
-GENDER_SHORTHAND: Final[dict[str, str]] = {
-    "masculine": "m",
-    "feminine": "f",
-    "neuter": "n",
-}  # fmt: skip
+    regular: str
+    shorthand: str
 
-"""Mapping of degree values to their more concise abbreviated forms."""
-DEGREE_SHORTHAND: Final[dict[str, str]] = {
-    "positive": "pos",
-    "comparative": "cmp",
-    "superlative": "spr",
-}  # fmt: skip
+
+class Tense(Enum, settings=MultiValue, init="regular shorthand"):
+    """Represents the tense of a verb."""
+
+    PRESENT = "present", "pre"
+    IMPERFECT = "imperfect", "imp"
+    FUTURE = "future", "fut"
+    PERFECT = "perfect", "per"
+    PLUPERFECT = "pluperfect", "plp"
+    # FUTURE_PERFECT = "future perfect", "fpr"
+
+    regular: str
+    shorthand: str
+
+
+class Voice(Enum, settings=MultiValue, init="regular shorthand"):
+    """Represents the voice of a verb."""
+
+    ACTIVE = "active", "act"
+    PASSIVE = "passive", "pas"
+
+    regular: str
+    shorthand: str
+
+
+class Mood(Enum, settings=MultiValue, init="regular shorthand"):
+    """Represents the mood of a verb."""
+
+    INDICATIVE = "indicative", "ind"
+    INFINITIVE = "infinitive", "inf"
+    IMPERATIVE = "imperative", "ipe"
+    SUBJUNCTIVE = "subjunctive", "sbj"
+    PARTICIPLE = "participle", "ptc"
+
+    regular: str
+    shorthand: str
+
+
+class Case(Enum, settings=MultiValue, init="regular shorthand"):
+    """Represents the case of a noun."""
+
+    NOMINATIVE = "nominative", "nom"
+    VOCATIVE = "vocative", "voc"
+    ACCUSATIVE = "accusative", "acc"
+    GENITIVE = "genitive", "gen"
+    DATIVE = "dative", "dat"
+    ABLATIVE = "ablative", "abl"
+
+    regular: str
+    shorthand: str
+
+
+class Gender(Enum, settings=MultiValue, init="regular shorthand"):
+    """Represents the gender of a noun or adjective."""
+
+    MASCULINE = "masculine", "m"
+    FEMININE = "feminine", "f"
+    NEUTER = "neuter", "n"
+
+    regular: str
+    shorthand: str
+
+
+class Degree(Enum, settings=MultiValue, init="regular shorthand"):
+    """Represents the degree of an adjective."""
+
+    POSITIVE = "positive", "pos"
+    COMPARATIVE = "comparative", "cmp"
+    SUPERLATIVE = "superlative", "spr"
+
+    regular: str
+    shorthand: str
+
 
 """Mapping of person values to their more concise abbreviated forms."""
 PERSON_SHORTHAND: Final[dict[int, str]] = {
     1: "1st person",
     2: "2nd person",
     3: "3rd person",
-}  # fmt: skip
+}
+
+type Person = Literal[1, 2, 3]
 
 
 class EndingComponents(SimpleNamespace):
@@ -80,15 +118,14 @@ class EndingComponents(SimpleNamespace):
     --------
     >>> foo = EndingComponents(case="nominative", gender="masculine", \
                                number="singular")
+    >>> foo.case
+    'nominative'
     """
-
-    pass
 
 
 @dataclass(init=True)
 class MultipleMeanings:
-    """Represents multiple meanings, with a main meaning and other
-    meanings.
+    """Represents multiple meanings, with a main meaning and other meanings.
 
     Attributes
     ----------
@@ -100,6 +137,15 @@ class MultipleMeanings:
     This class allows for there to be several English definitions of one
     Latin word. This means for translating-to-English questions, synonyms
     can be accepted, but not vice versa.
+
+    Examples
+    --------
+    >>> foo = MultipleMeanings(["hide", "conceal"])
+    >>> foo.meanings
+    ['hide', 'conceal']
+
+    >>> foo.__str__()
+    'hide'
     """
 
     meanings: list[str]
@@ -114,7 +160,8 @@ class MultipleMeanings:
 class MultipleEndings(SimpleNamespace):
     """Represents multiple endings for a word, where each ending is a
     separate string.
-    The fact that the attribute names can be customises means that this
+
+    The fact that the attribute names can be customised means that this
     class can be used for many use cases.
     e.g. MultipleEndings(regular="nostri", partitive="nostrum")
     would allow for nostrum being the partitive genitive, while nostri
@@ -125,7 +172,19 @@ class MultipleEndings(SimpleNamespace):
     value : str
 
     etc.
-    """
+
+    Examples
+    --------
+    >>> foo = MultipleEndings(regular="nostri", partitive="nostrum")
+    >>> foo.regular
+    'nostri'
+
+    >>> foo.__str__()
+    'nostri/nostrum'
+
+    >>> foo.get_all()
+    ['nostri', 'nostrum']
+    """  # noqa: D205
 
     def get_all(self) -> list[str]:
         """Returns a list of all the possible endings.
@@ -135,7 +194,6 @@ class MultipleEndings(SimpleNamespace):
         list[str]
             The endings.
         """
-
         return list(self.__dict__.values())
 
     def __str__(self) -> str:
@@ -145,43 +203,8 @@ class MultipleEndings(SimpleNamespace):
         return self.__str__() + val2
 
     # Allows for a prefix to be added to all of the endings.
-    def __radd__(self, val2: str) -> "MultipleEndings":  # pragma: no cover
+    def __radd__(self, val2: str) -> MultipleEndings:  # pragma: no cover
         prefixed = {
             key: f"{val2}{value}" for key, value in self.__dict__.items()
         }
         return MultipleEndings(**prefixed)
-
-
-def key_from_value(dd: dict[Any, Any] | dict[Any, Any], value: Any) -> Any:
-    """Returns the value in a dictionary from its key.
-    If no key is found with the given value, returns `None`.
-
-    Parameters
-    ----------
-    dd : dict[Any, Any]
-        The dictionary to search.
-    value : Any
-        The value to search for.
-
-    Returns
-    -------
-    Any
-        The first key whose value matches 'value', or None if not
-        found.
-    """
-
-    return next((key for key, val in dd.items() if val == value), None)
-
-
-if sys.version_info >= (3, 12):
-    from .type_hints import Ending as Ending
-    from .type_hints import Endings as Endings
-    from .type_hints import Meaning as Meaning
-
-else:  # pragma: no cover
-    # The type statement was added in 3.12, so TypeAlias is used instead
-    from typing import TypeAlias
-
-    Ending: TypeAlias = str | MultipleEndings
-    Endings: TypeAlias = dict[str, Ending]
-    Meaning: TypeAlias = str | MultipleMeanings

@@ -2,7 +2,9 @@
 # -*- coding: utf-8 -*-
 
 """Representations of Latin words with their endings calculated.
-A wrapper for the classes."""
+
+A wrapper for the classes.
+"""
 
 from .class_adjective import Adjective as Adjective
 from .class_noun import Noun as Noun

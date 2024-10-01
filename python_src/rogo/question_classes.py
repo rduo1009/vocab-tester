@@ -3,9 +3,13 @@
 
 """Contains representations of questions about Latin vocabulary."""
 
-from dataclasses import dataclass
+from __future__ import annotations
 
-from .. import accido
+from dataclasses import dataclass
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from .. import accido
 
 # TI = type-in
 # MC = multiple choice
@@ -15,13 +19,11 @@ from .. import accido
 class _Question:
     """Base class for questions."""
 
-    pass
-
 
 @dataclass
 class TI_EngtoLat_Question(_Question):
     """A question that asks for the Latin translation of an English word.
-    For example, "I search" (answer: "quaero")
+    For example, "I search" (answer: "quaero").
     """
 
     english: str
@@ -35,7 +37,8 @@ class TI_EngtoLat_Question(_Question):
 @dataclass
 class TI_LattoEng_Question(_Question):
     """A question that asks for the English translation of a Latin word.
-    For example, "quaero" (answer: "I search")"""
+    For example, "quaero" (answer: "I search").
+    """
 
     latin: str
     answers: list[str]
@@ -51,7 +54,8 @@ class PW_ComptoLat_Question(_Question):
     components of the word.
     For example:
     present active indicative 2nd person plural of "quaero"
-    (answer: "quaeratis")"""
+    (answer: "quaeratis").
+    """
 
     latin: str
     components: accido.misc.EndingComponents
@@ -67,7 +71,8 @@ class PW_LattoComp_Question(_Question):
     given the word.
     For example:
     Parse "quaeratis" (hear: quaero, quaerere, quaesivi, quaesitus)
-    (answer: "present active indicative 2nd person plural")"""
+    (answer: "present active indicative 2nd person plural").
+    """
 
     dictionary_entry: str
     latin: str

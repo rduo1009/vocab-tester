@@ -7,14 +7,18 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from functools import total_ordering
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
-from .misc import Ending, EndingComponents, Endings, MultipleEndings
+from .misc import EndingComponents, MultipleEndings
+
+if TYPE_CHECKING:
+    from .type_aliases import Ending, Endings
 
 
 @total_ordering
-class _Word(ABC):
+class _Word(ABC):  # noqa: PLW1641
     """Representation of an word.
+
     This class is not intended to be used by the user. Rather, all of the
     other classes inherit from this class.
 
@@ -27,6 +31,7 @@ class _Word(ABC):
     """
 
     def __init__(self) -> None:
+        """Initialises _Word (and all classes that inherit from it)."""
         self.endings: Endings
         self._first: str
         self._unique_endings: set[Ending] = set()
@@ -45,7 +50,7 @@ class _Word(ABC):
         return self.endings[key]
 
     def find(self, form: str) -> list[EndingComponents]:
-        """Finds the accidol properties that match the given form.
+        """Finds the accido properties that match the given form.
 
         Attributes
         ----------
@@ -55,24 +60,26 @@ class _Word(ABC):
         Returns
         -------
         list[EndingComponents]
-            The list of EndingComponents objects that represent the endings 
+            The list of EndingComponents objects that represent the endings
             that match the given form.
-        """  # fmt: skip
-
-        results = []
-        for key, value in self.endings.items():
-            if isinstance(value, MultipleEndings):
-                if form in value.get_all():
-                    results.append(self._create_namespace(key))
-            elif value == form:
-                results.append(self._create_namespace(key))
-        return results
+        """
+        return [
+            self._create_namespace(key)
+            for key, value in self.endings.items()
+            if (isinstance(value, MultipleEndings) and form in value.get_all())
+            or (not isinstance(value, MultipleEndings) and value == form)
+        ]
 
     # Force implementation of these methods
+    # docstr-coverage:excused `abstract method`
     @abstractmethod
     def get(
-        self, *args: Any, **kwargs: Any
-    ) -> Ending | None:  # pragma: no cover
+        self,
+        *args: Any,
+        **kwargs: Any,
+    ) -> (
+        Ending | None
+    ):  # pragma: no cover # sourcery skip: docstrings-for-functions
         pass
 
     @staticmethod

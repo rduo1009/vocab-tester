@@ -1,5 +1,8 @@
-extend = "../pyproject.toml"
+extend = "../ruff.toml"
 
 # Override settings
 line-length = 320
-lint.ignore = ["F401", "E741", "F841"]
+
+[lint]
+select = ["E4", "E7", "E9", "F"]
+ignore = ["E741"]

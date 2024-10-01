@@ -1,0 +1,14 @@
+{
+    "recommendations": [
+        "hookyqr.beautify",
+        "usernamehw.errorlens",
+        "tamasfe.even-better-toml",
+        "ms-python.mypy-type-checker",
+        "ms-python.python",
+        "ms-python.debugpy",
+        "rodolphebarbanneau.python-docstring-highlighter",
+        "charliermarsh.ruff",
+        "wayou.vscode-todo-highlight",
+        "redhat.vscode-yaml"
+    ]
+}

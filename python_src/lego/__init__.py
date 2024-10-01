@@ -2,8 +2,14 @@
 # -*- coding: utf-8 -*-
 
 """A package for reading from a vocabulary list and creating a Python list
-containing the words. Also, it can save the word list to a pickle file."""
+containing the words. Also, it can save the word list to a pickle file.
+"""  # noqa: D205
 
-from . import custom_exceptions, reader, saver
+from . import cache, exceptions, reader, saver
 
-__all__ = ["reader", "custom_exceptions", "saver"]
+__all__ = [
+    "cache",
+    "exceptions",
+    "reader",
+    "saver",
+]

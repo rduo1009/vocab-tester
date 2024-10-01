@@ -6,9 +6,13 @@
 from __future__ import annotations
 
 from functools import total_ordering
+from typing import TYPE_CHECKING
 
 from .class_word import _Word
-from .misc import EndingComponents, Meaning
+
+if TYPE_CHECKING:
+    from .misc import EndingComponents
+    from .type_aliases import Meaning
 
 
 @total_ordering
@@ -24,10 +28,19 @@ class RegularWord(_Word):
     --------
     >>> foo = RegularWord(word="sed", meaning="but")
     >>> foo.endings
-    {"": "sed"}
-    """  # fmt: skip
+    {'': 'sed'}
 
-    def __init__(self, word: str, meaning: Meaning):
+    Note that the arguments of RegularWord are keyword-only.
+    """
+
+    def __init__(self, *, word: str, meaning: Meaning) -> None:
+        """Initialises RegularWord.
+
+        Parameters
+        ----------
+        word : str
+        meaning : Meaning
+        """
         self.word: str = word
         self.meaning: Meaning = meaning
         self.endings = {"": self.word}
@@ -39,17 +52,19 @@ class RegularWord(_Word):
         -------
         str
             The word.
-        
+
         Examples
         --------
         >>> foo = RegularWord(word="sed", meaning="but")
         >>> foo.get()
-        "sed"
-        """  # fmt: skip
+        'sed'
+        """
         return self.word
 
     @staticmethod
-    def _create_namespace(key: str) -> EndingComponents:  # pragma: no cover
+    def _create_namespace(
+        key: str,  # noqa: ARG004
+    ) -> EndingComponents:  # pragma: no cover # this should never be ran
         return NotImplemented
 
     def __repr__(self) -> str:

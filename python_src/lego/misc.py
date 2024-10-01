@@ -5,18 +5,20 @@
 
 from __future__ import annotations
 
-import ctypes as ct
+import ctypes
 from dataclasses import dataclass
-from typing import Final
+from typing import TYPE_CHECKING, Final
 
 import python_src as src
 
-from .. import accido
+if TYPE_CHECKING:
+    from .. import accido
 
 
 @dataclass
 class VocabList:
     """Represents a list of Latin vocabulary.
+
     Each piece of vocabulary is represented by the classes in the accido
     package.
 
@@ -27,11 +29,17 @@ class VocabList:
     version : str
         The version of the package. Used to regenerate the endings if the
         version of the package is different (e.g. if the package is updated).
-    
+
     Examples
     --------
-    >>> x = VocabList([Noun(nominative="ancilla", genitive="ancillae", \
-    ...                     gender="feminine", meaning="slavegirl")], 
+    >>> foo = VocabList([
+    ...     Noun(
+    ...         nominative="ancilla",
+    ...         genitive="ancillae",
+    ...         gender="feminine",
+    ...         meaning="slavegirl",
+    ...     )
+    ... ])  # doctest: +SKIP
     This will create a VocabList with a single Noun object in it.
     """
 
@@ -41,14 +49,13 @@ class VocabList:
         # Set the version using the package version.
         self.version: str = src.__version__
 
+    def __repr__(self) -> str:
+        object_reprs: str = ", ".join(repr(word) for word in self.vocab)
+        return f"VocabList([{object_reprs}], version={self.version})"
 
-# Imports the c++ library containing the key. This is used to sign the
-# vocabulary pickle files for additional security.
-# Frankly, considering the code for all of this is public, this is a bit
-# on the useless side. I guess it would help if someone tried to make
-# an attack without knowledge of the source code or something.
-libkey: ct.CDLL = ct.CDLL("python_src/lego/libkey.so")
-libkey.get_key.restype = ct.c_char_p
+
+LIBKEY: ctypes.CDLL = ctypes.CDLL("python_src/lego/libkey.so")
+LIBKEY.get_key.restype = ctypes.c_char_p
 
 """The key used to sign vocabulary pickle files."""
-KEY: Final[bytes] = libkey.get_key()
+KEY: Final[bytes] = LIBKEY.get_key()

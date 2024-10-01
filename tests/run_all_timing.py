@@ -1,7 +1,6 @@
 # mypy: ignore-errors
 
 import importlib
-import inspect
 import os
 import sys
 import warnings
@@ -17,7 +16,7 @@ if __name__ == "__main__":
 
     for dirpath, _, filenames in os.walk(test_dir):
         for filename in filenames:
-            if filename.startswith("timing_") and filename.endswith(".py"):
+            if filename.endswith("_timing.py"):
                 if dirpath not in sys.path:
                     sys.path.append(dirpath)
 

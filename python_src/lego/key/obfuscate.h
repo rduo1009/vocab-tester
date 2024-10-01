@@ -192,12 +192,12 @@ AY_CONSTEVAL auto make_obfuscator(const CHAR_TYPE (&data)[N]) {
 
 // Obfuscates the string 'data' at compile-time and returns a reference to a
 // ay::obfuscated_data object with global lifetime that has functions for
-// decrypting the string and is also implicitly convertable to a char*
+// decrypting the string and is also implicitly convertible to a char*
 #define AY_OBFUSCATE(data) AY_OBFUSCATE_KEY(data, AY_OBFUSCATE_DEFAULT_KEY)
 
 // Obfuscates the string 'data' with 'key' at compile-time and returns a
 // reference to a ay::obfuscated_data object with global lifetime that has
-// functions for decrypting the string and is also implicitly convertable to a
+// functions for decrypting the string and is also implicitly convertible to a
 // char*
 #define AY_OBFUSCATE_KEY(data, key)                                            \
   []() -> ay::obfuscated_data<sizeof(data) / sizeof(data[0]), key,             \

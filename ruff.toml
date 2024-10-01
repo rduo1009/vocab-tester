@@ -1,0 +1,48 @@
+line-length = 79
+unsafe-fixes = true
+
+[lint]
+preview = true
+select = ["ALL"]
+ignore = [
+    "UP009",
+    "S101",
+    "ERA001",
+    "EXE001",
+    "PLC0414",
+    "EM102",
+    "EM101",
+    "TRY003",
+    "ANN",
+    "S403",
+    "FURB101",
+    "PTH123",
+    "DOC502",
+    "TID252",
+    "D105",
+    "D401",
+    "S301",
+    "CPY001",
+    "PLR2004",
+    "PLR0911",
+    "C901",
+    "PLR0912",
+    "PLR0913",
+    "COM812",
+    "ISC001",
+    "E",
+    "W",
+    "I",
+    "FIX004",
+]
+extend-select = ["E501", "W505"]
+
+[lint.pydocstyle]
+convention = "numpy"
+
+[format]
+preview = true
+quote-style = "double"
+indent-style = "space"
+docstring-code-format = true
+docstring-code-line-length = 72

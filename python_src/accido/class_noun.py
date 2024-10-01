@@ -6,21 +6,20 @@
 from __future__ import annotations
 
 from functools import total_ordering
-from typing import Literal, Optional
+from typing import TYPE_CHECKING, Literal
 
 from .class_word import _Word
-from .custom_exceptions import InvalidInputError
 from .edge_cases import IRREGULAR_NOUNS
+from .exceptions import InvalidInputError
 from .misc import (
-    CASE_SHORTHAND,
-    GENDER_SHORTHAND,
-    NUMBER_SHORTHAND,
-    Ending,
+    Case,
     EndingComponents,
-    Endings,
-    Meaning,
-    key_from_value,
+    Gender,
+    Number,
 )
+
+if TYPE_CHECKING:
+    from .type_aliases import Ending, Endings, Meaning
 
 
 @total_ordering
@@ -37,14 +36,18 @@ class Noun(_Word):
     endings : Endings
     plurale_tantum : bool
         If the noun is a plurale tantum or not.
-    gender : {"masculine", "feminine", "neuter"}
-    
+    gender : str
+
     Examples
     --------
-    >>> foo = Noun(nominative="ancilla", genitive="ancillae", \
-    ...            gender="feminine", meaning="slavegirl")
-    >>> foo.endings
-    {"Nnomsg": "ancilla", "Nvocsg": "ancilla", "Naccsg": "ancillam", ...}
+    >>> foo = Noun(
+    ...     nominative="ancilla",
+    ...     genitive="ancillae",
+    ...     gender="feminine",
+    ...     meaning="slavegirl",
+    ... )
+    >>> foo["Nnomsg"]
+    'ancilla'
 
     Note that all arguments of Noun are keyword-only.
 
@@ -52,14 +55,14 @@ class Noun(_Word):
     -----
     Accido relies on the assumption that there are no neuter or plurale
     tantum fifth declension nouns (there doesn't seem to be any).
-    """  # fmt: skip
+    """
 
     def __init__(
         self,
         *,
         nominative: str,
-        genitive: Optional[str],
-        gender: Optional[str],
+        genitive: str,
+        gender: str,
         meaning: Meaning,
     ) -> None:
         """Initialises Noun and determines the declension and endings.
@@ -67,7 +70,7 @@ class Noun(_Word):
         Parameters
         ----------
         nominative, genitive : str
-        gender : {"masculine", "feminine", "neuter"}
+        gender : str
         meaning : Meaning
 
         Raises
@@ -78,8 +81,9 @@ class Noun(_Word):
         super().__init__()
 
         if gender:
-            if gender not in GENDER_SHORTHAND:
-                raise InvalidInputError(f"Gender '{gender}' not recognised")
+            if gender not in {"masculine", "feminine", "neuter"}:
+                raise InvalidInputError(f"Invalid gender: '{gender}'")
+
             self.gender: str = gender
 
         self.nominative: str = nominative
@@ -97,7 +101,21 @@ class Noun(_Word):
             self.declension = 0
             return
 
-        # The ordering of this is strange because e.g. ending -ei ends in 'i' as well as 'ei'
+        self._find_declension()
+
+        self.endings = self._determine_endings()
+
+        if self.gender == "neuter":
+            self._neuter_endings()
+
+        if self.plurale_tantum:
+            self.endings = {
+                k: v for k, v in self.endings.items() if not k.endswith("sg")
+            }
+
+    def _find_declension(self) -> None:
+        # The ordering of this is strange because
+        # e.g. ending -ei ends in 'i' as well as 'ei'
         # so 5th declension check must come before 2nd declension check, etc.
         if self.genitive[-2:] == "ei":
             self.declension = 5
@@ -138,126 +156,125 @@ class Noun(_Word):
 
         else:
             raise InvalidInputError(
-                f"Genitive form '{self.genitive}' is not valid"
+                f"Invalid genitive form: '{self.genitive}'",
             )
 
-        temp_endings: dict[str, Ending]
+    def _determine_endings(self) -> Endings:
         match self.declension:
             case 1:
-                temp_endings = {
+                return {
                     "Nnomsg": self.nominative,  # puella
                     "Nvocsg": self.nominative,  # puella
-                    "Naccsg": self._stem + "am",  # puellam
+                    "Naccsg": f"{self._stem}am",  # puellam
                     "Ngensg": self.genitive,  # puellae
-                    "Ndatsg": self._stem + "ae",  # puellae
-                    "Nablsg": self._stem + "a",  # puella
-                    "Nnompl": self._stem + "ae",  # puellae
-                    "Nvocpl": self._stem + "ae",  # puellae
-                    "Naccpl": self._stem + "as",  # puellas
-                    "Ngenpl": self._stem + "arum",  # puellarum
-                    "Ndatpl": self._stem + "is",  # puellis
-                    "Nablpl": self._stem + "is",  # puellis
+                    "Ndatsg": f"{self._stem}ae",  # puellae
+                    "Nablsg": f"{self._stem}a",  # puella
+                    "Nnompl": f"{self._stem}ae",  # puellae
+                    "Nvocpl": f"{self._stem}ae",  # puellae
+                    "Naccpl": f"{self._stem}as",  # puellas
+                    "Ngenpl": f"{self._stem}arum",  # puellarum
+                    "Ndatpl": f"{self._stem}is",  # puellis
+                    "Nablpl": f"{self._stem}is",  # puellis
                 }
 
             case 2:
-                temp_endings = {
+                return {
                     "Nnomsg": self.nominative,  # servus
-                    "Nvocsg": self.nominative
-                    if self.nominative[-2:] == "er"
-                    else self._stem + "e",  # serve
-                    "Naccsg": self._stem + "um",  # servum
+                    "Nvocsg": (
+                        self.nominative  # puer
+                        if self.nominative.endswith("er")
+                        else f"{self._stem}e"  # serve
+                    ),
+                    "Naccsg": f"{self._stem}um",  # servum
                     "Ngensg": self.genitive,  # servi
-                    "Ndatsg": self._stem + "o",  # servo
-                    "Nablsg": self._stem + "o",  # servo
-                    "Nnompl": self._stem + "i",  # servi
-                    "Nvocpl": self._stem + "i",  # servi
-                    "Naccpl": self._stem + "os",  # servos
-                    "Ngenpl": self._stem + "orum",  # servorum
-                    "Ndatpl": self._stem + "is",  # servis
-                    "Nablpl": self._stem + "is",  # servis
+                    "Ndatsg": f"{self._stem}o",  # servo
+                    "Nablsg": f"{self._stem}o",  # servo
+                    "Nnompl": f"{self._stem}i",  # servi
+                    "Nvocpl": f"{self._stem}i",  # servi
+                    "Naccpl": f"{self._stem}os",  # servos
+                    "Ngenpl": f"{self._stem}orum",  # servorum
+                    "Ndatpl": f"{self._stem}is",  # servis
+                    "Nablpl": f"{self._stem}is",  # servis
                 }
 
             case 3:
-                temp_endings = {
+                return {
                     "Nnomsg": self.nominative,  # mercator
                     "Nvocsg": self.nominative,  # mercator
-                    "Naccsg": self._stem + "em",  # mercatorem
+                    "Naccsg": f"{self._stem}em",  # mercatorem
                     "Ngensg": self.genitive,  # mercatoris
-                    "Ndatsg": self._stem + "i",  # mercatori
-                    "Nablsg": self._stem + "e",  # mercatore
-                    "Nnompl": self._stem + "es",  # mercatores
-                    "Nvocpl": self._stem + "es",  # mercatores
-                    "Naccpl": self._stem + "es",  # mercatores
-                    "Ngenpl": self._stem + "um",  # mercatorum
-                    "Ndatpl": self._stem + "ibus",  # mercatoribus
-                    "Nablpl": self._stem + "ibus",  # mercatoribus
+                    "Ndatsg": f"{self._stem}i",  # mercatori
+                    "Nablsg": f"{self._stem}e",  # mercatore
+                    "Nnompl": f"{self._stem}es",  # mercatores
+                    "Nvocpl": f"{self._stem}es",  # mercatores
+                    "Naccpl": f"{self._stem}es",  # mercatores
+                    "Ngenpl": f"{self._stem}um",  # mercatorum
+                    "Ndatpl": f"{self._stem}ibus",  # mercatoribus
+                    "Nablpl": f"{self._stem}ibus",  # mercatoribus
                 }
 
             case 4:
-                temp_endings = {
+                return {
                     "Nnomsg": self.nominative,  # manus
                     "Nvocsg": self.nominative,  # manus
-                    "Naccsg": self._stem + "um",  # manum
-                    "Ngensg": self._stem + "us",  # manus
-                    "Ndatsg": self._stem + "ui",  # manui
-                    "Nablsg": self._stem + "u",  # manu
-                    "Nnompl": self._stem + "us",  # manus
-                    "Nvocpl": self._stem + "us",  # manus
-                    "Naccpl": self._stem + "us",  # manus
-                    "Ngenpl": self._stem + "uum",  # manuum
-                    "Ndatpl": self._stem + "ibus",  # manibus
-                    "Nablpl": self._stem + "ibus",  # manibus
+                    "Naccsg": f"{self._stem}um",  # manum
+                    "Ngensg": f"{self._stem}us",  # manus
+                    "Ndatsg": f"{self._stem}ui",  # manui
+                    "Nablsg": f"{self._stem}u",  # manu
+                    "Nnompl": f"{self._stem}us",  # manus
+                    "Nvocpl": f"{self._stem}us",  # manus
+                    "Naccpl": f"{self._stem}us",  # manus
+                    "Ngenpl": f"{self._stem}uum",  # manuum
+                    "Ndatpl": f"{self._stem}ibus",  # manibus
+                    "Nablpl": f"{self._stem}ibus",  # manibus
                 }
 
             case 5:
-                temp_endings = {
+                return {
                     "Nnomsg": self.nominative,  # res
                     "Nvocsg": self.nominative,  # res
-                    "Naccsg": self._stem + "em",  # rem
-                    "Ngensg": self._stem + "ei",  # rei
-                    "Ndatsg": self._stem + "ei",  # rei
-                    "Nablsg": self._stem + "e",  # re
-                    "Nnompl": self._stem + "es",  # res
-                    "Nvocpl": self._stem + "es",  # res
-                    "Naccpl": self._stem + "es",  # res
-                    "Ngenpl": self._stem + "erum",  # rerum
-                    "Ndatpl": self._stem + "ebus",  # rebus
-                    "Nablpl": self._stem + "ebus",  # rebus
+                    "Naccsg": f"{self._stem}em",  # rem
+                    "Ngensg": f"{self._stem}ei",  # rei
+                    "Ndatsg": f"{self._stem}ei",  # rei
+                    "Nablsg": f"{self._stem}e",  # re
+                    "Nnompl": f"{self._stem}es",  # res
+                    "Nvocpl": f"{self._stem}es",  # res
+                    "Naccpl": f"{self._stem}es",  # res
+                    "Ngenpl": f"{self._stem}erum",  # rerum
+                    "Ndatpl": f"{self._stem}ebus",  # rebus
+                    "Nablpl": f"{self._stem}ebus",  # rebus
                 }
 
-            case _:  # pragma: no cover
+            case _:  # pragma: no cover # this should never happen
                 raise ValueError(
-                    f"Declension {self.declension} not recognised"
+                    f"Declension {self.declension} not recognised",
                 )
 
-        if self.gender == "neuter":
-            temp_endings["Naccsg"] = self.nominative  # templum
-            temp_endings["Nvocsg"] = self.nominative  # templum
+    def _neuter_endings(self) -> None:
+        self.endings["Naccsg"] = self.nominative  # templum
+        self.endings["Nvocsg"] = self.nominative  # templum
 
-            if self.declension == 4:
-                temp_endings["Nnompl"] = self._stem + "ua"  # cornua
-                temp_endings["Naccpl"] = self._stem + "ua"  # cornua
-                temp_endings["Nvocpl"] = self._stem + "ua"  # cornua
-                temp_endings["Ndatsg"] = self._stem + "u"  # cornu
-            elif self.declension == 5:
-                raise InvalidInputError(
-                    f"Fifth declension nouns cannot be neuter (noun '{self.nominative}')"
-                )
-            else:
-                # For the other declensions
-                temp_endings["Nnompl"] = self._stem + "a"  # templa
-                temp_endings["Naccpl"] = self._stem + "a"  # templa
-                temp_endings["Nvocpl"] = self._stem + "a"  # templa
+        if self.declension == 5:
+            raise InvalidInputError(
+                "Fifth declension nouns cannot be neuter "
+                f"(noun '{self.nominative}' given)",
+            )
 
-        if self.plurale_tantum:
-            temp_endings = {
-                k: v for k, v in temp_endings.items() if not k.endswith("sg")
-            }
+        if self.declension == 4:
+            self.endings["Nnompl"] = f"{self._stem}ua"  # cornua
+            self.endings["Naccpl"] = f"{self._stem}ua"  # cornua
+            self.endings["Nvocpl"] = f"{self._stem}ua"  # cornua
+            self.endings["Ndatsg"] = f"{self._stem}u"  # cornu
 
-        self.endings: Endings = temp_endings
+        else:
+            # For the other declensions
+            self.endings["Nnompl"] = f"{self._stem}a"  # templa
+            self.endings["Naccpl"] = f"{self._stem}a"  # templa
+            self.endings["Nvocpl"] = f"{self._stem}a"  # templa
 
-    def get(self, *, case: str, number: str) -> Ending | None:
+    def get(self, *, case: Case | str, number: Number | str) -> Ending | None:
         """Returns the ending of the noun.
+
         The function returns None if no ending is found.
 
         Parameters
@@ -278,48 +295,51 @@ class Noun(_Word):
 
         Examples
         --------
-        >>> foo = Noun(nominative="ancilla", genitive="ancillae", \
-        ...            gender="feminine", meaning="slavegirl")
-        >>> foo.get(case="nominative", number="singular")
-        "ancilla"
+        >>> foo = Noun(
+        ...     nominative="ancilla",
+        ...     genitive="ancillae",
+        ...     gender="feminine",
+        ...     meaning="slavegirl",
+        ... )
+        >>> foo.get(case=Case.NOMINATIVE, number=Number.SINGULAR)
+        'ancilla'
 
         Note that all arguments of get are keyword-only.
         """
-        try:
-            short_case: str = CASE_SHORTHAND[case]
-            short_number: str = NUMBER_SHORTHAND[number]
-        except KeyError:
-            raise InvalidInputError(
-                f"Case '{case}' or number '{number}' not recognised"
-            )
+        if isinstance(case, str):
+            try:
+                case = Case(case.lower())
+            except ValueError as e:
+                raise InvalidInputError(f"Invalid case: '{case}'") from e
+
+        if isinstance(number, str):
+            try:
+                number = Number(number.lower())
+            except ValueError as e:
+                raise InvalidInputError(f"Invalid number: '{number}'") from e
+
+        short_case: str = case.shorthand
+        short_number: str = number.shorthand
 
         return self.endings.get(f"N{short_case}{short_number}")
 
     @staticmethod
     def _create_namespace(key: str) -> EndingComponents:
         output: EndingComponents = EndingComponents(
-            case=key_from_value(CASE_SHORTHAND, key[1:4]),
-            number=key_from_value(NUMBER_SHORTHAND, key[4:6]),
+            case=Case(key[1:4]).regular,
+            number=Number(key[4:6]).regular,
         )
         output.string = f"{output.case} {output.number}"
         return output
 
     def __repr__(self) -> str:
-        return f"Noun({self.nominative}, {self.genitive}, {GENDER_SHORTHAND[self.gender]}, {self.meaning})"
+        return (
+            f"Noun({self.nominative}, {self.genitive}, "
+            f"{self.gender}, {self.meaning})"
+        )
 
     def __str__(self) -> str:
-        match self.gender:
-            case "masculine":
-                return (
-                    f"{self.meaning}: {self.nominative}, {self.genitive}, (m)"
-                )
-            case "feminine":
-                return (
-                    f"{self.meaning}: {self.nominative}, {self.genitive}, (f)"
-                )
-            case "neuter":
-                return (
-                    f"{self.meaning}: {self.nominative}, {self.genitive}, (n)"
-                )
-            case _:  # pragma: no cover
-                raise ValueError(f"Gender {self.gender} not recognised")
+        return (
+            f"{self.meaning}: {self.nominative}, "
+            f"{self.genitive}, ({Gender(self.gender).shorthand})"
+        )
