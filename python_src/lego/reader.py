@@ -12,7 +12,7 @@ from re import match
 from typing import TYPE_CHECKING, Final
 
 import dill as pickle
-import lz4.frame
+import lz4.frame  # type: ignore[import-untyped]
 
 import python_src as src
 
@@ -137,9 +137,9 @@ def read_vocab_dump(filename: Path) -> VocabList:
             signature: str = content[-64:].decode()
     else:
         with open(filename, "rb") as file:
-            content: bytes = file.read()
-            pickled_data: bytes = content[:-64]
-            signature: str = content[-64:].decode()
+            content = file.read()
+            pickled_data = content[:-64]
+            signature = content[-64:].decode()
 
     if (
         hmac.new(KEY, pickled_data, hashlib.sha256).hexdigest() != signature

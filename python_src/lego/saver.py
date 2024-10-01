@@ -11,7 +11,7 @@ import warnings
 from typing import TYPE_CHECKING
 
 import dill as pickle
-import lz4.frame
+import lz4.frame  # type: ignore[import-untyped]
 
 from .exceptions import MisleadingFilenameWarning
 from .misc import KEY, VocabList
@@ -83,7 +83,7 @@ def save_vocab_dump(
                 category=MisleadingFilenameWarning,
                 stacklevel=2,
             )
-            file_path: Path = file_path.with_suffix(file_path.suffix + ".lz4")
+            file_path = file_path.with_suffix(file_path.suffix + ".lz4")
 
         with lz4.frame.open(file_path, "wb") as file:
             file.write(pickled_data)
