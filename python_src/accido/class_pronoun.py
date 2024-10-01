@@ -104,7 +104,11 @@ class Pronoun(_Word):
         Examples
         --------
         >>> foo = Pronoun(pronoun="hic", meaning="this")
-        >>> foo.get(gender="masculine", case="nominative", number="singular")
+        >>> foo.get(
+        ...     gender=Gender.MASCULINE,
+        ...     case=Case.NOMINATIVE,
+        ...     number=Number.SINGULAR,
+        ... )
         'hic'
 
         Note that the arguments of get are keyword-only.

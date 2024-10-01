@@ -826,10 +826,10 @@ class Adjective(_Word):
         ...     "egens", "egentis", termination=1, declension="3", meaning="poor"
         ... )
         >>> foo.get(
-        ...     degree="positive",
-        ...     gender="masculine",
-        ...     case="nominative",
-        ...     number="singular",
+        ...     degree=Degree.POSITIVE,
+        ...     gender=Gender.MASCULINE,
+        ...     case=Case.NOMINATIVE,
+        ...     number=Number.SINGULAR,
         ... )
         'egens'
 

@@ -301,7 +301,7 @@ class Noun(_Word):
         ...     gender="feminine",
         ...     meaning="slavegirl",
         ... )
-        >>> foo.get(case="nominative", number="singular")
+        >>> foo.get(case=Case.NOMINATIVE, number=Number.SINGULAR)
         'ancilla'
 
         Note that all arguments of get are keyword-only.

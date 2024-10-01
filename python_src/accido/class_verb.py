@@ -503,22 +503,22 @@ class Verb(_Word):
         ... )
         >>> foo.get(
         ...     person=1,
-        ...     number="singular",
-        ...     tense="present",
-        ...     voice="active",
-        ...     mood="indicative",
+        ...     number=Number.SINGULAR,
+        ...     tense=Tense.PRESENT,
+        ...     voice=Voice.ACTIVE,
+        ...     mood=Mood.INDICATIVE,
         ... )
         'celo'
 
         Note that all arguments of get are keyword-only.
 
         >>> foo.get(
-        ...     number="singular",
-        ...     tense="perfect",
-        ...     voice="passive",
-        ...     mood="participle",
-        ...     participle_gender="masculine",
-        ...     participle_case="nominative",
+        ...     number=Number.SINGULAR,
+        ...     tense=Tense.PERFECT,
+        ...     voice=Voice.PASSIVE,
+        ...     mood=Mood.PARTICIPLE,
+        ...     participle_gender=Gender.MASCULINE,
+        ...     participle_case=Case.NOMINATIVE,
         ... )
         'celatus'
 
@@ -541,7 +541,13 @@ class Verb(_Word):
             except ValueError as e:
                 raise InvalidInputError(f"Invalid voice: '{voice}'") from e
 
-        if mood == "participle":
+        if isinstance(mood, str):
+            try:
+                mood = Mood(mood.lower())
+            except ValueError as e:
+                raise InvalidInputError(f"Invalid mood: '{mood}'") from e
+
+        if mood == Mood.PARTICIPLE:
             if person:
                 raise InvalidInputError(
                     f"Participle cannot have a person (person '{person}')",
@@ -563,12 +569,6 @@ class Verb(_Word):
                 participle_gender=participle_gender,
                 participle_case=participle_case,
             )
-
-        if isinstance(mood, str):
-            try:
-                mood = Mood(mood.lower())
-            except ValueError as e:
-                raise InvalidInputError(f"Invalid mood: '{mood}'") from e
 
         if number and isinstance(number, str):
             try:
