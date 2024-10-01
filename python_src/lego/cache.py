@@ -80,6 +80,8 @@ def cache_vocab_file(
     if cache_path.exists():
         return (read_vocab_dump(cache_path), True)
 
-    vocab_list: VocabList = read_vocab_file(vocab_file_path)
+    vocab_list: VocabList = read_vocab_file(
+        vocab_file_path
+    )  # sourcery skip: name-type-suffix
     save_vocab_dump(cache_path, vocab_list)
     return (vocab_list, False)

@@ -83,7 +83,7 @@ def save_vocab_dump(
                 category=MisleadingFilenameWarning,
                 stacklevel=2,
             )
-            file_path = file_path.with_suffix(file_path.suffix + ".lz4")
+            file_path = file_path.with_suffix(f"{file_path.suffix}.lz4")
 
         with lz4.frame.open(file_path, "wb") as file:
             file.write(pickled_data)

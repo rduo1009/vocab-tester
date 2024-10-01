@@ -16,7 +16,9 @@ class InvalidVocabDumpError(Exception):
     """
 
 
-class MisleadingFilenameWarning(UserWarning):
+class MisleadingFilenameWarning(
+    UserWarning
+):  # sourcery skip: errors-named-error
     """A warning that is raised when a filename is misleading.
 
     For example, if a file ends in .lz4 but it is not a compressed file.
