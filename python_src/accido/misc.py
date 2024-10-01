@@ -7,69 +7,78 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from types import SimpleNamespace
-from typing import Final
 
-"""Mapping of number values to their more concise abbreviated forms."""
-NUMBER_SHORTHAND: Final[dict[str, str]] = {
-    "singular": "sg",
-    "plural": "pl",
-}
+from aenum import Enum, MultiValue
 
-"""Mapping of tense values to their more concise abbreviated forms."""
-TENSE_SHORTHAND: Final[dict[str, str]] = {
-    "present": "pre",
-    "imperfect": "imp",
-    "future": "fut",
-    "perfect": "per",
-    "pluperfect": "plp",
-    # "future perfect": "fpr",
-}
 
-"""Mapping of voice values to their more concise abbreviated forms."""
-VOICE_SHORTHAND: Final[dict[str, str]] = {
-    "active": "act",
-    "passive": "pas",
-}
+class Number(Enum, settings=MultiValue, init="regular shorthand"):
+    """Represents the grammatical number."""
 
-"""Mapping of mood values to their more concise abbreviated forms."""
-MOOD_SHORTHAND: Final[dict[str, str]] = {
-    "indicative": "ind",
-    "infinitive": "inf",
-    "imperative": "ipe",
-    "subjunctive": "sbj",
-    "participle": "ptc",
-}
+    SINGULAR = "singular", "sg"
+    PLURAL = "plural", "pl"
 
-"""Mapping of case values to their more concise abbreviated forms."""
-CASE_SHORTHAND: Final[dict[str, str]] = {
-    "nominative": "nom",
-    "vocative": "voc",
-    "accusative": "acc",
-    "genitive": "gen",
-    "dative": "dat",
-    "ablative": "abl",
-}
 
-"""Mapping of gender values to their more concise abbreviated forms."""
-GENDER_SHORTHAND: Final[dict[str, str]] = {
-    "masculine": "m",
-    "feminine": "f",
-    "neuter": "n",
-}
+class Tense(Enum, settings=MultiValue, init="regular shorthand"):
+    """Represents the tense of a verb."""
 
-"""Mapping of degree values to their more concise abbreviated forms."""
-DEGREE_SHORTHAND: Final[dict[str, str]] = {
-    "positive": "pos",
-    "comparative": "cmp",
-    "superlative": "spr",
-}
+    PRESENT = "present", "pre"
+    IMPERFECT = "imperfect", "imp"
+    FUTURE = "future", "fut"
+    PERFECT = "perfect", "per"
+    PLUPERFECT = "pluperfect", "plp"
+    # FUTURE_PERFECT = "future perfect", "fpr"
 
-"""Mapping of person values to their more concise abbreviated forms."""
-PERSON_SHORTHAND: Final[dict[int, str]] = {
-    1: "1st person",
-    2: "2nd person",
-    3: "3rd person",
-}
+
+class Voice(Enum, settings=MultiValue, init="regular shorthand"):
+    """Represents the voice of a verb."""
+
+    ACTIVE = "active", "act"
+    PASSIVE = "passive", "pas"
+
+
+class Mood(Enum, settings=MultiValue, init="regular shorthand"):
+    """Represents the mood of a verb."""
+
+    INDICATIVE = "indicative", "ind"
+    INFINITIVE = "infinitive", "inf"
+    IMPERATIVE = "imperative", "ipe"
+    SUBJUNCTIVE = "subjunctive", "sbj"
+    PARTICIPLE = "participle", "ptc"
+
+
+class Case(Enum, settings=MultiValue, init="regular shorthand"):
+    """Represents the case of a noun."""
+
+    NOMINATIVE = "nominative", "nom"
+    VOCATIVE = "vocative", "voc"
+    ACCUSATIVE = "accusative", "acc"
+    GENITIVE = "genitive", "gen"
+    DATIVE = "dative", "dat"
+    ABLATIVE = "ablative", "abl"
+
+
+class Gender(Enum, settings=MultiValue, init="regular shorthand"):
+    """Represents the gender of a noun or adjective."""
+
+    MASCULINE = "masculine", "m"
+    FEMININE = "feminine", "f"
+    NEUTER = "neuter", "n"
+
+
+class Degree(Enum, settings=MultiValue, init="regular shorthand"):
+    """Represents the degree of an adjective."""
+
+    POSITIVE = "positive", "pos"
+    COMPARATIVE = "comparative", "cmp"
+    SUPERLATIVE = "superlative", "spr"
+
+
+class Person(Enum, settings=MultiValue, init="regular shorthand"):
+    """Represents the person of a verb."""
+
+    FIRST = 1, "1st person"
+    SECOND = 2, "2nd person"
+    THIRD = 3, "3rd person"
 
 
 class EndingComponents(SimpleNamespace):
