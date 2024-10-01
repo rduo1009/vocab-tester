@@ -92,7 +92,7 @@ def save_vocab_dump(
 
     if file_path.suffix == ".lz4":
         warnings.warn(
-            f"The file '{file_path}' is not being compressed,"
+            f"The file '{file_path}' is not being compressed, "
             "but the file extension ('.lz4') suggests it is.",
             category=MisleadingFilenameWarning,
             stacklevel=2,

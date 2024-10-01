@@ -895,7 +895,7 @@ class Adjective(_Word):
     def __str__(self) -> str:
         if self.declension == "3":
             return (
-                f"{self.meaning}: {', '.join(self._principal_parts)},"
+                f"{self.meaning}: {', '.join(self._principal_parts)}, "
                 f"({self.declension}-{self.termination})"
             )
         return f"{self.meaning}: {', '.join(self._principal_parts)}, (2-1-2)"
