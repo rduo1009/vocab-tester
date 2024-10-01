@@ -8,15 +8,14 @@ from __future__ import annotations
 from functools import total_ordering
 from typing import TYPE_CHECKING, Literal
 
-from ..utils import key_from_value
 from .class_word import _Word
 from .edge_cases import IRREGULAR_NOUNS
 from .exceptions import InvalidInputError
 from .misc import (
-    CASE_SHORTHAND,
-    GENDER_SHORTHAND,
-    NUMBER_SHORTHAND,
+    Case,
     EndingComponents,
+    Gender,
+    Number,
 )
 
 if TYPE_CHECKING:
@@ -82,7 +81,7 @@ class Noun(_Word):
         super().__init__()
 
         if gender:
-            if gender not in GENDER_SHORTHAND:
+            if gender not in {"masculine", "feminine", "neuter"}:
                 raise InvalidInputError(f"Invalid gender: '{gender}'")
 
             self.gender: str = gender
@@ -273,7 +272,7 @@ class Noun(_Word):
             self.endings["Naccpl"] = f"{self._stem}a"  # templa
             self.endings["Nvocpl"] = f"{self._stem}a"  # templa
 
-    def get(self, *, case: str, number: str) -> Ending | None:
+    def get(self, *, case: Case | str, number: Number | str) -> Ending | None:
         """Returns the ending of the noun.
 
         The function returns None if no ending is found.
@@ -307,22 +306,28 @@ class Noun(_Word):
 
         Note that all arguments of get are keyword-only.
         """
-        if case not in CASE_SHORTHAND:
-            raise InvalidInputError(f"Invalid case: '{case}'")
+        if isinstance(case, str):
+            try:
+                case = Case(case.lower())
+            except ValueError as e:
+                raise InvalidInputError(f"Invalid case: '{case}'") from e
 
-        if number not in NUMBER_SHORTHAND:
-            raise InvalidInputError(f"Invalid number: '{number}'")
+        if isinstance(number, str):
+            try:
+                number = Number(number.lower())
+            except ValueError as e:
+                raise InvalidInputError(f"Invalid number: '{number}'") from e
 
-        short_case: str = CASE_SHORTHAND[case]
-        short_number: str = NUMBER_SHORTHAND[number]
+        short_case: str = case.shorthand
+        short_number: str = number.shorthand
 
         return self.endings.get(f"N{short_case}{short_number}")
 
     @staticmethod
     def _create_namespace(key: str) -> EndingComponents:
         output: EndingComponents = EndingComponents(
-            case=key_from_value(CASE_SHORTHAND, key[1:4]),
-            number=key_from_value(NUMBER_SHORTHAND, key[4:6]),
+            case=Case(key[1:4]).regular,
+            number=Number(key[4:6]).regular,
         )
         output.string = f"{output.case} {output.number}"
         return output
@@ -334,12 +339,7 @@ class Noun(_Word):
         )
 
     def __str__(self) -> str:
-        if self.gender in GENDER_SHORTHAND:
-            return (
-                f"{self.meaning}: {self.nominative}, "
-                f"{self.genitive}, ({GENDER_SHORTHAND[self.gender]})"
-            )
-
-        raise ValueError(
-            f"Gender {self.gender} not recognised",
-        )  # pragma: no cover # this should never occur
+        return (
+            f"{self.meaning}: {self.nominative}, "
+            f"{self.genitive}, ({Gender(self.gender).shorthand})"
+        )

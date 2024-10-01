@@ -8,16 +8,15 @@ from __future__ import annotations
 from functools import total_ordering
 from typing import TYPE_CHECKING
 
-from ..utils import key_from_value
 from .class_word import _Word
 from .edge_cases import IRREGULAR_ADJECTIVES, LIS_ADJECTIVES
 from .exceptions import InvalidInputError
 from .misc import (
-    CASE_SHORTHAND,
-    DEGREE_SHORTHAND,
-    GENDER_SHORTHAND,
-    NUMBER_SHORTHAND,
+    Case,
+    Degree,
     EndingComponents,
+    Gender,
+    Number,
 )
 
 if TYPE_CHECKING:
@@ -786,10 +785,10 @@ class Adjective(_Word):
     def get(
         self,
         *,
-        degree: str,
-        gender: str | None = None,
-        case: str | None = None,
-        number: str | None = None,
+        degree: Degree | str,
+        gender: Gender | str | None = None,
+        case: Case | str | None = None,
+        number: Number | str | None = None,
         adverb: bool = False,
     ) -> Ending | None:
         """Returns the ending of the adjective.
@@ -798,10 +797,14 @@ class Adjective(_Word):
 
         Parameters
         ----------
-        degree : str
-        gender, case, number : Optional[str], default = None
-            The gender, case and number of the ending, if applicable (not
-            an adverb).
+        degree : Degree | str
+            The degree of the adjective.
+        gender : Optional[Gender | str], default = None
+            The gender of the ending, if applicable (not an adverb).
+        case : Optional[Case | str], default = None
+            The case of the ending, if applicable (not an adverb).
+        number : Optional[Number | str], default = None
+            The number of the ending, if applicable (not an adverb).
         adverb : bool, default = False
             Whether the queried ending is an adverb or not.
 
@@ -840,29 +843,49 @@ class Adjective(_Word):
                     "Adverbs do not have gender, case or number "
                     f"(given '{gender}', '{case}' and '{number}')",
                 )
-            try:
-                short_degree = DEGREE_SHORTHAND[degree]
-            except KeyError as e:
-                raise InvalidInputError(f"Invalid degree: '{degree}'") from e
 
+            try:
+                degree = Degree(degree)
+            except ValueError as e:
+                raise InvalidInputError(f"Invalid degree: '{degree}'") from e
+            short_degree = degree.shorthand
             return self.endings.get(f"D{short_degree}")
 
-        if gender not in GENDER_SHORTHAND:
-            raise InvalidInputError(f"Invalid gender: '{gender}'")
+        if not gender:
+            raise InvalidInputError("Gender not given")
+        if not case:
+            raise InvalidInputError("Case not given")
+        if not number:
+            raise InvalidInputError("Number not given")
 
-        if case not in CASE_SHORTHAND:
-            raise InvalidInputError(f"Invalid case: '{case}'")
+        if isinstance(gender, str):
+            try:
+                gender = Gender(gender.lower())
+            except ValueError as e:
+                raise InvalidInputError(f"Invalid gender: '{gender}'") from e
 
-        if number not in NUMBER_SHORTHAND:
-            raise InvalidInputError(f"Invalid number: '{number}'")
+        if isinstance(case, str):
+            try:
+                case = Case(case.lower())
+            except ValueError as e:
+                raise InvalidInputError(f"Invalid case: '{case}'") from e
 
-        if degree not in DEGREE_SHORTHAND:
-            raise InvalidInputError(f"Invalid degree: '{degree}'")
+        if isinstance(number, str):
+            try:
+                number = Number(number.lower())
+            except ValueError as e:
+                raise InvalidInputError(f"Invalid number: '{number}'") from e
 
-        short_degree = DEGREE_SHORTHAND[degree]
-        short_gender: str = GENDER_SHORTHAND[gender]
-        short_case: str = CASE_SHORTHAND[case]
-        short_number: str = NUMBER_SHORTHAND[number]
+        if isinstance(degree, str):
+            try:
+                degree = Degree(degree.lower())
+            except ValueError as e:
+                raise InvalidInputError(f"Invalid degree: '{degree}'") from e
+
+        short_degree = degree.shorthand
+        short_gender: str = gender.shorthand
+        short_case: str = case.shorthand
+        short_number: str = number.shorthand
 
         return self.endings.get(
             f"A{short_degree}{short_gender}{short_case}{short_number}",
@@ -874,10 +897,10 @@ class Adjective(_Word):
 
         if key[0] == "A":
             output = EndingComponents(
-                degree=key_from_value(DEGREE_SHORTHAND, key[1:4]),
-                gender=key_from_value(GENDER_SHORTHAND, key[4]),
-                case=key_from_value(CASE_SHORTHAND, key[5:8]),
-                number=key_from_value(NUMBER_SHORTHAND, key[8:10]),
+                degree=Degree(key[1:4]).regular,
+                gender=Gender(key[4]).regular,
+                case=Case(key[5:8]).regular,
+                number=Number(key[8:10]).regular,
             )
             output.string = (
                 f"{output.degree} {output.case} "
@@ -886,7 +909,7 @@ class Adjective(_Word):
 
         else:
             output = EndingComponents(
-                degree=key_from_value(DEGREE_SHORTHAND, key[1:4]),
+                degree=Degree(key[1:4]).regular,
             )
             output.string = output.degree
 

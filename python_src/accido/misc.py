@@ -7,8 +7,15 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from types import SimpleNamespace
+from typing import TYPE_CHECKING, Final, Literal
 
-from aenum import Enum, MultiValue
+if TYPE_CHECKING:
+    # HACK: To avoid mypy errors.
+    from enum import Enum
+else:
+    from aenum import Enum
+
+from aenum import MultiValue  # type: ignore[import-untyped]
 
 
 class Number(Enum, settings=MultiValue, init="regular shorthand"):
@@ -16,6 +23,9 @@ class Number(Enum, settings=MultiValue, init="regular shorthand"):
 
     SINGULAR = "singular", "sg"
     PLURAL = "plural", "pl"
+
+    regular: str
+    shorthand: str
 
 
 class Tense(Enum, settings=MultiValue, init="regular shorthand"):
@@ -28,12 +38,18 @@ class Tense(Enum, settings=MultiValue, init="regular shorthand"):
     PLUPERFECT = "pluperfect", "plp"
     # FUTURE_PERFECT = "future perfect", "fpr"
 
+    regular: str
+    shorthand: str
+
 
 class Voice(Enum, settings=MultiValue, init="regular shorthand"):
     """Represents the voice of a verb."""
 
     ACTIVE = "active", "act"
     PASSIVE = "passive", "pas"
+
+    regular: str
+    shorthand: str
 
 
 class Mood(Enum, settings=MultiValue, init="regular shorthand"):
@@ -44,6 +60,9 @@ class Mood(Enum, settings=MultiValue, init="regular shorthand"):
     IMPERATIVE = "imperative", "ipe"
     SUBJUNCTIVE = "subjunctive", "sbj"
     PARTICIPLE = "participle", "ptc"
+
+    regular: str
+    shorthand: str
 
 
 class Case(Enum, settings=MultiValue, init="regular shorthand"):
@@ -56,6 +75,9 @@ class Case(Enum, settings=MultiValue, init="regular shorthand"):
     DATIVE = "dative", "dat"
     ABLATIVE = "ablative", "abl"
 
+    regular: str
+    shorthand: str
+
 
 class Gender(Enum, settings=MultiValue, init="regular shorthand"):
     """Represents the gender of a noun or adjective."""
@@ -63,6 +85,9 @@ class Gender(Enum, settings=MultiValue, init="regular shorthand"):
     MASCULINE = "masculine", "m"
     FEMININE = "feminine", "f"
     NEUTER = "neuter", "n"
+
+    regular: str
+    shorthand: str
 
 
 class Degree(Enum, settings=MultiValue, init="regular shorthand"):
@@ -72,12 +97,18 @@ class Degree(Enum, settings=MultiValue, init="regular shorthand"):
     COMPARATIVE = "comparative", "cmp"
     SUPERLATIVE = "superlative", "spr"
 
+    regular: str
+    shorthand: str
+
+
 """Mapping of person values to their more concise abbreviated forms."""
 PERSON_SHORTHAND: Final[dict[int, str]] = {
     1: "1st person",
     2: "2nd person",
     3: "3rd person",
 }
+
+type Person = Literal[1, 2, 3]
 
 
 class EndingComponents(SimpleNamespace):

@@ -8,15 +8,14 @@ from __future__ import annotations
 from functools import total_ordering
 from typing import TYPE_CHECKING
 
-from ..utils import key_from_value
 from .class_word import _Word
 from .edge_cases import PRONOUNS
 from .exceptions import InvalidInputError
 from .misc import (
-    CASE_SHORTHAND,
-    GENDER_SHORTHAND,
-    NUMBER_SHORTHAND,
+    Case,
     EndingComponents,
+    Gender,
+    Number,
 )
 
 if TYPE_CHECKING:
@@ -77,7 +76,9 @@ class Pronoun(_Word):
         self._femnom: Ending = self.endings["Pfnomsg"]
         self._neutnom: Ending = self.endings["Pnnomsg"]
 
-    def get(self, *, gender: str, case: str, number: str) -> Ending | None:
+    def get(
+        self, *, gender: Gender | str, case: Case | str, number: Number | str
+    ) -> Ending | None:
         """Returns the ending of the pronoun.
 
         The function returns None if no ending is found.
@@ -108,27 +109,36 @@ class Pronoun(_Word):
 
         Note that the arguments of get are keyword-only.
         """
-        if gender not in GENDER_SHORTHAND:
-            raise InvalidInputError(f"Invalid gender: '{gender}'")
+        if isinstance(gender, str):
+            try:
+                gender = Gender(gender.lower())
+            except ValueError as e:
+                raise InvalidInputError(f"Invalid gender: '{gender}'") from e
 
-        if case not in CASE_SHORTHAND:
-            raise InvalidInputError(f"Invalid case: '{case}'")
+        if isinstance(case, str):
+            try:
+                case = Case(case.lower())
+            except ValueError as e:
+                raise InvalidInputError(f"Invalid case: '{case}'") from e
 
-        if number not in NUMBER_SHORTHAND:
-            raise InvalidInputError(f"Invalid number: '{number}'")
+        if isinstance(number, str):
+            try:
+                number = Number(number.lower())
+            except ValueError as e:
+                raise InvalidInputError(f"Invalid number: '{number}'") from e
 
-        short_gender: str = GENDER_SHORTHAND[gender]
-        short_case: str = CASE_SHORTHAND[case]
-        short_number: str = NUMBER_SHORTHAND[number]
+        short_gender: str = gender.shorthand
+        short_case: str = case.shorthand
+        short_number: str = number.shorthand
 
         return self.endings.get(f"P{short_gender}{short_case}{short_number}")
 
     @staticmethod
     def _create_namespace(key: str) -> EndingComponents:
         output: EndingComponents = EndingComponents(
-            gender=key_from_value(GENDER_SHORTHAND, key[1]),
-            case=key_from_value(CASE_SHORTHAND, key[2:5]),
-            number=key_from_value(NUMBER_SHORTHAND, key[5:7]),
+            gender=Gender(key[1]).regular,
+            case=Case(key[2:5]).regular,
+            number=Number(key[5:7]).regular,
         )
         output.string = f"{output.case} {output.number} {output.gender}"
         return output
