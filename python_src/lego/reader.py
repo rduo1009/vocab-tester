@@ -12,6 +12,7 @@ from re import match
 from typing import TYPE_CHECKING, Final
 
 import dill as pickle
+import lz4.frame
 
 import python_src as src
 
@@ -105,6 +106,7 @@ def read_vocab_dump(filename: Path) -> VocabList:
     The pickle files are signed with a HMAC signature to ensure the data
     has not been tampered with. If the data is invalid, an exception is
     raised.
+    If the file ends in .lz4, the file is decompressed using lz4.
 
     Parameters
     ----------
@@ -128,10 +130,16 @@ def read_vocab_dump(filename: Path) -> VocabList:
     --------
     >>> read_vocab_dump(Path("path_to_file.pickle"))  # doctest: +SKIP
     """
-    with open(filename, "rb") as file:
-        content: bytes = file.read()
-        pickled_data: bytes = content[:-64]
-        signature: str = content[-64:].decode()
+    if filename.suffix == ".lz4":
+        with lz4.frame.open(filename, "rb") as file:
+            content: bytes = file.read()
+            pickled_data: bytes = content[:-64]
+            signature: str = content[-64:].decode()
+    else:
+        with open(filename, "rb") as file:
+            content: bytes = file.read()
+            pickled_data: bytes = content[:-64]
+            signature: str = content[-64:].decode()
 
     if (
         hmac.new(KEY, pickled_data, hashlib.sha256).hexdigest() != signature
@@ -140,15 +148,15 @@ def read_vocab_dump(filename: Path) -> VocabList:
             "Data integrity check failed for vocab dump.",
         )
 
-    output = pickle.loads(pickled_data)
-    if type(output) is VocabList:  # type: ignore[comparison-overlap] # mypy cannot recognise this
-        if output.version == src.__version__:
-            return output
+    raw_data = pickle.loads(pickled_data)
+    if type(raw_data) is VocabList:  # type: ignore[comparison-overlap] # mypy cannot recognise this
+        if raw_data.version == src.__version__:
+            return raw_data
         warnings.warn(
             "Vocab dump is from a different version of vocab-tester.",
             stacklevel=2,
         )
-        return _regenerate_vocab_list(output)
+        return _regenerate_vocab_list(raw_data)
 
     raise InvalidVocabDumpError(
         "Vocab dump is not valid.",
