@@ -6,77 +6,59 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import TYPE_CHECKING
 
-if TYPE_CHECKING:
-    from .. import accido
-
-# TI = type-in
-# MC = multiple choice
-# PW = parse word
-
-
-class _Question:
-    """Base class for questions."""
+from .. import accido
 
 
 @dataclass
-class TI_EngtoLat_Question(_Question):
-    """A question that asks for the Latin translation of an English word.
-    For example, "I search" (answer: "quaero").
-    """
+class _Question[T]:
+    """Generic class for questions."""
 
-    english: str
-    answers: list[str]
+    prompt: T
+    answers: set[T]
 
-    def check(self, response: str, further_answers: list[str]) -> bool:
-        """Check if the response is correct."""
+    def check(self, response: T) -> bool:
+        """Check if the response is correct.
+
+        Parameters
+        ----------
+        response : T
+            The response to the question.
+
+        Returns
+        -------
+        bool
+            True if the response is correct, False otherwise.
+        """
         return response in self.answers
 
 
-@dataclass
-class TI_LattoEng_Question(_Question):
-    """A question that asks for the English translation of a Latin word.
-    For example, "quaero" (answer: "I search").
-    """
-
-    latin: str
-    answers: list[str]
-
-    def check(self, response: str) -> bool:
-        """Check if the response is correct."""
-        return response in self.answers
+TypeInEngToLatQuestion = _Question[str]
+TypeInLatToEngQuestion = _Question[str]
 
 
 @dataclass
-class PW_ComptoLat_Question(_Question):
+class ParseWordCompToLatQuestion(_Question[str]):
     """A question that asks for a Latin word given the grammatical
     components of the word.
+
     For example:
     present active indicative 2nd person plural of "quaero"
     (answer: "quaeratis").
-    """
+    """  # noqa: D205
 
-    latin: str
     components: accido.misc.EndingComponents
-    answers: list[str]
-
-    def check(self, response: str) -> bool:
-        return response in self.answers
 
 
 @dataclass
-class PW_LattoComp_Question(_Question):
-    """A question that asks for the grammatical components of a Latin word,
-    given the word.
+class ParseWordLatToCompQuestion(_Question[accido.misc.EndingComponents]):
+    """A question that asks for the grammatical components of a Latin
+    word, given the word.
+
     For example:
     Parse "quaeratis" (hear: quaero, quaerere, quaesivi, quaesitus)
     (answer: "present active indicative 2nd person plural").
-    """
+    """  # noqa: D205
 
+    prompt: str  # overriding the parent class's prompt
     dictionary_entry: str
-    latin: str
-    answers: list[accido.misc.EndingComponents]
-
-    def check(self, response: accido.misc.EndingComponents) -> bool:
-        return response in self.answers
