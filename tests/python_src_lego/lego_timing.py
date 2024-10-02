@@ -11,7 +11,7 @@ l: VocabList
 
 package_version = python_src.__version__
 
-timing_file = "tests/python_src.lego/lego_timing_data.txt"
+timing_file = "tests/python_src_lego/lego_timing_data.txt"
 
 
 def log_timing_data(text):
@@ -30,7 +30,7 @@ def time_reader(run_times):
     from python_src.lego.reader import read_vocab_file
 
     for _ in range(run_times):
-        l = read_vocab_file(Path("tests/python_src.lego/test_vocab_files/regular_list.txt"))
+        l = read_vocab_file(Path("tests/python_src_lego/test_vocab_files/regular_list.txt"))
 
 
 @Timer(name="saver", text="{name}: {seconds:.3f} s", logger=log_timing_data)
@@ -42,7 +42,7 @@ def time_saver(run_times):
     from python_src.lego.saver import save_vocab_dump
 
     for _ in range(run_times):
-        save_vocab_dump(Path("tests/python_src.lego/test_vocab_files/testdump/regular_list.testdump"), l)
+        save_vocab_dump(Path("tests/python_src_lego/test_vocab_files/testdump/regular_list.testdump"), l)
 
 
 if __name__ == "__main__":

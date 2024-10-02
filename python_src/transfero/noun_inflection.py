@@ -10,6 +10,7 @@ from typing import TYPE_CHECKING
 import lemminflect
 from inflect import engine
 
+from ..accido.misc import Case, Number
 from .exceptions import InvalidWordError
 
 if TYPE_CHECKING:
@@ -55,6 +56,12 @@ def find_noun_inflections(
     if not hasattr(components, "number"):
         raise ValueError("Number must be specified")
 
+    if components.case not in Case:
+        raise ValueError(f"Invalid case: '{components.case}'")
+
+    if components.number not in Number:
+        raise ValueError(f"Invalid number: '{components.number}'")
+
     try:
         lemma: str = lemminflect.getLemma(noun, "NOUN")[0]
     except KeyError as e:
@@ -63,28 +70,22 @@ def find_noun_inflections(
     base_forms: set[str] = set()
 
     match components.number:
-        case "singular":
+        case Number.SINGULAR:
             base_forms = {lemminflect.getInflection(lemma, "NN")[0]}
-
-        case "plural":
+        case Number.PLURAL:
             base_forms.add(pluralinflect.plural_noun(lemma))
             pluralinflect.classical(all=True)
             base_forms.add(pluralinflect.plural_noun(lemma))
             pluralinflect.classical(all=False)
 
-        case _:
-            raise ValueError(f"Invalid number: '{components.number}'")
-
     match components.case:
-        case "nominative" | "vocative" | "accusative":
+        case Case.NOMINATIVE | Case.VOCATIVE | Case.ACCUSATIVE:
             return base_forms
-
-        case "genitive":
+        case Case.GENITIVE:
             possessive_genitive: set[str] = {
                 _get_possessive(base_form) for base_form in base_forms
             }
-
-            if components.number == "singular":
+            if components.number == Number.SINGULAR:
                 return (
                     possessive_genitive
                     | {f"of the {base_form}" for base_form in base_forms}
@@ -93,13 +94,11 @@ def find_noun_inflections(
                         for base_form in base_forms
                     }
                 )
-
             return possessive_genitive | {
                 f"of the {base_form}" for base_form in base_forms
             }
-
-        case "dative":
-            if components.number == "singular":
+        case Case.DATIVE:
+            if components.number == Number.SINGULAR:
                 return (
                     {f"for the {base_form}" for base_form in base_forms}
                     | {
@@ -112,16 +111,14 @@ def find_noun_inflections(
                         for base_form in base_forms
                     }
                 )
-
             return (
                 {f"for the {base_form}" for base_form in base_forms}
                 | {f"for {base_form}" for base_form in base_forms}
                 | {f"to the {base_form}" for base_form in base_forms}
                 | {f"to {base_form}" for base_form in base_forms}
             )
-
-        case "ablative":
-            if components.number == "singular":
+        case Case.ABLATIVE:
+            if components.number == Number.SINGULAR:
                 return (
                     base_forms
                     | {f"with the {base_form}" for base_form in base_forms}
@@ -143,13 +140,11 @@ def find_noun_inflections(
                         for base_form in base_forms
                     }
                 )
-
             return (
                 base_forms
                 | {f"with the {base_form}" for base_form in base_forms}
                 | {f"by the {base_form}" for base_form in base_forms}
                 | {f"by means of the {base_form}" for base_form in base_forms}
             )
-
         case _:
-            raise ValueError(f"Invalid case: '{components.case}'")
+            raise ValueError

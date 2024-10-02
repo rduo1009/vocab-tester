@@ -29,9 +29,10 @@ def time_adjective(run_times):
 @Timer(name="noun", text="{name}: {seconds:.3f} s", logger=log_timing_data)
 def time_noun(run_times):
     from python_src.accido import endings
+    from python_src.accido.misc import Gender
 
     for _ in range(run_times):
-        endings.Noun(nominative="ancilla", genitive="ancillae", gender="feminine", meaning="slavegirl")
+        endings.Noun(nominative="ancilla", genitive="ancillae", gender=Gender.FEMININE, meaning="slavegirl")
 
 
 @Timer(name="verb", text="{name}: {seconds:.3f} s", logger=log_timing_data)

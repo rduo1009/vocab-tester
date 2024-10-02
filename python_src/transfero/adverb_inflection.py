@@ -9,6 +9,7 @@ from typing import TYPE_CHECKING
 
 import lemminflect
 
+from ..accido.misc import Degree
 from .exceptions import InvalidWordError
 
 if TYPE_CHECKING:
@@ -43,19 +44,20 @@ def find_adverb_inflections(
     if not hasattr(components, "degree"):
         raise ValueError("Degree must be specified")
 
+    if components.degree not in Degree:
+        raise ValueError(f"Invalid degree: '{components.degree}'")
+
     try:
         lemma: str = lemminflect.getLemma(adverb, "ADV")[0]
     except KeyError as e:
         raise InvalidWordError(f"Word {adverb} is not an adverb") from e
 
     match components.degree:
-        case "positive":
+        case Degree.POSITIVE:
             return {lemma}
-
-        case "comparative":
+        case Degree.COMPARATIVE:
             return {f"more {lemma}"}
-
-        case "superlative":
+        case Degree.SUPERLATIVE:
             return {
                 f"most {lemma}",
                 f"very {lemma}",
@@ -64,6 +66,5 @@ def find_adverb_inflections(
                 f"too {lemma}",
                 f"quite {lemma}",
             }
-
         case _:
-            raise ValueError(f"Invalid degree: '{components.degree}'")
+            raise ValueError

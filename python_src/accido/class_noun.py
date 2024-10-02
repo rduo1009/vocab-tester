@@ -61,8 +61,8 @@ class Noun(_Word):
         self,
         *,
         nominative: str,
-        genitive: str,
-        gender: str,
+        genitive: str | None,
+        gender: Gender | None,
         meaning: Meaning,
     ) -> None:
         """Initialises Noun and determines the declension and endings.
@@ -81,10 +81,7 @@ class Noun(_Word):
         super().__init__()
 
         if gender:
-            if gender not in {"masculine", "feminine", "neuter"}:
-                raise InvalidInputError(f"Invalid gender: '{gender}'")
-
-            self.gender: str = gender
+            self.gender: Gender = gender
 
         self.nominative: str = nominative
         if genitive:
@@ -105,7 +102,7 @@ class Noun(_Word):
 
         self.endings = self._determine_endings()
 
-        if self.gender == "neuter":
+        if self.gender == Gender.NEUTER:
             self._neuter_endings()
 
         if self.plurale_tantum:
@@ -272,14 +269,17 @@ class Noun(_Word):
             self.endings["Naccpl"] = f"{self._stem}a"  # templa
             self.endings["Nvocpl"] = f"{self._stem}a"  # templa
 
-    def get(self, *, case: Case | str, number: Number | str) -> Ending | None:
+    def get(self, *, case: Case, number: Number) -> Ending | None:
         """Returns the ending of the noun.
 
         The function returns None if no ending is found.
 
         Parameters
         ----------
-        case, number : str
+        case : Case
+            The case of the noun.
+        number : Number
+            The number of the noun.
 
         Returns
         -------
@@ -326,16 +326,16 @@ class Noun(_Word):
     @staticmethod
     def _create_namespace(key: str) -> EndingComponents:
         output: EndingComponents = EndingComponents(
-            case=Case(key[1:4]).regular,
-            number=Number(key[4:6]).regular,
+            case=Case(key[1:4]),
+            number=Number(key[4:6]),
         )
-        output.string = f"{output.case} {output.number}"
+        output.string = f"{output.case.regular} {output.number.regular}"
         return output
 
     def __repr__(self) -> str:
         return (
             f"Noun({self.nominative}, {self.genitive}, "
-            f"{self.gender}, {self.meaning})"
+            f"{self.gender.regular}, {self.meaning})"
         )
 
     def __str__(self) -> str:

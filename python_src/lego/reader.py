@@ -9,7 +9,7 @@ import hashlib
 import hmac
 import warnings
 from re import match
-from typing import TYPE_CHECKING, Final
+from typing import TYPE_CHECKING
 
 import dill as pickle
 import lz4.frame  # type: ignore[import-untyped]
@@ -17,19 +17,13 @@ import lz4.frame  # type: ignore[import-untyped]
 import python_src as src
 
 from .. import accido
+from ..accido.misc import Gender
 from .exceptions import InvalidVocabDumpError, InvalidVocabFileFormatError
 from .misc import KEY, VocabList
 
 if TYPE_CHECKING:
     from io import TextIOWrapper
     from pathlib import Path
-
-"""Mapping of gender values to their more concise abbreviated forms."""
-GENDER_SHORTHAND: Final[dict[str, str]] = {
-    "m": "masculine",
-    "f": "feminine",
-    "n": "neuter",
-}
 
 
 def _regenerate_vocab_list(vocab_list: VocabList) -> VocabList:
@@ -301,9 +295,7 @@ def _parse_line(
                     meaning=meaning,
                     nominative=latin_parts[0],
                     genitive=latin_parts[1].split()[0],
-                    gender=GENDER_SHORTHAND[
-                        latin_parts[2].split()[-1].strip("()")
-                    ],
+                    gender=Gender(latin_parts[2].split()[-1].strip("()")),
                 )
             except KeyError as e:
                 raise InvalidVocabFileFormatError(

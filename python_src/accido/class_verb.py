@@ -448,12 +448,12 @@ class Verb(_Word):
         self,
         *,
         person: Person | None = None,
-        number: Number | str | None = None,
-        tense: Tense | str,
-        voice: Voice | str,
-        mood: Mood | str,
-        participle_gender: Gender | str | None = None,
-        participle_case: Case | str | None = None,
+        number: Number | None = None,
+        tense: Tense,
+        voice: Voice,
+        mood: Mood,
+        participle_gender: Gender | None = None,
+        participle_case: Case | None = None,
     ) -> Ending | None:
         """Returns the ending of the verb.
 
@@ -463,17 +463,17 @@ class Verb(_Word):
         ----------
         person : Optional[Person], default = None
             The person of the ending, if applicable (not participle).
-        number : Optional[str | Number], default = None
+        number : Optional[Number], default = None
             The number of the ending, if applicable (not participle).
-        tense : Tense | str
+        tense : Tense
             The tense of the ending.
-        voice : Voice | str
+        voice : Voice
             The voice of the ending.
-        mood : Mood | str
+        mood : Mood
             The mood of the ending.
-        participle_gender : Optional[Gender | str], default = None
+        participle_gender : Optional[Gender], default = None
             The gender of the participle, if applicable.
-        participle_case : Optional[Case | str], default = None
+        participle_case : Optional[Case], default = None
             The case of the participle, if applicable.
 
         Returns
@@ -594,9 +594,9 @@ class Verb(_Word):
         *,
         tense: Tense,
         voice: Voice,
-        number: Number | str,
-        participle_gender: Gender | str,
-        participle_case: Case | str,
+        number: Number,
+        participle_gender: Gender,
+        participle_case: Case,
     ) -> Ending | None:
         if isinstance(participle_case, str):
             try:
@@ -635,29 +635,31 @@ class Verb(_Word):
         output: EndingComponents
         if len(key) == 13:
             output = EndingComponents(
-                tense=Tense(key[1:4]).regular,
-                voice=Voice(key[4:7]).regular,
-                mood=Mood(key[7:10]).regular,
-                number=Number(key[10:12]).regular,
+                tense=Tense(key[1:4]),
+                voice=Voice(key[4:7]),
+                mood=Mood(key[7:10]),
+                number=Number(key[10:12]),
                 person=int(key[12]),
             )
             output.string = (
-                f"{output.tense} {output.voice} {output.mood} "
-                f"{output.number} {PERSON_SHORTHAND[int(key[12])]}"
+                f"{output.tense.regular} {output.voice.regular} "
+                f"{output.mood.regular} {output.number.regular} "
+                f"{PERSON_SHORTHAND[int(key[12])]}"
             )
             return output
         if len(key) == 16 and key[7:10] == "ptc":
             output = EndingComponents(
-                tense=Tense(key[1:4]).regular,
-                voice=Voice(key[4:7]).regular,
-                mood="participle",
-                gender=Gender(key[10]).regular,
-                case=Case(key[11:14]).regular,
-                number=Number(key[14:16]).regular,
+                tense=Tense(key[1:4]),
+                voice=Voice(key[4:7]),
+                mood=Mood.PARTICIPLE,
+                gender=Gender(key[10]),
+                case=Case(key[11:14]),
+                number=Number(key[14:16]),
             )
             output.string = (
-                f"{output.tense} {output.voice} participle "
-                f"{output.gender} {output.case} {output.number}"
+                f"{output.tense.regular} {output.voice.regular} participle "
+                f"{output.gender.regular} {output.case.regular} "
+                f"{output.number.regular}"
             )
             return output
 
