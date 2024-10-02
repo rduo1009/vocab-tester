@@ -136,7 +136,7 @@ class TestVerbDunder:
 
     def test_find(self):
         word = Verb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
-        assert compare(word.find("celabam"), [EndingComponents(person="1st person", number="singular", tense="imperfect", voice="active", mood="indicative", string="imperfect active indicative singular 1st person")])
+        assert compare(word.find("celabam"), [EndingComponents(person=1, number="singular", tense="imperfect", voice="active", mood="indicative", string="imperfect active indicative singular 1st person")])
 
     def test_find_participle(self):
         word = Verb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")

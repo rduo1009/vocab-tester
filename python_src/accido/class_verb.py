@@ -639,11 +639,11 @@ class Verb(_Word):
                 voice=Voice(key[4:7]).regular,
                 mood=Mood(key[7:10]).regular,
                 number=Number(key[10:12]).regular,
-                person=PERSON_SHORTHAND[int(key[12])],
+                person=int(key[12]),
             )
             output.string = (
                 f"{output.tense} {output.voice} {output.mood} "
-                f"{output.number} {output.person}"
+                f"{output.number} {PERSON_SHORTHAND[int(key[12])]}"
             )
             return output
         if len(key) == 16 and key[7:10] == "ptc":
