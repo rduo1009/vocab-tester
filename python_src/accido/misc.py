@@ -18,17 +18,23 @@ else:
 from aenum import MultiValue  # type: ignore[import-untyped]
 
 
-class Number(Enum, settings=MultiValue, init="regular shorthand"):
+class _EndingComponentEnum(Enum):
+    regular: str
+    shorthand: str
+
+
+class Number(
+    _EndingComponentEnum, settings=MultiValue, init="regular shorthand"
+):
     """Represents the grammatical number."""
 
     SINGULAR = "singular", "sg"
     PLURAL = "plural", "pl"
 
-    regular: str
-    shorthand: str
 
-
-class Tense(Enum, settings=MultiValue, init="regular shorthand"):
+class Tense(
+    _EndingComponentEnum, settings=MultiValue, init="regular shorthand"
+):
     """Represents the tense of a verb."""
 
     PRESENT = "present", "pre"
@@ -38,21 +44,19 @@ class Tense(Enum, settings=MultiValue, init="regular shorthand"):
     PLUPERFECT = "pluperfect", "plp"
     # FUTURE_PERFECT = "future perfect", "fpr"
 
-    regular: str
-    shorthand: str
 
-
-class Voice(Enum, settings=MultiValue, init="regular shorthand"):
+class Voice(
+    _EndingComponentEnum, settings=MultiValue, init="regular shorthand"
+):
     """Represents the voice of a verb."""
 
     ACTIVE = "active", "act"
     PASSIVE = "passive", "pas"
 
-    regular: str
-    shorthand: str
 
-
-class Mood(Enum, settings=MultiValue, init="regular shorthand"):
+class Mood(
+    _EndingComponentEnum, settings=MultiValue, init="regular shorthand"
+):
     """Represents the mood of a verb."""
 
     INDICATIVE = "indicative", "ind"
@@ -61,11 +65,10 @@ class Mood(Enum, settings=MultiValue, init="regular shorthand"):
     SUBJUNCTIVE = "subjunctive", "sbj"
     PARTICIPLE = "participle", "ptc"
 
-    regular: str
-    shorthand: str
 
-
-class Case(Enum, settings=MultiValue, init="regular shorthand"):
+class Case(
+    _EndingComponentEnum, settings=MultiValue, init="regular shorthand"
+):
     """Represents the case of a noun."""
 
     NOMINATIVE = "nominative", "nom"
@@ -75,30 +78,25 @@ class Case(Enum, settings=MultiValue, init="regular shorthand"):
     DATIVE = "dative", "dat"
     ABLATIVE = "ablative", "abl"
 
-    regular: str
-    shorthand: str
 
-
-class Gender(Enum, settings=MultiValue, init="regular shorthand"):
+class Gender(
+    _EndingComponentEnum, settings=MultiValue, init="regular shorthand"
+):
     """Represents the gender of a noun or adjective."""
 
     MASCULINE = "masculine", "m"
     FEMININE = "feminine", "f"
     NEUTER = "neuter", "n"
 
-    regular: str
-    shorthand: str
 
-
-class Degree(Enum, settings=MultiValue, init="regular shorthand"):
+class Degree(
+    _EndingComponentEnum, settings=MultiValue, init="regular shorthand"
+):
     """Represents the degree of an adjective."""
 
     POSITIVE = "positive", "pos"
     COMPARATIVE = "comparative", "cmp"
     SUPERLATIVE = "superlative", "spr"
-
-    regular: str
-    shorthand: str
 
 
 """Mapping of person values to their more concise abbreviated forms."""
@@ -116,10 +114,53 @@ class EndingComponents(SimpleNamespace):
 
     Examples
     --------
-    >>> foo = EndingComponents(case="nominative", gender="masculine", \
-                               number="singular")
-    >>> foo.case
+    >>> foo = EndingComponents(
+    ...     case=Case.NOMINATIVE,
+    ...     number=Number.SINGULAR,
+    ...     string="nominative singular",
+    ... )
+    >>> foo.number.regular
+    'singular'
+
+    For nouns.
+
+    >>> foo = EndingComponents(
+    ...     case=Case.NOMINATIVE,
+    ...     gender=Gender.MASCULINE,
+    ...     number=Number.SINGULAR,
+    ...     string="nominative singular masculine",
+    ... )
+    >>> foo.case.regular
     'nominative'
+
+    For adjectives and pronouns.
+
+    >>> foo = EndingComponents(
+    ...     tense=Tense.IMPERFECT,
+    ...     voice=Voice.ACTIVE,
+    ...     mood=Mood.INDICATIVE,
+    ...     number=Number.SINGULAR,
+    ...     person=1,
+    ...     string="imperfect active indicative singular 1st person",
+    ... )
+    >>> foo.person
+    1
+
+    For verbs.
+
+    >>> foo = EndingComponents(
+    ...     tense=Tense.PERFECT,
+    ...     voice=Voice.PASSIVE,
+    ...     mood=Mood.PARTICIPLE,
+    ...     gender=Gender.MASCULINE,
+    ...     case=Case.NOMINATIVE,
+    ...     number=Number.SINGULAR,
+    ...     string="perfect passive participle masculine nominative singular",
+    ... )
+    >>> foo.tense.regular
+    'perfect'
+
+    For participles.
     """
 
 
