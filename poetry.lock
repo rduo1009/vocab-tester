@@ -218,6 +218,17 @@ files = [
 tests = ["asttokens (>=2.1.0)", "coverage", "coverage-enable-subprocess", "ipython", "littleutils", "pytest", "rich"]
 
 [[package]]
+name = "fsrs"
+version = "2.5.1"
+description = "Free Spaced Repetition Scheduler"
+optional = false
+python-versions = ">=3.9"
+files = [
+    {file = "fsrs-2.5.1-py3-none-any.whl", hash = "sha256:2c6cbc4a759f6603bc6eeda663c5091a600333f1cde28025e893b8bbd293f879"},
+    {file = "fsrs-2.5.1.tar.gz", hash = "sha256:0a02fd3c1dede612272bcad32de4097b1a6e778d95b704531c40480de73f2977"},
+]
+
+[[package]]
 name = "icecream"
 version = "2.1.3"
 description = "Never use print() to debug again; inspect variables, expressions, and program execution with a single, simple function call."
@@ -953,4 +964,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.12"
-content-hash = "950f6451f0f142026c557f9bc344f779eb2e7be9bef74c353e1210c43656de23"
+content-hash = "807bc2a38ab574db1396f0e9a4db3570c6183753d864340f2f1eb08be84ef065"
