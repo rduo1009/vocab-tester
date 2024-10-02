@@ -785,10 +785,10 @@ class Adjective(_Word):
     def get(
         self,
         *,
-        degree: Degree | str,
-        gender: Gender | str | None = None,
-        case: Case | str | None = None,
-        number: Number | str | None = None,
+        degree: Degree,
+        gender: Gender | None = None,
+        case: Case | None = None,
+        number: Number | None = None,
         adverb: bool = False,
     ) -> Ending | None:
         """Returns the ending of the adjective.
@@ -797,13 +797,13 @@ class Adjective(_Word):
 
         Parameters
         ----------
-        degree : Degree | str
+        degree : Degree
             The degree of the adjective.
-        gender : Optional[Gender | str], default = None
+        gender : Optional[Gender], default = None
             The gender of the ending, if applicable (not an adverb).
-        case : Optional[Case | str], default = None
+        case : Optional[Case], default = None
             The case of the ending, if applicable (not an adverb).
-        number : Optional[Number | str], default = None
+        number : Optional[Number], default = None
             The number of the ending, if applicable (not an adverb).
         adverb : bool, default = False
             Whether the queried ending is an adverb or not.
@@ -839,15 +839,16 @@ class Adjective(_Word):
 
         if adverb:
             if gender or case or number:
+                assert gender is not None
+                assert case is not None
+                assert number is not None
+
                 raise InvalidInputError(
                     "Adverbs do not have gender, case or number "
-                    f"(given '{gender}', '{case}' and '{number}')",
+                    f"(given '{gender.regular}', '{case.regular}' "
+                    f"and '{number.regular}')",
                 )
 
-            try:
-                degree = Degree(degree)
-            except ValueError as e:
-                raise InvalidInputError(f"Invalid degree: '{degree}'") from e
             short_degree = degree.shorthand
             return self.endings.get(f"D{short_degree}")
 
@@ -857,30 +858,6 @@ class Adjective(_Word):
             raise InvalidInputError("Case not given")
         if not number:
             raise InvalidInputError("Number not given")
-
-        if isinstance(gender, str):
-            try:
-                gender = Gender(gender.lower())
-            except ValueError as e:
-                raise InvalidInputError(f"Invalid gender: '{gender}'") from e
-
-        if isinstance(case, str):
-            try:
-                case = Case(case.lower())
-            except ValueError as e:
-                raise InvalidInputError(f"Invalid case: '{case}'") from e
-
-        if isinstance(number, str):
-            try:
-                number = Number(number.lower())
-            except ValueError as e:
-                raise InvalidInputError(f"Invalid number: '{number}'") from e
-
-        if isinstance(degree, str):
-            try:
-                degree = Degree(degree.lower())
-            except ValueError as e:
-                raise InvalidInputError(f"Invalid degree: '{degree}'") from e
 
         short_degree = degree.shorthand
         short_gender: str = gender.shorthand
@@ -897,21 +874,21 @@ class Adjective(_Word):
 
         if key[0] == "A":
             output = EndingComponents(
-                degree=Degree(key[1:4]).regular,
-                gender=Gender(key[4]).regular,
-                case=Case(key[5:8]).regular,
-                number=Number(key[8:10]).regular,
+                degree=Degree(key[1:4]),
+                gender=Gender(key[4]),
+                case=Case(key[5:8]),
+                number=Number(key[8:10]),
             )
             output.string = (
-                f"{output.degree} {output.case} "
-                f"{output.number} {output.gender}"
+                f"{output.degree.regular} {output.case.regular} "
+                f"{output.number.regular} {output.gender.regular}"
             )
 
         else:
             output = EndingComponents(
-                degree=Degree(key[1:4]).regular,
+                degree=Degree(key[1:4]),
             )
-            output.string = output.degree
+            output.string = output.degree.regular
 
         return output
 

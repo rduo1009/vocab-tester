@@ -77,7 +77,7 @@ class Pronoun(_Word):
         self._neutnom: Ending = self.endings["Pnnomsg"]
 
     def get(
-        self, *, gender: Gender | str, case: Case | str, number: Number | str
+        self, *, gender: Gender, case: Case, number: Number
     ) -> Ending | None:
         """Returns the ending of the pronoun.
 
@@ -85,7 +85,12 @@ class Pronoun(_Word):
 
         Parameters
         ----------
-        gender, case, number : str
+        gender : Gender
+            The gender of the pronoun.
+        case : Case
+            The case of the pronoun.
+        number : Number
+            The number of the pronoun.
 
         Returns
         -------
@@ -113,24 +118,6 @@ class Pronoun(_Word):
 
         Note that the arguments of get are keyword-only.
         """
-        if isinstance(gender, str):
-            try:
-                gender = Gender(gender.lower())
-            except ValueError as e:
-                raise InvalidInputError(f"Invalid gender: '{gender}'") from e
-
-        if isinstance(case, str):
-            try:
-                case = Case(case.lower())
-            except ValueError as e:
-                raise InvalidInputError(f"Invalid case: '{case}'") from e
-
-        if isinstance(number, str):
-            try:
-                number = Number(number.lower())
-            except ValueError as e:
-                raise InvalidInputError(f"Invalid number: '{number}'") from e
-
         short_gender: str = gender.shorthand
         short_case: str = case.shorthand
         short_number: str = number.shorthand
@@ -140,11 +127,14 @@ class Pronoun(_Word):
     @staticmethod
     def _create_namespace(key: str) -> EndingComponents:
         output: EndingComponents = EndingComponents(
-            gender=Gender(key[1]).regular,
-            case=Case(key[2:5]).regular,
-            number=Number(key[5:7]).regular,
+            gender=Gender(key[1]),
+            case=Case(key[2:5]),
+            number=Number(key[5:7]),
         )
-        output.string = f"{output.case} {output.number} {output.gender}"
+        output.string = (
+            f"{output.case.regular} {output.number.regular} "
+            f"{output.gender.regular}"
+        )
         return output
 
     def __repr__(self) -> str:

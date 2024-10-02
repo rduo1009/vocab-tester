@@ -9,6 +9,7 @@ from typing import TYPE_CHECKING
 
 import lemminflect
 
+from ..accido.misc import Case, Degree, Gender, Number
 from .exceptions import InvalidWordError
 
 if TYPE_CHECKING:
@@ -53,41 +54,30 @@ def find_adjective_inflections(
     if not hasattr(components, "degree"):
         raise ValueError("Degree must be specified")
 
-    if components.gender not in {"masculine", "feminine", "neuter"}:
+    if components.gender not in Gender:
         raise ValueError(f"Invalid gender: '{components.gender}'")
 
-    if components.case not in {
-        "nominative",
-        "vocative",
-        "accusative",
-        "genitive",
-        "dative",
-        "ablative",
-    }:
+    if components.case not in Case:
         raise ValueError(f"Invalid case: '{components.case}'")
 
-    if components.number not in {"singular", "plural"}:
+    if components.number not in Number:
         raise ValueError(f"Invalid number: '{components.number}'")
 
     try:
         lemma: str = lemminflect.getLemma(adjective, "ADJ")[0]
     except KeyError as e:
         raise InvalidWordError(
-            f"Word '{adjective}' is not an adjective",
+            f"Word '{adjective}' is not an adjective"
         ) from e
 
     match components.degree:
-        case "positive":
+        case Degree.POSITIVE:
             return {lemma}
-
-        case "comparative":
+        case Degree.COMPARATIVE:
             comparative: str = lemminflect.getInflection(lemma, "RBR")[0]
-
             return {comparative, f"more {lemma}"}
-
-        case "superlative":
+        case Degree.SUPERLATIVE:
             superlative: str = lemminflect.getInflection(lemma, "RBS")[0]
-
             return {
                 superlative,
                 f"most {lemma}",
@@ -97,6 +87,5 @@ def find_adjective_inflections(
                 f"too {lemma}",
                 f"quite {lemma}",
             }
-
         case _:
             raise ValueError(f"Invalid degree: '{components.degree}'")

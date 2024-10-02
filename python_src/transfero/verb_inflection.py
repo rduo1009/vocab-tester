@@ -5,10 +5,11 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Literal
+from typing import TYPE_CHECKING
 
 import lemminflect
 
+from ..accido.misc import Mood, Number, Person, Tense, Voice
 from .edge_cases import STATIVE_VERBS
 from .exceptions import InvalidWordError
 
@@ -27,15 +28,15 @@ def _verify_verb_inflections(components: accido.misc.EndingComponents) -> None:
         raise ValueError("Mood must be specified")
 
     # not an infinitive
-    if components.mood != "infinitive":
+    if components.mood != Mood.INFINITIVE:
         if not hasattr(components, "number"):
             raise ValueError("Number must be specified")
 
-        if components.number not in {"singular", "plural"}:
+        if components.number not in Number:
             raise ValueError(f"Invalid number: '{components.number}'")
 
         # not a participle or an infinitive
-        if components.mood != "participle":
+        if components.mood != Mood.PARTICIPLE:
             if not hasattr(components, "person"):
                 raise ValueError("Person must be specified")
 
@@ -49,26 +50,13 @@ def _verify_verb_inflections(components: accido.misc.EndingComponents) -> None:
             if not hasattr(components, "gender"):
                 raise ValueError("Gender must be specified")
 
-    if components.voice not in {"active", "passive"}:
+    if components.voice not in Voice:
         raise ValueError(f"Invalid voice: '{components.voice}'")
 
-    if components.mood not in {
-        "indicative",
-        "imperative",
-        "subjunctive",
-        "infinitive",
-        "participle",
-    }:
+    if components.mood not in Mood:
         raise ValueError(f"Invalid mood: '{components.mood}'")
 
-    if components.tense not in {
-        "pluperfect",
-        "perfect",
-        "imperfect",
-        "present",
-        "future",
-        "future perfect",
-    }:
+    if components.tense not in Tense:
         raise ValueError(f"Invalid tense: '{components.tense}'")
 
 
@@ -104,7 +92,7 @@ def find_verb_inflections(
     """  # noqa: D205
     _verify_verb_inflections(components)
 
-    if components.mood == "participle":
+    if components.mood == Mood.PARTICIPLE:
         return _find_participle_inflections(verb, components)
 
     try:
@@ -113,76 +101,76 @@ def find_verb_inflections(
         raise InvalidWordError(f"Word {verb} is not a verb") from e
 
     match (components.tense, components.voice, components.mood):
-        case ("present", "active", "indicative"):
+        case (Tense.PRESENT, Voice.ACTIVE, Mood.INDICATIVE):
             return _find_preactind_inflections(
                 lemma,
                 components.number,
                 components.person,
             )
 
-        case ("imperfect", "active", "indicative"):
+        case (Tense.IMPERFECT, Voice.ACTIVE, Mood.INDICATIVE):
             return _find_impactind_inflections(
                 lemma,
                 components.number,
                 components.person,
             )
 
-        case ("perfect", "active", "indicative"):
+        case (Tense.PERFECT, Voice.ACTIVE, Mood.INDICATIVE):
             return _find_peractind_inflections(
                 lemma,
                 components.number,
                 components.person,
             )
 
-        case ("pluperfect", "active", "indicative"):
+        case (Tense.PLUPERFECT, Voice.ACTIVE, Mood.INDICATIVE):
             return _find_plpactind_inflections(
                 lemma,
                 components.number,
                 components.person,
             )
 
-        case ("present", "active", "infinitive"):
+        case (Tense.PRESENT, Voice.ACTIVE, Mood.INFINITIVE):
             return _find_preactinf_inflections(lemma)
 
-        case ("present", "active", "imperative"):
+        case (Tense.PRESENT, Voice.ACTIVE, Mood.IMPERATIVE):
             return _find_preipe_inflections(lemma)
 
         case _:
             raise NotImplementedError(
-                f"The {components.tense} {components.voice} "
-                f"{components.mood} has not been implemented",
+                f"The {components.tense.regular} {components.voice.regular} "
+                f"{components.mood.regular} has not been implemented",
             )
 
 
 def _find_preactind_inflections(
     lemma: str,
-    number: Literal["singular", "plural"],
-    person: Literal[1, 2, 3],
+    number: Number,
+    person: Person,
 ) -> set[str]:
     present_nonthird: str = lemminflect.getInflection(lemma, "VBP")[0]
     present_third: str = lemminflect.getInflection(lemma, "VBZ")[0]
     present_participle: str = lemminflect.getInflection(lemma, "VBG")[0]
 
     match (number, person):
-        case ("singular", 1):
+        case (Number.SINGULAR, 1):
             return {
                 f"I {present_nonthird}",
                 f"I am {present_participle}",
             }
 
-        case ("plural", 1):
+        case (Number.PLURAL, 1):
             return {
                 f"we {present_nonthird}",
                 f"we are {present_participle}",
             }
 
-        case ("singular", 2) | ("plural", 2):
+        case (Number.SINGULAR, 2) | (Number.PLURAL, 2):
             return {
                 f"you {present_nonthird}",
                 f"you are {present_participle}",
             }
 
-        case ("singular", 3):
+        case (Number.SINGULAR, 3):
             return {
                 f"he {present_third}",
                 f"he is {present_participle}",
@@ -192,19 +180,21 @@ def _find_preactind_inflections(
                 f"it is {present_participle}",
             }
 
-        case ("plural", 3):
+        case (Number.PLURAL, 3):
             return {
                 f"they {present_nonthird}",
                 f"they are {present_participle}",
             }
 
-    raise ValueError(f"Invalid number and person: '{number}' '{person}'")
+    raise ValueError(
+        f"Invalid number and person: '{number.regular}' '{person}'"
+    )
 
 
 def _find_impactind_inflections(
     lemma: str,
-    number: Literal["singular", "plural"],
-    person: Literal[1, 2, 3],
+    number: Number,
+    person: Person,
 ) -> set[str]:
     present_participle: str = lemminflect.getInflection(lemma, "VBG")[0]
 
@@ -212,16 +202,16 @@ def _find_impactind_inflections(
         past: str = lemminflect.getInflection(lemma, "VBD")[0]
 
         match (number, person):
-            case ("singular", 1):
+            case (Number.SINGULAR, 1):
                 return {f"I {past}", f"I was {present_participle}"}
 
-            case ("plural", 1):
+            case (Number.PLURAL, 1):
                 return {f"we {past}", f"we were {present_participle}"}
 
-            case ("singular", 2) | ("plural", 2):
+            case (Number.SINGULAR, 2) | (Number.PLURAL, 2):
                 return {f"you {past}", f"you were {present_participle}"}
 
-            case ("singular", 3):
+            case (Number.SINGULAR, 3):
                 return {
                     f"he {past}",
                     f"he was {present_participle}",
@@ -231,7 +221,7 @@ def _find_impactind_inflections(
                     f"it was {present_participle}",
                 }
 
-            case ("plural", 3):
+            case (Number.PLURAL, 3):
                 return {f"they {past}", f"they were {present_participle}"}
 
             # case _:
@@ -240,23 +230,23 @@ def _find_impactind_inflections(
             #     )
 
     match (number, person):
-        case ("singular", 1):
+        case (Number.SINGULAR, 1):
             return {f"I was {present_participle}"}
 
-        case ("plural", 1):
+        case (Number.PLURAL, 1):
             return {f"we were {present_participle}"}
 
-        case ("singular", 2) | ("plural", 2):
+        case (Number.SINGULAR, 2) | (Number.PLURAL, 2):
             return {f"you were {present_participle}"}
 
-        case ("singular", 3):
+        case (Number.SINGULAR, 3):
             return {
                 f"he was {present_participle}",
                 f"she was {present_participle}",
                 f"it was {present_participle}",
             }
 
-        case ("plural", 3):
+        case (Number.PLURAL, 3):
             return {f"they were {present_participle}"}
 
     raise ValueError(f"Invalid number and person: '{number}' '{person}'")
@@ -264,22 +254,22 @@ def _find_impactind_inflections(
 
 def _find_peractind_inflections(
     lemma: str,
-    number: Literal["singular", "plural"],
-    person: Literal[1, 2, 3],
+    number: Number,
+    person: Person,
 ) -> set[str]:
     past = lemminflect.getInflection(lemma, "VBD")[0]
 
     match (number, person):
-        case ("singular", 1):
+        case (Number.SINGULAR, 1):
             return {f"I {past}", f"I have {past}", f"I did {lemma}"}
 
-        case ("plural", 1):
+        case (Number.PLURAL, 1):
             return {f"we {past}", f"we have {past}", f"we did {lemma}"}
 
-        case ("singular", 2) | ("plural", 2):
+        case (Number.SINGULAR, 2) | (Number.PLURAL, 2):
             return {f"you {past}", f"you have {past}", f"you did {lemma}"}
 
-        case ("singular", 3):
+        case (Number.SINGULAR, 3):
             return {
                 f"he {past}",
                 f"he has {past}",
@@ -292,7 +282,7 @@ def _find_peractind_inflections(
                 f"it did {lemma}",
             }
 
-        case ("plural", 3):
+        case (Number.PLURAL, 3):
             return {f"they {past}", f"they have {past}", f"they did {lemma}"}
 
     raise ValueError(f"Invalid number and person: '{number}' '{person}'")
@@ -300,29 +290,29 @@ def _find_peractind_inflections(
 
 def _find_plpactind_inflections(
     lemma: str,
-    number: Literal["singular", "plural"],
-    person: Literal[1, 2, 3],
+    number: Number,
+    person: Person,
 ) -> set[str]:
     past_participle: str = lemminflect.getInflection(lemma, "VBN")[0]
 
     match (number, person):
-        case ("singular", 1):
+        case (Number.SINGULAR, 1):
             return {f"I had {past_participle}"}
 
-        case ("plural", 1):
+        case (Number.PLURAL, 1):
             return {f"we had {past_participle}"}
 
-        case ("singular", 2) | ("plural", 2):
+        case (Number.SINGULAR, 2) | (Number.PLURAL, 2):
             return {f"you had {past_participle}"}
 
-        case ("singular", 3):
+        case (Number.SINGULAR, 3):
             return {
                 f"he had {past_participle}",
                 f"she had {past_participle}",
                 f"it had {past_participle}",
             }
 
-        case ("plural", 3):
+        case (Number.PLURAL, 3):
             return {f"they had {past_participle}"}
 
     raise ValueError(f"Invalid number and person: '{number}' '{person}'")
@@ -335,11 +325,11 @@ def _find_participle_inflections(
     lemma: str = lemminflect.getLemma(verb, "NOUN")[0]
 
     match (components.tense, components.voice):
-        case ("perfect", "passive"):
+        case (Tense.PERFECT, Voice.PASSIVE):
             past_participle: str = lemminflect.getInflection(lemma, "VBN")[0]
             return {f"having been {past_participle}"}
 
-        case ("present", "active"):
+        case (Tense.PRESENT, Voice.ACTIVE):
             present_participle: str = lemminflect.getInflection(lemma, "VBG")[
                 0
             ]
@@ -347,8 +337,8 @@ def _find_participle_inflections(
 
         case _:
             raise NotImplementedError(
-                f"The {components.tense} {components.voice} participle has "
-                "not been implemented",
+                f"The {components.tense.regular} {components.voice.regular} "
+                "participle has not been implemented",
             )
 
 

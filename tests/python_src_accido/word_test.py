@@ -5,7 +5,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../.
 
 import pytest
 from python_src.accido.endings import Noun, Pronoun, Verb
-from python_src.accido.misc import EndingComponents
+from python_src.accido.misc import Case, EndingComponents, Gender, Number
 
 
 def test_eq():
@@ -28,15 +28,15 @@ def test_getitem():
 def test_find_same():
     word = Pronoun(pronoun="ille", meaning="that")
     assert word.find("illa") == [
-        EndingComponents(case="nominative", number="singular", gender="feminine", string="nominative singular feminine"),
-        EndingComponents(case="ablative", number="singular", gender="feminine", string="ablative singular feminine"),
-        EndingComponents(case="nominative", number="plural", gender="neuter", string="nominative plural neuter"),
-        EndingComponents(case="accusative", number="plural", gender="neuter", string="accusative plural neuter"),
+        EndingComponents(case=Case.NOMINATIVE, number=Number.SINGULAR, gender=Gender.FEMININE, string="nominative singular feminine"),
+        EndingComponents(case=Case.ABLATIVE, number=Number.SINGULAR, gender=Gender.FEMININE, string="ablative singular feminine"),
+        EndingComponents(case=Case.NOMINATIVE, number=Number.PLURAL, gender=Gender.NEUTER, string="nominative plural neuter"),
+        EndingComponents(case=Case.ACCUSATIVE, number=Number.PLURAL, gender=Gender.NEUTER, string="accusative plural neuter"),
     ]
 
 
 def test_find_multipleendings():
     word = Noun(nominative="ego", genitive=None, gender=None, meaning="I")
     assert word.find("nostrum") == [
-        EndingComponents(case="genitive", number="plural", string="genitive plural"),
+        EndingComponents(case=Case.GENITIVE, number=Number.PLURAL, string="genitive plural"),
     ]
