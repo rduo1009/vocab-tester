@@ -12,7 +12,7 @@ from typing import TYPE_CHECKING, Any
 from .misc import EndingComponents, MultipleEndings
 
 if TYPE_CHECKING:
-    from .type_aliases import Ending, Endings
+    from .type_aliases import Ending, Endings, Meaning
 
 
 @total_ordering
@@ -35,6 +35,7 @@ class _Word(ABC):  # noqa: PLW1641
         self.endings: Endings
         self._first: str
         self._unique_endings: set[Ending] = set()
+        self.meaning: Meaning
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, _Word):
