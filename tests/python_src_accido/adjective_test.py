@@ -53,6 +53,12 @@ class TestAdjectiveErrors:
             Adjective("laetus", "laeta", "laetum", declension="4", meaning="happy", termination=3)
         assert "Invalid declension: '4'" == str(error.value)
 
+    def test_errors_adverbs_donothave(self):
+        with pytest.raises(InvalidInputError) as error:
+            word = Adjective("laetus", "laeta", "laetum", declension="212", meaning="happy")
+            word.get(case=Case.NOMINATIVE, gender=Gender.MASCULINE, number=Number.SINGULAR, degree=Degree.POSITIVE, adverb=True)
+        assert "Adverbs do not have gender, case or number (given 'masculine', 'nominative' and 'singular')" == str(error.value)
+
 
 class TestAdjectiveDunder:
     def test_repr(self):

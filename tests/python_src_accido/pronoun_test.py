@@ -5,8 +5,10 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../.
 
 from types import SimpleNamespace
 
+import pytest
 from python_src.accido.edge_cases import PRONOUNS
 from python_src.accido.endings import Pronoun
+from python_src.accido.exceptions import InvalidInputError
 from python_src.accido.misc import Case, Gender, Number
 
 
@@ -33,3 +35,9 @@ def test_pronoun():
 def test_get():
     word = Pronoun(pronoun="ille", meaning="that")
     assert word.get(gender=Gender.MASCULINE, case=Case.GENITIVE, number=Number.SINGULAR) == "illius"
+
+
+def test_errors_cannot_recognise():
+    with pytest.raises(InvalidInputError) as error:
+        Pronoun(pronoun="error", meaning="this").endings
+    assert "Pronoun 'error' not recognised" == str(error.value)

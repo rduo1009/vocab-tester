@@ -118,24 +118,6 @@ class Pronoun(_Word):
 
         Note that the arguments of get are keyword-only.
         """
-        if isinstance(gender, str):
-            try:
-                gender = Gender(gender.lower())
-            except ValueError as e:
-                raise InvalidInputError(f"Invalid gender: '{gender}'") from e
-
-        if isinstance(case, str):
-            try:
-                case = Case(case.lower())
-            except ValueError as e:
-                raise InvalidInputError(f"Invalid case: '{case}'") from e
-
-        if isinstance(number, str):
-            try:
-                number = Number(number.lower())
-            except ValueError as e:
-                raise InvalidInputError(f"Invalid number: '{number}'") from e
-
         short_gender: str = gender.shorthand
         short_case: str = case.shorthand
         short_number: str = number.shorthand

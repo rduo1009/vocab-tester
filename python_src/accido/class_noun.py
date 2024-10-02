@@ -306,18 +306,6 @@ class Noun(_Word):
 
         Note that all arguments of get are keyword-only.
         """
-        if isinstance(case, str):
-            try:
-                case = Case(case.lower())
-            except ValueError as e:
-                raise InvalidInputError(f"Invalid case: '{case}'") from e
-
-        if isinstance(number, str):
-            try:
-                number = Number(number.lower())
-            except ValueError as e:
-                raise InvalidInputError(f"Invalid number: '{number}'") from e
-
         short_case: str = case.shorthand
         short_number: str = number.shorthand
 

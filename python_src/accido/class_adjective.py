@@ -849,10 +849,6 @@ class Adjective(_Word):
                     f"and '{number.regular}')",
                 )
 
-            try:
-                degree = Degree(degree)
-            except ValueError as e:
-                raise InvalidInputError(f"Invalid degree: '{degree}'") from e
             short_degree = degree.shorthand
             return self.endings.get(f"D{short_degree}")
 
@@ -862,30 +858,6 @@ class Adjective(_Word):
             raise InvalidInputError("Case not given")
         if not number:
             raise InvalidInputError("Number not given")
-
-        if isinstance(gender, str):
-            try:
-                gender = Gender(gender.lower())
-            except ValueError as e:
-                raise InvalidInputError(f"Invalid gender: '{gender}'") from e
-
-        if isinstance(case, str):
-            try:
-                case = Case(case.lower())
-            except ValueError as e:
-                raise InvalidInputError(f"Invalid case: '{case}'") from e
-
-        if isinstance(number, str):
-            try:
-                number = Number(number.lower())
-            except ValueError as e:
-                raise InvalidInputError(f"Invalid number: '{number}'") from e
-
-        if isinstance(degree, str):
-            try:
-                degree = Degree(degree.lower())
-            except ValueError as e:
-                raise InvalidInputError(f"Invalid degree: '{degree}'") from e
 
         short_degree = degree.shorthand
         short_gender: str = gender.shorthand
