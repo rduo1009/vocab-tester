@@ -163,6 +163,15 @@ class EndingComponents(SimpleNamespace):
     For participles.
     """
 
+    case: Case
+    number: Number
+    gender: Gender
+    tense: Tense
+    voice: Voice
+    mood: Mood
+    degree: Degree
+    string: str
+
 
 @dataclass(init=True)
 class MultipleMeanings:
