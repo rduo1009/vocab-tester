@@ -141,7 +141,8 @@ class EndingComponents:
     ...     case=Case.NOMINATIVE,
     ...     gender=Gender.MASCULINE,
     ...     number=Number.SINGULAR,
-    ...     string="nominative singular masculine",
+    ...     degree=Degree.SUPERLATIVE,
+    ...     string="nominative singular masculine superlative",
     ... )
     >>> foo.case.regular
     'nominative'
@@ -224,7 +225,7 @@ class EndingComponents:
             self.person: Person = person
         self.string: str = string
 
-        self.type: type
+        self.type: type[accido.endings._Word]
         self.subtype: str | None
         self.type, self.subtype = self._determine_type()
 
@@ -259,6 +260,8 @@ class EndingComponents:
             return (accido.endings.Pronoun, None)
         if set(attributes) == {"number", "case"}:
             return (accido.endings.Noun, None)
+        if set(attributes) == set():
+            return (accido.endings.RegularWord, None)
         raise ValueError(
             f"Invalid combination of attributes: {', '.join(attributes)}"
         )

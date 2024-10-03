@@ -65,7 +65,7 @@ class RegularWord(_Word):
     def _create_namespace(
         key: str,  # noqa: ARG004
     ) -> EndingComponents:  # pragma: no cover # this should never be ran
-        return NotImplemented
+        return EndingComponents(string="")
 
     def __repr__(self) -> str:
         return f"RegularWord({self.word}, {self.meaning})"

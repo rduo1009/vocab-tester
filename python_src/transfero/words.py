@@ -18,7 +18,9 @@ from .verb_inflection import find_verb_inflections as find_verb_inflections
 
 
 def find_inflection(
-    word: str, pos: type, components: accido.misc.EndingComponents
+    word: str,
+    pos: type[accido.endings._Word],
+    components: accido.misc.EndingComponents,
 ) -> set[str]:
     """Find the inflections of an English word.
 
@@ -26,7 +28,7 @@ def find_inflection(
     ----------
     word : str
         The word to inflect.
-    pos : type
+    pos : type[accido.endings._Word]
         The part of speech of the word
     components : accido.misc.EndingComponents
         The components of the word.
@@ -44,8 +46,8 @@ def find_inflection(
     match pos:
         case accido.endings.Adjective:
             if components.subtype == "adverb":
-                return find_adjective_inflections(word, components)
-            return find_adverb_inflections(adj_to_adv(word), components)
+                return find_adverb_inflections(adj_to_adv(word), components)
+            return find_adjective_inflections(word, components)
 
         case accido.endings.Noun:
             return find_noun_inflections(word, components)
@@ -60,4 +62,6 @@ def find_inflection(
             return {word}
 
         case _:
-            raise ValueError(f"Unknown POS: {pos}")  # should never happen
+            raise ValueError(
+                f"Unknown part of speech: {pos}"
+            )  # should never happen
