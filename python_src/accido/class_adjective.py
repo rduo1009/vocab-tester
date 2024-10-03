@@ -9,7 +9,11 @@ from functools import total_ordering
 from typing import TYPE_CHECKING
 
 from .class_word import _Word
-from .edge_cases import IRREGULAR_ADJECTIVES, LIS_ADJECTIVES
+from .edge_cases import (
+    IRREGULAR_ADJECTIVES,
+    LIS_ADJECTIVES,
+    NO_ADVERB_ADJECTIVES,
+)
 from .exceptions import InvalidInputError
 from .misc import (
     Case,
@@ -124,6 +128,9 @@ class Adjective(_Word):
                 self._irregular_spradv: str = irregular_data[4]
             else:
                 self.adverb_flag = False
+
+        if self._mascnom in NO_ADVERB_ADJECTIVES:
+            self.adverb_flag = False
 
         match self.declension:
             case "212":
