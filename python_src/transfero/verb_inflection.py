@@ -96,37 +96,59 @@ def find_verb_inflections(
         return _find_participle_inflections(verb, components)
 
     try:
-        lemma: str = lemminflect.getLemma(verb, "VERB")[0]
+        lemmas: tuple[str, ...] = lemminflect.getLemma(verb, "VERB")
     except KeyError as e:
         raise InvalidWordError(f"Word {verb} is not a verb") from e
 
-    match (components.tense, components.voice, components.mood):
+    inflections: set[str] = set()
+    for lemma in lemmas:
+        inflections |= _find_lemma(
+            lemma,
+            components.tense,
+            components.voice,
+            components.mood,
+            components.number,
+            components.person,
+        )
+
+    return inflections
+
+
+def _find_lemma(  # noqa: PLR0917
+    lemma: str,
+    tense: Tense,
+    voice: Voice,
+    mood: Mood,
+    number: Number,
+    person: Person,
+) -> set[str]:
+    match (tense, voice, mood):
         case (Tense.PRESENT, Voice.ACTIVE, Mood.INDICATIVE):
             return _find_preactind_inflections(
                 lemma,
-                components.number,
-                components.person,
+                number,
+                person,
             )
 
         case (Tense.IMPERFECT, Voice.ACTIVE, Mood.INDICATIVE):
             return _find_impactind_inflections(
                 lemma,
-                components.number,
-                components.person,
+                number,
+                person,
             )
 
         case (Tense.PERFECT, Voice.ACTIVE, Mood.INDICATIVE):
             return _find_peractind_inflections(
                 lemma,
-                components.number,
-                components.person,
+                number,
+                person,
             )
 
         case (Tense.PLUPERFECT, Voice.ACTIVE, Mood.INDICATIVE):
             return _find_plpactind_inflections(
                 lemma,
-                components.number,
-                components.person,
+                number,
+                person,
             )
 
         case (Tense.PRESENT, Voice.ACTIVE, Mood.INFINITIVE):
@@ -137,8 +159,8 @@ def find_verb_inflections(
 
         case _:
             raise NotImplementedError(
-                f"The {components.tense.regular} {components.voice.regular} "
-                f"{components.mood.regular} has not been implemented",
+                f"The {tense.regular} {voice.regular} "
+                f"{mood.regular} has not been implemented",
             )
 
 

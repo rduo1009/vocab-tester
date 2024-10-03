@@ -64,22 +64,34 @@ def find_adjective_inflections(
         raise ValueError(f"Invalid number: '{components.number}'")
 
     try:
-        lemma: str = lemminflect.getLemma(adjective, "ADJ")[0]
+        lemmas: tuple[str, ...] = lemminflect.getLemma(adjective, "ADJ")
     except KeyError as e:
         raise InvalidWordError(
             f"Word '{adjective}' is not an adjective"
         ) from e
 
-    match components.degree:
+    inflections: set[str] = set()
+    for lemma in lemmas:
+        inflections |= _inflect_lemma(lemma, components.degree)
+
+    return inflections
+
+
+def _inflect_lemma(lemma: str, degree: Degree) -> set[str]:
+    match degree:
         case Degree.POSITIVE:
             return {lemma}
         case Degree.COMPARATIVE:
-            comparative: str = lemminflect.getInflection(lemma, "RBR")[0]
-            return {comparative, f"more {lemma}"}
+            comparatives: tuple[str, ...] = lemminflect.getInflection(
+                lemma, "RBR"
+            )
+            return {*comparatives, f"more {lemma}"}
         case Degree.SUPERLATIVE:
-            superlative: str = lemminflect.getInflection(lemma, "RBS")[0]
+            superlatives: tuple[str, ...] = lemminflect.getInflection(
+                lemma, "RBS"
+            )
             return {
-                superlative,
+                *superlatives,
                 f"most {lemma}",
                 f"very {lemma}",
                 f"extremely {lemma}",
@@ -87,5 +99,24 @@ def find_adjective_inflections(
                 f"too {lemma}",
                 f"quite {lemma}",
             }
-        case _:
-            raise ValueError(f"Invalid degree: '{components.degree}'")
+
+
+# def find_main_adjective_inflection(
+#     adjective: str, components: accido.misc.EndingComponents
+# ) -> str:
+#     """Find the main inflection of an English adjective.
+#
+#     Parameters
+#     ----------
+#     adjective : str
+#         The adjective to inflect.
+#
+#     components : EndingComponents
+#         The components of the ending.
+#
+#     Returns
+#     -------
+#     str
+#     The main inflection of the adjective
+#     """
+#     pass

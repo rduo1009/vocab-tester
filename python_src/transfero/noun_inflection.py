@@ -63,13 +63,23 @@ def find_noun_inflections(
         raise ValueError(f"Invalid number: '{components.number}'")
 
     try:
-        lemma: str = lemminflect.getLemma(noun, "NOUN")[0]
+        lemmas: tuple[str, ...] = lemminflect.getLemma(noun, "NOUN")
     except KeyError as e:
         raise InvalidWordError(f"Word {noun} is not a noun") from e
 
+    inflections: set[str] = set()
+    for lemma in lemmas:
+        inflections |= _inflect_lemma(
+            lemma, components.case, components.number
+        )
+
+    return inflections
+
+
+def _inflect_lemma(lemma: str, case: Case, number: Number) -> set[str]:
     base_forms: set[str] = set()
 
-    match components.number:
+    match number:
         case Number.SINGULAR:
             base_forms = {lemminflect.getInflection(lemma, "NN")[0]}
         case Number.PLURAL:
@@ -78,14 +88,14 @@ def find_noun_inflections(
             base_forms.add(pluralinflect.plural_noun(lemma))
             pluralinflect.classical(all=False)
 
-    match components.case:
+    match case:
         case Case.NOMINATIVE | Case.VOCATIVE | Case.ACCUSATIVE:
             return base_forms
         case Case.GENITIVE:
             possessive_genitive: set[str] = {
                 _get_possessive(base_form) for base_form in base_forms
             }
-            if components.number == Number.SINGULAR:
+            if number == Number.SINGULAR:
                 return (
                     possessive_genitive
                     | {f"of the {base_form}" for base_form in base_forms}
@@ -98,7 +108,7 @@ def find_noun_inflections(
                 f"of the {base_form}" for base_form in base_forms
             }
         case Case.DATIVE:
-            if components.number == Number.SINGULAR:
+            if number == Number.SINGULAR:
                 return (
                     {f"for the {base_form}" for base_form in base_forms}
                     | {
@@ -118,7 +128,7 @@ def find_noun_inflections(
                 | {f"to {base_form}" for base_form in base_forms}
             )
         case Case.ABLATIVE:
-            if components.number == Number.SINGULAR:
+            if number == Number.SINGULAR:
                 return (
                     base_forms
                     | {f"with the {base_form}" for base_form in base_forms}
@@ -146,5 +156,3 @@ def find_noun_inflections(
                 | {f"by the {base_form}" for base_form in base_forms}
                 | {f"by means of the {base_form}" for base_form in base_forms}
             )
-        case _:
-            raise ValueError
