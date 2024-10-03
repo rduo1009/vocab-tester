@@ -633,6 +633,18 @@ class Verb(_Word):
     @staticmethod
     def _create_namespace(key: str) -> EndingComponents:
         output: EndingComponents
+        if len(key) == 13 and key[7:10] == "inf":
+            output = EndingComponents(
+                tense=Tense(key[1:4]),
+                voice=Voice(key[4:7]),
+                mood=Mood(key[7:10]),
+            )
+            output.string = (
+                f"{output.tense.regular} {output.voice.regular} "
+                f"{output.mood.regular}"
+            )
+            return output
+
         if len(key) == 13:
             output = EndingComponents(
                 tense=Tense(key[1:4]),
@@ -647,6 +659,7 @@ class Verb(_Word):
                 f"{PERSON_SHORTHAND[int(key[12])]}"
             )
             return output
+
         if len(key) == 16 and key[7:10] == "ptc":
             output = EndingComponents(
                 tense=Tense(key[1:4]),
