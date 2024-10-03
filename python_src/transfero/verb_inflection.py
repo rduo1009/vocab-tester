@@ -5,59 +5,29 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-
 import lemminflect
 
+from .. import accido
 from ..accido.misc import Mood, Number, Person, Tense, Voice
 from .edge_cases import STATIVE_VERBS
 from .exceptions import InvalidWordError
 
-if TYPE_CHECKING:
-    from .. import accido
-
 
 def _verify_verb_inflections(components: accido.misc.EndingComponents) -> None:
-    if not hasattr(components, "tense"):
-        raise ValueError("Tense must be specified")
+    if components.type != accido.endings.Verb:
+        raise ValueError(f"Invalid type: '{components.type}'")
 
-    if not hasattr(components, "voice"):
-        raise ValueError("Voice must be specified")
+    if (
+        components.mood == Mood.PARTICIPLE
+        and components.subtype != "participle"
+    ):
+        raise ValueError(f"Invalid subtype: '{components.subtype}'")
 
-    if not hasattr(components, "mood"):
-        raise ValueError("Mood must be specified")
-
-    # not an infinitive
-    if components.mood != Mood.INFINITIVE:
-        if not hasattr(components, "number"):
-            raise ValueError("Number must be specified")
-
-        if components.number not in Number:
-            raise ValueError(f"Invalid number: '{components.number}'")
-
-        # not a participle or an infinitive
-        if components.mood != Mood.PARTICIPLE:
-            if not hasattr(components, "person"):
-                raise ValueError("Person must be specified")
-
-            if components.person not in {1, 2, 3}:
-                raise ValueError(f"Invalid person: '{components.person}'")
-
-        else:
-            if not hasattr(components, "case"):
-                raise ValueError("Case must be specified")
-
-            if not hasattr(components, "gender"):
-                raise ValueError("Gender must be specified")
-
-    if components.voice not in Voice:
-        raise ValueError(f"Invalid voice: '{components.voice}'")
-
-    if components.mood not in Mood:
-        raise ValueError(f"Invalid mood: '{components.mood}'")
-
-    if components.tense not in Tense:
-        raise ValueError(f"Invalid tense: '{components.tense}'")
+    if (
+        components.mood == Mood.INFINITIVE
+        and components.subtype != "infinitive"
+    ):
+        raise ValueError(f"Invalid subtype: '{components.subtype}'")
 
 
 def find_verb_inflections(
@@ -101,15 +71,24 @@ def find_verb_inflections(
         raise InvalidWordError(f"Word {verb} is not a verb") from e
 
     inflections: set[str] = set()
-    for lemma in lemmas:
-        inflections |= _find_lemma(
-            lemma,
-            components.tense,
-            components.voice,
-            components.mood,
-            components.number,
-            components.person,
-        )
+    if hasattr(components, "number") and hasattr(components, "person"):
+        for lemma in lemmas:
+            inflections |= _find_lemma(
+                lemma,
+                components.tense,
+                components.voice,
+                components.mood,
+                components.number,
+                components.person,
+            )
+    else:
+        for lemma in lemmas:
+            inflections |= _find_lemma(
+                lemma,
+                components.tense,
+                components.voice,
+                components.mood,
+            )
 
     return inflections
 
@@ -119,11 +98,14 @@ def _find_lemma(  # noqa: PLR0917
     tense: Tense,
     voice: Voice,
     mood: Mood,
-    number: Number,
-    person: Person,
+    number: Number | None = None,
+    person: Person | None = None,
 ) -> set[str]:
     match (tense, voice, mood):
         case (Tense.PRESENT, Voice.ACTIVE, Mood.INDICATIVE):
+            assert number is not None
+            assert person is not None
+
             return _find_preactind_inflections(
                 lemma,
                 number,
@@ -131,6 +113,9 @@ def _find_lemma(  # noqa: PLR0917
             )
 
         case (Tense.IMPERFECT, Voice.ACTIVE, Mood.INDICATIVE):
+            assert number is not None
+            assert person is not None
+
             return _find_impactind_inflections(
                 lemma,
                 number,
@@ -138,6 +123,9 @@ def _find_lemma(  # noqa: PLR0917
             )
 
         case (Tense.PERFECT, Voice.ACTIVE, Mood.INDICATIVE):
+            assert number is not None
+            assert person is not None
+
             return _find_peractind_inflections(
                 lemma,
                 number,
@@ -145,6 +133,9 @@ def _find_lemma(  # noqa: PLR0917
             )
 
         case (Tense.PLUPERFECT, Voice.ACTIVE, Mood.INDICATIVE):
+            assert number is not None
+            assert person is not None
+
             return _find_plpactind_inflections(
                 lemma,
                 number,
@@ -164,7 +155,7 @@ def _find_lemma(  # noqa: PLR0917
             )
 
 
-def _find_preactind_inflections(
+def _find_preactind_inflections(  # type: ignore[return] # mypy cannot manage tuple match
     lemma: str,
     number: Number,
     person: Person,
@@ -208,12 +199,8 @@ def _find_preactind_inflections(
                 f"they are {present_participle}",
             }
 
-    raise ValueError(
-        f"Invalid number and person: '{number.regular}' '{person}'"
-    )
 
-
-def _find_impactind_inflections(
+def _find_impactind_inflections(  # type: ignore[return] # mypy cannot manage tuple match
     lemma: str,
     number: Number,
     person: Person,
@@ -246,11 +233,6 @@ def _find_impactind_inflections(
             case (Number.PLURAL, 3):
                 return {f"they {past}", f"they were {present_participle}"}
 
-            # case _:
-            #     raise ValueError(
-            #         f"Invalid number and person: '{number}' '{person}'"
-            #     )
-
     match (number, person):
         case (Number.SINGULAR, 1):
             return {f"I was {present_participle}"}
@@ -271,10 +253,8 @@ def _find_impactind_inflections(
         case (Number.PLURAL, 3):
             return {f"they were {present_participle}"}
 
-    raise ValueError(f"Invalid number and person: '{number}' '{person}'")
 
-
-def _find_peractind_inflections(
+def _find_peractind_inflections(  # type: ignore[return] # mypy cannot manage tuple match
     lemma: str,
     number: Number,
     person: Person,
@@ -307,10 +287,8 @@ def _find_peractind_inflections(
         case (Number.PLURAL, 3):
             return {f"they {past}", f"they have {past}", f"they did {lemma}"}
 
-    raise ValueError(f"Invalid number and person: '{number}' '{person}'")
 
-
-def _find_plpactind_inflections(
+def _find_plpactind_inflections(  # type: ignore[return] # mypy cannot manage tuple match
     lemma: str,
     number: Number,
     person: Person,
@@ -336,8 +314,6 @@ def _find_plpactind_inflections(
 
         case (Number.PLURAL, 3):
             return {f"they had {past_participle}"}
-
-    raise ValueError(f"Invalid number and person: '{number}' '{person}'")
 
 
 def _find_participle_inflections(

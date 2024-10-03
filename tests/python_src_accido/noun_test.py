@@ -3,13 +3,12 @@ import sys  # noqa: E401
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
-from types import SimpleNamespace
 
 import pytest
 
 from python_src.accido.exceptions import InvalidInputError  # isort: skip
 from python_src.accido.endings import Noun
-from python_src.accido.misc import Case, Gender, Number
+from python_src.accido.misc import Case, EndingComponents, Gender, Number
 from python_src.utils import compare
 
 
@@ -44,9 +43,9 @@ class TestNounDunder:
     def test_find(self):
         word = Noun(nominative="ancilla", genitive="ancillae", gender=Gender.FEMININE, meaning="slavegirl")
         assert compare(word.find("ancilla"),
-            [SimpleNamespace(case=Case.NOMINATIVE, number=Number.SINGULAR, string="nominative singular"),
-                SimpleNamespace(case=Case.VOCATIVE, number=Number.SINGULAR, string="vocative singular"),
-                    SimpleNamespace(case=Case.ABLATIVE, number=Number.SINGULAR, string="ablative singular")])  # fmt: skip
+            [EndingComponents(case=Case.NOMINATIVE, number=Number.SINGULAR, string="nominative singular"),
+                EndingComponents(case=Case.VOCATIVE, number=Number.SINGULAR, string="vocative singular"),
+                    EndingComponents(case=Case.ABLATIVE, number=Number.SINGULAR, string="ablative singular")])  # fmt: skip
 
     def test_str_masculine(self):
         word = Noun(nominative="servus", genitive="servi", gender=Gender.MASCULINE, meaning="slave")

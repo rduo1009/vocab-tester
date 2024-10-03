@@ -6,7 +6,7 @@
 from __future__ import annotations
 
 from functools import total_ordering
-from typing import TYPE_CHECKING, Literal
+from typing import TYPE_CHECKING, Literal, cast
 
 from .class_word import _Word
 from .edge_cases import check_io_verb, find_irregular_endings
@@ -646,12 +646,16 @@ class Verb(_Word):
             return output
 
         if len(key) == 13:
+            # ideally the assertion would be enough, but it doesn't work
+            person_value = cast(Person, int(key[12]))
+            assert person_value in {1, 2, 3}
+
             output = EndingComponents(
                 tense=Tense(key[1:4]),
                 voice=Voice(key[4:7]),
                 mood=Mood(key[7:10]),
                 number=Number(key[10:12]),
-                person=int(key[12]),
+                person=person_value,
             )
             output.string = (
                 f"{output.tense.regular} {output.voice.regular} "

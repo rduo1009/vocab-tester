@@ -5,15 +5,11 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-
 import lemminflect
 
-from ..accido.misc import Case, Degree, Gender, Number
+from .. import accido
+from ..accido.misc import Degree
 from .exceptions import InvalidWordError
-
-if TYPE_CHECKING:
-    from .. import accido
 
 
 def find_adjective_inflections(
@@ -41,27 +37,10 @@ def find_adjective_inflections(
     ValueError
         If the input (other than the word itself) is invalid.
     """
-    # Most of these are not necessary, but it helps to catch errors earlier
-    if not hasattr(components, "gender"):
-        raise ValueError("Gender must be specified")
-
-    if not hasattr(components, "case"):
-        raise ValueError("Case must be specified")
-
-    if not hasattr(components, "number"):
-        raise ValueError("Number must be specified")
-
-    if not hasattr(components, "degree"):
-        raise ValueError("Degree must be specified")
-
-    if components.gender not in Gender:
-        raise ValueError(f"Invalid gender: '{components.gender}'")
-
-    if components.case not in Case:
-        raise ValueError(f"Invalid case: '{components.case}'")
-
-    if components.number not in Number:
-        raise ValueError(f"Invalid number: '{components.number}'")
+    if components.type != accido.endings.Adjective:
+        raise ValueError(f"Invalid type: '{components.type}'")
+    if components.subtype is not None:
+        raise ValueError(f"Invalid subtype: '{components.subtype}'")
 
     try:
         lemmas: tuple[str, ...] = lemminflect.getLemma(adjective, "ADJ")

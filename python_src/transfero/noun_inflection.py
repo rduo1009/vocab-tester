@@ -5,16 +5,12 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-
 import lemminflect
 from inflect import engine
 
+from .. import accido
 from ..accido.misc import Case, Number
 from .exceptions import InvalidWordError
-
-if TYPE_CHECKING:
-    from .. import accido
 
 # Distinguish from the lemminflect module
 pluralinflect = engine()  # sourcery skip: avoid-global-variables
@@ -50,17 +46,8 @@ def find_noun_inflections(
     ValueError
         If the input (other than the word itself) is invalid.
     """
-    if not hasattr(components, "case"):
-        raise ValueError("Case must be specified")
-
-    if not hasattr(components, "number"):
-        raise ValueError("Number must be specified")
-
-    if components.case not in Case:
-        raise ValueError(f"Invalid case: '{components.case}'")
-
-    if components.number not in Number:
-        raise ValueError(f"Invalid number: '{components.number}'")
+    if components.type != accido.endings.Noun:
+        raise ValueError(f"Invalid type: '{components.type}'")
 
     try:
         lemmas: tuple[str, ...] = lemminflect.getLemma(noun, "NOUN")

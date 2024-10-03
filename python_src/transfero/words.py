@@ -43,7 +43,7 @@ def find_inflection(
     """
     match pos:
         case accido.endings.Adjective:
-            if hasattr(components, "gender"):
+            if components.subtype == "adverb":
                 return find_adjective_inflections(word, components)
             return find_adverb_inflections(adj_to_adv(word), components)
 
