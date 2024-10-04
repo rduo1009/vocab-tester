@@ -205,7 +205,7 @@ class EndingComponents:
         mood: Mood | None = None,
         person: Person | None = None,
         degree: Degree | None = None,
-        string: str = "",  # HACK: Should be required.
+        string: str = "",
     ) -> None:
         """Initialises EndingComponents.
 
@@ -230,9 +230,7 @@ class EndingComponents:
         degree : Degree | None, optional
             The degree of the ending.
         string : str, default=""
-            The string representation of the ending. It is actually required,
-            but it is not possible to make it required because of the way
-            the class is initialised.
+            The string representation of the ending, if needed.
 
         Raises
         ------
@@ -255,10 +253,7 @@ class EndingComponents:
             self.degree: Degree = degree
         if person:
             self.person: Person = person
-        if string:
-            self.string: str = string
-        else:  # pragma: no cover
-            raise ValueError("No string provided.")
+        self.string: str = string
 
         self.type: type[accido.endings._Word]
         self.subtype: str | None
