@@ -32,7 +32,7 @@ def test_wordinflection_verb():
 
 
 def test_wordinflection_pronoun():
-    assert find_inflection("I", accido.endings.Pronoun, accido.misc.EndingComponents(case=Case.NOMINATIVE, number=Number.SINGULAR)) == {"I"}
+    assert find_inflection("this", accido.endings.Pronoun, accido.misc.EndingComponents(case=Case.NOMINATIVE, number=Number.SINGULAR, gender=Gender.MASCULINE)) == {"this"}
 
 
 def test_wordinflection_regularword():
