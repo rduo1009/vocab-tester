@@ -2,32 +2,15 @@ import os
 import sys  # noqa: E401
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
-
 import pytest
-from python_src.accido.misc import Case, EndingComponents, Number
+from python_src.accido.misc import Case, EndingComponents, Gender, Number
 from python_src.transfero.words import find_noun_inflections
 
 
-class TestNounInflectErrors:
-    def test_noun_error_1(self):
-        with pytest.raises(ValueError) as error:
-            find_noun_inflections("house", EndingComponents(case="error", number=Number.SINGULAR))
-        assert str(error.value) == "Invalid case: 'error'"
-
-    def test_noun_error_2(self):
-        with pytest.raises(ValueError) as error:
-            find_noun_inflections("house", EndingComponents(case=Case.NOMINATIVE, number="error"))
-        assert str(error.value) == "Invalid number: 'error'"
-
-    def test_noun_error_3(self):
-        with pytest.raises(ValueError) as error:
-            find_noun_inflections("house", EndingComponents(case=Case.NOMINATIVE))
-        assert str(error.value) == "Number must be specified"
-
-    def test_noun_error_4(self):
-        with pytest.raises(ValueError) as error:
-            find_noun_inflections("house", EndingComponents(number=Number.SINGULAR))
-        assert str(error.value) == "Case must be specified"
+def test_invalid_type():
+    with pytest.raises(ValueError) as error:
+        find_noun_inflections("house", EndingComponents(case=Case.NOMINATIVE, number=Number.SINGULAR, gender=Gender.NEUTER))
+    assert "Invalid type: '<class 'python_src.accido.class_pronoun.Pronoun'>'" == str(error.value)
 
 
 class TestNounInflection:

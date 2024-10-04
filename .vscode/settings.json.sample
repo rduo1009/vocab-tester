@@ -32,7 +32,8 @@
         "**/.venv": true,
         "**/htmlcov": true,
         "**/monkeytype.sqlite3": true,
-        "**/poetry.lock": true
+        "**/poetry.lock": true,
+        ".dmypy.json": true,
     },
     "autoDocstring.docstringFormat": "numpy",
     "ruff.nativeServer": true,

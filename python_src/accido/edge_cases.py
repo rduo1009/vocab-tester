@@ -612,7 +612,6 @@ IRREGULAR_NOUNS: Final[dict[str, Endings]] = {
     },
 }
 
-
 """Contains adjectives that end in -lis, and thus have irregular
 superlatives."""
 LIS_ADJECTIVES: Final[set[str]] = {
@@ -623,7 +622,6 @@ LIS_ADJECTIVES: Final[set[str]] = {
     "gracilis",
     "humilis",
 }
-
 
 """Contains adjectives that have irregular forms in the comparative,
 superlative and adverb forms.
@@ -648,6 +646,11 @@ IRREGULAR_ADJECTIVES: Final[dict[str, list[str | None]]] = {
     "dexter": ["dexterior", "dextim", None, None, None],
 }
 
+"""Contains adjectives that don't have an adverb form. This will get added
+to over time."""
+NO_ADVERB_ADJECTIVES = {
+    "ingens",
+}
 
 """Contains pronouns, which all have irregular endings."""
 PRONOUNS: Final[dict[str, Endings]] = {

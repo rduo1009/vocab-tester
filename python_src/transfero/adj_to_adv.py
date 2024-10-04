@@ -16,6 +16,8 @@ import json
 from pathlib import Path
 from typing import Final
 
+from .exceptions import InvalidWordError
+
 with open(
     Path(__file__).parent.absolute() / "adj_to_adv.json", encoding="utf-8"
 ) as file:
@@ -37,7 +39,7 @@ def adj_to_adv(adjective: str) -> str:
 
     Raises
     ------
-    ValueError
+    InvalidWordError
         If the input is not an adjective.
 
     Examples
@@ -51,4 +53,4 @@ def adj_to_adv(adjective: str) -> str:
     if adjective in ADJECTIVE_TO_ADVERB:
         return ADJECTIVE_TO_ADVERB[adjective]
 
-    raise ValueError(f"Word '{adjective}' is not an adjective")
+    raise InvalidWordError(f"Word '{adjective}' is not an adjective")

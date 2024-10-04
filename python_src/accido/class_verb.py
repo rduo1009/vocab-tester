@@ -6,7 +6,7 @@
 from __future__ import annotations
 
 from functools import total_ordering
-from typing import TYPE_CHECKING, Literal
+from typing import TYPE_CHECKING, Literal, cast
 
 from .class_word import _Word
 from .edge_cases import check_io_verb, find_irregular_endings
@@ -523,29 +523,6 @@ class Verb(_Word):
 
         Similar with participle endings.
         """
-        short_tense: str
-        short_voice: str
-        short_mood: str
-        short_number: str
-
-        if isinstance(tense, str):
-            try:
-                tense = Tense(tense.lower())
-            except ValueError as e:
-                raise InvalidInputError(f"Invalid tense: '{tense}'") from e
-
-        if isinstance(voice, str):
-            try:
-                voice = Voice(voice.lower())
-            except ValueError as e:
-                raise InvalidInputError(f"Invalid voice: '{voice}'") from e
-
-        if isinstance(mood, str):
-            try:
-                mood = Mood(mood.lower())
-            except ValueError as e:
-                raise InvalidInputError(f"Invalid mood: '{mood}'") from e
-
         if mood == Mood.PARTICIPLE:
             if person:
                 raise InvalidInputError(
@@ -569,21 +546,14 @@ class Verb(_Word):
                 participle_case=participle_case,
             )
 
-        if number and isinstance(number, str):
-            try:
-                number = Number(number.lower())
-            except ValueError as e:
-                raise InvalidInputError(f"Invalid number: '{number}'") from e
-
-        short_tense = tense.shorthand
-        short_voice = voice.shorthand
-        short_mood = mood.shorthand
+        short_tense: str = tense.shorthand
+        short_voice: str = voice.shorthand
         if number:
-            assert isinstance(number, Number)
-            short_number = number.shorthand
+            short_number: str = number.shorthand
 
         if mood == Mood.INFINITIVE:
             return self.endings.get(f"V{short_tense}{short_voice}inf   ")
+        short_mood: str = mood.shorthand
         return self.endings.get(
             f"V{short_tense}{short_voice}{short_mood}{short_number}{person}",
         )
@@ -597,28 +567,6 @@ class Verb(_Word):
         participle_gender: Gender,
         participle_case: Case,
     ) -> Ending | None:
-        if isinstance(participle_case, str):
-            try:
-                participle_case = Case(participle_case.lower())
-            except ValueError as e:
-                raise InvalidInputError(
-                    f"Invalid case: '{participle_case}'"
-                ) from e
-
-        if isinstance(participle_gender, str):
-            try:
-                participle_gender = Gender(participle_gender.lower())
-            except ValueError as e:
-                raise InvalidInputError(
-                    f"Invalid gender: '{participle_gender}'"
-                ) from e
-
-        if isinstance(number, str):
-            try:
-                number = Number(number.lower())
-            except ValueError as e:
-                raise InvalidInputError(f"Invalid number: '{number}'") from e
-
         short_tense = tense.shorthand
         short_voice = voice.shorthand
         short_number = number.shorthand
@@ -632,13 +580,29 @@ class Verb(_Word):
     @staticmethod
     def _create_namespace(key: str) -> EndingComponents:
         output: EndingComponents
+        if len(key) == 13 and key[7:10] == "inf":
+            output = EndingComponents(
+                tense=Tense(key[1:4]),
+                voice=Voice(key[4:7]),
+                mood=Mood(key[7:10]),
+            )
+            output.string = (
+                f"{output.tense.regular} {output.voice.regular} "
+                f"{output.mood.regular}"
+            )
+            return output
+
         if len(key) == 13:
+            # ideally the assertion would be enough, but it doesn't work
+            person_value = cast(Person, int(key[12]))
+            assert person_value in {1, 2, 3}
+
             output = EndingComponents(
                 tense=Tense(key[1:4]),
                 voice=Voice(key[4:7]),
                 mood=Mood(key[7:10]),
                 number=Number(key[10:12]),
-                person=int(key[12]),
+                person=person_value,
             )
             output.string = (
                 f"{output.tense.regular} {output.voice.regular} "
@@ -646,6 +610,7 @@ class Verb(_Word):
                 f"{PERSON_SHORTHAND[int(key[12])]}"
             )
             return output
+
         if len(key) == 16 and key[7:10] == "ptc":
             output = EndingComponents(
                 tense=Tense(key[1:4]),

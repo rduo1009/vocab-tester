@@ -5,15 +5,11 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-
 import lemminflect
 
+from .. import accido
 from ..accido.misc import Degree
 from .exceptions import InvalidWordError
-
-if TYPE_CHECKING:
-    from .. import accido
 
 
 def find_adverb_inflections(
@@ -41,18 +37,25 @@ def find_adverb_inflections(
     ValueError
         If the input (other than the word itself) is invalid.
     """
-    if not hasattr(components, "degree"):
-        raise ValueError("Degree must be specified")
-
-    if components.degree not in Degree:
-        raise ValueError(f"Invalid degree: '{components.degree}'")
+    if components.type != accido.endings.Adjective:
+        raise ValueError(f"Invalid type: '{components.type}'")
+    if components.subtype != "adverb":  # pragma: no cover
+        raise ValueError(f"Invalid subtype: '{components.subtype}'")
 
     try:
-        lemma: str = lemminflect.getLemma(adverb, "ADV")[0]
-    except KeyError as e:
-        raise InvalidWordError(f"Word {adverb} is not an adverb") from e
+        lemmas: tuple[str, ...] = lemminflect.getLemma(adverb, "ADV")
+    except KeyError as e:  # pragma: no cover
+        raise InvalidWordError(f"Word '{adverb}' is not an adverb") from e
 
-    match components.degree:
+    inflections: set[str] = set()
+    for lemma in lemmas:
+        inflections |= _inflect_lemma(lemma, components.degree)
+
+    return inflections
+
+
+def _inflect_lemma(lemma: str, degree: Degree) -> set[str]:
+    match degree:
         case Degree.POSITIVE:
             return {lemma}
         case Degree.COMPARATIVE:
@@ -66,5 +69,3 @@ def find_adverb_inflections(
                 f"too {lemma}",
                 f"quite {lemma}",
             }
-        case _:
-            raise ValueError

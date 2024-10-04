@@ -11,31 +11,6 @@ if TYPE_CHECKING:
     from collections.abc import Iterable
 
 
-def key_from_value(dd: dict[Any, Any], value: Any) -> Any:
-    """Returns the value in a dictionary from its key.
-
-    If no key is found with the given value, returns `None`.
-
-    Parameters
-    ----------
-    dd : dict[Any, Any]
-        The dictionary to search.
-    value : Any
-        The value to search for.
-
-    Returns
-    -------
-    Any
-        The first key whose value matches 'value', or None if not
-        found.
-
-    Notes
-    -----
-    Code taken from https://stackoverflow.com/a/2569076
-    """
-    return next((key for key, val in dd.items() if val == value), None)
-
-
 def compare(first: Iterable[Any], second: Iterable[Any]) -> bool:
     """Compares two iterables.
 

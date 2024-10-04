@@ -8,6 +8,7 @@ exclude_also =
 
     raise AssertionError
     raise NotImplementedError
+    return NotImplemented
 
     if 0:
     if __name__ == .__main__.:

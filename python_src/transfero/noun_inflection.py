@@ -5,16 +5,12 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-
 import lemminflect
 from inflect import engine
 
+from .. import accido
 from ..accido.misc import Case, Number
 from .exceptions import InvalidWordError
-
-if TYPE_CHECKING:
-    from .. import accido
 
 # Distinguish from the lemminflect module
 pluralinflect = engine()  # sourcery skip: avoid-global-variables
@@ -50,26 +46,27 @@ def find_noun_inflections(
     ValueError
         If the input (other than the word itself) is invalid.
     """
-    if not hasattr(components, "case"):
-        raise ValueError("Case must be specified")
-
-    if not hasattr(components, "number"):
-        raise ValueError("Number must be specified")
-
-    if components.case not in Case:
-        raise ValueError(f"Invalid case: '{components.case}'")
-
-    if components.number not in Number:
-        raise ValueError(f"Invalid number: '{components.number}'")
+    if components.type != accido.endings.Noun:
+        raise ValueError(f"Invalid type: '{components.type}'")
 
     try:
-        lemma: str = lemminflect.getLemma(noun, "NOUN")[0]
-    except KeyError as e:
+        lemmas: tuple[str, ...] = lemminflect.getLemma(noun, "NOUN")
+    except KeyError as e:  # pragma: no cover
         raise InvalidWordError(f"Word {noun} is not a noun") from e
 
+    inflections: set[str] = set()
+    for lemma in lemmas:
+        inflections |= _inflect_lemma(
+            lemma, components.case, components.number
+        )
+
+    return inflections
+
+
+def _inflect_lemma(lemma: str, case: Case, number: Number) -> set[str]:
     base_forms: set[str] = set()
 
-    match components.number:
+    match number:
         case Number.SINGULAR:
             base_forms = {lemminflect.getInflection(lemma, "NN")[0]}
         case Number.PLURAL:
@@ -78,14 +75,14 @@ def find_noun_inflections(
             base_forms.add(pluralinflect.plural_noun(lemma))
             pluralinflect.classical(all=False)
 
-    match components.case:
+    match case:
         case Case.NOMINATIVE | Case.VOCATIVE | Case.ACCUSATIVE:
             return base_forms
         case Case.GENITIVE:
             possessive_genitive: set[str] = {
                 _get_possessive(base_form) for base_form in base_forms
             }
-            if components.number == Number.SINGULAR:
+            if number == Number.SINGULAR:
                 return (
                     possessive_genitive
                     | {f"of the {base_form}" for base_form in base_forms}
@@ -98,7 +95,7 @@ def find_noun_inflections(
                 f"of the {base_form}" for base_form in base_forms
             }
         case Case.DATIVE:
-            if components.number == Number.SINGULAR:
+            if number == Number.SINGULAR:
                 return (
                     {f"for the {base_form}" for base_form in base_forms}
                     | {
@@ -118,7 +115,7 @@ def find_noun_inflections(
                 | {f"to {base_form}" for base_form in base_forms}
             )
         case Case.ABLATIVE:
-            if components.number == Number.SINGULAR:
+            if number == Number.SINGULAR:
                 return (
                     base_forms
                     | {f"with the {base_form}" for base_form in base_forms}
@@ -146,5 +143,3 @@ def find_noun_inflections(
                 | {f"by the {base_form}" for base_form in base_forms}
                 | {f"by means of the {base_form}" for base_form in base_forms}
             )
-        case _:
-            raise ValueError

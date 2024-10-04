@@ -9,6 +9,8 @@ from dataclasses import dataclass
 from types import SimpleNamespace
 from typing import TYPE_CHECKING, Final, Literal
 
+from .. import accido
+
 if TYPE_CHECKING:
     # HACK: To avoid mypy errors.
     from enum import Enum
@@ -109,7 +111,7 @@ PERSON_SHORTHAND: Final[dict[int, str]] = {
 type Person = Literal[1, 2, 3]
 
 
-class EndingComponents(SimpleNamespace):
+class EndingComponents:
     """A container for the grammatical components of an ending.
 
     Examples
@@ -133,7 +135,25 @@ class EndingComponents(SimpleNamespace):
     >>> foo.case.regular
     'nominative'
 
-    For adjectives and pronouns.
+    For pronouns.
+
+    >>> foo = EndingComponents(
+    ...     case=Case.NOMINATIVE,
+    ...     gender=Gender.MASCULINE,
+    ...     number=Number.SINGULAR,
+    ...     degree=Degree.SUPERLATIVE,
+    ...     string="nominative singular masculine superlative",
+    ... )
+    >>> foo.case.regular
+    'nominative'
+
+    For adjectives.
+
+    >>> foo = EndingComponents(degree=Degree.SUPERLATIVE, string="superlative")
+    >>> foo.degree.regular
+    'superlative'
+
+    For adverbs.
 
     >>> foo = EndingComponents(
     ...     tense=Tense.IMPERFECT,
@@ -161,7 +181,144 @@ class EndingComponents(SimpleNamespace):
     'perfect'
 
     For participles.
+
+    >>> foo = EndingComponents(
+    ...     tense=Tense.PERFECT,
+    ...     voice=Voice.ACTIVE,
+    ...     mood=Mood.INFINITIVE,
+    ...     string="perfect active infinitive",
+    ... )
+    >>> foo.mood.regular
+    'infinitive'
+
+    For infinitives.
     """
+
+    def __init__(
+        self,
+        *,
+        case: Case | None = None,
+        number: Number | None = None,
+        gender: Gender | None = None,
+        tense: Tense | None = None,
+        voice: Voice | None = None,
+        mood: Mood | None = None,
+        person: Person | None = None,
+        degree: Degree | None = None,
+        string: str = "",
+    ) -> None:
+        """Initialises EndingComponents.
+
+        Determines the type and subtype of the ending.
+
+        Parameters
+        ----------
+        case : Case | None, optional
+            The case of the ending.
+        number : Number | None, optional
+            The number of the ending.
+        gender : Gender | None, optional
+            The gender of the ending
+        tense : Tense | None, optional
+            The tense of the ending.
+        voice : Voice | None, optional
+            The voice of the ending.
+        mood : Mood | None, optional
+            The mood of the ending.
+        person : Person | None, optional
+            The person of the ending.
+        degree : Degree | None, optional
+            The degree of the ending.
+        string : str, default=""
+            The string representation of the ending, if needed.
+
+        Raises
+        ------
+        ValueError
+            If no string is provided. (should never happen)
+        """
+        if case:
+            self.case: Case = case
+        if number:
+            self.number: Number = number
+        if gender:
+            self.gender: Gender = gender
+        if tense:
+            self.tense: Tense = tense
+        if voice:
+            self.voice: Voice = voice
+        if mood:
+            self.mood: Mood = mood
+        if degree:
+            self.degree: Degree = degree
+        if person:
+            self.person: Person = person
+        self.string: str = string
+
+        self.type: type[accido.endings._Word]
+        self.subtype: str | None
+        self.type, self.subtype = self._determine_type()
+
+    def _get_non_null_attributes(self) -> list[str]:
+        return [
+            attr
+            for attr, value in vars(self).items()
+            if value is not None and attr != "string"
+        ]
+
+    def _determine_type(self) -> tuple[type[accido.endings._Word], str | None]:
+        attributes = self._get_non_null_attributes()
+
+        if set(attributes) == {"tense", "voice", "mood", "person", "number"}:
+            return (accido.endings.Verb, None)
+        if set(attributes) == {"tense", "voice", "mood"}:
+            return (accido.endings.Verb, "infinitive")
+        if set(attributes) == {
+            "tense",
+            "voice",
+            "mood",
+            "number",
+            "gender",
+            "case",
+        }:
+            return (accido.endings.Verb, "participle")
+        if set(attributes) == {"degree"}:
+            return (accido.endings.Adjective, "adverb")
+        if set(attributes) == {"number", "gender", "case", "degree"}:
+            return (accido.endings.Adjective, None)
+        if set(attributes) == {"number", "gender", "case"}:
+            return (accido.endings.Pronoun, None)
+        if set(attributes) == {"number", "case"}:
+            return (accido.endings.Noun, None)
+        if not set(attributes):
+            return (accido.endings.RegularWord, None)
+        raise ValueError(
+            f"Invalid combination of attributes: {', '.join(attributes)}"
+        )
+
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, EndingComponents):
+            return NotImplemented
+
+        self_attrs = self._get_non_null_attributes()
+        other_attrs = other._get_non_null_attributes()
+
+        if self_attrs != other_attrs:
+            return False
+
+        return all(
+            getattr(self, attr) == getattr(other, attr) for attr in self_attrs
+        )
+
+    def __repr__(self) -> str:
+        return self.string
+
+    def __hash__(self) -> int:
+        return hash(
+            tuple(
+                getattr(self, attr) for attr in self._get_non_null_attributes()
+            )
+        )
 
 
 @dataclass(init=True)
@@ -211,7 +368,6 @@ class MultipleEndings(SimpleNamespace):
     Attributes
     ----------
     value : str
-
     etc.
 
     Examples

@@ -59,6 +59,24 @@ class TestAdjectiveErrors:
             word.get(case=Case.NOMINATIVE, gender=Gender.MASCULINE, number=Number.SINGULAR, degree=Degree.POSITIVE, adverb=True)
         assert "Adverbs do not have gender, case or number (given 'masculine', 'nominative' and 'singular')" == str(error.value)
 
+    def test_errors_get_gendernotgiven(self):
+        with pytest.raises(InvalidInputError) as error:
+            word = Adjective("laetus", "laeta", "laetum", declension="212", meaning="happy")
+            word.get(case=Case.NOMINATIVE, number=Number.SINGULAR, degree=Degree.POSITIVE)
+        assert "Gender not given" == str(error.value)
+
+    def test_errors_get_casenotgiven(self):
+        with pytest.raises(InvalidInputError) as error:
+            word = Adjective("laetus", "laeta", "laetum", declension="212", meaning="happy")
+            word.get(gender=Gender.MASCULINE, number=Number.SINGULAR, degree=Degree.POSITIVE)
+        assert "Case not given" == str(error.value)
+
+    def test_errors_get_numbernotgiven(self):
+        with pytest.raises(InvalidInputError) as error:
+            word = Adjective("laetus", "laeta", "laetum", declension="212", meaning="happy")
+            word.get(case=Case.NOMINATIVE, gender=Gender.MASCULINE, degree=Degree.POSITIVE)
+        assert "Number not given" == str(error.value)
+
 
 class TestAdjectiveDunder:
     def test_repr(self):
