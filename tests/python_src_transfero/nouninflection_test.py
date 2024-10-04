@@ -3,14 +3,14 @@ import sys  # noqa: E401
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 import pytest
-from python_src.accido.misc import Case, EndingComponents, Gender, Number
+from python_src.accido.misc import Case, Degree, EndingComponents, Gender, Number
 from python_src.transfero.words import find_noun_inflections
 
 
 def test_invalid_type():
     with pytest.raises(ValueError) as error:
-        find_noun_inflections("house", EndingComponents(case=Case.NOMINATIVE, number=Number.SINGULAR, gender=Gender.NEUTER))
-    assert "Invalid type: '<class 'python_src.accido.class_pronoun.Pronoun'>'" == str(error.value)
+        find_noun_inflections("house", EndingComponents(case=Case.NOMINATIVE, number=Number.SINGULAR, gender=Gender.NEUTER, degree=Degree.POSITIVE))
+    assert "Invalid type: '<class 'python_src.accido.class_adjective.Adjective'>'" == str(error.value)
 
 
 class TestNounInflection:
@@ -68,3 +68,9 @@ class TestNounInflection:
 
         assert find_noun_inflections(word, EndingComponents(case=Case.GENITIVE, number=Number.PLURAL)) == {"of the apples", "apples'"}
         assert find_noun_inflections(word, EndingComponents(case=Case.DATIVE, number=Number.PLURAL)) == {"for the apples", "for apples", "to the apples", "to apples"}
+
+
+def test_pronoun_inflections():
+    word = "this"
+
+    find_noun_inflections(word, EndingComponents(case=Case.NOMINATIVE, number=Number.SINGULAR))
