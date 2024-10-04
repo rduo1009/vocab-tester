@@ -260,7 +260,7 @@ class EndingComponents:
             return (accido.endings.Pronoun, None)
         if set(attributes) == {"number", "case"}:
             return (accido.endings.Noun, None)
-        if set(attributes) == set():
+        if not set(attributes):
             return (accido.endings.RegularWord, None)
         raise ValueError(
             f"Invalid combination of attributes: {', '.join(attributes)}"

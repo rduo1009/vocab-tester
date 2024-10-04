@@ -549,12 +549,12 @@ class Verb(_Word):
 
         short_tense: str = tense.shorthand
         short_voice: str = voice.shorthand
-        short_mood: str = mood.shorthand
         if number:
             short_number: str = number.shorthand
 
         if mood == Mood.INFINITIVE:
             return self.endings.get(f"V{short_tense}{short_voice}inf   ")
+        short_mood: str = mood.shorthand
         return self.endings.get(
             f"V{short_tense}{short_voice}{short_mood}{short_number}{person}",
         )
