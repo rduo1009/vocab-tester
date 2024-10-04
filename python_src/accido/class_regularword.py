@@ -9,9 +9,9 @@ from functools import total_ordering
 from typing import TYPE_CHECKING
 
 from .class_word import _Word
+from .misc import EndingComponents
 
 if TYPE_CHECKING:
-    from .misc import EndingComponents
     from .type_aliases import Meaning
 
 

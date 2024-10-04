@@ -88,6 +88,10 @@ class TestVerbDunder:
         word = Verb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
         assert compare(word.find("celatus"), [EndingComponents(tense=Tense.PERFECT, voice=Voice.PASSIVE, mood=Mood.PARTICIPLE, gender=Gender.MASCULINE, case=Case.NOMINATIVE, number=Number.SINGULAR, string="perfect passive participle masculine nominative singular")])
 
+    def test_find_infinitive(self):
+        word = Verb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
+        assert compare(word.find("celare"), [EndingComponents(tense=Tense.PRESENT, voice=Voice.ACTIVE, mood=Mood.INFINITIVE, string="present active infinitive")])
+
 
 class TestVerbConjugation:
     def test_firstconjugation(self):

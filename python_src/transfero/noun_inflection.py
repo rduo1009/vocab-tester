@@ -51,7 +51,7 @@ def find_noun_inflections(
 
     try:
         lemmas: tuple[str, ...] = lemminflect.getLemma(noun, "NOUN")
-    except KeyError as e:
+    except KeyError as e:  # pragma: no cover
         raise InvalidWordError(f"Word {noun} is not a noun") from e
 
     inflections: set[str] = set()

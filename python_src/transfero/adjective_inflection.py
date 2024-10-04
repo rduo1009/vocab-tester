@@ -44,7 +44,7 @@ def find_adjective_inflections(
 
     try:
         lemmas: tuple[str, ...] = lemminflect.getLemma(adjective, "ADJ")
-    except KeyError as e:
+    except KeyError as e:  # pragma: no cover
         raise InvalidWordError(
             f"Word '{adjective}' is not an adjective"
         ) from e

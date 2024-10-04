@@ -228,14 +228,15 @@ def read_vocab_file(file_path: Path) -> VocabList:
 
                         case _:
                             raise InvalidVocabFileFormatError(
-                                f"Invalid part of speech: {line[1:].strip()}",
+                                "Invalid part of speech: "
+                                f"'{line[1:].strip()}'",
                             )
 
                 case _:
                     parts: list[str] = line.strip().split(":")
                     if len(parts) != 2:
                         raise InvalidVocabFileFormatError(
-                            f"Invalid line format: {line}",
+                            f"Invalid line format: '{line}'",
                         )
 
                     meaning: accido.type_aliases.Meaning = _generate_meaning(
@@ -266,7 +267,7 @@ def _parse_line(
         case "Verb":
             if len(latin_parts) not in {3, 4}:
                 raise InvalidVocabFileFormatError(
-                    f"Invalid verb format: {line}",
+                    f"Invalid verb format: '{line}'",
                 )
 
             if len(latin_parts) > 3:
@@ -287,7 +288,7 @@ def _parse_line(
         case "Noun":
             if len(latin_parts) != 3:
                 raise InvalidVocabFileFormatError(
-                    f"Invalid noun format: {line}",
+                    f"Invalid noun format: '{line}'",
                 )
 
             try:
@@ -297,16 +298,16 @@ def _parse_line(
                     genitive=latin_parts[1].split()[0],
                     gender=Gender(latin_parts[2].split()[-1].strip("()")),
                 )
-            except KeyError as e:
+            except ValueError as e:
                 raise InvalidVocabFileFormatError(
                     "Invalid gender: "
-                    f"{latin_parts[2].split()[-1].strip('()')}",
+                    f"'{latin_parts[2].split()[-1].strip('()')}'",
                 ) from e
 
         case "Adjective":
             if len(latin_parts) not in {3, 4}:
                 raise InvalidVocabFileFormatError(
-                    f"Invalid adjective format: {line}",
+                    f"Invalid adjective format: '{line}'",
                 )
 
             declension: str = latin_parts[-1].strip("()")
@@ -316,7 +317,7 @@ def _parse_line(
                 declension,
             ):
                 raise InvalidVocabFileFormatError(
-                    f"Invalid adjective declension: {declension}",
+                    f"Invalid adjective declension: '{declension}'",
                 )
             if declension.startswith("3"):
                 return accido.endings.Adjective(

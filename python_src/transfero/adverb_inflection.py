@@ -39,13 +39,13 @@ def find_adverb_inflections(
     """
     if components.type != accido.endings.Adjective:
         raise ValueError(f"Invalid type: '{components.type}'")
-    if components.subtype != "adverb":
+    if components.subtype != "adverb":  # pragma: no cover
         raise ValueError(f"Invalid subtype: '{components.subtype}'")
 
     try:
         lemmas: tuple[str, ...] = lemminflect.getLemma(adverb, "ADV")
-    except KeyError as e:
-        raise InvalidWordError(f"Word {adverb} is not an adverb") from e
+    except KeyError as e:  # pragma: no cover
+        raise InvalidWordError(f"Word '{adverb}' is not an adverb") from e
 
     inflections: set[str] = set()
     for lemma in lemmas:

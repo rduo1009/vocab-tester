@@ -8,6 +8,24 @@ from python_src.accido.misc import Case, EndingComponents, Gender, Mood, Number,
 from python_src.transfero.words import find_verb_inflections
 
 
+def test_invalid_type():
+    with pytest.raises(ValueError) as error:
+        find_verb_inflections("teach", EndingComponents(case=Case.NOMINATIVE, number=Number.SINGULAR, gender=Gender.NEUTER))
+    assert "Invalid type: '<class 'python_src.accido.class_pronoun.Pronoun'>'" == str(error.value)
+
+
+def test_invalid_type_participle():
+    with pytest.raises(ValueError) as error:
+        find_verb_inflections("teach", EndingComponents(tense=Tense.PRESENT, voice=Voice.PASSIVE, mood=Mood.PARTICIPLE))
+    assert "Invalid subtype: 'infinitive'" == str(error.value)
+
+
+def test_invalid_type_infinitive():
+    with pytest.raises(ValueError) as error:
+        find_verb_inflections("teach", EndingComponents(tense=Tense.PERFECT, voice=Voice.PASSIVE, mood=Mood.INFINITIVE, number=Number.SINGULAR, case=Case.NOMINATIVE, gender=Gender.MASCULINE))
+    assert "Invalid subtype: 'participle'" == str(error.value)
+
+
 def test_verb_error_not_implemented():
     with pytest.raises(NotImplementedError) as error:
         find_verb_inflections("attack", EndingComponents(tense=Tense.PRESENT, voice=Voice.PASSIVE, mood=Mood.INDICATIVE, number=Number.SINGULAR, person=1))

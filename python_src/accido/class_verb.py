@@ -524,29 +524,6 @@ class Verb(_Word):
 
         Similar with participle endings.
         """
-        short_tense: str
-        short_voice: str
-        short_mood: str
-        short_number: str
-
-        if isinstance(tense, str):
-            try:
-                tense = Tense(tense.lower())
-            except ValueError as e:
-                raise InvalidInputError(f"Invalid tense: '{tense}'") from e
-
-        if isinstance(voice, str):
-            try:
-                voice = Voice(voice.lower())
-            except ValueError as e:
-                raise InvalidInputError(f"Invalid voice: '{voice}'") from e
-
-        if isinstance(mood, str):
-            try:
-                mood = Mood(mood.lower())
-            except ValueError as e:
-                raise InvalidInputError(f"Invalid mood: '{mood}'") from e
-
         if mood == Mood.PARTICIPLE:
             if person:
                 raise InvalidInputError(
@@ -570,18 +547,11 @@ class Verb(_Word):
                 participle_case=participle_case,
             )
 
-        if number and isinstance(number, str):
-            try:
-                number = Number(number.lower())
-            except ValueError as e:
-                raise InvalidInputError(f"Invalid number: '{number}'") from e
-
-        short_tense = tense.shorthand
-        short_voice = voice.shorthand
-        short_mood = mood.shorthand
+        short_tense: str = tense.shorthand
+        short_voice: str = voice.shorthand
+        short_mood: str = mood.shorthand
         if number:
-            assert isinstance(number, Number)
-            short_number = number.shorthand
+            short_number: str = number.shorthand
 
         if mood == Mood.INFINITIVE:
             return self.endings.get(f"V{short_tense}{short_voice}inf   ")
@@ -598,28 +568,6 @@ class Verb(_Word):
         participle_gender: Gender,
         participle_case: Case,
     ) -> Ending | None:
-        if isinstance(participle_case, str):
-            try:
-                participle_case = Case(participle_case.lower())
-            except ValueError as e:
-                raise InvalidInputError(
-                    f"Invalid case: '{participle_case}'"
-                ) from e
-
-        if isinstance(participle_gender, str):
-            try:
-                participle_gender = Gender(participle_gender.lower())
-            except ValueError as e:
-                raise InvalidInputError(
-                    f"Invalid gender: '{participle_gender}'"
-                ) from e
-
-        if isinstance(number, str):
-            try:
-                number = Number(number.lower())
-            except ValueError as e:
-                raise InvalidInputError(f"Invalid number: '{number}'") from e
-
         short_tense = tense.shorthand
         short_voice = voice.shorthand
         short_number = number.shorthand

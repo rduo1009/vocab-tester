@@ -67,7 +67,7 @@ def find_verb_inflections(
 
     try:
         lemmas: tuple[str, ...] = lemminflect.getLemma(verb, "VERB")
-    except KeyError as e:
+    except KeyError as e:  # pragma: no cover
         raise InvalidWordError(f"Word {verb} is not a verb") from e
 
     inflections: set[str] = set()
