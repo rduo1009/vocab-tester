@@ -1,0 +1,163 @@
+from collections.abc import Generator
+from operator import itemgetter as itemgetter
+
+from _typeshed import Incomplete
+
+from nltk.corpus.reader import XMLCorpusReader as XMLCorpusReader
+from nltk.corpus.reader import XMLCorpusView as XMLCorpusView
+from nltk.util import LazyConcatenation as LazyConcatenation
+from nltk.util import LazyIteratorList as LazyIteratorList
+from nltk.util import LazyMap as LazyMap
+
+__docformat__: str
+
+def mimic_wrap(
+    lines: Incomplete, wrap_at: int = 65, **kwargs: Incomplete
+) -> Generator[Incomplete, None, None]: ...
+
+class FramenetError(Exception): ...
+
+class AttrDict(dict):
+    def __init__(
+        self: Incomplete, *args: Incomplete, **kwargs: Incomplete
+    ) -> None: ...
+    def __setattr__(
+        self: Incomplete, name: Incomplete, value: Incomplete
+    ) -> None: ...
+    def __getattr__(self: Incomplete, name: Incomplete) -> Incomplete: ...
+    def __getitem__(self: Incomplete, name: Incomplete) -> Incomplete: ...
+
+class SpecialList(list):
+    def __init__(
+        self: Incomplete,
+        typ: Incomplete,
+        *args: Incomplete,
+        **kwargs: Incomplete,
+    ) -> None: ...
+
+class Future:
+    def __init__(
+        self: Incomplete,
+        loader: Incomplete,
+        *args: Incomplete,
+        **kwargs: Incomplete,
+    ) -> None: ...
+    def __nonzero__(self: Incomplete) -> Incomplete: ...
+    def __len__(self: Incomplete) -> int: ...
+    def __setitem__(
+        self: Incomplete, key: Incomplete, value: Incomplete
+    ) -> None: ...
+    def __getitem__(self: Incomplete, key: Incomplete) -> Incomplete: ...
+    def __getattr__(self: Incomplete, key: Incomplete) -> Incomplete: ...
+
+class PrettyDict(AttrDict):
+    def __init__(
+        self: Incomplete, *args: Incomplete, **kwargs: Incomplete
+    ) -> None: ...
+
+class PrettyList(list):
+    def __init__(
+        self: Incomplete, *args: Incomplete, **kwargs: Incomplete
+    ) -> None: ...
+
+class PrettyLazyMap(LazyMap): ...
+class PrettyLazyIteratorList(LazyIteratorList): ...
+
+class PrettyLazyConcatenation(LazyConcatenation):
+    def __add__(self: Incomplete, other: Incomplete) -> Incomplete: ...
+    def __radd__(self: Incomplete, other: Incomplete) -> Incomplete: ...
+
+class FramenetCorpusReader(XMLCorpusReader):
+    def warnings(self: Incomplete, v: Incomplete) -> None: ...
+    def __init__(
+        self: Incomplete, root: Incomplete, fileids: Incomplete
+    ) -> None: ...
+    def help(
+        self: Incomplete, attrname: Incomplete | None = None
+    ) -> Incomplete: ...
+    def buildindexes(self: Incomplete) -> None: ...
+    def doc(self: Incomplete, fn_docid: Incomplete) -> Incomplete: ...
+    def frame_by_id(
+        self: Incomplete, fn_fid: Incomplete, ignorekeys: Incomplete = []
+    ) -> Incomplete: ...
+    def frame_by_name(
+        self: Incomplete,
+        fn_fname: Incomplete,
+        ignorekeys: Incomplete = [],
+        check_cache: bool = True,
+    ) -> Incomplete: ...
+    def frame(
+        self: Incomplete,
+        fn_fid_or_fname: Incomplete,
+        ignorekeys: Incomplete = [],
+    ) -> Incomplete: ...
+    def frames_by_lemma(self: Incomplete, pat: Incomplete) -> Incomplete: ...
+    def lu_basic(self: Incomplete, fn_luid: Incomplete) -> Incomplete: ...
+    def lu(
+        self: Incomplete,
+        fn_luid: Incomplete,
+        ignorekeys: Incomplete = [],
+        luName: Incomplete | None = None,
+        frameID: Incomplete | None = None,
+        frameName: Incomplete | None = None,
+    ) -> Incomplete: ...
+    def propagate_semtypes(self: Incomplete) -> None: ...
+    def semtype(self: Incomplete, key: Incomplete) -> Incomplete: ...
+    def semtype_inherits(
+        self: Incomplete, st: Incomplete, superST: Incomplete
+    ) -> Incomplete: ...
+    def frames(
+        self: Incomplete, name: Incomplete | None = None
+    ) -> Incomplete: ...
+    def frame_ids_and_names(
+        self: Incomplete, name: Incomplete | None = None
+    ) -> Incomplete: ...
+    def fes(
+        self: Incomplete,
+        name: Incomplete | None = None,
+        frame: Incomplete | None = None,
+    ) -> Incomplete: ...
+    def lus(
+        self: Incomplete,
+        name: Incomplete | None = None,
+        frame: Incomplete | None = None,
+    ) -> Incomplete: ...
+    def lu_ids_and_names(
+        self: Incomplete, name: Incomplete | None = None
+    ) -> Incomplete: ...
+    def docs_metadata(
+        self: Incomplete, name: Incomplete | None = None
+    ) -> Incomplete: ...
+    def docs(
+        self: Incomplete, name: Incomplete | None = None
+    ) -> Incomplete: ...
+    def sents(
+        self: Incomplete, exemplars: bool = True, full_text: bool = True
+    ) -> Incomplete: ...
+    def annotations(
+        self: Incomplete,
+        luNamePattern: Incomplete | None = None,
+        exemplars: bool = True,
+        full_text: bool = True,
+    ) -> Incomplete: ...
+    def exemplars(
+        self: Incomplete,
+        luNamePattern: Incomplete | None = None,
+        frame: Incomplete | None = None,
+        fe: Incomplete | None = None,
+        fe2: Incomplete | None = None,
+    ) -> Incomplete: ...
+    def ft_sents(
+        self: Incomplete, docNamePattern: Incomplete | None = None
+    ) -> Incomplete: ...
+    def frame_relation_types(self: Incomplete) -> Incomplete: ...
+    def frame_relations(
+        self: Incomplete,
+        frame: Incomplete | None = None,
+        frame2: Incomplete | None = None,
+        type: Incomplete | None = None,
+    ) -> Incomplete: ...
+    def fe_relations(self: Incomplete) -> Incomplete: ...
+    def semtypes(self: Incomplete) -> Incomplete: ...
+
+def demo() -> None: ...

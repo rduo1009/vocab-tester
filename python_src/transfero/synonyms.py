@@ -5,9 +5,9 @@
 
 from __future__ import annotations
 
-from nltk import download  # type: ignore[import-untyped]
-from nltk.corpus import wordnet  # type: ignore[import-untyped]
-from nltk.data import find  # type: ignore[import-untyped]
+from nltk import download
+from nltk.corpus import wordnet
+from nltk.data import find
 
 try:
     find("corpora/wordnet.zip")
@@ -34,7 +34,7 @@ def find_synonyms(word: str) -> set[str]:
         synonyms.update(
             lemma.name()
             for lemma in synset.lemmas()
-            if lemma.name != word and "_" not in lemma.name()
+            if lemma.name() != word and "_" not in lemma.name()
         )
 
     return synonyms
