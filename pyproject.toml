@@ -29,9 +29,8 @@ pytest-xdist = "==3.6.1"
 docstr-coverage = "==2.3.2"
 pydoctest = "==0.2.1"
 
-
 [tool.poetry.group.types.dependencies]
-types-regex = "^2024.9.11.20240912"
+types-regex = "==2024.9.11.20240912"
 
 [build-system]
 requires = ["poetry-core"]
