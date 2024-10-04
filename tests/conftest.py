@@ -1,4 +1,4 @@
-import icecream  # type: ignore[import-untyped]
+import icecream
 import pytest
 
 
