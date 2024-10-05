@@ -14,7 +14,7 @@ from .. import accido
 class _Question[T]:
     """Generic class for questions."""
 
-    prompt: T
+    main_answer: T
     answers: set[T]
 
     def check(self, response: T) -> bool:
@@ -33,8 +33,42 @@ class _Question[T]:
         return response in self.answers
 
 
-TypeInEngToLatQuestion = _Question[str]
-TypeInLatToEngQuestion = _Question[str]
+@dataclass
+class TypeInEngToLatQuestion(_Question[str]):
+    """A question that asks for the Latin translation of an English word.
+
+    For example, "I search" (answer: "quaero")
+
+    Attributes
+    ----------
+    prompt : str
+        The prompt for the question (in English).
+    main_answer : str
+        The best answer to the question (in Latin).
+    answers : set[str]
+        The possible answers to the question (in Latin).
+    """
+
+    prompt: str
+
+
+@dataclass
+class TypeInLatToEngQuestion(_Question[str]):
+    """A question that asks for the English translation of a Latin word.
+
+    For example, "quaero" (answer: "I search")
+
+    Attributes
+    ----------
+    prompt : str
+        The prompt for the question (in Latin).
+    main_answer : str
+        The best answer to the question (in English).
+    answers : set[str]
+        The possible answers to the question (in English).
+    """
+
+    prompt: str
 
 
 @dataclass
@@ -45,8 +79,20 @@ class ParseWordCompToLatQuestion(_Question[str]):
     For example:
     present active indicative 2nd person plural of "quaero"
     (answer: "quaeratis").
+
+    Attributes
+    ----------
+    prompt : str
+        The prompt for the question.
+    components : accido.misc.EndingComponents
+        The grammatical components of the word.
+    main_answer : str
+        The best answer to the question.
+    answers : set[str]
+        The possible answers to the question.
     """  # noqa: D205
 
+    prompt: str
     components: accido.misc.EndingComponents
 
 
@@ -58,7 +104,18 @@ class ParseWordLatToCompQuestion(_Question[accido.misc.EndingComponents]):
     For example:
     Parse "quaeratis" (hear: quaero, quaerere, quaesivi, quaesitus)
     (answer: "present active indicative 2nd person plural").
+
+    Attributes
+    ----------
+    prompt : str
+        The prompt for the question.
+    dictionary_entry : str
+        The dictionary entry for the word.
+    main_answer : accido.misc.EndingComponents
+        The best answer to the question.
+    answers : set[accido.misc.EndingComponents]
+        The possible answers to the question.
     """  # noqa: D205
 
-    prompt: str  # overriding the parent class's prompt
+    prompt: str
     dictionary_entry: str
