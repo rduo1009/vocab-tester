@@ -72,9 +72,9 @@ class Pronoun(_Word):
         self._first = self.pronoun
         self.meaning: Meaning = meaning
 
-        self._mascnom: Ending = self.endings["Pmnomsg"]
-        self._femnom: Ending = self.endings["Pfnomsg"]
-        self._neutnom: Ending = self.endings["Pnnomsg"]
+        self.mascnom: Ending = self.endings["Pmnomsg"]
+        self.femnom: Ending = self.endings["Pfnomsg"]
+        self.neutnom: Ending = self.endings["Pnnomsg"]
 
     def get(
         self, *, gender: Gender, case: Case, number: Number
@@ -141,6 +141,4 @@ class Pronoun(_Word):
         return f"Pronoun({self.pronoun}, {self.meaning})"
 
     def __str__(self) -> str:
-        return (
-            f"{self.meaning}: {self._mascnom}, {self._femnom}, {self._neutnom}"
-        )
+        return f"{self.meaning}: {self.mascnom}, {self.femnom}, {self.neutnom}"
