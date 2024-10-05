@@ -26,7 +26,7 @@ jobs:
         with:
           fetch-depth: 0
           lfs: true
-          
+
       - name: Checkout LFS objects
         run: git lfs checkout
 
@@ -34,13 +34,18 @@ jobs:
         id: cache-tox
         uses: actions/cache@v4.1.0
         with:
-          path: '.tox'
+          path: ".tox"
           key: ${{ runner.os }}-${{ matrix.python-version }}-${{ hashFiles('pyproject.toml','tox.ini') }}
 
       - name: Install LLVM and Clang
         uses: KyleMayes/install-llvm-action@v2.0.5
         with:
           version: "18.1.8"
+
+      - name: Symlink libtinfo.so (Linux)
+        if: contains(matrix.os, 'ubuntu')
+        run: sudo ln -s libtinfo.so.5 /lib/x86_64-linux-gnu/libtinfo.so
+        working-directory: ${{ env.LLVM_PATH }}/lib
 
       - name: Compile cpp code
         run: clang++ -shared -fPIC -o python_src/lego/libkey.so python_src/lego/key/key.cpp
