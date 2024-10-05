@@ -301,7 +301,7 @@ def filter_questions(settings: Settings) -> list[QuestionClasses]:
     list[str]
         The filtered classes.
     """
-    classes: list[str] = []
+    classes: list[QuestionClasses] = []
     for key, value in CLASS_RULES.items():
         if settings[key]:
             classes.append(value)

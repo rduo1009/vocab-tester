@@ -157,7 +157,7 @@ def _pick_ending(
 
 def ask_question_without_sr(
     vocab_list: lego.misc.VocabList, amount: int, settings: Settings
-) -> Generator[Question[Any], None, None]:
+) -> Generator[Question, None, None]:
     """Ask a question about Latin vocabulary.
 
     Parameters
@@ -183,7 +183,7 @@ def ask_question_without_sr(
         filtered_endings: dict[str, Ending] = filter_endings(
             chosen_word.endings, settings
         )
-        question_type: str = random.choice(filtered_questions)
+        question_type: QuestionClasses = random.choice(filtered_questions)
 
         # TODO: if ever using mypyc, make a new variable for every type
         # for now, any type to allow variable to be reused
@@ -377,16 +377,26 @@ def _generate_typein_engtolat(
         and ending_components.subtype not in {"infinitive", "participle"}
         and ending_components.person == 2
     ):
-        answers = {
-            chosen_ending,  # second person singular
-            chosen_word.get(  # second person plural
-                tense=ending_components.tense,
-                voice=ending_components.voice,
-                mood=ending_components.mood,
-                number=Number.PLURAL,
-                person=2,
-            ),
-        }
+        # HACK: messy but works
+        if second_person_plural := chosen_word.get(
+            tense=ending_components.tense,
+            voice=ending_components.voice,
+            mood=ending_components.mood,
+            number=Number.PLURAL,
+            person=2,
+        ):
+            temp_second_person_plural: tuple[str, ...] = (
+                tuple(second_person_plural.get_all())
+                if type(second_person_plural) is accido.misc.MultipleEndings
+                else tuple(second_person_plural)
+            )
+
+            answers = {
+                chosen_ending,  # second person singular
+                *temp_second_person_plural,
+            }
+        else:
+            answers = {chosen_ending}
 
     return TypeInEngToLatQuestion(
         prompt=inflected_meaning,
@@ -398,7 +408,7 @@ def _generate_typein_engtolat(
 def _generate_typein_lattoeng(
     chosen_word: accido.endings._Word, filtered_endings: dict[str, Ending]
 ) -> TypeInLatToEngQuestion | None:
-    chosen_ending: str
+    chosen_ending: Ending
     _, chosen_ending = _pick_ending(filtered_endings)
 
     if type(chosen_ending) is accido.misc.MultipleEndings:
@@ -435,6 +445,7 @@ def _generate_typein_lattoeng(
             main_meaning = str(raw_meanings)
             meanings = set(raw_meanings.meanings)
         else:
+            assert type(raw_meanings) is str
             meanings = {raw_meanings}
             main_meaning = raw_meanings
 
@@ -492,7 +503,7 @@ def _generate_parse(
         chosen_ending = random.choice(chosen_ending.get_all())
     assert type(chosen_ending) is str
 
-    all_ending_components: list[accido.misc.EndingComponents] = (
+    all_ending_components: set[accido.misc.EndingComponents] = set(
         chosen_word.find(chosen_ending)
     )
     assert main_ending_components in all_ending_components
@@ -528,6 +539,7 @@ def _generate_inflect(
             main_answer = random.choice(chosen_ending.get_all())
         answers = set(chosen_ending.get_all())
     else:
+        assert type(chosen_ending) is str
         main_answer = chosen_ending
         answers = {chosen_ending}
 
