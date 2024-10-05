@@ -22,13 +22,20 @@ jobs:
         os:
           - ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4.2.0
         with:
           fetch-depth: 0
           lfs: true
           
       - name: Checkout LFS objects
         run: git lfs checkout
+
+      - name: Cache tox folder
+        id: cache-tox
+        uses: actions/cache@v4.1.0
+        with:
+          path: '.tox'
+          key: ${{ runner.os }}-${{ matrix.python-version }}-${{ hashFiles('pyproject.toml','tox.ini') }}
 
       - name: Set up Clang
         uses: egor-tensin/setup-clang@v1
@@ -40,7 +47,7 @@ jobs:
         run: clang++ -shared -fPIC -o python_src/lego/libkey.so python_src/lego/key/key.cpp
 
       - name: Setup python for test ${{ matrix.py }}
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v5.2.0
         with:
           python-version: ${{ matrix.py }}
 
@@ -51,6 +58,7 @@ jobs:
         run: python -m pip install tox-gh>=1.2
 
       - name: Setup test suite
+        if: steps.cache-tox.outputs.cache-hit != 'true'
         run: tox -vv --notest
 
       - name: Run test suite
