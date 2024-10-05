@@ -254,7 +254,28 @@ def _generate_typein_engtolat(
         and ending_components.number != Number.SINGULAR
     )
 
-    if verb_subjunctive or noun_accusative_vocative or adjective_nominative:
+    participle_nominative: bool = (
+        type(chosen_word) is accido.endings.Verb
+        and ending_components.subtype == "participle"
+        and ending_components.case != Case.NOMINATIVE
+        and ending_components.number != Number.SINGULAR
+        and ending_components.gender == Gender.MASCULINE
+    )
+
+    verb_second_plural: bool = (  # plural second person is same as singular
+        type(chosen_word) is accido.endings.Verb
+        and ending_components.subtype not in {"infinitive", "participle"}
+        and ending_components.number == Number.PLURAL
+        and ending_components.person == 2
+    )
+
+    if (
+        verb_subjunctive
+        or noun_accusative_vocative
+        or adjective_nominative
+        or participle_nominative
+        or verb_second_plural
+    ):
         return None
 
     # Get the best meaning if it is a MultipleMeanings, or
@@ -315,6 +336,49 @@ def _generate_typein_engtolat(
                 )
             )
 
+    elif (
+        type(chosen_word) is accido.endings.Verb
+        and ending_components.subtype == "participle"
+    ):
+        answers = {
+            item
+            for key, value in chosen_word.endings.items()
+            if key[7:10] == Mood.PARTICIPLE.shorthand
+            for item in (
+                value.get_all()
+                if isinstance(value, accido.misc.MultipleEndings)
+                else [value]
+            )
+        }
+
+        if ending_components.number == Number.PLURAL:
+            chosen_ending = str(  # str to get the main ending
+                chosen_word.get(
+                    tense=ending_components.tense,
+                    voice=ending_components.voice,
+                    mood=Mood.PARTICIPLE,
+                    number=Number.SINGULAR,
+                    participle_case=Case.NOMINATIVE,
+                    participle_gender=Gender.MASCULINE,
+                )
+            )
+
+    elif (
+        type(chosen_word) is accido.endings.Verb
+        and ending_components.subtype not in {"infinitive", "participle"}
+        and ending_components.person == 2
+    ):
+        answers = {
+            chosen_ending,  # second person singular
+            chosen_word.get(  # second person plural
+                tense=ending_components.tense,
+                voice=ending_components.voice,
+                mood=ending_components.mood,
+                number=Number.PLURAL,
+                person=2,
+            ),
+        }
+
     return TypeInEngToLatQuestion(
         prompt=inflected_meaning,
         main_answer=chosen_ending,
@@ -362,7 +426,6 @@ def _generate_typein_lattoeng(
             main_meaning = str(raw_meanings)
             meanings = set(raw_meanings.meanings)
         else:
-            assert type(raw_meanings) is str
             meanings = {raw_meanings}
             main_meaning = raw_meanings
 
