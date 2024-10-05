@@ -92,13 +92,13 @@ settings = {
     "exclude-adjective-212-declension": False,
     "exclude-adjective-third-declension": False,
     "include-typein-engtolat": False,
-    "include-typein-lattoeng": True,
+    "include-typein-lattoeng": False,
     "include-parse": False,
-    "include-inflect": False,
+    "include-inflect": True,
 }
 
 
-def test_typein_lattoeng():
+def test_inflect_question():
     vocab_list = read_vocab_file(Path("tests/python_src_lego/test_vocab_files/regular_list.txt"))
     amount = 1000
     for output in ask_question_without_sr(vocab_list, amount, settings):
