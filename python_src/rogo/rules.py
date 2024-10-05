@@ -9,6 +9,7 @@ import re
 from typing import TYPE_CHECKING, Final
 
 from .. import accido
+from .question_classes import QuestionClasses
 
 if TYPE_CHECKING:
     from ..accido.type_aliases import Ending, Endings
@@ -120,10 +121,10 @@ RULE_REGEX: Final[dict[str, str]] = {
 }  # fmt: skip
 
 CLASS_RULES: Final[dict[str, str]] = {
-    "include-typein-engtolat": "TypeInEngtoLatQuestion",
-    "include-typein-lattoeng": "TypeInLattoEngQuestion",
-    "include-parse": "ParseWordLattoCompQuestion",
-    "include-inflect": "ParseWordComptoLatQuestion",
+    "include-typein-engtolat": QuestionClasses.TYPEIN_ENGTOLAT,
+    "include-typein-lattoeng": QuestionClasses.TYPEIN_LATTOENG,
+    "include-parse": QuestionClasses.PARSEWORD_LATTOCOMP,
+    "include-inflect": QuestionClasses.PARSEWORD_COMPTOLAT,
 }
 
 
@@ -286,7 +287,7 @@ def filter_endings(endings: Endings, settings: Settings) -> dict[str, Ending]:
     return filtered_endings
 
 
-def filter_questions(settings: Settings) -> list[str]:
+def filter_questions(settings: Settings) -> list[QuestionClasses]:
     """Filter the question types using the settings.
 
     Parameters

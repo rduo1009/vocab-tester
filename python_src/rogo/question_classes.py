@@ -6,8 +6,18 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from enum import Enum
 
 from .. import accido
+
+
+class QuestionClasses(Enum):
+    """The classes of questions that can be asked."""
+
+    TYPEIN_ENGTOLAT = "TypeInEngtoLatQuestion"
+    TYPEIN_LATTOENG = "TypeInLattoEngQuestion"
+    PARSEWORD_LATTOCOMP = "ParseWordLattoCompQuestion"
+    PARSEWORD_COMPTOLAT = "ParseWordComptoLatQuestion"
 
 
 @dataclass
@@ -83,7 +93,7 @@ class ParseWordCompToLatQuestion(_Question[str]):
     Attributes
     ----------
     prompt : str
-        The prompt for the question.
+        The prompt for the question (the dictionary entry).
     components : accido.misc.EndingComponents
         The grammatical components of the word.
     main_answer : str

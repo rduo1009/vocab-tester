@@ -12,8 +12,9 @@ from .. import accido, lego, transfero
 from ..accido.misc import Case, Gender, Mood, Number
 from .exceptions import InvalidSettingsError
 from .question_classes import (
-    ParseWordCompToLatQuestion,  # noqa: F401
-    ParseWordLatToCompQuestion,  # noqa: F401
+    ParseWordCompToLatQuestion,
+    ParseWordLatToCompQuestion,
+    QuestionClasses,
     TypeInEngToLatQuestion,
     TypeInLatToEngQuestion,
 )
@@ -173,7 +174,7 @@ def ask_question_without_sr(
     """
     _verify_settings(settings)
     vocab: Vocab = filter_words(vocab_list, settings)
-    filtered_questions: list[str] = filter_questions(settings)
+    filtered_questions: list[QuestionClasses] = filter_questions(settings)
 
     for _ in range(amount):
         chosen_word: accido.endings._Word = random.choice(vocab)
@@ -186,7 +187,7 @@ def ask_question_without_sr(
         # for now, any type to allow variable to be reused
         output: Any
         match question_type:
-            case "TypeInEngtoLatQuestion":
+            case QuestionClasses.TYPEIN_ENGTOLAT:
                 if output := _generate_typein_engtolat(
                     chosen_word, filtered_endings
                 ):
@@ -195,11 +196,25 @@ def ask_question_without_sr(
                 else:
                     continue
 
-            case "TypeInLattoEngQuestion":
+            case QuestionClasses.TYPEIN_LATTOENG:
                 if output := _generate_typein_lattoeng(
                     chosen_word, filtered_endings
                 ):
                     assert type(output) is TypeInLatToEngQuestion
+                    yield output
+                else:
+                    continue
+
+            case QuestionClasses.PARSEWORD_LATTOCOMP:
+                if output := _generate_parse(chosen_word, filtered_endings):
+                    assert type(output) is ParseWordLatToCompQuestion
+                    yield output
+                else:
+                    continue
+
+            case QuestionClasses.PARSEWORD_COMPTOLAT:
+                if output := _generate_inflect(chosen_word, filtered_endings):
+                    assert type(output) is ParseWordCompToLatQuestion
                     yield output
                 else:
                     continue
@@ -310,6 +325,7 @@ def _generate_typein_engtolat(
 def _generate_typein_lattoeng(
     chosen_word: accido.endings._Word, filtered_endings: dict[str, Ending]
 ) -> TypeInLatToEngQuestion | None:
+    chosen_ending: str
     _, chosen_ending = _pick_ending(filtered_endings)
 
     if type(chosen_ending) is accido.misc.MultipleEndings:
@@ -383,4 +399,69 @@ def _generate_typein_lattoeng(
         prompt=chosen_ending,
         main_answer=main_answer,
         answers=inflected_meanings,
+    )
+
+
+def _generate_parse(
+    chosen_word: accido.endings._Word, filtered_endings: dict[str, Ending]
+) -> ParseWordLatToCompQuestion | None:
+    if type(chosen_word) is accido.endings.RegularWord:
+        return None
+
+    ending_components_key: str
+    chosen_ending: Ending
+    ending_components_key, chosen_ending = _pick_ending(filtered_endings)
+
+    main_ending_components: accido.misc.EndingComponents = (
+        chosen_word._create_namespace(ending_components_key)  # noqa: SLF001
+    )
+
+    if type(chosen_ending) is accido.misc.MultipleEndings:
+        chosen_ending = random.choice(chosen_ending.get_all())
+    assert type(chosen_ending) is str
+
+    all_ending_components: list[accido.misc.EndingComponents] = (
+        chosen_word.find(chosen_ending)
+    )
+    assert main_ending_components in all_ending_components
+
+    return ParseWordLatToCompQuestion(
+        prompt=chosen_ending,
+        main_answer=main_ending_components,
+        answers=all_ending_components,
+        dictionary_entry=str(chosen_word),  # __str__ returns dictionary entry
+    )
+
+
+def _generate_inflect(
+    chosen_word: accido.endings._Word, filtered_endings: dict[str, Ending]
+) -> ParseWordCompToLatQuestion | None:
+    if type(chosen_word) is accido.endings.RegularWord:
+        return None
+
+    ending_components_key: str
+    chosen_ending: Ending
+    ending_components_key, chosen_ending = _pick_ending(filtered_endings)
+
+    ending_components: accido.misc.EndingComponents = (
+        chosen_word._create_namespace(ending_components_key)  # noqa: SLF001
+    )
+
+    main_answer: str
+    answers: set[str]
+    if type(chosen_ending) is accido.misc.MultipleEndings:
+        if hasattr(chosen_ending, "regular"):
+            main_answer = chosen_ending.regular
+        else:
+            main_answer = random.choice(chosen_ending.get_all())
+        answers = set(chosen_ending.get_all())
+    else:
+        main_answer = chosen_ending
+        answers = {chosen_ending}
+
+    return ParseWordCompToLatQuestion(
+        prompt=str(chosen_word),  # __str__ returns dictionary entry
+        components=ending_components,
+        main_answer=main_answer,
+        answers=answers,
     )
