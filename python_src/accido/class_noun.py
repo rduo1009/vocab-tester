@@ -6,7 +6,7 @@
 from __future__ import annotations
 
 from functools import total_ordering
-from typing import TYPE_CHECKING, Literal
+from typing import TYPE_CHECKING
 
 from .class_word import _Word
 from .edge_cases import IRREGULAR_NOUNS
@@ -19,7 +19,7 @@ from .misc import (
 )
 
 if TYPE_CHECKING:
-    from .type_aliases import Ending, Endings, Meaning
+    from .type_aliases import Ending, Endings, Meaning, NounDeclension
 
 
 @total_ordering
@@ -90,7 +90,7 @@ class Noun(_Word):
         self.plurale_tantum: bool = False
 
         self._first: str = self.nominative
-        self.declension: Literal[0, 1, 2, 3, 4, 5]
+        self.declension: NounDeclension
         self._stem: str
 
         if self.nominative in IRREGULAR_NOUNS:

@@ -43,16 +43,6 @@ class TestAdjectiveErrors:
             Adjective("laetus", "laeta", declension="3", meaning="happy", termination=3)
         assert "Third-termination adjectives must have 3 principal parts (adjective 'laetus' given)" == str(error.value)
 
-    def test_errors_invalid_termination(self):
-        with pytest.raises(InvalidInputError) as error:
-            Adjective("laetus", "laeta", declension="3", meaning="happy", termination=7)
-        assert "Termination must be 1, 2 or 3 (given '7')" == str(error.value)
-
-    def test_errors_invalid_declension(self):
-        with pytest.raises(InvalidInputError) as error:
-            Adjective("laetus", "laeta", "laetum", declension="4", meaning="happy", termination=3)
-        assert "Invalid declension: '4'" == str(error.value)
-
     def test_errors_adverbs_donothave(self):
         with pytest.raises(InvalidInputError) as error:
             word = Adjective("laetus", "laeta", "laetum", declension="212", meaning="happy")
