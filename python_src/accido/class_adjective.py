@@ -153,17 +153,6 @@ class Adjective(_Word):
                     case 3:
                         self.endings = self._33_endings()
 
-                    case _:
-                        raise InvalidInputError(
-                            "Termination must be 1, 2 or 3 "
-                            f"(given '{self.termination}')",
-                        )
-
-            case _:
-                raise InvalidInputError(
-                    f"Invalid declension: '{self.declension}'",
-                )
-
     def _212_endings(self) -> Endings:
         if self.termination:
             raise InvalidInputError(

@@ -26,7 +26,7 @@ if not nltk_data_path.exists():  # pragma: no cover
 
 try:
     find("corpora/wordnet.zip")
-except LookupError:
+except LookupError:  # pragma: no cover
     download("wordnet", download_dir=str(nltk_data_path))
     warnings.warn(
         f"The wordnet dataset was not found in {nltk_data_path} and has "
