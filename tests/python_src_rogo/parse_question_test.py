@@ -95,6 +95,7 @@ settings = {
     "include-typein-lattoeng": False,
     "include-parse": True,
     "include-inflect": False,
+    "include-principal-parts": False,
 }
 
 

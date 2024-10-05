@@ -14,6 +14,7 @@ from .exceptions import InvalidSettingsError
 from .question_classes import (
     ParseWordCompToLatQuestion,
     ParseWordLatToCompQuestion,
+    PrincipalPartsQuestion,
     QuestionClasses,
     TypeInEngToLatQuestion,
     TypeInLatToEngQuestion,
@@ -22,7 +23,7 @@ from .rules import filter_endings, filter_questions, filter_words
 
 if TYPE_CHECKING:
     from ..accido.type_aliases import Ending, Meaning
-    from .question_classes import _Question
+    from .question_classes import Question
     from .type_aliases import Settings, Vocab
 
 REQUIRED_SETTINGS: Final[set[str]] = {
@@ -112,6 +113,7 @@ REQUIRED_SETTINGS: Final[set[str]] = {
     "include-typein-lattoeng",
     "include-parse",
     "include-inflect",
+    "include-principal-parts",
 }
 
 
@@ -155,7 +157,7 @@ def _pick_ending(
 
 def ask_question_without_sr(
     vocab_list: lego.misc.VocabList, amount: int, settings: Settings
-) -> Generator[_Question[Any], None, None]:
+) -> Generator[Question[Any], None, None]:
     """Ask a question about Latin vocabulary.
 
     Parameters
@@ -169,7 +171,7 @@ def ask_question_without_sr(
 
     Yields
     ------
-    _Question
+    Question
         The question to ask.
     """
     _verify_settings(settings)
@@ -215,6 +217,13 @@ def ask_question_without_sr(
             case QuestionClasses.PARSEWORD_COMPTOLAT:
                 if output := _generate_inflect(chosen_word, filtered_endings):
                     assert type(output) is ParseWordCompToLatQuestion
+                    yield output
+                else:
+                    continue
+
+            case QuestionClasses.PRINCIPAL_PARTS:
+                if output := _generate_principal_parts_question(chosen_word):
+                    assert type(output) is PrincipalPartsQuestion
                     yield output
                 else:
                     continue
@@ -527,4 +536,74 @@ def _generate_inflect(
         components=ending_components,
         main_answer=main_answer,
         answers=answers,
+    )
+
+
+def _generate_principal_parts_question(
+    chosen_word: accido.endings._Word,
+) -> PrincipalPartsQuestion | None:
+    if type(chosen_word) is accido.endings.RegularWord:
+        return None
+
+    principal_parts: tuple[str, ...]
+    if type(chosen_word) is accido.endings.Verb:
+        if chosen_word.ppp:
+            principal_parts = (
+                chosen_word.present,
+                chosen_word.infinitive,
+                chosen_word.perfect,
+                chosen_word.ppp,
+            )
+        else:
+            principal_parts = (
+                chosen_word.present,
+                chosen_word.infinitive,
+                chosen_word.perfect,
+            )
+
+    elif type(chosen_word) is accido.endings.Noun:
+        if chosen_word.genitive:
+            principal_parts = (
+                chosen_word.nominative,
+                chosen_word.genitive,
+            )
+        else:  # irregular noun
+            return None
+
+    elif type(chosen_word) is accido.endings.Adjective:
+        match chosen_word.declension:
+            case "212":
+                principal_parts = (
+                    chosen_word.mascnom,
+                    chosen_word.femnom,
+                    chosen_word.neutnom,
+                )
+            case "3":
+                match chosen_word.termination:
+                    case 1:
+                        principal_parts = (
+                            chosen_word.mascnom,
+                            chosen_word.mascgen,
+                        )
+                    case 2:
+                        principal_parts = (
+                            chosen_word.mascnom,
+                            chosen_word.neutnom,
+                        )
+                    case 3:
+                        principal_parts = (
+                            chosen_word.mascnom,
+                            chosen_word.femnom,
+                            chosen_word.neutnom,
+                        )
+
+    elif type(chosen_word) is accido.endings.Pronoun:
+        principal_parts = (
+            chosen_word.mascnom,
+            chosen_word.femnom,
+            chosen_word.neutnom,
+        )
+
+    return PrincipalPartsQuestion(
+        prompt=principal_parts[0], principal_parts=principal_parts
     )

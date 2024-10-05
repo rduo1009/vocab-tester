@@ -7,6 +7,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from enum import Enum
+from typing import Any, Protocol
 
 from .. import accido
 
@@ -18,10 +19,20 @@ class QuestionClasses(Enum):
     TYPEIN_LATTOENG = "TypeInLattoEngQuestion"
     PARSEWORD_LATTOCOMP = "ParseWordLattoCompQuestion"
     PARSEWORD_COMPTOLAT = "ParseWordComptoLatQuestion"
+    PRINCIPAL_PARTS = "PrincipalPartsQuestion"
+
+
+class Question(Protocol):
+    """A protocol for questions."""
+
+    prompt: Any
+
+    def check(self, response: Any) -> bool:
+        """Checks if the response is correct."""
 
 
 @dataclass
-class _Question[T]:
+class _MultiAnswerQuestion[T]:
     """Generic class for questions."""
 
     main_answer: T
@@ -44,7 +55,7 @@ class _Question[T]:
 
 
 @dataclass
-class TypeInEngToLatQuestion(_Question[str]):
+class TypeInEngToLatQuestion(_MultiAnswerQuestion[str]):
     """A question that asks for the Latin translation of an English word.
 
     For example, "I search" (answer: "quaero")
@@ -63,7 +74,7 @@ class TypeInEngToLatQuestion(_Question[str]):
 
 
 @dataclass
-class TypeInLatToEngQuestion(_Question[str]):
+class TypeInLatToEngQuestion(_MultiAnswerQuestion[str]):
     """A question that asks for the English translation of a Latin word.
 
     For example, "quaero" (answer: "I search")
@@ -82,7 +93,7 @@ class TypeInLatToEngQuestion(_Question[str]):
 
 
 @dataclass
-class ParseWordCompToLatQuestion(_Question[str]):
+class ParseWordCompToLatQuestion(_MultiAnswerQuestion[str]):
     """A question that asks for a Latin word given the grammatical
     components of the word.
 
@@ -107,7 +118,9 @@ class ParseWordCompToLatQuestion(_Question[str]):
 
 
 @dataclass
-class ParseWordLatToCompQuestion(_Question[accido.misc.EndingComponents]):
+class ParseWordLatToCompQuestion(
+    _MultiAnswerQuestion[accido.misc.EndingComponents]
+):
     """A question that asks for the grammatical components of a Latin
     word, given the word.
 
@@ -129,3 +142,26 @@ class ParseWordLatToCompQuestion(_Question[accido.misc.EndingComponents]):
 
     prompt: str
     dictionary_entry: str
+
+
+@dataclass
+class PrincipalPartsQuestion:
+    """A question that asks for the principal parts of a Latin verb."""
+
+    prompt: str
+    principal_parts: tuple[str, ...]
+
+    def check(self, response: tuple[str, ...]) -> bool:
+        """Check if the given principal parts are correct.
+
+        Parameters
+        ----------
+        response : list[str]
+            The principal parts to check.
+
+        Returns
+        -------
+        bool
+            True if the given principal parts are correct, False otherwise.
+        """
+        return response == self.principal_parts

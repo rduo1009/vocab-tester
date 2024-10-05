@@ -120,11 +120,12 @@ RULE_REGEX: Final[dict[str, str]] = {
     "exclude-pronoun-plural": r"^P[a-z][a-z][a-z][a-z]pl$",
 }  # fmt: skip
 
-CLASS_RULES: Final[dict[str, str]] = {
+CLASS_RULES: Final[dict[str, QuestionClasses]] = {
     "include-typein-engtolat": QuestionClasses.TYPEIN_ENGTOLAT,
     "include-typein-lattoeng": QuestionClasses.TYPEIN_LATTOENG,
     "include-parse": QuestionClasses.PARSEWORD_LATTOCOMP,
     "include-inflect": QuestionClasses.PARSEWORD_COMPTOLAT,
+    "include-principal-parts": QuestionClasses.PRINCIPAL_PARTS,
 }
 
 
