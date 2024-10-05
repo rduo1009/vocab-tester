@@ -25,6 +25,10 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          lfs: true
+          
+      - name: Checkout LFS objects
+        run: git lfs checkout
 
       - name: Set up Clang
         uses: egor-tensin/setup-clang@v1
