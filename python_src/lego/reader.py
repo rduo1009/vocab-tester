@@ -9,7 +9,7 @@ import hashlib
 import hmac
 import warnings
 from re import match
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, cast
 
 import dill as pickle
 import lz4.frame  # type: ignore[import-untyped]
@@ -18,6 +18,7 @@ import python_src as src
 
 from .. import accido
 from ..accido.misc import Gender
+from ..accido.type_aliases import Termination
 from .exceptions import InvalidVocabDumpError, InvalidVocabFileFormatError
 from .misc import KEY, VocabList
 
@@ -320,9 +321,12 @@ def _parse_line(
                     f"Invalid adjective declension: '{declension}'",
                 )
             if declension.startswith("3"):
+                termination = cast(Termination, int(declension[2]))
+                assert termination in {1, 2, 3}
+
                 return accido.endings.Adjective(
                     *latin_parts[:-1],
-                    termination=int(declension[2]),
+                    termination=termination,
                     declension="3",
                     meaning=meaning,
                 )

@@ -6,7 +6,7 @@
 from __future__ import annotations
 
 from functools import total_ordering
-from typing import TYPE_CHECKING, Literal, cast
+from typing import TYPE_CHECKING, cast
 
 from .class_word import _Word
 from .edge_cases import check_io_verb, find_irregular_endings
@@ -24,7 +24,7 @@ from .misc import (
 )
 
 if TYPE_CHECKING:
-    from .type_aliases import Ending, Endings, Meaning
+    from .type_aliases import Conjugation, Ending, Endings, Meaning
 
 
 @total_ordering
@@ -92,7 +92,7 @@ class Verb(_Word):
         self.meaning: Meaning = meaning
 
         self._first = self.present
-        self.conjugation: Literal[0, 1, 2, 3, 4, 5]
+        self.conjugation: Conjugation
 
         if self.present[-1:] != "o":
             raise InvalidInputError(
