@@ -8,7 +8,7 @@ from __future__ import annotations
 import random
 from typing import TYPE_CHECKING, Any, Final, Generator
 
-from .. import accido, transfero
+from .. import accido, lego, transfero
 from ..accido.misc import Case, Gender, Mood, Number
 from .exceptions import InvalidSettingsError
 from .question_classes import (
@@ -20,7 +20,6 @@ from .question_classes import (
 from .rules import filter_endings, filter_questions, filter_words
 
 if TYPE_CHECKING:
-    from .. import lego
     from ..accido.type_aliases import Ending, Meaning
     from .question_classes import _Question
     from .type_aliases import Settings, Vocab
