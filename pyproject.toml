@@ -28,6 +28,8 @@ codetiming = "==1.4.0"
 pytest-xdist = "==3.6.1"
 docstr-coverage = "==2.3.2"
 pydoctest = "==0.2.1"
+pytest-testmon = "==2.1.1"
+pytest-watch = "==4.2.0"
 
 [tool.poetry.group.types.dependencies]
 types-regex = "==2024.9.11.20240912"
