@@ -13,3 +13,4 @@ monkeytype.sqlite3
 .tox
 /dist
 .dmypy.json
+.testmondata
