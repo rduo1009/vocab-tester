@@ -48,9 +48,9 @@ def _create_hmm_tagger(
     B: Union[List[List[float]], ndarray],  # type: ignore[type-arg]
     pi: Union[List[float], ndarray],  # type: ignore[type-arg]
 ) -> HiddenMarkovModelTagger: ...
-def _market_hmm_example() -> (
-    Tuple[HiddenMarkovModelTagger, List[str], List[str]]
-): ...
+def _market_hmm_example() -> Tuple[
+    HiddenMarkovModelTagger, List[str], List[str]
+]: ...
 def _ninf_array(shape: Tuple[int, int]) -> ndarray: ...  # type: ignore[type-arg]
 def logsumexp2(arr: ndarray) -> float64: ...  # type: ignore[type-arg]
 
