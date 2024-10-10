@@ -32,7 +32,7 @@ jobs:
 
       - name: Cache tox folder
         id: cache-tox
-        uses: actions/cache@v4.1.0
+        uses: actions/cache@v4.1.1
         with:
           path: ".tox"
           key: ${{ runner.os }}-${{ matrix.python-version }}-${{ hashFiles('pyproject.toml','tox.ini','poetry.lock') }}
