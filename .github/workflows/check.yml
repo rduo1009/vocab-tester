@@ -30,12 +30,12 @@ jobs:
       - name: Checkout LFS objects
         run: git lfs checkout
 
-      - name: Cache tox folder
-        id: cache-tox
-        uses: actions/cache@v4.1.1
-        with:
-          path: ".tox"
-          key: ${{ runner.os }}-${{ matrix.python-version }}-${{ hashFiles('pyproject.toml','tox.ini','poetry.lock') }}
+      # - name: Cache tox folder
+      #   id: cache-tox
+      #   uses: actions/cache@v4.1.1
+      #   with:
+      #     path: ".tox"
+      #     key: ${{ runner.os }}-${{ matrix.python-version }}-${{ hashFiles('pyproject.toml','tox.ini','poetry.lock') }}
 
       - name: Install LLVM and Clang
         uses: KyleMayes/install-llvm-action@v2.0.5
@@ -63,7 +63,7 @@ jobs:
         run: python -m pip install tox-gh>=1.2
 
       - name: Setup test suite
-        if: steps.cache-tox.outputs.cache-hit != 'true'
+        # if: steps.cache-tox.outputs.cache-hit != 'true'
         run: tox -vv --notest
 
       - name: Run test suite
