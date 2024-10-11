@@ -294,7 +294,6 @@ def _generate_typein_engtolat(
         tuple(
             transfero.words.find_inflection(
                 word=raw_meaning,
-                pos=type(chosen_word),
                 components=ending_components,
             )
         )
@@ -454,7 +453,6 @@ def _generate_typein_lattoeng(
             inflected_meanings.update(
                 transfero.words.find_inflection(
                     word=meaning,
-                    pos=type(chosen_word),
                     components=ending_components,
                 )
             )
@@ -464,7 +462,6 @@ def _generate_typein_lattoeng(
                 tuple(
                     transfero.words.find_inflection(
                         word=main_meaning,
-                        pos=type(chosen_word),
                         components=ending_components,
                     )
                 )

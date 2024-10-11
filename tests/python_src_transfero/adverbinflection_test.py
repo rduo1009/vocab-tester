@@ -4,7 +4,7 @@ import sys  # noqa: E401
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 import pytest
 from python_src.accido.misc import Case, Degree, EndingComponents, Gender, Number
-from python_src.transfero.words import find_adverb_inflections
+from python_src.transfero.adverb_inflection import find_adverb_inflections, find_main_adverb_inflection
 
 
 def test_invalid_type():
@@ -24,3 +24,10 @@ def test_adverb_inflection():
     assert find_adverb_inflections(word, EndingComponents(degree=Degree.POSITIVE)) == {"happily"}
     assert find_adverb_inflections(word, EndingComponents(degree=Degree.COMPARATIVE)) == {"more happily"}
     assert find_adverb_inflections(word, EndingComponents(degree=Degree.SUPERLATIVE)) == {"most happily", "very happily", "extremely happily", "rather happily", "too happily", "quite happily"}
+
+
+def test_adverb_main_inflection():
+    word = "happily"
+    assert find_main_adverb_inflection(word, EndingComponents(degree=Degree.POSITIVE)) == "happily"
+    assert find_main_adverb_inflection(word, EndingComponents(degree=Degree.COMPARATIVE)) == "more happily"
+    assert find_main_adverb_inflection(word, EndingComponents(degree=Degree.SUPERLATIVE)) == "most happily"

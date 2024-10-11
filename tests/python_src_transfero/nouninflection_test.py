@@ -4,7 +4,7 @@ import sys  # noqa: E401
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 import pytest
 from python_src.accido.misc import Case, Degree, EndingComponents, Gender, Number
-from python_src.transfero.words import find_noun_inflections
+from python_src.transfero.noun_inflection import find_main_noun_inflection, find_noun_inflections
 
 
 def test_invalid_type():
@@ -68,6 +68,61 @@ class TestNounInflection:
 
         assert find_noun_inflections(word, EndingComponents(case=Case.GENITIVE, number=Number.PLURAL)) == {"of the apples", "apples'"}
         assert find_noun_inflections(word, EndingComponents(case=Case.DATIVE, number=Number.PLURAL)) == {"for the apples", "for apples", "to the apples", "to apples"}
+
+    def test_main_noun_inflections_1(self):
+        word = "house"
+        assert find_main_noun_inflection(word, EndingComponents(case=Case.NOMINATIVE, number=Number.SINGULAR)) == "house"
+        assert find_main_noun_inflection(word, EndingComponents(case=Case.VOCATIVE, number=Number.SINGULAR)) == "house"
+        assert find_main_noun_inflection(word, EndingComponents(case=Case.ACCUSATIVE, number=Number.SINGULAR)) == "house"
+        assert find_main_noun_inflection(word, EndingComponents(case=Case.ABLATIVE, number=Number.SINGULAR)) == "by the house"
+
+        assert find_main_noun_inflection(word, EndingComponents(case=Case.GENITIVE, number=Number.SINGULAR)) == "of the house"
+        assert find_main_noun_inflection(word, EndingComponents(case=Case.DATIVE, number=Number.SINGULAR)) == "for the house"
+
+        assert find_main_noun_inflection(word, EndingComponents(case=Case.NOMINATIVE, number=Number.PLURAL)) == "houses"
+        assert find_main_noun_inflection(word, EndingComponents(case=Case.VOCATIVE, number=Number.PLURAL)) == "houses"
+        assert find_main_noun_inflection(word, EndingComponents(case=Case.ACCUSATIVE, number=Number.PLURAL)) == "houses"
+        assert find_main_noun_inflection(word, EndingComponents(case=Case.ABLATIVE, number=Number.PLURAL)) == "by the houses"
+
+        assert find_main_noun_inflection(word, EndingComponents(case=Case.GENITIVE, number=Number.PLURAL)) == "of the houses"
+        assert find_main_noun_inflection(word, EndingComponents(case=Case.DATIVE, number=Number.PLURAL)) == "for the houses"
+
+    def test_main_noun_inflections_2(self):
+        word = "cactus"
+
+        assert find_main_noun_inflection(word, EndingComponents(case=Case.NOMINATIVE, number=Number.SINGULAR)) == "cactus"
+        assert find_main_noun_inflection(word, EndingComponents(case=Case.ACCUSATIVE, number=Number.SINGULAR)) == "cactus"
+        assert find_main_noun_inflection(word, EndingComponents(case=Case.VOCATIVE, number=Number.SINGULAR)) == "cactus"
+        assert find_main_noun_inflection(word, EndingComponents(case=Case.ABLATIVE, number=Number.SINGULAR)) == "by the cactus"
+        assert find_main_noun_inflection(word, EndingComponents(case=Case.GENITIVE, number=Number.SINGULAR)) == "of the cactus"
+        assert find_main_noun_inflection(word, EndingComponents(case=Case.DATIVE, number=Number.SINGULAR)) == "for the cactus"
+
+        assert find_main_noun_inflection(word, EndingComponents(case=Case.NOMINATIVE, number=Number.PLURAL)) == "cacti"
+        assert find_main_noun_inflection(word, EndingComponents(case=Case.ACCUSATIVE, number=Number.PLURAL)) == "cacti"
+        assert find_main_noun_inflection(word, EndingComponents(case=Case.VOCATIVE, number=Number.PLURAL)) == "cacti"
+        assert find_main_noun_inflection(word, EndingComponents(case=Case.ABLATIVE, number=Number.PLURAL)) == "by the cacti"
+
+        assert find_main_noun_inflection(word, EndingComponents(case=Case.GENITIVE, number=Number.PLURAL)) == "of the cacti"
+        assert find_main_noun_inflection(word, EndingComponents(case=Case.DATIVE, number=Number.PLURAL)) == "for the cacti"
+
+    def test_main_noun_inflections_3(self):
+        word = "apple"
+
+        assert find_main_noun_inflection(word, EndingComponents(case=Case.NOMINATIVE, number=Number.SINGULAR)) == "apple"
+        assert find_main_noun_inflection(word, EndingComponents(case=Case.VOCATIVE, number=Number.SINGULAR)) == "apple"
+        assert find_main_noun_inflection(word, EndingComponents(case=Case.ACCUSATIVE, number=Number.SINGULAR)) == "apple"
+        assert find_main_noun_inflection(word, EndingComponents(case=Case.ABLATIVE, number=Number.SINGULAR)) == "by the apple"
+
+        assert find_main_noun_inflection(word, EndingComponents(case=Case.GENITIVE, number=Number.SINGULAR)) == "of the apple"
+        assert find_main_noun_inflection(word, EndingComponents(case=Case.DATIVE, number=Number.SINGULAR)) == "for the apple"
+
+        assert find_main_noun_inflection(word, EndingComponents(case=Case.NOMINATIVE, number=Number.PLURAL)) == "apples"
+        assert find_main_noun_inflection(word, EndingComponents(case=Case.VOCATIVE, number=Number.PLURAL)) == "apples"
+        assert find_main_noun_inflection(word, EndingComponents(case=Case.ACCUSATIVE, number=Number.PLURAL)) == "apples"
+        assert find_main_noun_inflection(word, EndingComponents(case=Case.ABLATIVE, number=Number.PLURAL)) == "by the apples"
+
+        assert find_main_noun_inflection(word, EndingComponents(case=Case.GENITIVE, number=Number.PLURAL)) == "of the apples"
+        assert find_main_noun_inflection(word, EndingComponents(case=Case.DATIVE, number=Number.PLURAL)) == "for the apples"
 
 
 def test_pronoun_inflections():
