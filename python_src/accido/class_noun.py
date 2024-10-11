@@ -114,39 +114,35 @@ class Noun(_Word):
         # The ordering of this is strange because
         # e.g. ending -ei ends in 'i' as well as 'ei'
         # so 5th declension check must come before 2nd declension check, etc.
-        if self.genitive[-2:] == "ei":
+        if self.genitive.endswith("ei"):
             self.declension = 5
             self._stem = self.genitive[:-2]  # diei > di-
-        elif self.genitive[-2:] == "ae":
+        elif self.genitive.endswith("ae"):
             self.declension = 1
             self._stem = self.genitive[:-2]  # puellae -> puell-
-        elif self.genitive[-1:] == "i":
+        elif self.genitive.endswith("i"):
             self.declension = 2
             self._stem = self.genitive[:-1]  # servi -> serv-
-        elif self.genitive[-2:] == "is":
+        elif self.genitive.endswith("is"):
             self.declension = 3
             self._stem = self.genitive[:-2]  # canis -> can-
-        elif self.genitive[-2:] == "us":
+        elif self.genitive.endswith("us"):
             self.declension = 4
             self._stem = self.genitive[:-2]  # manus -> man-
 
-        elif self.genitive[-3:] == "uum":
+        elif self.genitive.endswith("uum"):
             self.declension = 4
             self._stem = self.genitive[:-3]  # manuum -> man-
             self.plurale_tantum = True
-        elif self.genitive[-4:] == "arum":
+        elif self.genitive.endswith("arum"):
             self.declension = 1
             self._stem = self.genitive[:-4]  # puellarum -> puell-
             self.plurale_tantum = True
-        elif self.genitive[-4:] == "orum":
+        elif self.genitive.endswith("orum"):
             self.declension = 2
             self._stem = self.genitive[:-4]  # servorum -> serv-
             self.plurale_tantum = True
-        # elif self.genitive[-4:] == "erum":
-        #     self.declension = 5
-        #     self._stem = self.genitive[:-4]  # dierum > di-
-        #     self.plurale_tantum = True
-        elif self.genitive[-2:] == "um":
+        elif self.genitive.endswith("um"):
             self.declension = 3
             self._stem = self.genitive[:-2]  # canum -> can-
             self.plurale_tantum = True

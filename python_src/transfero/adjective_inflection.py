@@ -107,7 +107,7 @@ def _inflect_lemma(lemma: str, degree: Degree) -> tuple[str, set[str]]:
                 lemma, "RBR"
             )
             return (
-                comparatives[0] if not not_comparable else f"more {lemma}",
+                f"more {lemma}" if not_comparable else comparatives[0],
                 {*comparatives, f"more {lemma}"},
             )
         case Degree.SUPERLATIVE:
@@ -115,7 +115,7 @@ def _inflect_lemma(lemma: str, degree: Degree) -> tuple[str, set[str]]:
                 lemma, "RBS"
             )
             return (
-                superlatives[0] if not not_comparable else f"most {lemma}",
+                f"most {lemma}" if not_comparable else superlatives[0],
                 {
                     *superlatives,
                     f"most {lemma}",

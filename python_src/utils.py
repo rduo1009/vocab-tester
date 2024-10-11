@@ -5,20 +5,20 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from collections.abc import Iterable
 
 
-def compare(first: Iterable[Any], second: Iterable[Any]) -> bool:
+def compare[T](first: Iterable[T], second: Iterable[T]) -> bool:
     """Compares two iterables.
 
     Parameters
     ----------
-    first : Iterable[Any]
+    first : Iterable[T]
         The first iterable to compare.
-    second : Iterable[Any]
+    second : Iterable[T]
         The second iterable to compare.
 
     Returns
@@ -30,7 +30,7 @@ def compare(first: Iterable[Any], second: Iterable[Any]) -> bool:
     -----
     Code taken from https://stackoverflow.com/a/7829388
     """
-    comparison = list(second)  # make a mutable copy
+    comparison: list[T] = list(second)  # make a mutable copy
     try:
         for elem in first:
             comparison.remove(elem)

@@ -94,12 +94,12 @@ class Verb(_Word):
         self._first = self.present
         self.conjugation: Conjugation
 
-        if self.present[-1:] != "o":
+        if not self.present.endswith("o"):
             raise InvalidInputError(
                 f"Invalid present form: '{self.present}' (must end in '-o')",
             )
 
-        if self.perfect[-1:] != "i":
+        if not self.perfect.endswith("i"):
             raise InvalidInputError(
                 f"Invalid perfect form: '{self.perfect}' (must end in '-i')",
             )

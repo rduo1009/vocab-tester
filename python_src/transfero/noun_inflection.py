@@ -117,13 +117,12 @@ def _inflect_lemma(
             pluralinflect.classical(all=True)
             classical_plural: str = pluralinflect.plural_noun(lemma)
             pluralinflect.classical(all=False)
+            base_forms.update({normal_plural, classical_plural})
 
             # If the noun has a classical plural form, then that is used,
             # but if it doesn't then classical_plural is just the normal
             # plural
             best_form = classical_plural
-
-            base_forms.update({normal_plural, classical_plural})
 
     match case:
         case Case.NOMINATIVE | Case.VOCATIVE | Case.ACCUSATIVE:

@@ -52,39 +52,39 @@ def find_inflection(
         case accido.endings.Adjective:
             if components.subtype == "adverb":
                 return (
-                    find_adverb_inflections(adj_to_adv(word), components)
-                    if not main
-                    else find_main_adverb_inflection(word, components)
+                    find_main_adverb_inflection(word, components)
+                    if main
+                    else find_adverb_inflections(adj_to_adv(word), components)
                 )
             return (
-                find_adjective_inflections(word, components)
-                if not main
-                else find_main_adjective_inflection(word, components)
+                find_main_adjective_inflection(word, components)
+                if main
+                else find_adjective_inflections(word, components)
             )
 
         case accido.endings.Noun:
             return (
-                find_noun_inflections(word, components)
-                if not main
-                else find_main_noun_inflection(word, components)
+                find_main_noun_inflection(word, components)
+                if main
+                else find_noun_inflections(word, components)
             )
 
         case accido.endings.Verb:
             return (
-                find_verb_inflections(word, components)
-                if not main
-                else find_main_verb_inflection(word, components)
+                find_main_verb_inflection(word, components)
+                if main
+                else find_verb_inflections(word, components)
             )
 
         case accido.endings.Pronoun:
             return (
-                find_noun_inflections(word, components)
-                if not main
-                else find_main_noun_inflection(word, components)
+                find_main_noun_inflection(word, components)
+                if main
+                else find_noun_inflections(word, components)
             )
 
         case accido.endings.RegularWord:
-            return {word} if not main else word
+            return word if main else {word}
 
         case _:
             raise ValueError(
