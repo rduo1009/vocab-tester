@@ -144,7 +144,7 @@ def read_vocab_dump(filename: Path) -> VocabList:
         )
 
     raw_data = pickle.loads(pickled_data)
-    if isinstance(raw_data, VocabList):  # type: ignore[comparison-overlap] # mypy cannot recognise this
+    if isinstance(raw_data, VocabList):
         if raw_data.version == src.__version__:
             return raw_data
         warnings.warn(
