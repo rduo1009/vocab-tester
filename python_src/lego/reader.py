@@ -47,14 +47,14 @@ def _regenerate_vocab_list(vocab_list: VocabList) -> VocabList:
     new_vocab: list[accido.endings._Word] = []
 
     for word in vocab_list.vocab:
-        if type(word) is accido.endings.RegularWord:
+        if isinstance(word, accido.endings.RegularWord):
             new_vocab.append(
                 accido.endings.RegularWord(
                     word=word.word,
                     meaning=word.meaning,
                 ),
             )
-        elif type(word) is accido.endings.Verb:
+        elif isinstance(word, accido.endings.Verb):
             new_vocab.append(
                 accido.endings.Verb(
                     present=word.present,
@@ -64,7 +64,7 @@ def _regenerate_vocab_list(vocab_list: VocabList) -> VocabList:
                     meaning=word.meaning,
                 ),
             )
-        elif type(word) is accido.endings.Noun:
+        elif isinstance(word, accido.endings.Noun):
             new_vocab.append(
                 accido.endings.Noun(
                     nominative=word.nominative,
@@ -73,7 +73,7 @@ def _regenerate_vocab_list(vocab_list: VocabList) -> VocabList:
                     gender=word.gender,
                 ),
             )
-        elif type(word) is accido.endings.Adjective:
+        elif isinstance(word, accido.endings.Adjective):
             new_vocab.append(
                 accido.endings.Adjective(
                     *word._principal_parts,  # noqa: SLF001
@@ -82,7 +82,7 @@ def _regenerate_vocab_list(vocab_list: VocabList) -> VocabList:
                     meaning=word.meaning,
                 ),
             )
-        elif type(word) is accido.endings.Pronoun:
+        elif isinstance(word, accido.endings.Pronoun):
             new_vocab.append(
                 accido.endings.Pronoun(
                     pronoun=word.pronoun,
@@ -90,7 +90,7 @@ def _regenerate_vocab_list(vocab_list: VocabList) -> VocabList:
                 ),
             )
         else:  # pragma: no cover # this should never happen
-            raise ValueError(f"Unknown word type: {type(word)}")  # noqa: DOC501
+            raise TypeError(f"Unknown word type: {type(word)}")  # noqa: DOC501
 
     return VocabList(new_vocab)
 
@@ -144,7 +144,7 @@ def read_vocab_dump(filename: Path) -> VocabList:
         )
 
     raw_data = pickle.loads(pickled_data)
-    if type(raw_data) is VocabList:  # type: ignore[comparison-overlap] # mypy cannot recognise this
+    if isinstance(raw_data, VocabList):  # type: ignore[comparison-overlap] # mypy cannot recognise this
         if raw_data.version == src.__version__:
             return raw_data
         warnings.warn(
