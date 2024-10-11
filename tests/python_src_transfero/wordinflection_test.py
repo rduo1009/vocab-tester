@@ -3,37 +3,54 @@ import sys  # noqa: E401
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
-import pytest
 from python_src import accido
 from python_src.accido.misc import Case, Degree, Gender, Mood, Number, Tense, Voice
 from python_src.transfero.words import find_inflection
 
 
-def test_wordinflection_errors():
-    with pytest.raises(ValueError) as error:
-        find_inflection("test", accido.endings._Word, accido.misc.EndingComponents(tense=Tense.PRESENT, voice=Voice.ACTIVE, mood=Mood.INFINITIVE))  # type: ignore[type-abstract]
-    assert str(error.value) == "Unknown part of speech: <class 'python_src.accido.class_word._Word'>"
-
-
 def test_wordinflection_adjective():
-    assert find_inflection("happy", accido.endings.Adjective, accido.misc.EndingComponents(case=Case.NOMINATIVE, gender=Gender.MASCULINE, number=Number.SINGULAR, degree=Degree.COMPARATIVE)) == {"happier", "more happy"}
+    assert find_inflection("happy", accido.misc.EndingComponents(case=Case.NOMINATIVE, gender=Gender.MASCULINE, number=Number.SINGULAR, degree=Degree.COMPARATIVE)) == {"happier", "more happy"}
 
 
 def test_wordinflection_adverb():
-    assert find_inflection("sad", accido.endings.Adjective, accido.misc.EndingComponents(degree=Degree.POSITIVE)) == {"sadly"}
+    assert find_inflection("sad", accido.misc.EndingComponents(degree=Degree.POSITIVE)) == {"sadly"}
 
 
 def test_wordinflection_noun():
-    assert find_inflection("house", accido.endings.Noun, accido.misc.EndingComponents(case=Case.DATIVE, number=Number.PLURAL)) == {"to houses", "to the houses", "for houses", "for the houses"}
+    assert find_inflection("house", accido.misc.EndingComponents(case=Case.DATIVE, number=Number.PLURAL)) == {"to houses", "to the houses", "for houses", "for the houses"}
 
 
 def test_wordinflection_verb():
-    assert find_inflection("teach", accido.endings.Verb, accido.misc.EndingComponents(tense=Tense.IMPERFECT, voice=Voice.ACTIVE, mood=Mood.INDICATIVE, number=Number.PLURAL, person=1)) == {"we were teaching"}
+    assert find_inflection("teach", accido.misc.EndingComponents(tense=Tense.IMPERFECT, voice=Voice.ACTIVE, mood=Mood.INDICATIVE, number=Number.PLURAL, person=1)) == {"we were teaching"}
 
 
 def test_wordinflection_pronoun():
-    assert find_inflection("this", accido.endings.Pronoun, accido.misc.EndingComponents(case=Case.NOMINATIVE, number=Number.SINGULAR, gender=Gender.MASCULINE)) == {"this"}
+    assert find_inflection("this", accido.misc.EndingComponents(case=Case.NOMINATIVE, number=Number.SINGULAR, gender=Gender.MASCULINE)) == {"this"}
 
 
 def test_wordinflection_regularword():
-    assert find_inflection("in", accido.endings.RegularWord, accido.misc.EndingComponents()) == {"in"}
+    assert find_inflection("in", accido.misc.EndingComponents()) == {"in"}
+
+
+def test_mainwordinflection_adjective():
+    assert find_inflection("happy", accido.misc.EndingComponents(case=Case.NOMINATIVE, gender=Gender.MASCULINE, number=Number.SINGULAR, degree=Degree.COMPARATIVE), main=True) == "happier"
+
+
+def test_mainwordinflection_adverb():
+    assert find_inflection("sadly", accido.misc.EndingComponents(degree=Degree.POSITIVE), main=True) == "sadly"
+
+
+def test_mainwordinflection_noun():
+    assert find_inflection("house", accido.misc.EndingComponents(case=Case.DATIVE, number=Number.PLURAL), main=True) == "for the houses"
+
+
+def test_mainwordinflection_verb():
+    assert find_inflection("teach", accido.misc.EndingComponents(tense=Tense.IMPERFECT, voice=Voice.ACTIVE, mood=Mood.INDICATIVE, number=Number.PLURAL, person=1), main=True) == "we were teaching"
+
+
+def test_mainwordinflection_pronoun():
+    assert find_inflection("this", accido.misc.EndingComponents(case=Case.NOMINATIVE, number=Number.SINGULAR, gender=Gender.MASCULINE), main=True) == "this"
+
+
+def test_mainwordinflection_regularword():
+    assert find_inflection("in", accido.misc.EndingComponents(), main=True) == "in"
