@@ -63,7 +63,7 @@ def find_verb_inflections(
     _verify_verb_inflections(components)
 
     if components.mood == Mood.PARTICIPLE:
-        return _find_participle_inflections(verb, components)
+        return _find_participle_inflections(verb, components)[1]
 
     try:
         lemmas: tuple[str, ...] = lemminflect.getLemma(verb, "VERB")
@@ -80,7 +80,7 @@ def find_verb_inflections(
                 components.mood,
                 components.number,
                 components.person,
-            )
+            )[1]
     else:
         for lemma in lemmas:
             inflections |= _find_lemma(
@@ -88,9 +88,61 @@ def find_verb_inflections(
                 components.tense,
                 components.voice,
                 components.mood,
-            )
+            )[1]
 
     return inflections
+
+
+def find_main_verb_inflection(
+    verb: str, components: accido.misc.EndingComponents
+) -> str:
+    """Find the main inflection of an English verb.
+
+    Parameters.
+    ----------
+    verb : str
+        The verb to inflect.
+    components : EndingComponents
+        The components of the ending.
+
+    Returns
+    -------
+    str
+        The main inflection of the verb.
+
+    Raises
+    ------
+    InvalidWordError
+        If the word is not a valid English verb.
+    ValueError
+        If the input (other than the word itself) is invalid.
+    """
+    _verify_verb_inflections(components)
+
+    if components.mood == Mood.PARTICIPLE:
+        return _find_participle_inflections(verb, components)[0]
+
+    try:
+        lemma: str = lemminflect.getLemma(verb, "VERB")[0]
+    except KeyError as e:  # pragma: no cover
+        raise InvalidWordError(f"Word {verb} is not a verb") from e
+
+    if hasattr(components, "number") and hasattr(components, "person"):
+        return _find_lemma(
+            lemma,
+            components.tense,
+            components.voice,
+            components.mood,
+            components.number,
+            components.person,
+        )[0]
+
+    return _find_lemma(
+        lemma,
+        components.tense,
+        components.voice,
+        components.mood,
+    )[0]
 
 
 def _find_lemma(  # noqa: PLR0917
@@ -100,7 +152,7 @@ def _find_lemma(  # noqa: PLR0917
     mood: Mood,
     number: Number | None = None,
     person: Person | None = None,
-) -> set[str]:
+) -> tuple[str, set[str]]:
     match (tense, voice, mood):
         case (Tense.PRESENT, Voice.ACTIVE, Mood.INDICATIVE):
             assert number is not None
@@ -159,52 +211,67 @@ def _find_preactind_inflections(  # type: ignore[return] # mypy cannot manage tu
     lemma: str,
     number: Number,
     person: Person,
-) -> set[str]:
+) -> tuple[str, set[str]]:
     present_nonthird: str = lemminflect.getInflection(lemma, "VBP")[0]
     present_third: str = lemminflect.getInflection(lemma, "VBZ")[0]
     present_participle: str = lemminflect.getInflection(lemma, "VBG")[0]
 
     match (number, person):
         case (Number.SINGULAR, 1):
-            return {
+            return (
                 f"I {present_nonthird}",
-                f"I am {present_participle}",
-            }
+                {
+                    f"I {present_nonthird}",
+                    f"I am {present_participle}",
+                },
+            )
 
         case (Number.PLURAL, 1):
-            return {
+            return (
                 f"we {present_nonthird}",
-                f"we are {present_participle}",
-            }
+                {
+                    f"we {present_nonthird}",
+                    f"we are {present_participle}",
+                },
+            )
 
         case (Number.SINGULAR, 2) | (Number.PLURAL, 2):
-            return {
+            return (
                 f"you {present_nonthird}",
-                f"you are {present_participle}",
-            }
+                {
+                    f"you {present_nonthird}",
+                    f"you are {present_participle}",
+                },
+            )
 
         case (Number.SINGULAR, 3):
-            return {
+            return (
                 f"he {present_third}",
-                f"he is {present_participle}",
-                f"she {present_third}",
-                f"she is {present_participle}",
-                f"it {present_third}",
-                f"it is {present_participle}",
-            }
+                {
+                    f"he {present_third}",
+                    f"he is {present_participle}",
+                    f"she {present_third}",
+                    f"she is {present_participle}",
+                    f"it {present_third}",
+                    f"it is {present_participle}",
+                },
+            )
 
         case (Number.PLURAL, 3):
-            return {
+            return (
                 f"they {present_nonthird}",
-                f"they are {present_participle}",
-            }
+                {
+                    f"they {present_nonthird}",
+                    f"they are {present_participle}",
+                },
+            )
 
 
 def _find_impactind_inflections(  # type: ignore[return] # mypy cannot manage tuple match
     lemma: str,
     number: Number,
     person: Person,
-) -> set[str]:
+) -> tuple[str, set[str]]:
     present_participle: str = lemminflect.getInflection(lemma, "VBG")[0]
 
     if lemma in STATIVE_VERBS:
@@ -212,126 +279,201 @@ def _find_impactind_inflections(  # type: ignore[return] # mypy cannot manage tu
 
         match (number, person):
             case (Number.SINGULAR, 1):
-                return {f"I {past}", f"I was {present_participle}"}
+                return (
+                    f"I {past}",
+                    {
+                        f"I {past}",
+                        f"I was {present_participle}",
+                    },
+                )
 
             case (Number.PLURAL, 1):
-                return {f"we {past}", f"we were {present_participle}"}
+                return (
+                    f"we {past}",
+                    {f"we {past}", f"we were {present_participle}"},
+                )
 
             case (Number.SINGULAR, 2) | (Number.PLURAL, 2):
-                return {f"you {past}", f"you were {present_participle}"}
+                return (
+                    f"you {past}",
+                    {f"you {past}", f"you were {present_participle}"},
+                )
 
             case (Number.SINGULAR, 3):
-                return {
+                return (
                     f"he {past}",
-                    f"he was {present_participle}",
-                    f"she {past}",
-                    f"she was {present_participle}",
-                    f"it {past}",
-                    f"it was {present_participle}",
-                }
+                    {
+                        f"he {past}",
+                        f"he was {present_participle}",
+                        f"she {past}",
+                        f"she was {present_participle}",
+                        f"it {past}",
+                        f"it was {present_participle}",
+                    },
+                )
 
             case (Number.PLURAL, 3):
-                return {f"they {past}", f"they were {present_participle}"}
-
+                return (
+                    f"they {past}",
+                    {f"they {past}", f"they were {present_participle}"},
+                )
     match (number, person):
         case (Number.SINGULAR, 1):
-            return {f"I was {present_participle}"}
+            return (
+                f"I was {present_participle}",
+                {f"I was {present_participle}"},
+            )
 
         case (Number.PLURAL, 1):
-            return {f"we were {present_participle}"}
+            return (
+                f"we were {present_participle}",
+                {f"we were {present_participle}"},
+            )
 
         case (Number.SINGULAR, 2) | (Number.PLURAL, 2):
-            return {f"you were {present_participle}"}
+            return (
+                f"you were {present_participle}",
+                {f"you were {present_participle}"},
+            )
 
         case (Number.SINGULAR, 3):
-            return {
+            return (
                 f"he was {present_participle}",
-                f"she was {present_participle}",
-                f"it was {present_participle}",
-            }
+                {
+                    f"he was {present_participle}",
+                    f"she was {present_participle}",
+                    f"it was {present_participle}",
+                },
+            )
 
         case (Number.PLURAL, 3):
-            return {f"they were {present_participle}"}
+            return (
+                f"they were {present_participle}",
+                {f"they were {present_participle}"},
+            )
 
 
 def _find_peractind_inflections(  # type: ignore[return] # mypy cannot manage tuple match
     lemma: str,
     number: Number,
     person: Person,
-) -> set[str]:
+) -> tuple[str, set[str]]:
     past = lemminflect.getInflection(lemma, "VBD")[0]
 
     match (number, person):
         case (Number.SINGULAR, 1):
-            return {f"I {past}", f"I have {past}", f"I did {lemma}"}
+            return (
+                f"I {past}",
+                {
+                    f"I {past}",
+                    f"I have {past}",
+                    f"I did {lemma}",
+                },
+            )
 
         case (Number.PLURAL, 1):
-            return {f"we {past}", f"we have {past}", f"we did {lemma}"}
+            return (
+                f"we {past}",
+                {
+                    f"we {past}",
+                    f"we have {past}",
+                    f"we did {lemma}",
+                },
+            )
 
         case (Number.SINGULAR, 2) | (Number.PLURAL, 2):
-            return {f"you {past}", f"you have {past}", f"you did {lemma}"}
+            return (
+                f"you {past}",
+                {
+                    f"you {past}",
+                    f"you have {past}",
+                    f"you did {lemma}",
+                },
+            )
 
         case (Number.SINGULAR, 3):
-            return {
+            return (
                 f"he {past}",
-                f"he has {past}",
-                f"he did {lemma}",
-                f"she {past}",
-                f"she has {past}",
-                f"she did {lemma}",
-                f"it {past}",
-                f"it has {past}",
-                f"it did {lemma}",
-            }
+                {
+                    f"he {past}",
+                    f"he has {past}",
+                    f"he did {lemma}",
+                    f"she {past}",
+                    f"she has {past}",
+                    f"she did {lemma}",
+                    f"it {past}",
+                    f"it has {past}",
+                    f"it did {lemma}",
+                },
+            )
 
         case (Number.PLURAL, 3):
-            return {f"they {past}", f"they have {past}", f"they did {lemma}"}
+            return (
+                f"they {past}",
+                {
+                    f"they {past}",
+                    f"they have {past}",
+                    f"they did {lemma}",
+                },
+            )
 
 
 def _find_plpactind_inflections(  # type: ignore[return] # mypy cannot manage tuple match
     lemma: str,
     number: Number,
     person: Person,
-) -> set[str]:
+) -> tuple[str, set[str]]:
     past_participle: str = lemminflect.getInflection(lemma, "VBN")[0]
 
     match (number, person):
         case (Number.SINGULAR, 1):
-            return {f"I had {past_participle}"}
+            return (f"I had {past_participle}", {f"I had {past_participle}"})
 
         case (Number.PLURAL, 1):
-            return {f"we had {past_participle}"}
+            return (f"we had {past_participle}", {f"we had {past_participle}"})
 
         case (Number.SINGULAR, 2) | (Number.PLURAL, 2):
-            return {f"you had {past_participle}"}
+            return (
+                f"you had {past_participle}",
+                {f"you had {past_participle}"},
+            )
 
         case (Number.SINGULAR, 3):
-            return {
+            return (
                 f"he had {past_participle}",
-                f"she had {past_participle}",
-                f"it had {past_participle}",
-            }
+                {
+                    f"he had {past_participle}",
+                    f"she had {past_participle}",
+                    f"it had {past_participle}",
+                },
+            )
 
         case (Number.PLURAL, 3):
-            return {f"they had {past_participle}"}
+            return (
+                f"they had {past_participle}",
+                {f"they had {past_participle}"},
+            )
 
 
 def _find_participle_inflections(
     verb: str,
     components: accido.misc.EndingComponents,
-) -> set[str]:
+) -> tuple[str, set[str]]:
     lemma: str = lemminflect.getLemma(verb, "NOUN")[0]
 
     match (components.tense, components.voice):
         case (Tense.PERFECT, Voice.PASSIVE):
             past_participle: str = lemminflect.getInflection(lemma, "VBN")[0]
-            return {f"having been {past_participle}"}
+            return (
+                f"having been {past_participle}",
+                {f"having been {past_participle}"},
+            )
 
         case (Tense.PRESENT, Voice.ACTIVE):
             present_participle: str = lemminflect.getInflection(lemma, "VBG")[
                 0
             ]
-            return {present_participle}
+            return (present_participle, {present_participle})
 
         case _:
             raise NotImplementedError(
@@ -340,9 +482,9 @@ def _find_participle_inflections(
             )
 
 
-def _find_preactinf_inflections(lemma: str) -> set[str]:
-    return {f"to {lemma}"}
+def _find_preactinf_inflections(lemma: str) -> tuple[str, set[str]]:
+    return (f"to {lemma}", {f"to {lemma}"})
 
 
-def _find_preipe_inflections(lemma: str) -> set[str]:
-    return {f"{lemma}"}
+def _find_preipe_inflections(lemma: str) -> tuple[str, set[str]]:
+    return (lemma, {lemma})

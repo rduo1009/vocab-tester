@@ -8,33 +8,38 @@ from __future__ import annotations
 from .. import accido
 from .adj_to_adv import adj_to_adv as adj_to_adv
 from .adjective_inflection import (
-    find_adjective_inflections as find_adjective_inflections,
+    find_adjective_inflections,
+    find_main_adjective_inflection,
 )
 from .adverb_inflection import (
-    find_adverb_inflections as find_adverb_inflections,
+    find_adverb_inflections,
+    find_main_adverb_inflection,
 )
-from .noun_inflection import find_noun_inflections as find_noun_inflections
-from .verb_inflection import find_verb_inflections as find_verb_inflections
+from .noun_inflection import find_main_noun_inflection, find_noun_inflections
+from .verb_inflection import find_main_verb_inflection, find_verb_inflections
 
 
 def find_inflection(
     word: str,
-    pos: type[accido.endings._Word],
     components: accido.misc.EndingComponents,
-) -> set[str]:
+    *,
+    main: bool = False,
+) -> set[str] | str:
     """Find the inflections of an English word.
 
     Parameters
     ----------
     word : str
         The word to inflect.
-    pos : type[accido.endings._Word]
-        The part of speech of the word
     components : accido.misc.EndingComponents
         The components of the word.
+    main : bool, optional = False
+        Whether to return the main inflection or all of the inflections.
 
     Returns
     -------
+    str
+        The main inflection of the word.
     set[str]
         The inflections of the word.
 
@@ -43,25 +48,45 @@ def find_inflection(
     ValueError
         If the part of speech is unknown. This should never happen.
     """
-    match pos:
+    match components.type:
         case accido.endings.Adjective:
             if components.subtype == "adverb":
-                return find_adverb_inflections(adj_to_adv(word), components)
-            return find_adjective_inflections(word, components)
+                return (
+                    find_adverb_inflections(adj_to_adv(word), components)
+                    if not main
+                    else find_main_adverb_inflection(word, components)
+                )
+            return (
+                find_adjective_inflections(word, components)
+                if not main
+                else find_main_adjective_inflection(word, components)
+            )
 
         case accido.endings.Noun:
-            return find_noun_inflections(word, components)
+            return (
+                find_noun_inflections(word, components)
+                if not main
+                else find_main_noun_inflection(word, components)
+            )
 
         case accido.endings.Verb:
-            return find_verb_inflections(word, components)
+            return (
+                find_verb_inflections(word, components)
+                if not main
+                else find_main_verb_inflection(word, components)
+            )
 
         case accido.endings.Pronoun:
-            return find_noun_inflections(word, components)
+            return (
+                find_noun_inflections(word, components)
+                if not main
+                else find_main_noun_inflection(word, components)
+            )
 
         case accido.endings.RegularWord:
-            return {word}
+            return {word} if not main else word
 
         case _:
             raise ValueError(
-                f"Unknown part of speech: {pos}"
+                f"Unknown part of speech: {components.type}"
             )  # should never happen
