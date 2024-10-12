@@ -54,3 +54,9 @@ def test_mainwordinflection_pronoun():
 
 def test_mainwordinflection_regularword():
     assert find_inflection("in", accido.misc.EndingComponents(), main=True) == "in"
+
+
+def test_mainwordinflection_nounlikepronoun():
+    components = accido.misc.EndingComponents(case=Case.NOMINATIVE, number=Number.SINGULAR, gender=Gender.MASCULINE)
+    components.subtype = "pronoun"
+    assert find_inflection("this", components, main=True) == "this"

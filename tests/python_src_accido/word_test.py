@@ -37,6 +37,6 @@ def test_find_same():
 
 def test_find_multipleendings():
     word = Noun(nominative="ego", genitive=None, gender=None, meaning="I")
-    assert word.find("nostrum") == [
-        EndingComponents(case=Case.GENITIVE, number=Number.PLURAL, string="genitive plural"),
-    ]
+    a = EndingComponents(case=Case.GENITIVE, number=Number.PLURAL, string="genitive plural")
+    a.subtype = "pronoun"
+    assert word.find("nostrum") == [a]

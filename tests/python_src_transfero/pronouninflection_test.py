@@ -89,3 +89,104 @@ class TestPronounInflection:
 
         assert find_main_pronoun_inflection(word, EndingComponents(case=Case.GENITIVE, number=Number.PLURAL, gender=Gender.MASCULINE)) == "of those"
         assert find_main_pronoun_inflection(word, EndingComponents(case=Case.DATIVE, number=Number.PLURAL, gender=Gender.MASCULINE)) == "for those"
+
+
+class TestNounlikePronounInflection:
+    def test_pronoun_inflections_1(self):
+        word = "I"
+
+        assert find_pronoun_inflections(word, EndingComponents(case=Case.NOMINATIVE, number=Number.SINGULAR)) == {"I"}
+        assert find_pronoun_inflections(word, EndingComponents(case=Case.VOCATIVE, number=Number.SINGULAR)) == {"I"}
+        assert find_pronoun_inflections(word, EndingComponents(case=Case.ACCUSATIVE, number=Number.SINGULAR)) == {"me"}
+        assert find_pronoun_inflections(word, EndingComponents(case=Case.GENITIVE, number=Number.SINGULAR)) == {"of me", "my"}
+        assert find_pronoun_inflections(word, EndingComponents(case=Case.DATIVE, number=Number.SINGULAR)) == {"for me", "to me"}
+        assert find_pronoun_inflections(word, EndingComponents(case=Case.ABLATIVE, number=Number.SINGULAR)) == {"me", "with me", "by me", "by means of me"}
+
+        assert find_pronoun_inflections(word, EndingComponents(case=Case.NOMINATIVE, number=Number.PLURAL)) == {"we"}
+        assert find_pronoun_inflections(word, EndingComponents(case=Case.VOCATIVE, number=Number.PLURAL)) == {"we"}
+        assert find_pronoun_inflections(word, EndingComponents(case=Case.ACCUSATIVE, number=Number.PLURAL)) == {"us"}
+        assert find_pronoun_inflections(word, EndingComponents(case=Case.GENITIVE, number=Number.PLURAL)) == {"of us", "our"}
+        assert find_pronoun_inflections(word, EndingComponents(case=Case.DATIVE, number=Number.PLURAL)) == {"for us", "to us"}
+        assert find_pronoun_inflections(word, EndingComponents(case=Case.ABLATIVE, number=Number.PLURAL)) == {"us", "with us", "by us", "by means of us"}
+
+    def test_main_pronoun_inflections_1(self):
+        word = "I"
+
+        assert find_main_pronoun_inflection(word, EndingComponents(case=Case.NOMINATIVE, number=Number.SINGULAR)) == "I"
+        assert find_main_pronoun_inflection(word, EndingComponents(case=Case.VOCATIVE, number=Number.SINGULAR)) == "I"
+        assert find_main_pronoun_inflection(word, EndingComponents(case=Case.ACCUSATIVE, number=Number.SINGULAR)) == "me"
+        assert find_main_pronoun_inflection(word, EndingComponents(case=Case.GENITIVE, number=Number.SINGULAR)) == "of me"
+        assert find_main_pronoun_inflection(word, EndingComponents(case=Case.DATIVE, number=Number.SINGULAR)) == "for me"
+        assert find_main_pronoun_inflection(word, EndingComponents(case=Case.ABLATIVE, number=Number.SINGULAR)) == "by me"
+
+        assert find_main_pronoun_inflection(word, EndingComponents(case=Case.NOMINATIVE, number=Number.PLURAL)) == "we"
+        assert find_main_pronoun_inflection(word, EndingComponents(case=Case.VOCATIVE, number=Number.PLURAL)) == "we"
+        assert find_main_pronoun_inflection(word, EndingComponents(case=Case.ACCUSATIVE, number=Number.PLURAL)) == "us"
+        assert find_main_pronoun_inflection(word, EndingComponents(case=Case.GENITIVE, number=Number.PLURAL)) == "of us"
+        assert find_main_pronoun_inflection(word, EndingComponents(case=Case.DATIVE, number=Number.PLURAL)) == "for us"
+        assert find_main_pronoun_inflection(word, EndingComponents(case=Case.ABLATIVE, number=Number.PLURAL)) == "by us"
+
+    def test_pronoun_inflections_2(self):
+        word = "you"
+
+        assert find_pronoun_inflections(word, EndingComponents(case=Case.NOMINATIVE, number=Number.SINGULAR)) == {"you"}
+        assert find_pronoun_inflections(word, EndingComponents(case=Case.VOCATIVE, number=Number.SINGULAR)) == {"you"}
+        assert find_pronoun_inflections(word, EndingComponents(case=Case.ACCUSATIVE, number=Number.SINGULAR)) == {"you"}
+        assert find_pronoun_inflections(word, EndingComponents(case=Case.GENITIVE, number=Number.SINGULAR)) == {"of you", "your"}
+        assert find_pronoun_inflections(word, EndingComponents(case=Case.DATIVE, number=Number.SINGULAR)) == {"for you", "to you"}
+        assert find_pronoun_inflections(word, EndingComponents(case=Case.ABLATIVE, number=Number.SINGULAR)) == {"you", "with you", "by you", "by means of you"}
+
+        assert find_pronoun_inflections(word, EndingComponents(case=Case.NOMINATIVE, number=Number.PLURAL)) == {"you"}
+        assert find_pronoun_inflections(word, EndingComponents(case=Case.VOCATIVE, number=Number.PLURAL)) == {"you"}
+        assert find_pronoun_inflections(word, EndingComponents(case=Case.ACCUSATIVE, number=Number.PLURAL)) == {"you"}
+        assert find_pronoun_inflections(word, EndingComponents(case=Case.GENITIVE, number=Number.PLURAL)) == {"of you", "your"}
+        assert find_pronoun_inflections(word, EndingComponents(case=Case.DATIVE, number=Number.PLURAL)) == {"for you", "to you"}
+        assert find_pronoun_inflections(word, EndingComponents(case=Case.ABLATIVE, number=Number.PLURAL)) == {"you", "with you", "by you", "by means of you"}
+
+    def test_main_pronoun_inflections_2(self):
+        word = "you"
+
+        assert find_main_pronoun_inflection(word, EndingComponents(case=Case.NOMINATIVE, number=Number.SINGULAR)) == "you"
+        assert find_main_pronoun_inflection(word, EndingComponents(case=Case.VOCATIVE, number=Number.SINGULAR)) == "you"
+        assert find_main_pronoun_inflection(word, EndingComponents(case=Case.ACCUSATIVE, number=Number.SINGULAR)) == "you"
+        assert find_main_pronoun_inflection(word, EndingComponents(case=Case.GENITIVE, number=Number.SINGULAR)) == "of you"
+        assert find_main_pronoun_inflection(word, EndingComponents(case=Case.DATIVE, number=Number.SINGULAR)) == "for you"
+        assert find_main_pronoun_inflection(word, EndingComponents(case=Case.ABLATIVE, number=Number.SINGULAR)) == "by you"
+
+        assert find_main_pronoun_inflection(word, EndingComponents(case=Case.NOMINATIVE, number=Number.PLURAL)) == "you"
+        assert find_main_pronoun_inflection(word, EndingComponents(case=Case.VOCATIVE, number=Number.PLURAL)) == "you"
+        assert find_main_pronoun_inflection(word, EndingComponents(case=Case.ACCUSATIVE, number=Number.PLURAL)) == "you"
+        assert find_main_pronoun_inflection(word, EndingComponents(case=Case.GENITIVE, number=Number.PLURAL)) == "of you"
+        assert find_main_pronoun_inflection(word, EndingComponents(case=Case.DATIVE, number=Number.PLURAL)) == "for you"
+        assert find_main_pronoun_inflection(word, EndingComponents(case=Case.ABLATIVE, number=Number.PLURAL)) == "by you"
+
+    def test_pronoun_inflections_3(self):
+        word = "oneself"
+
+        assert find_pronoun_inflections(word, EndingComponents(case=Case.ACCUSATIVE, number=Number.SINGULAR)) == {"oneself", "himself", "herself", "itself", "themself"}
+        assert find_pronoun_inflections(word, EndingComponents(case=Case.GENITIVE, number=Number.SINGULAR)) == {"of oneself", "one's", "of himself", "his", "of herself", "her", "of itself", "its", "of themself", "their"}
+        assert find_pronoun_inflections(word, EndingComponents(case=Case.DATIVE, number=Number.SINGULAR)) == {"for oneself", "for himself", "for herself", "for itself", "for themself", "to oneself", "to himself", "to herself", "to itself", "to themself"}
+        assert find_pronoun_inflections(word, EndingComponents(case=Case.ABLATIVE, number=Number.SINGULAR)) == {
+            "oneself", "himself", "herself", "itself", "themself",
+            "with oneself", "with himself", "with herself", "with itself", "with themself",
+            "by oneself", "by himself", "by herself", "by itself", "by themself",
+            "by means of oneself", "by means of himself", "by means of herself", "by means of itself", "by means of themself",
+        }  # fmt: skip
+
+        assert find_pronoun_inflections(word, EndingComponents(case=Case.ACCUSATIVE, number=Number.PLURAL)) == {"themselves"}
+        assert find_pronoun_inflections(word, EndingComponents(case=Case.GENITIVE, number=Number.PLURAL)) == {"of themselves", "their"}
+        assert find_pronoun_inflections(word, EndingComponents(case=Case.DATIVE, number=Number.PLURAL)) == {"for themselves", "to themselves"}
+        assert find_pronoun_inflections(word, EndingComponents(case=Case.ABLATIVE, number=Number.PLURAL)) == {"themselves", "with themselves", "by themselves", "by means of themselves"}
+
+    def test_main_pronoun_inflections_3(self):
+        word = "oneself"
+
+        assert find_main_pronoun_inflection(word, EndingComponents(case=Case.ACCUSATIVE, number=Number.SINGULAR)) == "oneself"
+        assert find_main_pronoun_inflection(word, EndingComponents(case=Case.GENITIVE, number=Number.SINGULAR)) == "of oneself"
+        assert find_main_pronoun_inflection(word, EndingComponents(case=Case.DATIVE, number=Number.SINGULAR)) == "for oneself"
+        assert find_main_pronoun_inflection(word, EndingComponents(case=Case.ABLATIVE, number=Number.SINGULAR)) == "by oneself"
+
+        assert find_main_pronoun_inflection(word, EndingComponents(case=Case.ACCUSATIVE, number=Number.PLURAL)) == "themselves"
+        assert find_main_pronoun_inflection(word, EndingComponents(case=Case.GENITIVE, number=Number.PLURAL)) == "of themselves"
+        assert find_main_pronoun_inflection(word, EndingComponents(case=Case.DATIVE, number=Number.PLURAL)) == "for themselves"
+        assert find_main_pronoun_inflection(word, EndingComponents(case=Case.ABLATIVE, number=Number.PLURAL)) == "by themselves"
