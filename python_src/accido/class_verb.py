@@ -6,7 +6,7 @@
 from __future__ import annotations
 
 from functools import total_ordering
-from typing import TYPE_CHECKING, cast
+from typing import TYPE_CHECKING
 
 from .class_word import _Word
 from .edge_cases import check_io_verb, find_irregular_endings
@@ -18,10 +18,10 @@ from .misc import (
     Gender,
     Mood,
     Number,
-    Person,
     Tense,
     Voice,
 )
+from .type_aliases import Person, is_person
 
 if TYPE_CHECKING:
     from .type_aliases import Conjugation, Ending, Endings, Meaning
@@ -594,9 +594,8 @@ class Verb(_Word):
             return output
 
         if len(key) == 13:
-            # ideally the assertion would be enough, but it doesn't work
-            person_value = cast(Person, int(key[12]))
-            assert person_value in {1, 2, 3}
+            person_value = int(key[12])
+            assert is_person(person_value)
 
             output = EndingComponents(
                 tense=Tense(key[1:4]),
