@@ -307,7 +307,7 @@ class Noun(_Word):
 
         return self.endings.get(f"N{short_case}{short_number}")
 
-    def _create_namespace(self, key: str) -> EndingComponents:
+    def _create_namespace(self, key: str) -> EndingComponents:  # type: ignore[override]
         output: EndingComponents = EndingComponents(
             case=Case(key[1:4]),
             number=Number(key[4:6]),
