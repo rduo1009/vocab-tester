@@ -41,7 +41,7 @@ jobs:
         if: contains(matrix.os, 'ubuntu')
         run: |
           sudo apt-get update
-          sudo apt-get install -y libtinfo6
+          sudo apt-get install -y libncurses5
 
       - name: Compile cpp code
         run: clang++ -shared -fPIC -o python_src/lego/libkey.so python_src/lego/key/key.cpp
