@@ -38,7 +38,7 @@ def find_pronoun_inflections(
     ValueError
         If the input (other than the word itself) is invalid.
     """
-    if components.type is not accido.endings.Pronoun:
+    if components.type not in {accido.endings.Noun, accido.endings.Pronoun}:
         raise ValueError(f"Invalid type: '{components.type}'")
 
     return set(_inflect_lemma(pronoun, components.case, components.number))
@@ -71,7 +71,7 @@ def find_main_pronoun_inflection(
     ValueError
         If the input (other than the word itself) is invalid.
     """
-    if components.type is not accido.endings.Pronoun:
+    if components.type not in {accido.endings.Noun, accido.endings.Pronoun}:
         raise ValueError(f"Invalid type: '{components.type}'")
 
     return _inflect_lemma(pronoun, components.case, components.number)[0]
@@ -86,8 +86,8 @@ def _inflect_lemma(lemma: str, case: Case, number: Number) -> tuple[str, ...]:
         ) from e
 
 
-type Inflections = dict[tuple[Case, Number], tuple[str, ...]]
-PRONOUNS: Final[dict[str, Inflections]] = {
+type _Inflections = dict[tuple[Case, Number], tuple[str, ...]]
+PRONOUNS: Final[dict[str, _Inflections]] = {
     "this": {
         (Case.NOMINATIVE, Number.SINGULAR): ("this",),
         (Case.NOMINATIVE, Number.PLURAL): ("these",),
@@ -146,6 +146,133 @@ PRONOUNS: Final[dict[str, Inflections]] = {
             "by means of those",
             "with those",
             "those",
+        ),
+    },
+    "I": {
+        (Case.NOMINATIVE, Number.SINGULAR): ("I",),
+        (Case.NOMINATIVE, Number.PLURAL): ("we",),
+        (Case.VOCATIVE, Number.SINGULAR): ("I",),
+        (Case.VOCATIVE, Number.PLURAL): ("we",),
+        (Case.ACCUSATIVE, Number.SINGULAR): ("me",),
+        (Case.ACCUSATIVE, Number.PLURAL): ("us",),
+        (Case.GENITIVE, Number.SINGULAR): ("of me", "my"),
+        (Case.GENITIVE, Number.PLURAL): ("of us", "our"),
+        (Case.DATIVE, Number.SINGULAR): (
+            "for me",
+            "to me",
+        ),
+        (Case.DATIVE, Number.PLURAL): (
+            "for us",
+            "to us",
+        ),
+        (Case.ABLATIVE, Number.SINGULAR): (
+            "by me",
+            "by means of me",
+            "with me",
+            "me",
+        ),
+        (Case.ABLATIVE, Number.PLURAL): (
+            "by us",
+            "by means of us",
+            "with us",
+            "us",
+        ),
+    },
+    "you": {
+        (Case.NOMINATIVE, Number.SINGULAR): ("you",),
+        (Case.NOMINATIVE, Number.PLURAL): ("you",),
+        (Case.VOCATIVE, Number.SINGULAR): ("you",),
+        (Case.VOCATIVE, Number.PLURAL): ("you",),
+        (Case.ACCUSATIVE, Number.SINGULAR): ("you",),
+        (Case.ACCUSATIVE, Number.PLURAL): ("you",),
+        (Case.GENITIVE, Number.SINGULAR): ("of you", "your"),
+        (Case.GENITIVE, Number.PLURAL): ("of you", "your"),
+        (Case.DATIVE, Number.SINGULAR): (
+            "for you",
+            "to you",
+        ),
+        (Case.DATIVE, Number.PLURAL): (
+            "for you",
+            "to you",
+        ),
+        (Case.ABLATIVE, Number.SINGULAR): (
+            "by you",
+            "by means of you",
+            "with you",
+            "you",
+        ),
+        (Case.ABLATIVE, Number.PLURAL): (
+            "by you",
+            "by means of you",
+            "with you",
+            "you",
+        ),
+    },
+    "oneself": {
+        (Case.ACCUSATIVE, Number.SINGULAR): (
+            "oneself",
+            "himself",
+            "herself",
+            "itself",
+            "themself",
+        ),
+        (Case.ACCUSATIVE, Number.PLURAL): ("themselves",),
+        (Case.GENITIVE, Number.SINGULAR): (
+            "of oneself",
+            "one's",
+            "of himself",
+            "his",
+            "of herself",
+            "her",
+            "of itself",
+            "its",
+            "of themself",
+            "their",
+        ),
+        (Case.GENITIVE, Number.PLURAL): ("of themselves", "their"),
+        (Case.DATIVE, Number.SINGULAR): (
+            "for oneself",
+            "for himself",
+            "for herself",
+            "for itself",
+            "for themself",
+            "to oneself",
+            "to himself",
+            "to herself",
+            "to itself",
+            "to themself",
+        ),
+        (Case.DATIVE, Number.PLURAL): (
+            "for themselves",
+            "to themselves",
+        ),
+        (Case.ABLATIVE, Number.SINGULAR): (
+            "by oneself",
+            "by himself",
+            "by herself",
+            "by itself",
+            "by themself",
+            "by means of oneself",
+            "by means of himself",
+            "by means of herself",
+            "by means of itself",
+            "by means of themself",
+            "with oneself",
+            "with himself",
+            "with herself",
+            "with itself",
+            "with themself",
+            "oneself",
+            "himself",
+            "herself",
+            "itself",
+            "themself",
+        ),
+        (Case.ABLATIVE, Number.PLURAL): (
+            "by themselves",
+            "by means of themselves",
+            "with themselves",
+            "themselves",
         ),
     },
 }

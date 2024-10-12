@@ -67,6 +67,12 @@ def find_inflection(
             )
 
         case accido.endings.Noun:
+            if components.subtype == "pronoun":
+                return (
+                    find_main_pronoun_inflection(word, components)
+                    if main
+                    else find_pronoun_inflections(word, components)
+                )
             return (
                 find_main_noun_inflection(word, components)
                 if main
@@ -90,7 +96,7 @@ def find_inflection(
         case accido.endings.RegularWord:
             return word if main else {word}
 
-        case _:
+        case _:  # pragma: no cover
             raise ValueError(
                 f"Unknown part of speech: {components.type}"
             )  # should never happen

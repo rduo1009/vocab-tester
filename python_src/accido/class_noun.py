@@ -307,13 +307,14 @@ class Noun(_Word):
 
         return self.endings.get(f"N{short_case}{short_number}")
 
-    @staticmethod
-    def _create_namespace(key: str) -> EndingComponents:
+    def _create_namespace(self, key: str) -> EndingComponents:
         output: EndingComponents = EndingComponents(
             case=Case(key[1:4]),
             number=Number(key[4:6]),
         )
         output.string = f"{output.case.regular} {output.number.regular}"
+        if self.declension == 0:
+            output.subtype = "pronoun"
         return output
 
     def __repr__(self) -> str:
