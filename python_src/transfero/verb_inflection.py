@@ -14,7 +14,7 @@ from .exceptions import InvalidWordError
 
 
 def _verify_verb_inflections(components: accido.misc.EndingComponents) -> None:
-    if components.type != accido.endings.Verb:
+    if components.type is not accido.endings.Verb:
         raise ValueError(f"Invalid type: '{components.type}'")
 
     if (

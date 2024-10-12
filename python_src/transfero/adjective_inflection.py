@@ -38,7 +38,7 @@ def find_adjective_inflections(
     ValueError
         If the input (other than the word itself) is invalid.
     """
-    if components.type != accido.endings.Adjective:
+    if components.type is not accido.endings.Adjective:
         raise ValueError(f"Invalid type: '{components.type}'")
     if components.subtype is not None:
         raise ValueError(f"Invalid subtype: '{components.subtype}'")
@@ -81,7 +81,7 @@ def find_main_adjective_inflection(
     ValueError
         If the input (other than the word itself) is invalid.
     """
-    if components.type != accido.endings.Adjective:
+    if components.type is not accido.endings.Adjective:
         raise ValueError(f"Invalid type: '{components.type}'")
     if components.subtype is not None:
         raise ValueError(f"Invalid subtype: '{components.subtype}'")
