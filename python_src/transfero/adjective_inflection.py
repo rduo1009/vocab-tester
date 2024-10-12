@@ -38,7 +38,7 @@ def find_adjective_inflections(
     ValueError
         If the input (other than the word itself) is invalid.
     """
-    if components.type != accido.endings.Adjective:
+    if components.type is not accido.endings.Adjective:
         raise ValueError(f"Invalid type: '{components.type}'")
     if components.subtype is not None:
         raise ValueError(f"Invalid subtype: '{components.subtype}'")
@@ -81,7 +81,7 @@ def find_main_adjective_inflection(
     ValueError
         If the input (other than the word itself) is invalid.
     """
-    if components.type != accido.endings.Adjective:
+    if components.type is not accido.endings.Adjective:
         raise ValueError(f"Invalid type: '{components.type}'")
     if components.subtype is not None:
         raise ValueError(f"Invalid subtype: '{components.subtype}'")
@@ -107,7 +107,7 @@ def _inflect_lemma(lemma: str, degree: Degree) -> tuple[str, set[str]]:
                 lemma, "RBR"
             )
             return (
-                comparatives[0] if not not_comparable else f"more {lemma}",
+                f"more {lemma}" if not_comparable else comparatives[0],
                 {*comparatives, f"more {lemma}"},
             )
         case Degree.SUPERLATIVE:
@@ -115,7 +115,7 @@ def _inflect_lemma(lemma: str, degree: Degree) -> tuple[str, set[str]]:
                 lemma, "RBS"
             )
             return (
-                superlatives[0] if not not_comparable else f"most {lemma}",
+                f"most {lemma}" if not_comparable else superlatives[0],
                 {
                     *superlatives,
                     f"most {lemma}",

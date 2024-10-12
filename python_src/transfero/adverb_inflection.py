@@ -37,7 +37,7 @@ def find_adverb_inflections(
     ValueError
         If the input (other than the word itself) is invalid.
     """
-    if components.type != accido.endings.Adjective:
+    if components.type is not accido.endings.Adjective:
         raise ValueError(f"Invalid type: '{components.type}'")
     if components.subtype != "adverb":  # pragma: no cover
         raise ValueError(f"Invalid subtype: '{components.subtype}'")
@@ -78,9 +78,9 @@ def find_main_adverb_inflection(
     ValueError
         If the input (other than the word itself) is invalid.
     """
-    if components.type != accido.endings.Adjective:
+    if components.type is not accido.endings.Adjective:
         raise ValueError(f"Invalid type: '{components.type}'")
-    if components.subtype != "adverb":  # pragma: no cover
+    if components.subtype != "adverb":
         raise ValueError(f"Invalid subtype: '{components.subtype}'")
 
     try:

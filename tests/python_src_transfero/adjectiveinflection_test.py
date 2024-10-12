@@ -12,10 +12,18 @@ def test_invalid_type():
         find_adjective_inflections("happy", EndingComponents(case=Case.NOMINATIVE, number=Number.SINGULAR, gender=Gender.NEUTER))
     assert "Invalid type: '<class 'python_src.accido.class_pronoun.Pronoun'>'" == str(error.value)
 
+    with pytest.raises(ValueError) as error:
+        find_main_adjective_inflection("happy", EndingComponents(case=Case.NOMINATIVE, number=Number.SINGULAR, gender=Gender.NEUTER))
+    assert "Invalid type: '<class 'python_src.accido.class_pronoun.Pronoun'>'" == str(error.value)
+
 
 def test_invalid_subtype():
     with pytest.raises(ValueError) as error:
         find_adjective_inflections("happy", EndingComponents(degree=Degree.POSITIVE))
+    assert "Invalid subtype: 'adverb'" == str(error.value)
+
+    with pytest.raises(ValueError) as error:
+        find_main_adjective_inflection("happy", EndingComponents(degree=Degree.POSITIVE))
     assert "Invalid subtype: 'adverb'" == str(error.value)
 
 

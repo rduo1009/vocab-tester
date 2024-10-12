@@ -14,6 +14,8 @@ from .. import accido
 if TYPE_CHECKING:
     # HACK: To avoid mypy errors.
     from enum import Enum
+
+    from .type_aliases import Person
 else:
     from aenum import Enum
 
@@ -108,7 +110,8 @@ PERSON_SHORTHAND: Final[dict[int, str]] = {
     3: "3rd person",
 }
 
-type Person = Literal[1, 2, 3]
+
+type _Subtype = Literal["infinitive", "participle", "adverb", "pronoun"]
 
 
 class EndingComponents:
@@ -203,7 +206,7 @@ class EndingComponents:
         tense: Tense | None = None,
         voice: Voice | None = None,
         mood: Mood | None = None,
-        person: Person | None = None,
+        person: Person | None = None,  # avoiding circular imports
         degree: Degree | None = None,
         string: str = "",
     ) -> None:
@@ -256,7 +259,7 @@ class EndingComponents:
         self.string: str = string
 
         self.type: type[accido.endings._Word]
-        self.subtype: str | None
+        self.subtype: _Subtype | None
         self.type, self.subtype = self._determine_type()
 
     def _get_non_null_attributes(self) -> list[str]:
@@ -266,7 +269,9 @@ class EndingComponents:
             if value is not None and attr != "string"
         ]
 
-    def _determine_type(self) -> tuple[type[accido.endings._Word], str | None]:
+    def _determine_type(
+        self,
+    ) -> tuple[type[accido.endings._Word], _Subtype | None]:
         attributes = self._get_non_null_attributes()
 
         if set(attributes) == {"tense", "voice", "mood", "person", "number"}:

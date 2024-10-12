@@ -25,10 +25,11 @@ def find_noun_inflections(
     noun: str,
     components: accido.misc.EndingComponents,
 ) -> set[str]:
-    """Inflect English nouns and pronouns using the case and number.
+    """Inflect English nouns using the case and number.
 
-    Some pronouns in Latin also have a gender, but this is not used in English,
-    so they can be used as if they were nouns.
+    This function can also be used to inflect pronouns that are treated
+    like nouns in accido. For example, 'I', which is considered an
+    irregular noun.
 
     Parameters
     ----------
@@ -49,7 +50,7 @@ def find_noun_inflections(
     ValueError
         If the input (other than the word itself) is invalid.
     """
-    if components.type not in {accido.endings.Noun, accido.endings.Pronoun}:
+    if components.type is not accido.endings.Noun:
         raise ValueError(f"Invalid type: '{components.type}'")
 
     try:
@@ -117,13 +118,12 @@ def _inflect_lemma(
             pluralinflect.classical(all=True)
             classical_plural: str = pluralinflect.plural_noun(lemma)
             pluralinflect.classical(all=False)
+            base_forms.update({normal_plural, classical_plural})
 
             # If the noun has a classical plural form, then that is used,
             # but if it doesn't then classical_plural is just the normal
             # plural
             best_form = classical_plural
-
-            base_forms.update({normal_plural, classical_plural})
 
     match case:
         case Case.NOMINATIVE | Case.VOCATIVE | Case.ACCUSATIVE:

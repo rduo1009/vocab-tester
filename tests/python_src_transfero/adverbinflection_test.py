@@ -12,11 +12,19 @@ def test_invalid_type():
         find_adverb_inflections("happily", EndingComponents(case=Case.NOMINATIVE, number=Number.SINGULAR, gender=Gender.NEUTER))
     assert "Invalid type: '<class 'python_src.accido.class_pronoun.Pronoun'>'" == str(error.value)
 
+    with pytest.raises(ValueError) as error:
+        find_main_adverb_inflection("happily", EndingComponents(case=Case.NOMINATIVE, number=Number.SINGULAR, gender=Gender.NEUTER))
+    assert "Invalid type: '<class 'python_src.accido.class_pronoun.Pronoun'>'" == str(error.value)
+
 
 def test_invalid_subtype():
     with pytest.raises(ValueError) as error:
-        find_adverb_inflections("happily", EndingComponents(case=Case.NOMINATIVE, number=Number.SINGULAR, gender=Gender.NEUTER))
-    assert "Invalid type: '<class 'python_src.accido.class_pronoun.Pronoun'>'" == str(error.value)
+        find_adverb_inflections("happily", EndingComponents(case=Case.NOMINATIVE, number=Number.SINGULAR, gender=Gender.NEUTER, degree=Degree.POSITIVE))
+    assert "Invalid subtype: 'None'" == str(error.value)
+
+    with pytest.raises(ValueError) as error:
+        find_main_adverb_inflection("happily", EndingComponents(case=Case.NOMINATIVE, number=Number.SINGULAR, gender=Gender.NEUTER, degree=Degree.POSITIVE))
+    assert "Invalid subtype: 'None'" == str(error.value)
 
 
 def test_adverb_inflection():

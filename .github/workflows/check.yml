@@ -41,7 +41,9 @@ jobs:
         if: contains(matrix.os, 'ubuntu')
         run: |
           sudo apt-get update
-          sudo apt-get install -y libtinfo5
+          wget http://archive.ubuntu.com/ubuntu/pool/universe/n/ncurses/libtinfo5_6.2-0ubuntu2.1_amd64.deb
+          sudo dpkg -i libtinfo5_6.2-0ubuntu2.1_amd64.deb
+          sudo apt-get install -f
 
       - name: Compile cpp code
         run: clang++ -shared -fPIC -o python_src/lego/libkey.so python_src/lego/key/key.cpp

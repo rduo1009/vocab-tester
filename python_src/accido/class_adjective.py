@@ -324,7 +324,7 @@ class Adjective(_Word):
 
         self.mascgen: str = self._principal_parts[1]
 
-        if self.mascgen[-2:] != "is":
+        if not self.mascgen.endswith("is"):
             raise InvalidInputError(
                 f"Invalid genitive form: '{self.mascgen}' "
                 "(must end in '-is')",
@@ -488,7 +488,7 @@ class Adjective(_Word):
         self._pos_stem = self.mascnom[:-2]  # fortis -> fort-
         if not self.irregular_flag:
             self._cmp_stem = f"{self._pos_stem}ior"  # fort- -> fortior-
-            if self.mascnom[-2:] == "er":  # pragma: no cover
+            if self.mascnom.endswith("er"):  # pragma: no cover
                 self._spr_stem = f"{self.mascnom}rim"  # miser- -> miserrim-
             elif self.mascnom in LIS_ADJECTIVES:
                 self._spr_stem = f"{self._pos_stem}lim"  # facil- -> facillim-
@@ -644,7 +644,7 @@ class Adjective(_Word):
         self._pos_stem = self.femnom[:-2]  # acris -> acr-
         if not self.irregular_flag:
             self._cmp_stem = f"{self._pos_stem}ior"  # acr- -> acrior-
-            if self.mascnom[-2:] == "er":
+            if self.mascnom.endswith("er"):
                 self._spr_stem = f"{self.mascnom}rim"  # cer- -> acerrim-
             elif self.mascnom in LIS_ADJECTIVES:  # pragma: no cover
                 self._spr_stem = f"{self._pos_stem}lim"  # facil- -> facillim-
