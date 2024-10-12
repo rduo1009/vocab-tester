@@ -303,6 +303,6 @@ def filter_questions(settings: Settings) -> list[QuestionClasses]:
     """
     classes: list[QuestionClasses] = []
     for key, value in CLASS_RULES.items():
-        if settings[key]:
+        if settings[key]:  # type: ignore[literal-required]
             classes.append(value)
     return classes

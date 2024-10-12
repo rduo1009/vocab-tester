@@ -7,8 +7,9 @@ from pathlib import Path
 
 from python_src.lego.reader import read_vocab_file
 from python_src.rogo.asker import ask_question_without_sr
+from python_src.rogo.type_aliases import Settings
 
-settings = {
+settings: Settings = {
     "exclude-verb-present-active-indicative": False,
     "exclude-verb-imperfect-active-indicative": False,
     "exclude-verb-perfect-active-indicative": False,

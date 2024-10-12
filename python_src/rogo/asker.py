@@ -20,101 +20,14 @@ from .question_classes import (
     TypeInLatToEngQuestion,
 )
 from .rules import filter_endings, filter_questions, filter_words
+from .type_aliases import Settings
 
 if TYPE_CHECKING:
     from ..accido.type_aliases import Ending, Meaning
     from .question_classes import Question
-    from .type_aliases import Settings, Vocab
+    from .type_aliases import Vocab
 
-REQUIRED_SETTINGS: Final[set[str]] = {
-    "exclude-verb-present-active-indicative",
-    "exclude-verb-imperfect-active-indicative",
-    "exclude-verb-perfect-active-indicative",
-    "exclude-verb-pluperfect-active-indicative",
-    "exclude-verb-present-active-infinitive",
-    "exclude-verb-present-active-imperative",
-    "exclude-verb-imperfect-active-subjunctive",
-    "exclude-verb-pluperfect-active-subjunctive",
-    "exclude-verb-singular",
-    "exclude-verb-plural",
-    "exclude-verb-1st-person",
-    "exclude-verb-2nd-person",
-    "exclude-verb-3rd-person",
-    "exclude-participles",
-    "exclude-participle-present-active",
-    "exclude-participle-perfect-passive",
-    "exclude-participle-masculine",
-    "exclude-participle-feminine",
-    "exclude-participle-neuter",
-    "exclude-participle-nominative",
-    "exclude-participle-vocative",
-    "exclude-participle-accusative",
-    "exclude-participle-genitive",
-    "exclude-participle-dative",
-    "exclude-participle-ablative",
-    "exclude-participle-singular",
-    "exclude-participle-plural",
-    "exclude-noun-nominative",
-    "exclude-noun-vocative",
-    "exclude-noun-accusative",
-    "exclude-noun-genitive",
-    "exclude-noun-dative",
-    "exclude-noun-ablative",
-    "exclude-noun-singular",
-    "exclude-noun-plural",
-    "exclude-adjective-masculine",
-    "exclude-adjective-feminine",
-    "exclude-adjective-neuter",
-    "exclude-adjective-nominative",
-    "exclude-adjective-vocative",
-    "exclude-adjective-accusative",
-    "exclude-adjective-genitive",
-    "exclude-adjective-dative",
-    "exclude-adjective-ablative",
-    "exclude-adjective-singular",
-    "exclude-adjective-plural",
-    "exclude-adjective-positive",
-    "exclude-adjective-comparative",
-    "exclude-adjective-superlative",
-    "exclude-adverbs",
-    "exclude-adverb-positive",
-    "exclude-adverb-comparative",
-    "exclude-adverb-superlative",
-    "exclude-pronoun-masculine",
-    "exclude-pronoun-feminine",
-    "exclude-pronoun-neuter",
-    "exclude-pronoun-nominative",
-    "exclude-pronoun-vocative",
-    "exclude-pronoun-accusative",
-    "exclude-pronoun-genitive",
-    "exclude-pronoun-dative",
-    "exclude-pronoun-ablative",
-    "exclude-pronoun-singular",
-    "exclude-pronoun-plural",
-    "exclude-nouns",
-    "exclude-verbs",
-    "exclude-adjectives",
-    "exclude-pronouns",
-    "exclude-regulars",
-    "exclude-verb-first-conjugation",
-    "exclude-verb-second-conjugation",
-    "exclude-verb-third-conjugation",
-    "exclude-verb-fourth-conjugation",
-    "exclude-verb-thirdio-conjugation",
-    "exclude-noun-first-declension",
-    "exclude-noun-second-declension",
-    "exclude-noun-third-declension",
-    "exclude-noun-fourth-declension",
-    "exclude-noun-fifth-declension",
-    "exclude-noun-irregular-declension",
-    "exclude-adjective-212-declension",
-    "exclude-adjective-third-declension",
-    "include-typein-engtolat",
-    "include-typein-lattoeng",
-    "include-parse",
-    "include-inflect",
-    "include-principal-parts",
-}
+REQUIRED_SETTINGS: Final[set[str]] = set(Settings.__annotations__.keys())
 
 
 def _verify_settings(settings: Settings) -> None:
@@ -229,7 +142,7 @@ def ask_question_without_sr(
                     continue
 
 
-def _generate_typein_engtolat(  # noqa: PLR0914
+def _generate_typein_engtolat(  # noqa: PLR0914, PLR0915
     chosen_word: accido.endings._Word, filtered_endings: dict[str, Ending]
 ) -> TypeInEngToLatQuestion | None:
     ending_components_key: str
@@ -393,11 +306,14 @@ def _generate_typein_engtolat(  # noqa: PLR0914
             number=Number.PLURAL,
             person=2,
         ):
-            temp_second_person_plural: tuple[str, ...] = (
-                tuple(second_person_plural.get_all())
-                if type(second_person_plural) is accido.misc.MultipleEndings
-                else (second_person_plural,)
-            )
+            temp_second_person_plural: tuple[str, ...]
+            if type(second_person_plural) is accido.misc.MultipleEndings:
+                temp_second_person_plural = tuple(
+                    second_person_plural.get_all()
+                )
+            else:
+                assert type(second_person_plural) is str
+                temp_second_person_plural = (second_person_plural,)
 
             answers = {
                 chosen_ending,  # second person singular
@@ -407,21 +323,40 @@ def _generate_typein_engtolat(  # noqa: PLR0914
             answers = {chosen_ending}
 
     elif pronoun_flag:
+
+        def _convert_to_tuple(
+            ending: Ending | None,
+        ) -> tuple[str, ...] | tuple[None]:
+            if ending is None:
+                return ()
+
+            if type(ending) is accido.misc.MultipleEndings:
+                return tuple(ending.get_all())
+
+            assert type(ending) is str
+            return (ending,)
+
         answers = {
-            chosen_word.get(
-                case=ending_components.case,
-                number=ending_components.number,
-                gender=Gender.MASCULINE,
+            *_convert_to_tuple(
+                chosen_word.get(
+                    case=ending_components.case,
+                    number=ending_components.number,
+                    gender=Gender.MASCULINE,
+                )
             ),
-            chosen_word.get(
-                case=ending_components.case,
-                number=ending_components.number,
-                gender=Gender.FEMININE,
+            *_convert_to_tuple(
+                chosen_word.get(
+                    case=ending_components.case,
+                    number=ending_components.number,
+                    gender=Gender.FEMININE,
+                )
             ),
-            chosen_word.get(
-                case=ending_components.case,
-                number=ending_components.number,
-                gender=Gender.NEUTER,
+            *_convert_to_tuple(
+                chosen_word.get(
+                    case=ending_components.case,
+                    number=ending_components.number,
+                    gender=Gender.NEUTER,
+                )
             ),
         }
 
