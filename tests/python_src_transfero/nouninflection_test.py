@@ -16,6 +16,7 @@ def test_invalid_type():
 class TestNounInflection:
     def test_noun_inflections_1(self):
         word = "house"
+
         assert find_noun_inflections(word, EndingComponents(case=Case.NOMINATIVE, number=Number.SINGULAR)) == {"house"}
         assert find_noun_inflections(word, EndingComponents(case=Case.VOCATIVE, number=Number.SINGULAR)) == {"house"}
         assert find_noun_inflections(word, EndingComponents(case=Case.ACCUSATIVE, number=Number.SINGULAR)) == {"house"}
@@ -126,6 +127,6 @@ class TestNounInflection:
 
 
 def test_pronoun_inflections():
-    word = "this"
+    word = "I"
 
     find_noun_inflections(word, EndingComponents(case=Case.NOMINATIVE, number=Number.SINGULAR))
