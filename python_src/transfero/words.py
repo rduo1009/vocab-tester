@@ -16,6 +16,10 @@ from .adverb_inflection import (
     find_main_adverb_inflection,
 )
 from .noun_inflection import find_main_noun_inflection, find_noun_inflections
+from .pronoun_inflection import (
+    find_main_pronoun_inflection,
+    find_pronoun_inflections,
+)
 from .verb_inflection import find_main_verb_inflection, find_verb_inflections
 
 
@@ -78,9 +82,9 @@ def find_inflection(
 
         case accido.endings.Pronoun:
             return (
-                find_main_noun_inflection(word, components)
+                find_main_pronoun_inflection(word, components)
                 if main
-                else find_noun_inflections(word, components)
+                else find_pronoun_inflections(word, components)
             )
 
         case accido.endings.RegularWord:
