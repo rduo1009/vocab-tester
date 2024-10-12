@@ -57,6 +57,6 @@ def test_mainwordinflection_regularword():
 
 
 def test_mainwordinflection_nounlikepronoun():
-    components = accido.misc.EndingComponents(case=Case.NOMINATIVE, number=Number.SINGULAR, gender=Gender.MASCULINE)
+    components = accido.misc.EndingComponents(case=Case.GENITIVE, number=Number.SINGULAR)
     components.subtype = "pronoun"
-    assert find_inflection("this", components, main=True) == "this"
+    assert find_inflection("I", components, main=True) == "of me"

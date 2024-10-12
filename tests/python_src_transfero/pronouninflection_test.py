@@ -12,6 +12,10 @@ def test_invalid_type():
         find_pronoun_inflections("house", EndingComponents(case=Case.NOMINATIVE, number=Number.SINGULAR, gender=Gender.NEUTER, degree=Degree.POSITIVE))
     assert "Invalid type: '<class 'python_src.accido.class_adjective.Adjective'>'" == str(error.value)
 
+    with pytest.raises(ValueError) as error:
+        find_main_pronoun_inflection("house", EndingComponents(case=Case.NOMINATIVE, number=Number.SINGULAR, gender=Gender.NEUTER, degree=Degree.POSITIVE))
+    assert "Invalid type: '<class 'python_src.accido.class_adjective.Adjective'>'" == str(error.value)
+
 
 class TestPronounInflection:
     def test_pronoun_inflections_1(self):
