@@ -229,7 +229,7 @@ def ask_question_without_sr(
                     continue
 
 
-def _generate_typein_engtolat(
+def _generate_typein_engtolat(  # noqa: PLR0914
     chosen_word: accido.endings._Word, filtered_endings: dict[str, Ending]
 ) -> TypeInEngToLatQuestion | None:
     ending_components_key: str
@@ -256,7 +256,7 @@ def _generate_typein_engtolat(
     )
 
     adjective_flag: bool = hasattr(ending_components, "case")
-    adjective_nominative = (  # adjectives are all same
+    adjective_nominative: bool = (  # adjectives are all same
         type(chosen_word) is accido.endings.Adjective
         and adjective_flag
         and ending_components.case != Case.NOMINATIVE
@@ -271,19 +271,28 @@ def _generate_typein_engtolat(
         and ending_components.gender == Gender.MASCULINE
     )
 
-    verb_second_plural: bool = (  # plural second person is same as singular
+    verb_second_plural: bool = (  # plural 2nd person is same as singular
         type(chosen_word) is accido.endings.Verb
         and ending_components.subtype not in {"infinitive", "participle"}
         and ending_components.number == Number.PLURAL
         and ending_components.person == 2
     )
 
+    pronoun_flag: bool = type(chosen_word) is accido.endings.Pronoun or (
+        type(chosen_word) is accido.endings.Noun
+        and ending_components.subtype == "pronoun"
+    )
+    pronoun_not_masculine: bool = (
+        pronoun_flag and ending_components.gender != Gender.MASCULINE
+    )
+
     if (
-        verb_subjunctive
+        verb_subjunctive  # noqa: PLR0916
         or noun_accusative_vocative
         or adjective_nominative
         or participle_nominative
         or verb_second_plural
+        or pronoun_not_masculine
     ):
         return None
 
@@ -387,7 +396,7 @@ def _generate_typein_engtolat(
             temp_second_person_plural: tuple[str, ...] = (
                 tuple(second_person_plural.get_all())
                 if type(second_person_plural) is accido.misc.MultipleEndings
-                else tuple(second_person_plural)
+                else (second_person_plural,)
             )
 
             answers = {
@@ -396,6 +405,25 @@ def _generate_typein_engtolat(
             }
         else:
             answers = {chosen_ending}
+
+    elif pronoun_flag:
+        answers = {
+            chosen_word.get(
+                case=ending_components.case,
+                number=ending_components.number,
+                gender=Gender.MASCULINE,
+            ),
+            chosen_word.get(
+                case=ending_components.case,
+                number=ending_components.number,
+                gender=Gender.FEMININE,
+            ),
+            chosen_word.get(
+                case=ending_components.case,
+                number=ending_components.number,
+                gender=Gender.NEUTER,
+            ),
+        }
 
     return TypeInEngToLatQuestion(
         prompt=inflected_meaning,
