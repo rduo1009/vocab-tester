@@ -1,4 +1,9 @@
 #!/bin/bash
 
-poetry export --format=requirements.txt --output=requirements.txt --without-hashes --without-urls  
-poetry export --format=requirements.txt --output=requirements-dev.txt --without-hashes --without-urls --with=dev    
+# From https://github.com/python-poetry/poetry-plugin-export/issues/183#issuecomment-1804931339
+
+poetry install --only main --sync
+poetry run pip freeze > requirements.txt
+
+poetry install --sync
+poetry run pip freeze > dev_requirements.txt
