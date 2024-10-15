@@ -5,26 +5,21 @@
 
 from __future__ import annotations
 
-import sys
-
-assert sys.version_info >= (3, 10)
-
 from functools import total_ordering
-from typing import TYPE_CHECKING, Literal
+from typing import TYPE_CHECKING
 
-from ..utils import key_from_value
 from .class_word import _Word
 from .edge_cases import IRREGULAR_NOUNS
 from .exceptions import InvalidInputError
 from .misc import (
-    CASE_SHORTHAND,
-    GENDER_SHORTHAND,
-    NUMBER_SHORTHAND,
+    Case,
     EndingComponents,
+    Gender,
+    Number,
 )
 
 if TYPE_CHECKING:
-    from .type_aliases import Ending, Endings, Meaning
+    from .type_aliases import Ending, Endings, Meaning, NounDeclension
 
 
 @total_ordering
@@ -66,8 +61,8 @@ class Noun(_Word):
         self,
         *,
         nominative: str,
-        genitive: str,
-        gender: str,
+        genitive: str | None,
+        gender: Gender | None,
         meaning: Meaning,
     ) -> None:
         """Initialises Noun and determines the declension and endings.
@@ -86,10 +81,7 @@ class Noun(_Word):
         super().__init__()
 
         if gender:
-            if gender not in GENDER_SHORTHAND:
-                raise InvalidInputError(f"Invalid gender: '{gender}'")
-
-            self.gender: str = gender
+            self.gender: Gender = gender
 
         self.nominative: str = nominative
         if genitive:
@@ -98,7 +90,7 @@ class Noun(_Word):
         self.plurale_tantum: bool = False
 
         self._first: str = self.nominative
-        self.declension: Literal[0, 1, 2, 3, 4, 5]
+        self.declension: NounDeclension
         self._stem: str
 
         if self.nominative in IRREGULAR_NOUNS:
@@ -110,7 +102,7 @@ class Noun(_Word):
 
         self.endings = self._determine_endings()
 
-        if self.gender == "neuter":
+        if self.gender == Gender.NEUTER:
             self._neuter_endings()
 
         if self.plurale_tantum:
@@ -119,41 +111,38 @@ class Noun(_Word):
             }
 
     def _find_declension(self) -> None:
-        # The ordering of this is strange because e.g. ending -ei ends in 'i' as well as 'ei'
+        # The ordering of this is strange because
+        # e.g. ending -ei ends in 'i' as well as 'ei'
         # so 5th declension check must come before 2nd declension check, etc.
-        if self.genitive[-2:] == "ei":
+        if self.genitive.endswith("ei"):
             self.declension = 5
             self._stem = self.genitive[:-2]  # diei > di-
-        elif self.genitive[-2:] == "ae":
+        elif self.genitive.endswith("ae"):
             self.declension = 1
             self._stem = self.genitive[:-2]  # puellae -> puell-
-        elif self.genitive[-1:] == "i":
+        elif self.genitive.endswith("i"):
             self.declension = 2
             self._stem = self.genitive[:-1]  # servi -> serv-
-        elif self.genitive[-2:] == "is":
+        elif self.genitive.endswith("is"):
             self.declension = 3
             self._stem = self.genitive[:-2]  # canis -> can-
-        elif self.genitive[-2:] == "us":
+        elif self.genitive.endswith("us"):
             self.declension = 4
             self._stem = self.genitive[:-2]  # manus -> man-
 
-        elif self.genitive[-3:] == "uum":
+        elif self.genitive.endswith("uum"):
             self.declension = 4
             self._stem = self.genitive[:-3]  # manuum -> man-
             self.plurale_tantum = True
-        elif self.genitive[-4:] == "arum":
+        elif self.genitive.endswith("arum"):
             self.declension = 1
             self._stem = self.genitive[:-4]  # puellarum -> puell-
             self.plurale_tantum = True
-        elif self.genitive[-4:] == "orum":
+        elif self.genitive.endswith("orum"):
             self.declension = 2
             self._stem = self.genitive[:-4]  # servorum -> serv-
             self.plurale_tantum = True
-        # elif self.genitive[-4:] == "erum":
-        #     self.declension = 5
-        #     self._stem = self.genitive[:-4]  # dierum > di-
-        #     self.plurale_tantum = True
-        elif self.genitive[-2:] == "um":
+        elif self.genitive.endswith("um"):
             self.declension = 3
             self._stem = self.genitive[:-2]  # canum -> can-
             self.plurale_tantum = True
@@ -260,7 +249,8 @@ class Noun(_Word):
 
         if self.declension == 5:
             raise InvalidInputError(
-                f"Fifth declension nouns cannot be neuter (noun '{self.nominative}' given)",
+                "Fifth declension nouns cannot be neuter "
+                f"(noun '{self.nominative}' given)",
             )
 
         if self.declension == 4:
@@ -275,14 +265,17 @@ class Noun(_Word):
             self.endings["Naccpl"] = f"{self._stem}a"  # templa
             self.endings["Nvocpl"] = f"{self._stem}a"  # templa
 
-    def get(self, *, case: str, number: str) -> Ending | None:
+    def get(self, *, case: Case, number: Number) -> Ending | None:
         """Returns the ending of the noun.
 
         The function returns None if no ending is found.
 
         Parameters
         ----------
-        case, number : str
+        case : Case
+            The case of the noun.
+        number : Number
+            The number of the noun.
 
         Returns
         -------
@@ -304,38 +297,34 @@ class Noun(_Word):
         ...     gender="feminine",
         ...     meaning="slavegirl",
         ... )
-        >>> foo.get(case="nominative", number="singular")
+        >>> foo.get(case=Case.NOMINATIVE, number=Number.SINGULAR)
         'ancilla'
 
         Note that all arguments of get are keyword-only.
         """
-        if case not in CASE_SHORTHAND:
-            raise InvalidInputError(f"Invalid case: '{case}'")
-
-        if number not in NUMBER_SHORTHAND:
-            raise InvalidInputError(f"Invalid number: '{number}'")
-
-        short_case: str = CASE_SHORTHAND[case]
-        short_number: str = NUMBER_SHORTHAND[number]
+        short_case: str = case.shorthand
+        short_number: str = number.shorthand
 
         return self.endings.get(f"N{short_case}{short_number}")
 
-    @staticmethod
-    def _create_namespace(key: str) -> EndingComponents:
+    def _create_namespace(self, key: str) -> EndingComponents:  # type: ignore[override]
         output: EndingComponents = EndingComponents(
-            case=key_from_value(CASE_SHORTHAND, key[1:4]),
-            number=key_from_value(NUMBER_SHORTHAND, key[4:6]),
+            case=Case(key[1:4]),
+            number=Number(key[4:6]),
         )
-        output.string = f"{output.case} {output.number}"
+        output.string = f"{output.case.regular} {output.number.regular}"
+        if self.declension == 0:
+            output.subtype = "pronoun"
         return output
 
     def __repr__(self) -> str:
-        return f"Noun({self.nominative}, {self.genitive}, {self.gender}, {self.meaning})"
+        return (
+            f"Noun({self.nominative}, {self.genitive}, "
+            f"{self.gender.regular}, {self.meaning})"
+        )
 
     def __str__(self) -> str:
-        if self.gender in GENDER_SHORTHAND:
-            return f"{self.meaning}: {self.nominative}, {self.genitive}, ({GENDER_SHORTHAND[self.gender]})"
-
-        raise ValueError(
-            f"Gender {self.gender} not recognised",
-        )  # pragma: no cover # this should never occur
+        return (
+            f"{self.meaning}: {self.nominative}, "
+            f"{self.genitive}, ({Gender(self.gender).shorthand})"
+        )

@@ -1,0 +1,3 @@
+from typing import Callable
+
+def _parse_args(fun: Callable) -> Callable: ...

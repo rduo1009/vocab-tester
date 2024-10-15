@@ -8,15 +8,14 @@ from __future__ import annotations
 from functools import total_ordering
 from typing import TYPE_CHECKING
 
-from ..utils import key_from_value
 from .class_word import _Word
 from .edge_cases import PRONOUNS
 from .exceptions import InvalidInputError
 from .misc import (
-    CASE_SHORTHAND,
-    GENDER_SHORTHAND,
-    NUMBER_SHORTHAND,
+    Case,
     EndingComponents,
+    Gender,
+    Number,
 )
 
 if TYPE_CHECKING:
@@ -43,7 +42,7 @@ class Pronoun(_Word):
     """
 
     def __init__(self, *, pronoun: str, meaning: Meaning) -> None:
-        """Intialises Pronoun and determines the endings.
+        """Initialises Pronoun and determines the endings.
 
         Parameters
         ----------
@@ -73,18 +72,25 @@ class Pronoun(_Word):
         self._first = self.pronoun
         self.meaning: Meaning = meaning
 
-        self._mascnom: Ending = self.endings["Pmnomsg"]
-        self._femnom: Ending = self.endings["Pfnomsg"]
-        self._neutnom: Ending = self.endings["Pnnomsg"]
+        self.mascnom: Ending = self.endings["Pmnomsg"]
+        self.femnom: Ending = self.endings["Pfnomsg"]
+        self.neutnom: Ending = self.endings["Pnnomsg"]
 
-    def get(self, *, gender: str, case: str, number: str) -> Ending | None:
+    def get(
+        self, *, gender: Gender, case: Case, number: Number
+    ) -> Ending | None:
         """Returns the ending of the pronoun.
 
         The function returns None if no ending is found.
 
         Parameters
         ----------
-        gender, case, number : str
+        gender : Gender
+            The gender of the pronoun.
+        case : Case
+            The case of the pronoun.
+        number : Number
+            The number of the pronoun.
 
         Returns
         -------
@@ -103,40 +109,36 @@ class Pronoun(_Word):
         Examples
         --------
         >>> foo = Pronoun(pronoun="hic", meaning="this")
-        >>> foo.get(gender="masculine", case="nominative", number="singular")
+        >>> foo.get(
+        ...     gender=Gender.MASCULINE,
+        ...     case=Case.NOMINATIVE,
+        ...     number=Number.SINGULAR,
+        ... )
         'hic'
 
         Note that the arguments of get are keyword-only.
         """
-        if gender not in GENDER_SHORTHAND:
-            raise InvalidInputError(f"Invalid gender: '{gender}'")
-
-        if case not in CASE_SHORTHAND:
-            raise InvalidInputError(f"Invalid case: '{case}'")
-
-        if number not in NUMBER_SHORTHAND:
-            raise InvalidInputError(f"Invalid number: '{number}'")
-
-        short_gender: str = GENDER_SHORTHAND[gender]
-        short_case: str = CASE_SHORTHAND[case]
-        short_number: str = NUMBER_SHORTHAND[number]
+        short_gender: str = gender.shorthand
+        short_case: str = case.shorthand
+        short_number: str = number.shorthand
 
         return self.endings.get(f"P{short_gender}{short_case}{short_number}")
 
     @staticmethod
     def _create_namespace(key: str) -> EndingComponents:
         output: EndingComponents = EndingComponents(
-            gender=key_from_value(GENDER_SHORTHAND, key[1]),
-            case=key_from_value(CASE_SHORTHAND, key[2:5]),
-            number=key_from_value(NUMBER_SHORTHAND, key[5:7]),
+            gender=Gender(key[1]),
+            case=Case(key[2:5]),
+            number=Number(key[5:7]),
         )
-        output.string = f"{output.case} {output.number} {output.gender}"
+        output.string = (
+            f"{output.case.regular} {output.number.regular} "
+            f"{output.gender.regular}"
+        )
         return output
 
     def __repr__(self) -> str:
         return f"Pronoun({self.pronoun}, {self.meaning})"
 
     def __str__(self) -> str:
-        return (
-            f"{self.meaning}: {self._mascnom}, {self._femnom}, {self._neutnom}"
-        )
+        return f"{self.meaning}: {self.mascnom}, {self.femnom}, {self.neutnom}"

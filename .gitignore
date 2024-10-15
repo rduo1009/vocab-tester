@@ -12,3 +12,5 @@ monkeytype.sqlite3
 .coverage
 .tox
 /dist
+.dmypy.json
+.testmondata

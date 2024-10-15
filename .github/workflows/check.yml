@@ -17,7 +17,7 @@ jobs:
       fail-fast: false
       matrix:
         py:
-          - "3.13.0-rc.1"
+          - "3.13.0"
           - "3.12.5"
           - "3.11.9"
           - "3.10.14"
@@ -26,32 +26,47 @@ jobs:
         os:
           - ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4.2.1
         with:
           fetch-depth: 0
-          
-      - name: Set up Clang
-        uses: egor-tensin/setup-clang@v1
+
+      # - name: Cache tox folder
+      #   id: cache-tox
+      #   uses: actions/cache@v4.1.1
+      #   with:
+      #     path: ".tox"
+      #     key: ${{ runner.os }}-${{ matrix.python-version }}-${{ hashFiles('pyproject.toml','tox.ini','poetry.lock') }}
+
+      - name: Install LLVM and Clang
+        uses: KyleMayes/install-llvm-action@v2.0.5
         with:
-          version: latest
-          platform: x64
-          
+          version: "18.1.8"
+
+      - name: Install libtinfo5 (Linux)
+        if: contains(matrix.os, 'ubuntu')
+        run: |
+          sudo apt-get update
+          wget http://archive.ubuntu.com/ubuntu/pool/universe/n/ncurses/libtinfo5_6.2-0ubuntu2.1_amd64.deb
+          sudo dpkg -i libtinfo5_6.2-0ubuntu2.1_amd64.deb
+          sudo apt-get install -f
+
       - name: Compile cpp code
         run: clang++ -shared -fPIC -o python_src/lego/libkey.so python_src/lego/key/key.cpp
-        
+
       - name: Setup python for test ${{ matrix.py }}
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5.2.0
         with:
           python-version: ${{ matrix.py }}
-          
+
       - name: Create testdump directory
-        run: mkdir tests/python_src.lego/test_vocab_files/testdump
-        
+        run: mkdir tests/python_src_lego/test_vocab_files/testdump
+
       - name: Install tox
         run: python -m pip install tox-gh>=1.2
-        
+
       - name: Setup test suite
+        # if: steps.cache-tox.outputs.cache-hit != 'true'
         run: tox -vv --notest
-        
+
       - name: Run test suite
         run: tox --skip-pkg-install

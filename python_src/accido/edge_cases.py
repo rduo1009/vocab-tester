@@ -14,7 +14,6 @@ if TYPE_CHECKING:
 
 #  NOTE: There are deponents, but am keeping them for future
 # There also may be missing verbs
-"""Contains third conjugation -io verbs."""
 THIRD_IO_VERBS: Final[set[str]] = {
     "abicio",
     "adicio",
@@ -71,7 +70,6 @@ def check_io_verb(present: str) -> bool:
     return any(present.endswith(io_verb) for io_verb in THIRD_IO_VERBS)
 
 
-"""Contains irregular verbs."""
 IRREGULAR_VERBS: Final[dict[str, Endings]] = {
     "sum": {
         "Vpreactindsg1": "sum",
@@ -392,8 +390,8 @@ IRREGULAR_VERBS: Final[dict[str, Endings]] = {
 }
 
 
-"""Contains verbs that are derived from the main irregular verbs (usually
-having a prefix)."""
+# Contains verbs that are derived from the main irregular verbs (usually
+# having a prefix)
 DERIVED_IRREGULAR_VERBS: Final[dict[str, set[str]]] = {
     "eo": {
         "abeo",
@@ -445,8 +443,6 @@ DERIVED_IRREGULAR_VERBS: Final[dict[str, set[str]]] = {
 # NOTE: This entire thing will probably need to be reworked at some point
 # Notably allowing the given perfect stem to be used so that I don't have
 # to write everything manually
-
-"""Contains the endings that are used for the derived irregular verbs."""
 DERIVED_IRREGULAR_ENDINGS: Final[dict[str, Endings]] = {
     "eo": {
         "Vpreactindsg1": "eo",
@@ -570,7 +566,6 @@ def find_irregular_endings(present: str) -> Endings | None:
     return None
 
 
-"""Contains irregular nouns."""
 IRREGULAR_NOUNS: Final[dict[str, Endings]] = {
     "ego": {
         "Nnomsg": "ego",
@@ -612,9 +607,6 @@ IRREGULAR_NOUNS: Final[dict[str, Endings]] = {
     },
 }
 
-
-"""Contains adjectives that end in -lis, and thus have irregular
-superlatives."""
 LIS_ADJECTIVES: Final[set[str]] = {
     "facilis",
     "difficilis",
@@ -624,11 +616,10 @@ LIS_ADJECTIVES: Final[set[str]] = {
     "humilis",
 }
 
-
-"""Contains adjectives that have irregular forms in the comparative,
-superlative and adverb forms.
-Note that some of these adjectives do not have adverb forms, so the adverb
-forms are given a None value instead."""
+# Contains adjectives that have irregular forms in the comparative,
+# superlative and adverb forms.
+# Note that some of these adjectives do not have adverb forms, so the adverb
+# forms are given a None value instead.
 IRREGULAR_ADJECTIVES: Final[dict[str, list[str | None]]] = {
     "bonus": ["melior", "optim", "bene", "melius", "optime"],
     "malus": ["peior", "pessim", "male", "peius", "pessime"],
@@ -648,8 +639,11 @@ IRREGULAR_ADJECTIVES: Final[dict[str, list[str | None]]] = {
     "dexter": ["dexterior", "dextim", None, None, None],
 }
 
+# TODO: Add to this
+NO_ADVERB_ADJECTIVES = {
+    "ingens",
+}
 
-"""Contains pronouns, which all have irregular endings."""
 PRONOUNS: Final[dict[str, Endings]] = {
     "hic": {
         "Pmnomsg": "hic",

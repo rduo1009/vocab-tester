@@ -9,9 +9,9 @@ from functools import total_ordering
 from typing import TYPE_CHECKING
 
 from .class_word import _Word
+from .misc import EndingComponents
 
 if TYPE_CHECKING:
-    from .misc import EndingComponents
     from .type_aliases import Meaning
 
 
@@ -34,7 +34,7 @@ class RegularWord(_Word):
     """
 
     def __init__(self, *, word: str, meaning: Meaning) -> None:
-        """Initalises RegularWord.
+        """Initialises RegularWord.
 
         Parameters
         ----------
@@ -65,7 +65,7 @@ class RegularWord(_Word):
     def _create_namespace(
         key: str,  # noqa: ARG004
     ) -> EndingComponents:  # pragma: no cover # this should never be ran
-        return NotImplemented
+        return EndingComponents(string="")
 
     def __repr__(self) -> str:
         return f"RegularWord({self.word}, {self.meaning})"

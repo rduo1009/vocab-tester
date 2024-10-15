@@ -67,7 +67,7 @@ def cache_vocab_file(
     UserWarning
         If the cache folder did not exist and had to be created.
     """
-    if not cache_folder.exists():
+    if not cache_folder.exists():  # pragma: no cover
         cache_folder.mkdir(parents=True, exist_ok=True)
         warnings.warn(
             f"The directory {cache_folder} did not exist and has been created",
@@ -80,6 +80,8 @@ def cache_vocab_file(
     if cache_path.exists():
         return (read_vocab_dump(cache_path), True)
 
-    vocab_list: VocabList = read_vocab_file(vocab_file_path)
-    save_vocab_dump(cache_path, vocab_list)
-    return (vocab_list, False)
+    vocab_list: VocabList = read_vocab_file(  # pragma: no cover
+        vocab_file_path
+    )  # sourcery skip: name-type-suffix
+    save_vocab_dump(cache_path, vocab_list)  # pragma: no cover
+    return (vocab_list, False)  # pragma: no cover

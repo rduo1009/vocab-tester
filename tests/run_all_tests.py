@@ -6,7 +6,10 @@ import os
 import sys
 import warnings
 
+import icecream
+
 warnings.filterwarnings("ignore")
+icecream.install()
 
 
 def run_tests_in_class(cls):

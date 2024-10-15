@@ -7,5 +7,3 @@ echo "done"
 echo -n "Generating coverage report... "
 coverage html >> /dev/null
 echo "done"
-
-open htmlcov/index.html
