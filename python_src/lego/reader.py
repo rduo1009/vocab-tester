@@ -23,9 +23,11 @@ if sys.version_info >= (3, 10):
     from .reader_latest import _parse_line as _parse_line
     from .reader_latest import read_vocab_file as read_vocab_file
 else:
-    from .._compat.py38.reader import _generate_meaning as _generate_meaning
-    from .._compat.py38.reader import _parse_line as _parse_line
-    from .._compat.py38.reader import read_vocab_file as read_vocab_file
+    from .._compat.lego.py38.reader import (
+        _generate_meaning as _generate_meaning,
+    )
+    from .._compat.lego.py38.reader import _parse_line as _parse_line
+    from .._compat.lego.py38.reader import read_vocab_file as read_vocab_file
 
 
 def _regenerate_vocab_list(vocab_list: VocabList) -> VocabList:

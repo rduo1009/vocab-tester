@@ -13,8 +13,8 @@ from typing import TYPE_CHECKING, Literal
 
 import lemminflect
 
-from ...transfero.edge_cases import STATIVE_VERBS
-from ...transfero.exceptions import InvalidWordError
+from ....transfero.edge_cases import STATIVE_VERBS
+from ....transfero.exceptions import InvalidWordError
 
 if TYPE_CHECKING:
     from ... import accido

@@ -12,16 +12,16 @@ assert sys.version_info <= (3, 10)
 from functools import total_ordering
 from typing import TYPE_CHECKING, Literal
 
-from ...accido.class_word import _Word
-from ...accido.edge_cases import IRREGULAR_NOUNS
-from ...accido.exceptions import InvalidInputError
-from ...accido.misc import (
+from ....accido.class_word import _Word
+from ....accido.edge_cases import IRREGULAR_NOUNS
+from ....accido.exceptions import InvalidInputError
+from ....accido.misc import (
     CASE_SHORTHAND,
     GENDER_SHORTHAND,
     NUMBER_SHORTHAND,
     EndingComponents,
 )
-from ...utils import key_from_value
+from ....utils import key_from_value
 
 if TYPE_CHECKING:
     from .type_aliases import Ending, Endings, Meaning

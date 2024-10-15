@@ -7,8 +7,10 @@ from __future__ import annotations
 
 import sys
 
+from .. import accido
+from .adj_to_adv import adj_to_adv
+
 if sys.version_info >= (3, 10):
-    from .adj_to_adv import adj_to_adv as adj_to_adv
     from .adjective_inflection import (
         find_adjective_inflections,
         find_main_adjective_inflection,
@@ -30,29 +32,26 @@ if sys.version_info >= (3, 10):
         find_verb_inflections,
     )
 else:
-    from .._compat.py38.adjective_inflection import (
+    from .._compat.py38.tranfero.adjective_inflection import (
         find_adjective_inflections,
         find_main_adjective_inflection,
     )
-    from .._compat.py38.adverb_inflection import (
+    from .._compat.py38.tranfero.adverb_inflection import (
         find_adverb_inflections,
         find_main_adverb_inflection,
     )
-    from .._compat.py38.noun_inflection import (
+    from .._compat.py38.tranfero.noun_inflection import (
         find_main_noun_inflection,
         find_noun_inflections,
     )
-    from .._compat.py38.pronoun_inflection import (
+    from .._compat.py38.tranfero.pronoun_inflection import (
         find_main_pronoun_inflection,
         find_pronoun_inflections,
     )
-    from .._compat.py38.verb_inflection import (
+    from .._compat.py38.tranfero.verb_inflection import (
         find_main_verb_inflection,
         find_verb_inflections,
     )
-    from .adj_to_adv import adj_to_adv
-
-from .. import accido
 
 
 def find_inflection(

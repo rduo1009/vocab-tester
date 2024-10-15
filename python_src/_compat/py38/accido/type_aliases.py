@@ -12,7 +12,7 @@ assert sys.version_info <= (3, 10)
 
 from typing import Literal, Union
 
-from ...accido.misc import MultipleEndings, MultipleMeanings
+from ....accido.misc import MultipleEndings, MultipleMeanings
 
 Ending = Union[str, MultipleEndings]
 Endings = Dict[str, Ending]

@@ -12,11 +12,11 @@ assert sys.version_info <= (3, 10)
 from re import match
 from typing import TYPE_CHECKING, Final
 
-from ... import accido
-from ...lego.exceptions import (
+from ....lego.exceptions import (
     InvalidVocabFileFormatError,
 )
-from ...lego.misc import VocabList
+from ....lego.misc import VocabList
+from ... import accido
 
 if TYPE_CHECKING:
     from io import TextIOWrapper

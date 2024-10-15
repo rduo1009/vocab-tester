@@ -12,7 +12,7 @@ assert sys.version_info < (3, 12)
 
 from typing import Literal, TypeAlias
 
-from ...accido.misc import MultipleEndings, MultipleMeanings
+from ....accido.misc import MultipleEndings, MultipleMeanings
 
 Ending: TypeAlias = str | MultipleEndings
 Endings: TypeAlias = dict[str, Ending]

@@ -13,7 +13,7 @@ from typing import TYPE_CHECKING
 
 import lemminflect
 
-from ...transfero.exceptions import InvalidWordError
+from ....transfero.exceptions import InvalidWordError
 
 if TYPE_CHECKING:
     from ... import accido
