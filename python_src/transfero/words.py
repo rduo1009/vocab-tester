@@ -5,22 +5,46 @@
 
 from __future__ import annotations
 
+import sys
+
+if sys.version_info >= (3, 10):
+    from .adj_to_adv import adj_to_adv as adj_to_adv
+    from .adjective_inflection import (
+        find_adjective_inflections,
+        find_main_adjective_inflection,
+    )
+    from .adverb_inflection import (
+        find_adverb_inflections,
+        find_main_adverb_inflection,
+    )
+    from .noun_inflection import (
+        find_main_noun_inflection,
+        find_noun_inflections,
+    )
+    from .verb_inflection import (
+        find_main_verb_inflection,
+        find_verb_inflections,
+    )
+else:
+    from .._compat.py38.adjective_inflection import (
+        find_adjective_inflections,
+        find_main_adjective_inflection,
+    )
+    from .._compat.py38.adverb_inflection import (
+        find_adverb_inflections,
+        find_main_adverb_inflection,
+    )
+    from .._compat.py38.noun_inflection import (
+        find_main_noun_inflection,
+        find_noun_inflections,
+    )
+    from .._compat.py38.verb_inflection import (
+        find_main_verb_inflection,
+        find_verb_inflections,
+    )
+    from .adj_to_adv import adj_to_adv
+
 from .. import accido
-from .adj_to_adv import adj_to_adv as adj_to_adv
-from .adjective_inflection import (
-    find_adjective_inflections,
-    find_main_adjective_inflection,
-)
-from .adverb_inflection import (
-    find_adverb_inflections,
-    find_main_adverb_inflection,
-)
-from .noun_inflection import find_main_noun_inflection, find_noun_inflections
-from .pronoun_inflection import (
-    find_main_pronoun_inflection,
-    find_pronoun_inflections,
-)
-from .verb_inflection import find_main_verb_inflection, find_verb_inflections
 
 
 def find_inflection(

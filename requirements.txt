@@ -1,15 +1,16 @@
-aenum==3.1.15 ; python_version >= "3.12" and python_version < "4.0"
-click==8.1.7 ; python_version >= "3.12" and python_version < "4.0"
-colorama==0.4.6 ; python_version >= "3.12" and python_version < "4.0" and platform_system == "Windows"
-dill==0.3.9 ; python_version >= "3.12" and python_version < "4.0"
-inflect==7.4.0 ; python_version >= "3.12" and python_version < "4.0"
-joblib==1.4.2 ; python_version >= "3.12" and python_version < "4.0"
-lemminflect==0.2.3 ; python_version >= "3.12" and python_version < "4.0"
-lz4==4.3.3 ; python_version >= "3.12" and python_version < "4.0"
-more-itertools==10.5.0 ; python_version >= "3.12" and python_version < "4.0"
-nltk==3.9.1 ; python_version >= "3.12" and python_version < "4.0"
-numpy==2.1.2 ; python_version >= "3.12" and python_version < "4.0"
-regex==2024.9.11 ; python_version >= "3.12" and python_version < "4.0"
-tqdm==4.66.5 ; python_version >= "3.12" and python_version < "4.0"
-typeguard==4.3.0 ; python_version >= "3.12" and python_version < "4.0"
-typing-extensions==4.12.2 ; python_version >= "3.12" and python_version < "4.0"
+aenum==3.1.15
+click==8.1.7
+dill==0.3.8
+future_typing @ git+https://github.com/rduo1009/future-typing.git@b062439ffb3c74254041906fa3cc7564879efaa5
+inflect==7.4.0
+joblib==1.4.2
+lemminflect==0.2.3
+lz4==4.3.3
+more-itertools==10.5.0
+nltk==3.9.1
+numpy==2.1.0
+regex==2024.9.11
+tqdm==4.66.5
+typeguard==4.3.0
+typing_extensions==4.12.2
+-e git+https://github.com/rduo1009/vocab-tester.git@c29c0f951d488eb672883faa216acd53ffd2ec4e#egg=vocab_tester

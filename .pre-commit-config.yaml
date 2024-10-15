@@ -1,5 +1,5 @@
 ci:
-  skip: [poetry-lock, poetry-export]
+  skip: [poetry-lock]
   autofix_commit_msg: "🔨 refactor: [pre-commit.ci] auto fixes from pre-commit.com hooks"
   autoupdate_commit_msg: "🤖 ci(pre-commit): pre-commit autoupdate"
 
@@ -9,23 +9,6 @@ repos:
     rev: "1.8.0"
     hooks:
       - id: poetry-lock
-      - id: poetry-export
-        args:
-          [
-            "--format=requirements.txt",
-            "--output=requirements.txt",
-            "--without-hashes",
-            "--without-urls",
-          ]
-      - id: poetry-export
-        args:
-          [
-            "--format=requirements.txt",
-            "--output=requirements-dev.txt",
-            "--without-hashes",
-            "--without-urls",
-            "--with=dev",
-          ]
 
   # Format code
   - repo: https://github.com/astral-sh/ruff-pre-commit

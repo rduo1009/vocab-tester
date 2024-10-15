@@ -7,34 +7,25 @@ from __future__ import annotations
 
 import sys
 
-assert sys.version_info >= (3, 10)
+assert sys.version_info <= (3, 10)
 
 from functools import total_ordering
 from typing import TYPE_CHECKING
 
-from .class_word import _Word
-from .edge_cases import (
-    IRREGULAR_ADJECTIVES,
-    LIS_ADJECTIVES,
-    NO_ADVERB_ADJECTIVES,
-)
-from .exceptions import InvalidInputError
-from .misc import (
+from ...accido.class_word import _Word
+from ...accido.edge_cases import IRREGULAR_ADJECTIVES, LIS_ADJECTIVES
+from ...accido.exceptions import InvalidInputError
+from ...accido.misc import (
     Case,
     Degree,
     EndingComponents,
     Gender,
     Number,
 )
+from ...utils import key_from_value
 
 if TYPE_CHECKING:
-    from .type_aliases import (
-        AdjectiveDeclension,
-        Ending,
-        Endings,
-        Meaning,
-        Termination,
-    )
+    from .type_aliases import Ending, Endings, Meaning
 
 
 @total_ordering
@@ -77,8 +68,8 @@ class Adjective(_Word):
     def __init__(
         self,
         *principal_parts: str,
-        termination: Termination | None = None,
-        declension: AdjectiveDeclension,
+        termination: int | None = None,
+        declension: str,
         meaning: Meaning,
     ) -> None:
         """Initialises Adjective and determines the endings.
@@ -103,14 +94,14 @@ class Adjective(_Word):
         super().__init__()
 
         self._principal_parts: tuple[str, ...] = principal_parts
-        self.mascnom: str = self._principal_parts[0]
-        self.femnom: str
-        self.neutnom: str
+        self._mascnom: str = self._principal_parts[0]
+        self._femnom: str
+        self._neutnom: str
 
         self._first = self._principal_parts[0]
         self.meaning: Meaning = meaning
-        self.declension: AdjectiveDeclension = declension
-        self.termination: Termination | None = termination
+        self.declension: str = declension
+        self.termination: int | None = termination
         self.irregular_flag: bool = False
         self.adverb_flag: bool = True
 
@@ -118,9 +109,9 @@ class Adjective(_Word):
         self._cmp_stem: str
         self._spr_stem: str
 
-        if self.mascnom in IRREGULAR_ADJECTIVES:
+        if self._mascnom in IRREGULAR_ADJECTIVES:
             self.irregular_flag = True
-            irregular_data = IRREGULAR_ADJECTIVES[self.mascnom]
+            irregular_data = IRREGULAR_ADJECTIVES[self._mascnom]
 
             assert irregular_data[0] is not None
             assert irregular_data[1] is not None
@@ -139,56 +130,61 @@ class Adjective(_Word):
             else:
                 self.adverb_flag = False
 
-        if self.mascnom in NO_ADVERB_ADJECTIVES:
-            self.adverb_flag = False
+        if self.declension == "212":
+            self.endings = self._212_endings()
 
-        match self.declension:
-            case "212":
-                self.endings = self._212_endings()
+        elif self.declension == "3":
+            if self.termination == 1:
+                self.endings = self._31_endings()
 
-            case "3":
-                match self.termination:
-                    case 1:
-                        self.endings = self._31_endings()
+            elif self.termination == 2:
+                self.endings = self._32_endings()
 
-                    case 2:
-                        self.endings = self._32_endings()
+            elif self.termination == 3:
+                self.endings = self._33_endings()
 
-                    case 3:
-                        self.endings = self._33_endings()
+            else:
+                raise InvalidInputError(
+                    f"Termination must be 1, 2 or 3 (given '{self.termination}')",
+                )
+
+        else:
+            raise InvalidInputError(
+                f"Invalid declension: '{self.declension}'",
+            )
 
     def _212_endings(self) -> Endings:
         if self.termination:
             raise InvalidInputError(
-                "2-1-2 adjectives cannot have a termination "
-                f"(termination '{self.termination}' given)",
+                f"2-1-2 adjectives cannot have a termination (termination '{self.termination}' given)",
             )
 
         if len(self._principal_parts) != 3:
             raise InvalidInputError(
-                "2-1-2 adjectives must have 3 principal parts "
-                f"(adjective '{self._first}' given)",
+                f"2-1-2 adjectives must have 3 principal parts (adjective '{self._first}' given)",
             )
 
-        self.femnom = self._principal_parts[1]
-        self.neutnom = self._principal_parts[2]
+        self._femnom = self._principal_parts[1]
+        self._neutnom = self._principal_parts[2]
 
-        self._pos_stem = self.femnom[:-1]  # cara -> car-
+        self._pos_stem = self._femnom[:-1]  # cara -> car-
 
-        if self.mascnom not in IRREGULAR_ADJECTIVES:
+        if self._mascnom not in IRREGULAR_ADJECTIVES:
             self._cmp_stem = f"{self._pos_stem}ior"  # car- -> carior-
-            if self.mascnom.endswith(
+            if self._mascnom.endswith(
                 "er",
-            ):  # pragma: no cover
-                self._spr_stem = f"{self.mascnom}rim"  # miser- -> miserrim-
-            elif self.mascnom in LIS_ADJECTIVES:  # pragma: no cover
+            ):  # pragma: no cover # not sure if an example of this actually occurs
+                self._spr_stem = f"{self._mascnom}rim"  # miser- -> miserrim-
+            elif (
+                self._mascnom in LIS_ADJECTIVES
+            ):  # pragma: no cover # not sure if an example of this actually occurs
                 self._spr_stem = f"{self._pos_stem}lim"  # facil- -> facillim-
             else:
                 self._spr_stem = f"{self._pos_stem}issim"  # car- -> carissim-
 
         endings: Endings
         endings = {
-            "Aposmnomsg": self.mascnom,  # carus
+            "Aposmnomsg": self._mascnom,  # carus
             "Aposmvocsg": f"{self._pos_stem}e",  # care
             "Aposmaccsg": f"{self._pos_stem}um",  # carum
             "Aposmgensg": f"{self._pos_stem}i",  # cari
@@ -200,8 +196,8 @@ class Adjective(_Word):
             "Aposmgenpl": f"{self._pos_stem}orum",  # carorum
             "Aposmdatpl": f"{self._pos_stem}is",  # caris
             "Aposmablpl": f"{self._pos_stem}is",  # caris
-            "Aposfnomsg": self.femnom,  # cara
-            "Aposfvocsg": self.femnom,  # cara
+            "Aposfnomsg": self._femnom,  # cara
+            "Aposfvocsg": self._femnom,  # cara
             "Aposfaccsg": f"{self._pos_stem}am",  # caram
             "Aposfgensg": f"{self._pos_stem}ae",  # carae
             "Aposfdatsg": f"{self._pos_stem}ae",  # carae
@@ -212,9 +208,9 @@ class Adjective(_Word):
             "Aposfgenpl": f"{self._pos_stem}arum",  # cararum
             "Aposfdatpl": f"{self._pos_stem}is",  # caris
             "Aposfablpl": f"{self._pos_stem}is",  # caris
-            "Aposnnomsg": self.neutnom,  # carum
-            "Aposnvocsg": self.neutnom,  # carum
-            "Aposnaccsg": self.neutnom,  # carum
+            "Aposnnomsg": self._neutnom,  # carum
+            "Aposnvocsg": self._neutnom,  # carum
+            "Aposnaccsg": self._neutnom,  # carum
             "Aposngensg": f"{self._pos_stem}i",  # cari
             "Aposndatsg": f"{self._pos_stem}o",  # caro
             "Aposnablsg": f"{self._pos_stem}o",  # caro
@@ -299,7 +295,7 @@ class Adjective(_Word):
         }
 
         if self.adverb_flag:
-            endings |= {
+            endings.update({
                 "Dpos": (
                     self._irregular_posadv
                     if self.irregular_flag
@@ -315,32 +311,32 @@ class Adjective(_Word):
                     if self.irregular_flag
                     else f"{self._spr_stem}e"
                 ),  # laetissime
-            }
+            })
 
         return endings
 
     def _31_endings(self) -> Endings:
         if len(self._principal_parts) != 2:
             raise InvalidInputError(
-                "First-termination adjectives must have 2 principal parts "
-                f"(adjective '{self._first}' given)",
+                f"First-termination adjectives must have 2 principal parts (adjective '{self._first}' given)",
             )
 
-        self.mascgen: str = self._principal_parts[1]
+        self._mascgen: str = self._principal_parts[1]
 
-        if not self.mascgen.endswith("is"):
+        if self._mascgen[-2:] != "is":
             raise InvalidInputError(
-                f"Invalid genitive form: '{self.mascgen}' "
-                "(must end in '-is')",
+                f"Invalid genitive form: '{self._mascgen}' (must end in '-is')",
             )
 
-        self._pos_stem = self.mascgen[:-2]  # ingentis -> ingent-
+        self._pos_stem = self._mascgen[:-2]  # ingentis -> ingent-
 
         if not self.irregular_flag:
             self._cmp_stem = f"{self._pos_stem}ior"  # ingent- > ingentior-
-            if self.mascnom.endswith("er"):
-                self._spr_stem = f"{self.mascnom}rim"  # miser- -> miserrim-
-            elif self.mascnom in LIS_ADJECTIVES:  # pragma: no cover
+            if self._mascnom.endswith("er"):
+                self._spr_stem = f"{self._mascnom}rim"  # miser- -> miserrim-
+            elif (
+                self._mascnom in LIS_ADJECTIVES
+            ):  # pragma: no cover # not sure if an example of this actually occurs
                 self._spr_stem = f"{self._pos_stem}lim"  # facil- -> facillim-
             else:
                 self._spr_stem = (
@@ -349,10 +345,10 @@ class Adjective(_Word):
 
         endings: Endings
         endings = {
-            "Aposmnomsg": self.mascnom,  # ingens
-            "Aposmvocsg": self.mascnom,  # ingens
+            "Aposmnomsg": self._mascnom,  # ingens
+            "Aposmvocsg": self._mascnom,  # ingens
             "Aposmaccsg": f"{self._pos_stem}em",  # ingentem
-            "Aposmgensg": self.mascgen,  # ingentis
+            "Aposmgensg": self._mascgen,  # ingentis
             "Aposmdatsg": f"{self._pos_stem}i",  # ingenti
             "Aposmablsg": f"{self._pos_stem}i",  # ingenti
             "Aposmnompl": f"{self._pos_stem}es",  # ingentes
@@ -361,10 +357,10 @@ class Adjective(_Word):
             "Aposmgenpl": f"{self._pos_stem}ium",  # ingentium
             "Aposmdatpl": f"{self._pos_stem}ibus",  # ingentibus
             "Aposmablpl": f"{self._pos_stem}ibus",  # ingentibus
-            "Aposfnomsg": self.mascnom,  # ingens
-            "Aposfvocsg": self.mascnom,  # ingens
+            "Aposfnomsg": self._mascnom,  # ingens
+            "Aposfvocsg": self._mascnom,  # ingens
             "Aposfaccsg": f"{self._pos_stem}em",  # ingentem
-            "Aposfgensg": self.mascgen,  # ingentis
+            "Aposfgensg": self._mascgen,  # ingentis
             "Aposfdatsg": f"{self._pos_stem}i",  # ingenti
             "Aposfablsg": f"{self._pos_stem}i",  # ingenti
             "Aposfnompl": f"{self._pos_stem}es",  # ingentes
@@ -373,10 +369,10 @@ class Adjective(_Word):
             "Aposfgenpl": f"{self._pos_stem}ium",  # ingentium
             "Aposfdatpl": f"{self._pos_stem}ibus",  # ingentibus
             "Aposfablpl": f"{self._pos_stem}ibus",  # ingentibus
-            "Aposnnomsg": self.mascnom,  # ingens
-            "Aposnvocsg": self.mascnom,  # ingens
-            "Aposnaccsg": self.mascnom,  # ingens
-            "Aposngensg": self.mascgen,  # ingentis
+            "Aposnnomsg": self._mascnom,  # ingens
+            "Aposnvocsg": self._mascnom,  # ingens
+            "Aposnaccsg": self._mascnom,  # ingens
+            "Aposngensg": self._mascgen,  # ingentis
             "Aposndatsg": f"{self._pos_stem}i",  # ingenti
             "Aposnablsg": f"{self._pos_stem}i",  # ingenti
             "Aposnnompl": f"{self._pos_stem}ia",  # ingentia
@@ -460,7 +456,7 @@ class Adjective(_Word):
         }
 
         if self.adverb_flag:
-            endings |= {
+            endings.update({
                 "Dpos": (
                     self._irregular_posadv
                     if self.irregular_flag
@@ -476,25 +472,26 @@ class Adjective(_Word):
                     if self.irregular_flag
                     else f"{self._spr_stem}e"
                 ),  # atrocissime
-            }
+            })
 
         return endings
 
     def _32_endings(self) -> Endings:
         if len(self._principal_parts) != 2:
             raise InvalidInputError(
-                "Second-termination adjectives must have 2 principal parts "
-                f"(adjective '{self._first}' given)",
+                f"Second-termination adjectives must have 2 principal parts (adjective '{self._first}' given)",
             )
 
-        self.neutnom = self._principal_parts[1]
+        self._neutnom = self._principal_parts[1]
 
-        self._pos_stem = self.mascnom[:-2]  # fortis -> fort-
+        self._pos_stem = self._mascnom[:-2]  # fortis -> fort-
         if not self.irregular_flag:
             self._cmp_stem = f"{self._pos_stem}ior"  # fort- -> fortior-
-            if self.mascnom.endswith("er"):  # pragma: no cover
-                self._spr_stem = f"{self.mascnom}rim"  # miser- -> miserrim-
-            elif self.mascnom in LIS_ADJECTIVES:
+            if (
+                self._mascnom[-2:] == "er"
+            ):  # pragma: no cover # not sure if an example of this actually occurs
+                self._spr_stem = f"{self._mascnom}rim"  # miser- -> miserrim-
+            elif self._mascnom in LIS_ADJECTIVES:
                 self._spr_stem = f"{self._pos_stem}lim"  # facil- -> facillim-
             else:
                 self._spr_stem = (
@@ -503,8 +500,8 @@ class Adjective(_Word):
 
         endings: Endings
         endings = {
-            "Aposmnomsg": self.mascnom,  # fortis
-            "Aposmvocsg": self.mascnom,  # fortis
+            "Aposmnomsg": self._mascnom,  # fortis
+            "Aposmvocsg": self._mascnom,  # fortis
             "Aposmaccsg": f"{self._pos_stem}em",  # fortem
             "Aposmgensg": f"{self._pos_stem}is",  # fortis
             "Aposmdatsg": f"{self._pos_stem}i",  # forti
@@ -515,8 +512,8 @@ class Adjective(_Word):
             "Aposmgenpl": f"{self._pos_stem}ium",  # fortium
             "Aposmdatpl": f"{self._pos_stem}ibus",  # fortibus
             "Aposmablpl": f"{self._pos_stem}ibus",  # fortibus
-            "Aposfnomsg": self.mascnom,  # fortis
-            "Aposfvocsg": self.mascnom,  # fortis
+            "Aposfnomsg": self._mascnom,  # fortis
+            "Aposfvocsg": self._mascnom,  # fortis
             "Aposfaccsg": f"{self._pos_stem}em",  # fortem
             "Aposfgensg": f"{self._pos_stem}is",  # fortis
             "Aposfdatsg": f"{self._pos_stem}i",  # forti
@@ -527,9 +524,9 @@ class Adjective(_Word):
             "Aposfgenpl": f"{self._pos_stem}ium",  # fortium
             "Aposfdatpl": f"{self._pos_stem}ibus",  # fortibus
             "Aposfablpl": f"{self._pos_stem}ibus",  # fortibus
-            "Aposnnomsg": self.neutnom,  # forte
-            "Aposnvocsg": self.neutnom,  # forte
-            "Aposnaccsg": self.neutnom,  # forte
+            "Aposnnomsg": self._neutnom,  # forte
+            "Aposnvocsg": self._neutnom,  # forte
+            "Aposnaccsg": self._neutnom,  # forte
             "Aposngensg": f"{self._pos_stem}is",  # fortis
             "Aposndatsg": f"{self._pos_stem}i",  # fortibus
             "Aposnablsg": f"{self._pos_stem}i",  # fortibus
@@ -614,7 +611,7 @@ class Adjective(_Word):
         }
 
         if self.adverb_flag:
-            endings |= {
+            endings.update({
                 "Dpos": (
                     self._irregular_posadv
                     if self.irregular_flag
@@ -630,35 +627,34 @@ class Adjective(_Word):
                     if self.irregular_flag
                     else f"{self._spr_stem}e"
                 ),  # fortissime
-            }
+            })
 
         return endings
 
     def _33_endings(self) -> Endings:
         if len(self._principal_parts) != 3:
             raise InvalidInputError(
-                "Third-termination adjectives must have 3 principal parts "
-                f"(adjective '{self._first}' given)",
+                f"Third-termination adjectives must have 3 principal parts (adjective '{self._first}' given)",
             )
 
-        self.mascnom = self._principal_parts[0]
-        self.femnom = self._principal_parts[1]
-        self.neutnom = self._principal_parts[2]
+        self._mascnom = self._principal_parts[0]
+        self._femnom = self._principal_parts[1]
+        self._neutnom = self._principal_parts[2]
 
-        self._pos_stem = self.femnom[:-2]  # acris -> acr-
+        self._pos_stem = self._femnom[:-2]  # acris -> acr-
         if not self.irregular_flag:
             self._cmp_stem = f"{self._pos_stem}ior"  # acr- -> acrior-
-            if self.mascnom.endswith("er"):
-                self._spr_stem = f"{self.mascnom}rim"  # cer- -> acerrim-
-            elif self.mascnom in LIS_ADJECTIVES:  # pragma: no cover
+            if self._mascnom[-2:] == "er":
+                self._spr_stem = f"{self._mascnom}rim"  # cer- -> acerrim-
+            elif self._mascnom in LIS_ADJECTIVES:  # pragma: no cover
                 self._spr_stem = f"{self._pos_stem}lim"  # facil- -> facillim-
             else:  # pragma: no cover
                 self._spr_stem = f"{self._pos_stem}issim"  # levis -> levissim-
 
         endings: Endings
         endings = {
-            "Aposmnomsg": self.mascnom,  # acer
-            "Aposmvocsg": self.mascnom,  # acer
+            "Aposmnomsg": self._mascnom,  # acer
+            "Aposmvocsg": self._mascnom,  # acer
             "Aposmaccsg": f"{self._pos_stem}em",  # acrem
             "Aposmgensg": f"{self._pos_stem}is",  # acris
             "Aposmdatsg": f"{self._pos_stem}i",  # acri
@@ -669,8 +665,8 @@ class Adjective(_Word):
             "Aposmgenpl": f"{self._pos_stem}ium",  # acrium
             "Aposmdatpl": f"{self._pos_stem}ibus",  # acribus
             "Aposmablpl": f"{self._pos_stem}ibus",  # acribus
-            "Aposfnomsg": self.femnom,  # acris
-            "Aposfvocsg": self.femnom,  # acris
+            "Aposfnomsg": self._femnom,  # acris
+            "Aposfvocsg": self._femnom,  # acris
             "Aposfaccsg": f"{self._pos_stem}em",  # acrem
             "Aposfgensg": f"{self._pos_stem}is",  # acris
             "Aposfdatsg": f"{self._pos_stem}i",  # acri
@@ -681,9 +677,9 @@ class Adjective(_Word):
             "Aposfgenpl": f"{self._pos_stem}ium",  # acrium
             "Aposfdatpl": f"{self._pos_stem}ibus",  # acribus
             "Aposfablpl": f"{self._pos_stem}ibus",  # acribus
-            "Aposnnomsg": self.neutnom,  # acre
-            "Aposnvocsg": self.neutnom,  # acre
-            "Aposnaccsg": self.neutnom,  # acre
+            "Aposnnomsg": self._neutnom,  # acre
+            "Aposnvocsg": self._neutnom,  # acre
+            "Aposnaccsg": self._neutnom,  # acre
             "Aposngensg": f"{self._pos_stem}is",  # acris
             "Aposndatsg": f"{self._pos_stem}i",  # acri
             "Aposnablsg": f"{self._pos_stem}i",  # acri
@@ -768,7 +764,7 @@ class Adjective(_Word):
         }
 
         if self.adverb_flag:
-            endings |= {
+            endings.update({
                 "Dpos": (
                     self._irregular_posadv
                     if self.irregular_flag
@@ -784,7 +780,7 @@ class Adjective(_Word):
                     if self.irregular_flag
                     else f"{self._spr_stem}e"
                 ),  # acerrime
-            }
+            })
 
         return endings
 

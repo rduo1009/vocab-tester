@@ -5,7 +5,11 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+import sys
+
+assert sys.version_info >= (3, 10)
+
+from typing import TYPE_CHECKING, Literal
 
 import lemminflect
 

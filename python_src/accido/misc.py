@@ -111,9 +111,6 @@ PERSON_SHORTHAND: Final[dict[int, str]] = {
 }
 
 
-type _Subtype = Literal["infinitive", "participle", "adverb", "pronoun"]
-
-
 class EndingComponents:
     """A container for the grammatical components of an ending.
 
@@ -259,7 +256,9 @@ class EndingComponents:
         self.string: str = string
 
         self.type: type[accido.endings._Word]
-        self.subtype: _Subtype | None
+        self.subtype: (
+            Literal["infinitive", "participle", "adverb", "pronoun"] | None
+        )
         self.type, self.subtype = self._determine_type()
 
     def _get_non_null_attributes(self) -> list[str]:
@@ -271,7 +270,10 @@ class EndingComponents:
 
     def _determine_type(
         self,
-    ) -> tuple[type[accido.endings._Word], _Subtype | None]:
+    ) -> tuple[
+        type[accido.endings._Word],
+        Literal["infinitive", "participle", "adverb", "pronoun"] | None,
+    ]:
         attributes = self._get_non_null_attributes()
 
         if set(attributes) == {"tense", "voice", "mood", "person", "number"}:
