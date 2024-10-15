@@ -17,7 +17,10 @@ if sys.version_info >= (3, 12):
     from .type_aliases_latest import is_person as is_person
     from .type_aliases_latest import is_termination as is_termination
 
-elif sys.version_info >= (3, 10):
+else:
+    from .._compat.py310.accido.type_aliases import (
+        AdjectiveDeclension as AdjectiveDeclension,
+    )
     from .._compat.py310.accido.type_aliases import Conjugation as Conjugation
     from .._compat.py310.accido.type_aliases import Ending as Ending
     from .._compat.py310.accido.type_aliases import Endings as Endings
@@ -26,11 +29,7 @@ elif sys.version_info >= (3, 10):
         NounDeclension as NounDeclension,
     )
     from .._compat.py310.accido.type_aliases import Person as Person
-    from .._compat.py310.type_aliases import (
-        AdjectiveDeclension as AdjectiveDeclension,
+    from .._compat.py310.accido.type_aliases import is_person as is_person
+    from .._compat.py310.accido.type_aliases import (
+        is_termination as is_termination,
     )
-
-else:  # pragma: no cover
-    from .._compat.py38.accido.type_aliases import Ending as Ending
-    from .._compat.py38.accido.type_aliases import Endings as Endings
-    from .._compat.py38.accido.type_aliases import Meaning as Meaning

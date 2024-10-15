@@ -1,7 +1,7 @@
 aenum==3.1.15
 click==8.1.7
 dill==0.3.8
-future_typing @ git+https://github.com/rduo1009/future-typing.git@b062439ffb3c74254041906fa3cc7564879efaa5
+future_typing @ git+https://github.com/rduo1009/future-typing.git@ff8be71d90b5c1872460038983502a91728ec15c
 inflect==7.4.0
 joblib==1.4.2
 lemminflect==0.2.3
@@ -13,4 +13,4 @@ regex==2024.9.11
 tqdm==4.66.5
 typeguard==4.3.0
 typing_extensions==4.12.2
--e git+https://github.com/rduo1009/vocab-tester.git@c29c0f951d488eb672883faa216acd53ffd2ec4e#egg=vocab_tester
+-e git+https://github.com/rduo1009/vocab-tester.git@0323a592a53e2ceed1d093c42a93480218d918ad#egg=vocab_tester

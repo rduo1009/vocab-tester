@@ -15,6 +15,7 @@ from .saver import save_vocab_dump
 if TYPE_CHECKING:
     from .misc import VocabList
 import hashlib
+import sys
 
 
 def _sha256sum(filename: Path) -> str:
@@ -34,11 +35,20 @@ def _sha256sum(filename: Path) -> str:
     -----
     Code taken from https://stackoverflow.com/a/44873382
     """
-    with open(filename, "rb", buffering=0) as file:
-        return hashlib.file_digest(
-            file,  # type: ignore[arg-type] # mypy cannot handle this
-            "sha256",
-        ).hexdigest()
+    if sys.version_info >= (3, 11):
+        with open(filename, "rb", buffering=0) as file:
+            return hashlib.file_digest(
+                file,  # type: ignore[arg-type] # mypy cannot handle this
+                "sha256",
+            ).hexdigest()
+
+    h = hashlib.sha256()
+    b = bytearray(128 * 1024)
+    mv = memoryview(b)
+    with open(filename, "rb", buffering=0) as f:
+        while n := f.readinto(mv):
+            h.update(mv[:n])
+    return h.hexdigest()
 
 
 def cache_vocab_file(

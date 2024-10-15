@@ -251,7 +251,7 @@ test = ["black (==21.5b1)", "flake8 (==3.9.2)", "isort (==5.8.0)", "mypy (==0.81
 type = "git"
 url = "https://github.com/rduo1009/future-typing.git"
 reference = "HEAD"
-resolved_reference = "b062439ffb3c74254041906fa3cc7564879efaa5"
+resolved_reference = "ff8be71d90b5c1872460038983502a91728ec15c"
 
 [[package]]
 name = "icecream"

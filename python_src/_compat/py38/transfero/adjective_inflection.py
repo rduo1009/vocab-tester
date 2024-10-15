@@ -5,18 +5,12 @@
 
 from __future__ import annotations
 
-import sys
-
-assert sys.version_info <= (3, 10)
-
-from typing import TYPE_CHECKING
-
 import lemminflect
 
+from .... import accido
+from ....accido.misc import Degree
+from ....transfero.edge_cases import NOT_COMPARABLE_ADJECTIVES
 from ....transfero.exceptions import InvalidWordError
-
-if TYPE_CHECKING:
-    from ... import accido
 
 
 def find_adjective_inflections(
@@ -44,61 +38,86 @@ def find_adjective_inflections(
     ValueError
         If the input (other than the word itself) is invalid.
     """
-    # Most of these are not necessary, but it helps to catch errors earlier
-    if not hasattr(components, "gender"):
-        raise ValueError("Gender must be specified")
+    if components.type is not accido.endings.Adjective:
+        raise ValueError(f"Invalid type: '{components.type}'")
+    if components.subtype is not None:
+        raise ValueError(f"Invalid subtype: '{components.subtype}'")
 
-    if not hasattr(components, "case"):
-        raise ValueError("Case must be specified")
+    try:
+        lemmas: tuple[str, ...] = lemminflect.getLemma(adjective, "ADJ")
+    except KeyError as e:  # pragma: no cover
+        raise InvalidWordError(
+            f"Word '{adjective}' is not an adjective"
+        ) from e
 
-    if not hasattr(components, "number"):
-        raise ValueError("Number must be specified")
+    inflections: set[str] = set()
+    for lemma in lemmas:
+        inflections |= _inflect_lemma(lemma, components.degree)[1]
 
-    if not hasattr(components, "degree"):
-        raise ValueError("Degree must be specified")
+    return inflections
 
-    if components.gender not in {"masculine", "feminine", "neuter"}:
-        raise ValueError(f"Invalid gender: '{components.gender}'")
 
-    if components.case not in {
-        "nominative",
-        "vocative",
-        "accusative",
-        "genitive",
-        "dative",
-        "ablative",
-    }:
-        raise ValueError(f"Invalid case: '{components.case}'")
+def find_main_adjective_inflection(
+    adjective: str, components: accido.misc.EndingComponents
+) -> str:
+    """Find the main inflection of an English adjective.
 
-    if components.number not in {"singular", "plural"}:
-        raise ValueError(f"Invalid number: '{components.number}'")
+    Parameters.
+    ----------
+    adjective : str
+        The adjective to inflect.
+    components : EndingComponents
+        The components of the ending.
+
+    Returns
+    -------
+    str
+        The main inflection of the adjective.
+
+    Raises
+    ------
+    InvalidWordError
+        If the word is not a valid English adjective.
+    ValueError
+        If the input (other than the word itself) is invalid.
+    """
+    if components.type is not accido.endings.Adjective:
+        raise ValueError(f"Invalid type: '{components.type}'")
+    if components.subtype is not None:
+        raise ValueError(f"Invalid subtype: '{components.subtype}'")
 
     try:
         lemma: str = lemminflect.getLemma(adjective, "ADJ")[0]
-    except KeyError as e:
+    except KeyError as e:  # pragma: no cover
         raise InvalidWordError(
-            f"Word '{adjective}' is not an adjective",
+            f"Word '{adjective}' is not an adjective"
         ) from e
 
-    if components.degree == "positive":
-        return {lemma}
+    return _inflect_lemma(lemma, components.degree)[0]
 
-    if components.degree == "comparative":
-        comparative: str = lemminflect.getInflection(lemma, "RBR")[0]
 
-        return {comparative, f"more {lemma}"}
+def _inflect_lemma(lemma: str, degree: Degree) -> tuple[str, set[str]]:
+    not_comparable: bool = lemma in NOT_COMPARABLE_ADJECTIVES
 
-    if components.degree == "superlative":
-        superlative: str = lemminflect.getInflection(lemma, "RBS")[0]
+    if degree is Degree.POSITIVE:
+        return (lemma, {lemma})
+    if degree is Degree.COMPARATIVE:
+        comparatives: tuple[str, ...] = lemminflect.getInflection(lemma, "RBR")
+        return (
+            f"more {lemma}" if not_comparable else comparatives[0],
+            {*comparatives, f"more {lemma}"},
+        )
 
-        return {
-            superlative,
+    superlatives: tuple[str, ...] = lemminflect.getInflection(lemma, "RBS")
+    return (
+        f"most {lemma}" if not_comparable else superlatives[0],
+        {
+            *superlatives,
             f"most {lemma}",
             f"very {lemma}",
             f"extremely {lemma}",
             f"rather {lemma}",
             f"too {lemma}",
             f"quite {lemma}",
-        }
-
-    raise ValueError(f"Invalid degree: '{components.degree}'")
+        },
+    )

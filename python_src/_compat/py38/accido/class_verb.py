@@ -5,10 +5,6 @@
 
 from __future__ import annotations
 
-import sys
-
-assert sys.version_info <= (3, 10)
-
 from functools import total_ordering
 from typing import TYPE_CHECKING, Literal
 
@@ -16,16 +12,16 @@ from ....accido.class_word import _Word
 from ....accido.edge_cases import check_io_verb, find_irregular_endings
 from ....accido.exceptions import InvalidInputError
 from ....accido.misc import (
-    CASE_SHORTHAND,
-    GENDER_SHORTHAND,
-    MOOD_SHORTHAND,
-    NUMBER_SHORTHAND,
     PERSON_SHORTHAND,
-    TENSE_SHORTHAND,
-    VOICE_SHORTHAND,
+    Case,
     EndingComponents,
+    Gender,
+    Mood,
+    Number,
+    Tense,
+    Voice,
 )
-from ....utils import key_from_value
+from ....accido.type_aliases import Person, is_person
 
 if TYPE_CHECKING:
     from .type_aliases import Ending, Endings, Meaning
@@ -450,13 +446,13 @@ class Verb(_Word):
     def get(
         self,
         *,
-        person: int | None = None,
-        number: str | None = None,
-        tense: str,
-        voice: str,
-        mood: str,
-        participle_gender: str | None = None,
-        participle_case: str | None = None,
+        person: Person | None = None,
+        number: Number | None = None,
+        tense: Tense,
+        voice: Voice,
+        mood: Mood,
+        participle_gender: Gender | None = None,
+        participle_case: Case | None = None,
     ) -> Ending | None:
         """Returns the ending of the verb.
 
@@ -464,14 +460,20 @@ class Verb(_Word):
 
         Parameters
         ----------
-        person : Optional[int], default = None
+        person : Optional[Person], default = None
             The person of the ending, if applicable (not participle).
-        number : Optional[str], default = None
+        number : Optional[Number], default = None
             The number of the ending, if applicable (not participle).
-        tense, voice, mood : str
-            The tense, voice and mood of the ending.
-        participle_gender, participle_case : Optional[str], default = None
-            The case and gender of the ending, if applicable (participle).
+        tense : Tense
+            The tense of the ending.
+        voice : Voice
+            The voice of the ending.
+        mood : Mood
+            The mood of the ending.
+        participle_gender : Optional[Gender], default = None
+            The gender of the participle, if applicable.
+        participle_case : Optional[Case], default = None
+            The case of the participle, if applicable.
 
         Returns
         -------
@@ -500,39 +502,28 @@ class Verb(_Word):
         ... )
         >>> foo.get(
         ...     person=1,
-        ...     number="singular",
-        ...     tense="present",
-        ...     voice="active",
-        ...     mood="indicative",
+        ...     number=Number.SINGULAR,
+        ...     tense=Tense.PRESENT,
+        ...     voice=Voice.ACTIVE,
+        ...     mood=Mood.INDICATIVE,
         ... )
         'celo'
 
         Note that all arguments of get are keyword-only.
 
         >>> foo.get(
-        ...     number="singular",
-        ...     tense="perfect",
-        ...     voice="passive",
-        ...     mood="participle",
-        ...     participle_gender="masculine",
-        ...     participle_case="nominative",
+        ...     number=Number.SINGULAR,
+        ...     tense=Tense.PERFECT,
+        ...     voice=Voice.PASSIVE,
+        ...     mood=Mood.PARTICIPLE,
+        ...     participle_gender=Gender.MASCULINE,
+        ...     participle_case=Case.NOMINATIVE,
         ... )
         'celatus'
 
         Similar with participle endings.
         """
-        short_tense: str
-        short_voice: str
-        short_mood: str
-        short_number: str
-
-        if tense not in TENSE_SHORTHAND:
-            raise InvalidInputError(f"Invalid tense: '{tense}'")
-
-        if voice not in VOICE_SHORTHAND:
-            raise InvalidInputError(f"Invalid voice: '{voice}'")
-
-        if mood == "participle":
+        if mood == Mood.PARTICIPLE:
             if person:
                 raise InvalidInputError(
                     f"Participle cannot have a person (person '{person}')",
@@ -547,7 +538,7 @@ class Verb(_Word):
             if not number:
                 raise InvalidInputError("Number not given")
 
-            return self._get_partciple(
+            return self._get_participle(
                 tense=tense,
                 voice=voice,
                 number=number,
@@ -555,50 +546,32 @@ class Verb(_Word):
                 participle_case=participle_case,
             )
 
-        if mood not in MOOD_SHORTHAND:
-            raise InvalidInputError(f"Invalid mood: '{mood}'")
-
-        if number and number not in NUMBER_SHORTHAND:
-            raise InvalidInputError(f"Invalid number: '{number}'")
-
-        if person and person not in {1, 2, 3}:
-            raise InvalidInputError(f"Invalid person: '{person}'")
-
-        short_tense = TENSE_SHORTHAND[tense]
-        short_voice = VOICE_SHORTHAND[voice]
-        short_mood = MOOD_SHORTHAND[mood]
+        short_tense: str = tense.shorthand
+        short_voice: str = voice.shorthand
         if number:
-            short_number = NUMBER_SHORTHAND[number]
+            short_number: str = number.shorthand
 
-        if mood == "infinitive":
+        if mood == Mood.INFINITIVE:
             return self.endings.get(f"V{short_tense}{short_voice}inf   ")
+        short_mood: str = mood.shorthand
         return self.endings.get(
             f"V{short_tense}{short_voice}{short_mood}{short_number}{person}",
         )
 
-    def _get_partciple(
+    def _get_participle(
         self,
         *,
-        tense: str,
-        voice: str,
-        number: str,
-        participle_gender: str,
-        participle_case: str,
+        tense: Tense,
+        voice: Voice,
+        number: Number,
+        participle_gender: Gender,
+        participle_case: Case,
     ) -> Ending | None:
-        if participle_case not in CASE_SHORTHAND:
-            raise InvalidInputError(f"Invalid case: '{participle_case}'")
-
-        if participle_gender not in GENDER_SHORTHAND:
-            raise InvalidInputError(f"Invalid gender: '{participle_gender}'")
-
-        if number not in NUMBER_SHORTHAND:
-            raise InvalidInputError(f"Invalid number: '{number}'")
-
-        short_tense = TENSE_SHORTHAND[tense]
-        short_voice = VOICE_SHORTHAND[voice]
-        short_number = NUMBER_SHORTHAND[number]
-        short_gender: str = GENDER_SHORTHAND[participle_gender]
-        short_case: str = CASE_SHORTHAND[participle_case]
+        short_tense = tense.shorthand
+        short_voice = voice.shorthand
+        short_number = number.shorthand
+        short_gender: str = participle_gender.shorthand
+        short_case: str = participle_case.shorthand
 
         return self.endings.get(
             f"V{short_tense}{short_voice}ptc{short_gender}{short_case}{short_number}",
@@ -607,29 +580,55 @@ class Verb(_Word):
     @staticmethod
     def _create_namespace(key: str) -> EndingComponents:
         output: EndingComponents
-        if len(key) == 13:
+        if len(key) == 13 and key[7:10] == "inf":
             output = EndingComponents(
-                tense=key_from_value(TENSE_SHORTHAND, key[1:4]),
-                voice=key_from_value(VOICE_SHORTHAND, key[4:7]),
-                mood=key_from_value(MOOD_SHORTHAND, key[7:10]),
-                number=key_from_value(NUMBER_SHORTHAND, key[10:12]),
-                person=PERSON_SHORTHAND[int(key[12])],
+                tense=Tense(key[1:4]),
+                voice=Voice(key[4:7]),
+                mood=Mood(key[7:10]),
             )
-            output.string = f"{output.tense} {output.voice} {output.mood} {output.number} {output.person}"
+            output.string = (
+                f"{output.tense.regular} {output.voice.regular} "
+                f"{output.mood.regular}"
+            )
             return output
+
+        if len(key) == 13:
+            person_value = int(key[12])
+            assert is_person(person_value)
+
+            output = EndingComponents(
+                tense=Tense(key[1:4]),
+                voice=Voice(key[4:7]),
+                mood=Mood(key[7:10]),
+                number=Number(key[10:12]),
+                person=person_value,
+            )
+            output.string = (
+                f"{output.tense.regular} {output.voice.regular} "
+                f"{output.mood.regular} {output.number.regular} "
+                f"{PERSON_SHORTHAND[int(key[12])]}"
+            )
+            return output
+
         if len(key) == 16 and key[7:10] == "ptc":
             output = EndingComponents(
-                tense=key_from_value(TENSE_SHORTHAND, key[1:4]),
-                voice=key_from_value(VOICE_SHORTHAND, key[4:7]),
-                mood="participle",
-                gender=key_from_value(GENDER_SHORTHAND, key[10]),
-                case=key_from_value(CASE_SHORTHAND, key[11:14]),
-                number=key_from_value(NUMBER_SHORTHAND, key[14:16]),
+                tense=Tense(key[1:4]),
+                voice=Voice(key[4:7]),
+                mood=Mood.PARTICIPLE,
+                gender=Gender(key[10]),
+                case=Case(key[11:14]),
+                number=Number(key[14:16]),
             )
-            output.string = f"{output.tense} {output.voice} participle {output.gender} {output.case} {output.number}"
+            output.string = (
+                f"{output.tense.regular} {output.voice.regular} participle "
+                f"{output.gender.regular} {output.case.regular} "
+                f"{output.number.regular}"
+            )
             return output
-        # pragma: no cover # this should never happen
-        raise InvalidInputError(f"Key '{key}' is invalid")
+
+        raise InvalidInputError(
+            f"Key '{key}' is invalid"
+        )  # pragma: no cover # this should never happen
 
     def __repr__(self) -> str:
         return f"Verb({self.present}, {self.infinitive}, {self.perfect}, {self.ppp}, {self.meaning})"

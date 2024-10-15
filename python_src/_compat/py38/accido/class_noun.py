@@ -5,10 +5,6 @@
 
 from __future__ import annotations
 
-import sys
-
-assert sys.version_info <= (3, 10)
-
 from functools import total_ordering
 from typing import TYPE_CHECKING, Literal
 
@@ -16,12 +12,11 @@ from ....accido.class_word import _Word
 from ....accido.edge_cases import IRREGULAR_NOUNS
 from ....accido.exceptions import InvalidInputError
 from ....accido.misc import (
-    CASE_SHORTHAND,
-    GENDER_SHORTHAND,
-    NUMBER_SHORTHAND,
+    Case,
     EndingComponents,
+    Gender,
+    Number,
 )
-from ....utils import key_from_value
 
 if TYPE_CHECKING:
     from .type_aliases import Ending, Endings, Meaning
@@ -66,8 +61,8 @@ class Noun(_Word):
         self,
         *,
         nominative: str,
-        genitive: str,
-        gender: str,
+        genitive: str | None,
+        gender: Gender | None,
         meaning: Meaning,
     ) -> None:
         """Initialises Noun and determines the declension and endings.
@@ -86,10 +81,7 @@ class Noun(_Word):
         super().__init__()
 
         if gender:
-            if gender not in GENDER_SHORTHAND:
-                raise InvalidInputError(f"Invalid gender: '{gender}'")
-
-            self.gender: str = gender
+            self.gender: Gender = gender
 
         self.nominative: str = nominative
         if genitive:
@@ -110,7 +102,7 @@ class Noun(_Word):
 
         self.endings = self._determine_endings()
 
-        if self.gender == "neuter":
+        if self.gender == Gender.NEUTER:
             self._neuter_endings()
 
         if self.plurale_tantum:
@@ -274,14 +266,17 @@ class Noun(_Word):
             self.endings["Naccpl"] = f"{self._stem}a"  # templa
             self.endings["Nvocpl"] = f"{self._stem}a"  # templa
 
-    def get(self, *, case: str, number: str) -> Ending | None:
+    def get(self, *, case: Case, number: Number) -> Ending | None:
         """Returns the ending of the noun.
 
         The function returns None if no ending is found.
 
         Parameters
         ----------
-        case, number : str
+        case : Case
+            The case of the noun.
+        number : Number
+            The number of the noun.
 
         Returns
         -------
@@ -303,38 +298,34 @@ class Noun(_Word):
         ...     gender="feminine",
         ...     meaning="slavegirl",
         ... )
-        >>> foo.get(case="nominative", number="singular")
+        >>> foo.get(case=Case.NOMINATIVE, number=Number.SINGULAR)
         'ancilla'
 
         Note that all arguments of get are keyword-only.
         """
-        if case not in CASE_SHORTHAND:
-            raise InvalidInputError(f"Invalid case: '{case}'")
-
-        if number not in NUMBER_SHORTHAND:
-            raise InvalidInputError(f"Invalid number: '{number}'")
-
-        short_case: str = CASE_SHORTHAND[case]
-        short_number: str = NUMBER_SHORTHAND[number]
+        short_case: str = case.shorthand
+        short_number: str = number.shorthand
 
         return self.endings.get(f"N{short_case}{short_number}")
 
-    @staticmethod
-    def _create_namespace(key: str) -> EndingComponents:
+    def _create_namespace(self, key: str) -> EndingComponents:  # type: ignore[override]
         output: EndingComponents = EndingComponents(
-            case=key_from_value(CASE_SHORTHAND, key[1:4]),
-            number=key_from_value(NUMBER_SHORTHAND, key[4:6]),
+            case=Case(key[1:4]),
+            number=Number(key[4:6]),
         )
-        output.string = f"{output.case} {output.number}"
+        output.string = f"{output.case.regular} {output.number.regular}"
+        if self.declension == 0:
+            output.subtype = "pronoun"
         return output
 
     def __repr__(self) -> str:
-        return f"Noun({self.nominative}, {self.genitive}, {GENDER_SHORTHAND[self.gender]}, {self.meaning})"
+        return (
+            f"Noun({self.nominative}, {self.genitive}, "
+            f"{self.gender.regular}, {self.meaning})"
+        )
 
     def __str__(self) -> str:
-        if self.gender in GENDER_SHORTHAND:
-            return f"{self.meaning}: {self.nominative}, {self.genitive}, ({GENDER_SHORTHAND[self.gender]})"
-
-        raise ValueError(
-            f"Gender {self.gender} not recognised",
-        )  # pragma: no cover # this should never occur
+        return (
+            f"{self.meaning}: {self.nominative}, "
+            f"{self.genitive}, ({Gender(self.gender).shorthand})"
+        )

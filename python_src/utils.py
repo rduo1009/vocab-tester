@@ -3,37 +3,9 @@
 
 """General functions used by vocab-tester and its tests."""
 
-from __future__ import annotations
+import sys
 
-from typing import TYPE_CHECKING
-
-if TYPE_CHECKING:
-    from collections.abc import Iterable
-
-
-def compare[T](first: Iterable[T], second: Iterable[T]) -> bool:
-    """Compares two iterables.
-
-    Parameters
-    ----------
-    first : Iterable[T]
-        The first iterable to compare.
-    second : Iterable[T]
-        The second iterable to compare.
-
-    Returns
-    -------
-    bool
-        True if the iterables are equal, False otherwise.
-
-    Notes
-    -----
-    Code taken from https://stackoverflow.com/a/7829388
-    """
-    comparison: list[T] = list(second)  # make a mutable copy
-    try:
-        for elem in first:
-            comparison.remove(elem)
-    except ValueError:  # pragma: no cover
-        return False
-    return not comparison
+if sys.version_info >= (3, 13):
+    from .utils_latest import compare as compare
+else:
+    from ._compat.py312.utils import compare as compare

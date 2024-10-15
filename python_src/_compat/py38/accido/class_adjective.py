@@ -5,10 +5,6 @@
 
 from __future__ import annotations
 
-import sys
-
-assert sys.version_info <= (3, 10)
-
 from functools import total_ordering
 from typing import TYPE_CHECKING
 

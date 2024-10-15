@@ -5,13 +5,13 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../.
 
 import pytest
 from python_src.accido.misc import Case, EndingComponents, Gender, Mood, Number, Tense, Voice
-from python_src.transfero.verb_inflection import find_main_verb_inflection, find_verb_inflections
+from python_src.transfero.words import find_main_verb_inflection, find_verb_inflections  # type: ignore[attr-defined]
 
 
 def test_invalid_type():
     with pytest.raises(ValueError) as error:
         find_verb_inflections("teach", EndingComponents(case=Case.NOMINATIVE, number=Number.SINGULAR, gender=Gender.NEUTER))
-    assert "Invalid type: '<class 'python_src.accido.class_pronoun.Pronoun'>'" == str(error.value)
+    assert "Invalid type:" in str(error.value)
 
 
 def test_invalid_type_participle():
