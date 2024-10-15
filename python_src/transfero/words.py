@@ -21,6 +21,10 @@ if sys.version_info >= (3, 10):
         find_main_noun_inflection,
         find_noun_inflections,
     )
+    from .pronoun_inflection import (
+        find_main_pronoun_inflection,
+        find_pronoun_inflections,
+    )
     from .verb_inflection import (
         find_main_verb_inflection,
         find_verb_inflections,
@@ -37,6 +41,10 @@ else:
     from .._compat.py38.noun_inflection import (
         find_main_noun_inflection,
         find_noun_inflections,
+    )
+    from .._compat.py38.pronoun_inflection import (
+        find_main_pronoun_inflection,
+        find_pronoun_inflections,
     )
     from .._compat.py38.verb_inflection import (
         find_main_verb_inflection,

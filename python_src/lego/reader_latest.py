@@ -10,9 +10,11 @@ import sys
 assert sys.version_info >= (3, 10)
 
 from re import match
-from typing import TYPE_CHECKING, Final
+from typing import TYPE_CHECKING, Final, cast
 
 from .. import accido
+from ..accido.misc import Gender
+from ..accido.type_aliases import Termination
 from .exceptions import (
     InvalidVocabFileFormatError,
 )
@@ -168,13 +170,12 @@ def _parse_line(
                     meaning=meaning,
                     nominative=latin_parts[0],
                     genitive=latin_parts[1].split()[0],
-                    gender=GENDER_SHORTHAND[
-                        latin_parts[2].split()[-1].strip("()")
-                    ],
+                    gender=Gender(latin_parts[2].split()[-1].strip("()")),
                 )
-            except KeyError as e:
+            except ValueError as e:
                 raise InvalidVocabFileFormatError(
-                    f"Invalid gender: {latin_parts[2].split()[-1].strip('()')}",
+                    "Invalid gender: "
+                    f"'{latin_parts[2].split()[-1].strip('()')}'",
                 ) from e
 
         case "Adjective":
@@ -192,13 +193,17 @@ def _parse_line(
                 raise InvalidVocabFileFormatError(
                     f"Invalid adjective declension: {declension}",
                 )
+
             if declension.startswith("3"):
+                termination = cast(Termination, int(declension[2]))
+
                 return accido.endings.Adjective(
                     *latin_parts[:-1],
-                    termination=int(declension[2]),
+                    termination=termination,
                     declension="3",
                     meaning=meaning,
                 )
+
             return accido.endings.Adjective(
                 *latin_parts[:-1],
                 meaning=meaning,
