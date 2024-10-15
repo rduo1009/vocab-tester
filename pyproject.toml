@@ -11,7 +11,7 @@ readme = "README.md"
 packages = [ { include = "python_src" } ]
 
 [tool.poetry.dependencies]
-python = ">=3.13.0,<4.0"
+python = ">=3.12,<4.0"
 dill = "==0.3.9"
 nltk = "==3.9.1"
 lemminflect = "==0.2.3"
