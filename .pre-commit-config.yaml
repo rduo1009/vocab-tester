@@ -1,15 +1,51 @@
 ci:
-  skip: [poetry-check, poetry-lock]
+  skip: [poetry-check, poetry-lock, poetry-export]
   autofix_commit_msg: "🔨 refactor: [pre-commit.ci] auto fixes from pre-commit.com hooks"
   autoupdate_commit_msg: "🤖 ci(pre-commit): pre-commit autoupdate"
 
 repos:
+  # Check project deps
+  - repo: https://github.com/python-poetry/poetry
+    rev: "1.8.0"
+    hooks:
+      - id: poetry-lock
+      - id: poetry-export
+        args:
+          [
+            "--format=requirements.txt",
+            "--output=requirements.txt",
+            "--without-hashes",
+            "--without-urls",
+          ]
+      - id: poetry-export
+        args:
+          [
+            "--format=requirements.txt",
+            "--output=requirements-dev.txt",
+            "--without-hashes",
+            "--without-urls",
+            "--with=dev",
+          ]
+
+  # Format code
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.6.9
     hooks:
       - id: ruff
         args: [--select, I, --fix]
       - id: ruff-format
+
+  # Format other files
+  - repo: https://github.com/tox-dev/pyproject-fmt
+    rev: "2.3.1"
+    hooks:
+      - id: pyproject-fmt
+        args: [--keep-full-version]
+
+  - repo: https://github.com/tox-dev/tox-ini-fmt
+    rev: "1.4.1"
+    hooks:
+      - id: tox-ini-fmt
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v5.0.0
@@ -32,20 +68,3 @@ repos:
       - id: python-no-log-warn
       - id: python-use-type-annotations
       - id: text-unicode-replacement-char
-
-  - repo: https://github.com/python-poetry/poetry
-    rev: "1.8.0"
-    hooks:
-      - id: poetry-check
-      - id: poetry-lock
-
-  - repo: https://github.com/tox-dev/pyproject-fmt
-    rev: "2.3.1"
-    hooks:
-      - id: pyproject-fmt
-        args: [--keep-full-version]
-
-  - repo: https://github.com/tox-dev/tox-ini-fmt
-    rev: "1.4.1"
-    hooks:
-      - id: tox-ini-fmt
