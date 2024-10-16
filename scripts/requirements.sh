@@ -6,4 +6,4 @@ poetry install --only main --sync
 poetry run pip freeze > requirements.txt
 
 poetry install --sync
-poetry run pip freeze > dev_requirements.txt
+poetry run pip freeze > requirements-dev.txt
