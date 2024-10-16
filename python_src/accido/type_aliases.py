@@ -5,7 +5,7 @@
 
 import sys
 
-if sys.version_info >= (3, 12):
+if sys.version_info >= (3, 13):
     from .type_aliases_latest import AdjectiveDeclension as AdjectiveDeclension
     from .type_aliases_latest import Conjugation as Conjugation
     from .type_aliases_latest import Ending as Ending
