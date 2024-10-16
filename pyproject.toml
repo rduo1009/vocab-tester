@@ -20,10 +20,11 @@ future-typing = { git = "https://github.com/rduo1009/future-typing.git" }
 lz4 = "==4.3.3"
 aenum = { git = "https://github.com/rduo1009/aenum.git" }
 numpy = [
-  { version = "1.24.4", python = "~3.8" },
-  { version = "1.26.4", python = ">=3.9 <3.13" },
-  { version = "2.1.0", python = "~3.13" },
+  { version = "==1.24.4", python = "~3.8" },
+  { version = "==1.26.4", python = ">=3.9 <3.13" },
+  { version = "==2.1.0", python = "~3.13" },
 ]
+typing_extensions = { version = "==4.12.2", python = "<3.10" }
 
 [tool.poetry.group.dev.dependencies]
 icecream = "==2.1.3"

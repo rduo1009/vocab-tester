@@ -5,9 +5,13 @@
 
 from __future__ import annotations
 
+import sys
 from typing import Literal
 
-from typing_extensions import TypeAlias, TypeGuard
+if sys.version_info < (3, 10):  # use backport if python3.9
+    from typing_extensions import TypeAlias, TypeGuard
+else:
+    from typing import TypeAlias, TypeGuard
 
 from ....accido.misc import MultipleEndings, MultipleMeanings
 
