@@ -22,7 +22,7 @@ more-itertools==10.5.0
 mypy==1.12.0
 mypy-extensions==1.0.0
 nltk==3.9.1
-numpy==2.1.0
+numpy==2.1.2
 packaging==24.1
 pluggy==1.5.0
 pydoctest==0.2.1
