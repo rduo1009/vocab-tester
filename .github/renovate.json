@@ -5,5 +5,6 @@
   ],
   "baseBranches": ["compat-package", "compat-coconut"],
   "prHourlyLimit": 5,
-  "commitMessagePrefix": "🚧 build(deps):"
+  "commitMessagePrefix": "🚧 build(deps):",
+  "commitMessageAction": "update"
 }
