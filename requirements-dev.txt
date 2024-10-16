@@ -4,6 +4,7 @@ click==8.1.7
 codetiming==1.4.0
 colorama==0.4.6
 coverage==7.6.3
+deptry==0.20.0
 dill==0.3.9
 docopt==0.6.2
 docstr-coverage==2.3.2
@@ -22,7 +23,7 @@ more-itertools==10.5.0
 mypy==1.12.0
 mypy-extensions==1.0.0
 nltk==3.9.1
-numpy==2.1.2
+numpy==2.1.0
 packaging==24.1
 pluggy==1.5.0
 pydoctest==0.2.1
@@ -42,5 +43,5 @@ tqdm==4.66.5
 typeguard==4.3.0
 types-regex==2024.9.11.20240912
 typing_extensions==4.12.2
--e git+https://github.com/rduo1009/vocab-tester.git@f20fbc5426183bc4cdf3720cc117a592b0b19f5c#egg=vocab_tester
+-e git+https://github.com/rduo1009/vocab-tester.git@2e9f6565416f6c436ade4b731bcd5be36d566f41#egg=vocab_tester
 watchdog==5.0.3

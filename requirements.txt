@@ -8,9 +8,9 @@ lemminflect==0.2.3
 lz4==4.3.3
 more-itertools==10.5.0
 nltk==3.9.1
-numpy==2.1.2
+numpy==2.1.0
 regex==2024.9.11
 tqdm==4.66.5
 typeguard==4.3.0
 typing_extensions==4.12.2
--e git+https://github.com/rduo1009/vocab-tester.git@f20fbc5426183bc4cdf3720cc117a592b0b19f5c#egg=vocab_tester
+-e git+https://github.com/rduo1009/vocab-tester.git@2e9f6565416f6c436ade4b731bcd5be36d566f41#egg=vocab_tester
