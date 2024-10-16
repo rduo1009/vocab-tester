@@ -1,4 +1,4 @@
-aenum @ git+https://github.com/rduo1009/aenum.git@148bfd730820cea9c09eb039960abfdb25dd953b ; python_version >= "3.12" and python_version < "4.0"
+aenum @ git+https://github.com/rduo1009/aenum.git@8ccbb09513017f148fa4b66f23e49d7be75674fb ; python_version >= "3.12" and python_version < "4.0"
 asttokens==2.4.1 ; python_version >= "3.12" and python_version < "4.0"
 click==8.1.7 ; python_version >= "3.12" and python_version < "4.0"
 codetiming==1.4.0 ; python_version >= "3.12" and python_version < "4.0"
