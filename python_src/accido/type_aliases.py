@@ -29,6 +29,7 @@ else:
         NounDeclension as NounDeclension,
     )
     from .._compat.py310.accido.type_aliases import Person as Person
+    from .._compat.py310.accido.type_aliases import Termination as Termination
     from .._compat.py310.accido.type_aliases import is_person as is_person
     from .._compat.py310.accido.type_aliases import (
         is_termination as is_termination,

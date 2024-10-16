@@ -42,7 +42,7 @@ def _sha256sum(filename: Path) -> str:
                 "sha256",
             ).hexdigest()
 
-    h = hashlib.sha256()
+    h = hashlib.sha256()  # type: ignore[unreachable]
     b = bytearray(128 * 1024)
     mv = memoryview(b)
     with open(filename, "rb", buffering=0) as f:
