@@ -20,19 +20,20 @@ numpy = [
 ]
 
 [tool.poetry.group.dev.dependencies]
-coconut = { version = "*", python = ">=3.8" }
-icecream = { version = "==2.1.3", python = ">=3.8" }
-mypy = { version = "==1.11.2", python = ">=3.8" }
-ruff = { version = "==0.6.8", python = ">=3.8" }
-pytest = { version = "==8.3.3", python = ">=3.8" }
-monkeytype = { version = "==23.3.0", python = ">=3.8" }
-coverage = { version = "==7.6.1", python = ">=3.8" }
-pytest-cov = { version = "==5.0.0", python = ">=3.8" }
-pytest-sugar = { version = "==1.0.0", python = ">=3.8" }
-codetiming = { version = "==1.4.0", python = ">=3.8" }
-pytest-xdist = { version = "==3.6.1", python = ">=3.8" }
-docstr-coverage = { version = "==2.3.2", python = ">=3.8" }
-pydoctest = { version = "==0.2.1", python = ">=3.8" }
+# Only to be used with the latest version of python.
+coconut = { version = "==3.1.2", python = ">=3.13" }
+icecream = { version = "==2.1.3", python = ">=3.13" }
+mypy = { version = "==1.11.2", python = ">=3.13" }
+ruff = { version = "==0.6.8", python = ">=3.13" }
+pytest = { version = "==8.3.3", python = ">=3.13" }
+monkeytype = { version = "==23.3.0", python = ">=3.13" }
+coverage = { version = "==7.6.1", python = ">=3.13" }
+pytest-cov = { version = "==5.0.0", python = ">=3.13" }
+pytest-sugar = { version = "==1.0.0", python = ">=3.13" }
+codetiming = { version = "==1.4.0", python = ">=3.13" }
+pytest-xdist = { version = "==3.6.1", python = ">=3.13" }
+docstr-coverage = { version = "==2.3.2", python = ">=3.13" }
+pydoctest = { version = "==0.2.1", python = ">=3.13" }
 
 [build-system]
 requires = ["poetry-core"]
