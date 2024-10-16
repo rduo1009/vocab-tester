@@ -625,8 +625,10 @@ class Verb(_Word):
             )
             output.string = f"{output.tense} {output.voice} participle {output.gender} {output.case} {output.number}"
             return output
-        # pragma: no cover # this should never happen
-        raise InvalidInputError(f"Key '{key}' is invalid")
+
+        raise InvalidInputError(
+            f"Key '{key}' is invalid"
+        )  # pragma: no cover # this should never happen
 
     def __repr__(self) -> str:
         return f"Verb({self.present}, {self.infinitive}, {self.perfect}, {self.ppp}, {self.meaning})"
