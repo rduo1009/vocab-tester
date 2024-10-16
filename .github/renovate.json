@@ -3,5 +3,6 @@
   "extends": [
     "config:recommended"
   ],
-  "baseBranches": ["compat-package", "compat-coconut"]
+  "baseBranches": ["compat-package", "compat-coconut"],
+  "prHourlyLimit": 5
 }
