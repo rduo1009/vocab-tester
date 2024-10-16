@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# __coconut_hash__ = 0x386fd023
+# __coconut_hash__ = 0x9a55d2f8
 
 # Compiled with Coconut version 3.1.2
 
@@ -141,17 +141,14 @@ class Degree(Enum):  #63: class Degree(Enum, settings=MultiValue, init="regular 
     SUPERLATIVE = "superlative", "spr"  #68:     SUPERLATIVE = "superlative", "spr"
 
 
-_coconut_call_set_names(Degree)  #71: class Person(Enum, settings=MultiValue, init="regular shorthand"):
-@_coconut_handle_cls_kwargs(settings=MultiValue, init="regular shorthand")  #71: class Person(Enum, settings=MultiValue, init="regular shorthand"):
-class Person(Enum):  #71: class Person(Enum, settings=MultiValue, init="regular shorthand"):
-    """Represents the person of a verb."""  #72:     """Represents the person of a verb."""
-
-    FIRST = 1, "1st person"  #74:     FIRST = 1, "1st person"
-    SECOND = 2, "2nd person"  #75:     SECOND = 2, "2nd person"
-    THIRD = 3, "3rd person"  #76:     THIRD = 3, "3rd person"
+_coconut_call_set_names(Degree)  #71: """Mapping of person values to their more concise abbreviated forms."""
+"""Mapping of person values to their more concise abbreviated forms."""  #71: """Mapping of person values to their more concise abbreviated forms."""
+PERSON_SHORTHAND = _coconut.dict(((1, "1st person"), (2, "2nd person"), (3, "3rd person")))  # type: Final[dict[int, str]]  #72: PERSON_SHORTHAND: Final[dict[int, str]] = {
+if "__annotations__" not in _coconut.locals():  #72: PERSON_SHORTHAND: Final[dict[int, str]] = {
+    __annotations__ = {}  # type: ignore  #72: PERSON_SHORTHAND: Final[dict[int, str]] = {
+__annotations__["PERSON_SHORTHAND"] = 'Final[dict[int, str]]'  #72: PERSON_SHORTHAND: Final[dict[int, str]] = {
 
 
-_coconut_call_set_names(Person)  #79: class EndingComponents(SimpleNamespace):
 class EndingComponents(SimpleNamespace):  #79: class EndingComponents(SimpleNamespace):
     """A container for the grammatical components of an ending.
 

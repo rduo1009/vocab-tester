@@ -68,12 +68,12 @@ class Degree(Enum, settings=MultiValue, init="regular shorthand"):
     SUPERLATIVE = "superlative", "spr"
 
 
-class Person(Enum, settings=MultiValue, init="regular shorthand"):
-    """Represents the person of a verb."""
-
-    FIRST = 1, "1st person"
-    SECOND = 2, "2nd person"
-    THIRD = 3, "3rd person"
+"""Mapping of person values to their more concise abbreviated forms."""
+PERSON_SHORTHAND: Final[dict[int, str]] = {
+    1: "1st person",
+    2: "2nd person",
+    3: "3rd person",
+}
 
 
 class EndingComponents(SimpleNamespace):
