@@ -1,4 +1,4 @@
-aenum @ git+https://github.com/rduo1009/aenum.git@148bfd730820cea9c09eb039960abfdb25dd953b
+aenum @ git+https://github.com/rduo1009/aenum.git@8ccbb09513017f148fa4b66f23e49d7be75674fb
 asttokens==2.4.1
 click==8.1.7
 codetiming==1.4.0
@@ -42,5 +42,5 @@ tqdm==4.66.5
 typeguard==4.3.0
 types-regex==2024.9.11.20240912
 typing_extensions==4.12.2
--e git+https://github.com/rduo1009/vocab-tester.git@246f39d9f72eb86913ce5d80edcbe91f97e2d978#egg=vocab_tester
+-e git+https://github.com/rduo1009/vocab-tester.git@f20fbc5426183bc4cdf3720cc117a592b0b19f5c#egg=vocab_tester
 watchdog==5.0.3
