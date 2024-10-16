@@ -32,26 +32,26 @@ if sys.version_info >= (3, 10):
         find_verb_inflections,
     )
 else:
-    from .._compat.py38.transfero.adjective_inflection import (
+    from .._compat.py39.transfero.adjective_inflection import (
         find_adjective_inflections,
         find_main_adjective_inflection,
     )
-    from .._compat.py38.transfero.adverb_inflection import (
+    from .._compat.py39.transfero.adverb_inflection import (
         find_adverb_inflections,
         find_main_adverb_inflection,
     )
-    from .._compat.py38.transfero.noun_inflection import (
+    from .._compat.py39.transfero.noun_inflection import (
         find_main_noun_inflection,
         find_noun_inflections,
     )
-    from .._compat.py38.transfero.verb_inflection import (
+    from .._compat.py39.transfero.verb_inflection import (
         find_main_verb_inflection,
         find_verb_inflections,
     )
 
 
 # NOTE: Unfortunately we have to forgo using match-case statements with this
-# the alternative (creating a words_latest.py and putting a words.py in py38)
+# the alternative (creating a words_latest.py and putting a words.py in py39)
 # would make things too complicated.
 def find_inflection(
     word: str,
