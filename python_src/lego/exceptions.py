@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# __coconut_hash__ = 0x6926b65e
+# __coconut_hash__ = 0x95ba8f4a
 
 # Compiled with Coconut version 3.1.2
 
@@ -11,7 +11,7 @@
 from __future__ import print_function, absolute_import, unicode_literals, division
 import sys as _coconut_sys
 import os as _coconut_os
-_coconut_header_info = ('3.1.2', '', True)
+_coconut_header_info = ('3.1.2', '', False)
 _coconut_cached__coconut__ = _coconut_sys.modules.get(str('__coconut__'))
 _coconut_file_dir = _coconut_os.path.dirname(_coconut_os.path.dirname(_coconut_os.path.abspath(__file__)))
 _coconut_pop_path = False
@@ -72,4 +72,12 @@ class InvalidVocabDumpError(Exception):  #8: class InvalidVocabDumpError(Excepti
     or if the file is not a vocab dump.
     """  #13:     """
 
-_coconut_call_set_names(InvalidVocabDumpError)  #15:     """
+
+_coconut_call_set_names(InvalidVocabDumpError)  #16: class MisleadingFilenameWarning(UserWarning):
+class MisleadingFilenameWarning(UserWarning):  #16: class MisleadingFilenameWarning(UserWarning):
+    """A warning that is raised when a filename is misleading.
+
+    For example, if a file ends in .lz4 but it is not a compressed file.
+    """  #20:     """
+
+_coconut_call_set_names(MisleadingFilenameWarning)  #22:     """

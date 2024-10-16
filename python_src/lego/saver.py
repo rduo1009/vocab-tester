@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# __coconut_hash__ = 0x7590fbaa
+# __coconut_hash__ = 0x5dfb1291
 
 # Compiled with Coconut version 3.1.2
 
@@ -11,7 +11,7 @@
 from __future__ import print_function, absolute_import, unicode_literals, division
 import sys as _coconut_sys
 import os as _coconut_os
-_coconut_header_info = ('3.1.2', '', True)
+_coconut_header_info = ('3.1.2', '', False)
 _coconut_cached__coconut__ = _coconut_sys.modules.get(str('__coconut__'))
 _coconut_file_dir = _coconut_os.path.dirname(_coconut_os.path.dirname(_coconut_os.path.abspath(__file__)))
 _coconut_pop_path = False
@@ -64,22 +64,28 @@ import hmac  #4: import hmac
 import warnings  #5: import warnings
 
 import dill as pickle  #7: import dill as pickle
+import lz4.frame  #8: import lz4.frame
 
-from .misc import KEY  #9: from .misc import KEY, VocabList
-from .misc import VocabList  #9: from .misc import KEY, VocabList
+from .exceptions import MisleadingFilenameWarning  #10: from .exceptions import MisleadingFilenameWarning
+from .misc import KEY  #11: from .misc import KEY, VocabList
+from .misc import VocabList  #11: from .misc import KEY, VocabList
 
-if TYPE_CHECKING:  #11: if TYPE_CHECKING:
-    from pathlib import Path  #12:     from pathlib import Path
+if TYPE_CHECKING:  #13: if TYPE_CHECKING:
+    from pathlib import Path  #14:     from pathlib import Path
 
 
-def save_vocab_dump(file_path,  # type: Path  #15: def save_vocab_dump(file_path: Path, vocab_list: VocabList) -> None:
-    vocab_list  # type: VocabList  #15: def save_vocab_dump(file_path: Path, vocab_list: VocabList) -> None:
-    ):  #15: def save_vocab_dump(file_path: Path, vocab_list: VocabList) -> None:
+def save_vocab_dump(file_path,  # type: Path  #17: def save_vocab_dump(
+    vocab_list,  # type: VocabList  #17: def save_vocab_dump(
+    compress=False  # type: bool  #17: def save_vocab_dump(
+    ):  #17: def save_vocab_dump(
 # type: (...) -> None
     """Saves a vocabulary dump file.
 
     The pickle files are signed with a HMAC signature to ensure the data
     has not been tampered with.
+    The files can also be compressed using LZ4 compression. If this is the
+    case, the files will be saved with the .lz4 extension, unless the user
+    has put the .lz4 extension in the file path already.
 
     Parameters
     ----------
@@ -87,6 +93,8 @@ def save_vocab_dump(file_path,  # type: Path  #15: def save_vocab_dump(file_path
         The path to the vocabulary dump file.
     vocab_list : VocabList
         The vocabulary to save.
+    compress : bool, default = False
+        Whether to compress the pickle file.
 
     Raises
     ------
@@ -97,26 +105,49 @@ def save_vocab_dump(file_path,  # type: Path  #15: def save_vocab_dump(file_path
     --------
     UserWarning
         If the file already exists and has been overwritten.
+    MisleadingFilenameWarning
+        If the file path does not end in .lz4 and the file is being
+        compressed, or if the file path ends in .lz4 and the file is not
+        being compressed.
 
     Examples
     --------
     >>> save_vocab_dump(
     ...     Path("path_to_file.pickle"), VocabList()
     ... )  # doctest: +SKIP
-    """  #43:     """
-    if not file_path.parent.exists():  #44:     if not file_path.parent.exists():
-        raise FileNotFoundError("The directory {_coconut_format_0} does not exist".format(_coconut_format_0=(file_path.parent)))  #45:         raise FileNotFoundError(
+    """  #56:     """
+    if not file_path.parent.exists():  #57:     if not file_path.parent.exists():
+        raise FileNotFoundError("The directory '{_coconut_format_0}' does not exist".format(_coconut_format_0=(file_path.parent)))  #58:         raise FileNotFoundError(
 
-    if file_path.exists():  #49:     if file_path.exists():
-        warnings.warn("The file {_coconut_format_0} already exists and has been overwritten".format(_coconut_format_0=(file_path)), stacklevel=2)  #50:         warnings.warn(
+    if file_path.exists():  #62:     if file_path.exists():
+        warnings.warn("The file '{_coconut_format_0}' already exists and has been overwritten".format(_coconut_format_0=(file_path)), stacklevel=2)  #63:         warnings.warn(
 
-    pickled_data = pickle.dumps(vocab_list)  # type: bytes  #55:     pickled_data: bytes = pickle.dumps(vocab_list)
-    if "__annotations__" not in _coconut.locals():  #55:     pickled_data: bytes = pickle.dumps(vocab_list)
-        __annotations__ = {}  # type: ignore  #55:     pickled_data: bytes = pickle.dumps(vocab_list)
-    __annotations__["pickled_data"] = 'bytes'  #55:     pickled_data: bytes = pickle.dumps(vocab_list)
+    pickled_data = pickle.dumps(vocab_list)  # type: bytes  #68:     pickled_data: bytes = pickle.dumps(vocab_list)
+    if "__annotations__" not in _coconut.locals():  #68:     pickled_data: bytes = pickle.dumps(vocab_list)
+        __annotations__ = {}  # type: ignore  #68:     pickled_data: bytes = pickle.dumps(vocab_list)
+    __annotations__["pickled_data"] = 'bytes'  #68:     pickled_data: bytes = pickle.dumps(vocab_list)
+    signature = hmac.new(KEY, pickled_data, hashlib.sha256).hexdigest()  # type: str  #69:     signature: str = hmac.new(KEY, pickled_data, hashlib.sha256).hexdigest()
+    if "__annotations__" not in _coconut.locals():  #69:     signature: str = hmac.new(KEY, pickled_data, hashlib.sha256).hexdigest()
+        __annotations__ = {}  # type: ignore  #69:     signature: str = hmac.new(KEY, pickled_data, hashlib.sha256).hexdigest()
+    __annotations__["signature"] = 'str'  #69:     signature: str = hmac.new(KEY, pickled_data, hashlib.sha256).hexdigest()
 
-    signature = hmac.new(KEY, pickled_data, hashlib.sha256).hexdigest()  #57:     signature = hmac.new(KEY, pickled_data, hashlib.sha256).hexdigest()
+    if compress:  #71:     if compress:
+# Add lz4 extension if it is not already there
+        if file_path.suffix != ".lz4":  #73:         if file_path.suffix != ".lz4":
+            warnings.warn("The file '{_coconut_format_0}' is being compressed, but the '.lz4' extension is not present and is being added.".format(_coconut_format_0=(file_path)), category=MisleadingFilenameWarning, stacklevel=2)  #74:             warnings.warn(
+            file_path = file_path.with_suffix(file_path.suffix + ".lz4")  # type: Path  #79:             file_path: Path = file_path.with_suffix(file_path.suffix + ".lz4")
+            if "__annotations__" not in _coconut.locals():  #79:             file_path: Path = file_path.with_suffix(file_path.suffix + ".lz4")
+                __annotations__ = {}  # type: ignore  #79:             file_path: Path = file_path.with_suffix(file_path.suffix + ".lz4")
+            __annotations__["file_path"] = 'Path'  #79:             file_path: Path = file_path.with_suffix(file_path.suffix + ".lz4")
 
-    with open(file_path, "wb") as file:  #59:     with open(file_path, "wb") as file:
-        file.write(pickled_data)  #60:         file.write(pickled_data)
-        file.write(signature.encode())  #61:         file.write(signature.encode())
+        with lz4.frame.open(file_path, "wb") as file:  #81:         with lz4.frame.open(file_path, "wb") as file:
+            file.write(pickled_data)  #82:             file.write(pickled_data)
+            file.write(signature.encode())  #83:             file.write(signature.encode())
+        return  #84:         return
+
+    if file_path.suffix == ".lz4":  #86:     if file_path.suffix == ".lz4":
+        warnings.warn("The file '{_coconut_format_0}' is not being compressed, but the file extension ('.lz4') suggests it is.".format(_coconut_format_0=(file_path)), category=MisleadingFilenameWarning, stacklevel=2)  #87:         warnings.warn(
+
+    with open(file_path, "wb") as file:  #93:     with open(file_path, "wb") as file:
+        file.write(pickled_data)  #94:         file.write(pickled_data)
+        file.write(signature.encode())  #95:         file.write(signature.encode())

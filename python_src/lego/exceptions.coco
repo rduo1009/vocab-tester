@@ -11,3 +11,10 @@ class InvalidVocabDumpError(Exception):
     This could be due to the file being corrupted or being tampered with,
     or if the file is not a vocab dump.
     """
+
+
+class MisleadingFilenameWarning(UserWarning):
+    """A warning that is raised when a filename is misleading.
+
+    For example, if a file ends in .lz4 but it is not a compressed file.
+    """

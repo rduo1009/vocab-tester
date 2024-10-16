@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# __coconut_hash__ = 0xe642de9b
+# __coconut_hash__ = 0x50afef89
 
 # Compiled with Coconut version 3.1.2
 
@@ -11,7 +11,7 @@
 from __future__ import print_function, absolute_import, unicode_literals, division
 import sys as _coconut_sys
 import os as _coconut_os
-_coconut_header_info = ('3.1.2', '', True)
+_coconut_header_info = ('3.1.2', '', False)
 _coconut_cached__coconut__ = _coconut_sys.modules.get(str('__coconut__'))
 _coconut_file_dir = _coconut_os.path.dirname(_coconut_os.path.dirname(_coconut_os.path.abspath(__file__)))
 _coconut_pop_path = False
@@ -82,29 +82,30 @@ if _coconut_sys_0 is not _coconut_sentinel:  #7: from typing import Final
     sys = _coconut_sys_0  #7: from typing import Final
 
 import dill as pickle  #9: import dill as pickle
+import lz4.frame  #10: import lz4.frame
 
-import python_src as src  #11: import python_src as src
+import python_src as src  #12: import python_src as src
 
-from .. import accido  #13: from .. import accido
-from .exceptions import InvalidVocabDumpError  #14: from .exceptions import InvalidVocabDumpError, InvalidVocabFileFormatError
-from .exceptions import InvalidVocabFileFormatError  #14: from .exceptions import InvalidVocabDumpError, InvalidVocabFileFormatError
-from .misc import KEY  #15: from .misc import KEY, VocabList
-from .misc import VocabList  #15: from .misc import KEY, VocabList
+from .. import accido  #14: from .. import accido
+from .exceptions import InvalidVocabDumpError  #15: from .exceptions import InvalidVocabDumpError, InvalidVocabFileFormatError
+from .exceptions import InvalidVocabFileFormatError  #15: from .exceptions import InvalidVocabDumpError, InvalidVocabFileFormatError
+from .misc import KEY  #16: from .misc import KEY, VocabList
+from .misc import VocabList  #16: from .misc import KEY, VocabList
 
-if TYPE_CHECKING:  #17: if TYPE_CHECKING:
-    from io import TextIOWrapper  #18:     from io import TextIOWrapper
-    from pathlib import Path  #19:     from pathlib import Path
+if TYPE_CHECKING:  #18: if TYPE_CHECKING:
+    from io import TextIOWrapper  #19:     from io import TextIOWrapper
+    from pathlib import Path  #20:     from pathlib import Path
 
-"""Mapping of gender values to their more concise abbreviated forms."""  #21: """Mapping of gender values to their more concise abbreviated forms."""
-GENDER_SHORTHAND = _coconut.dict((("m", "masculine"), ("f", "feminine"), ("n", "neuter")))  # type: Final[dict[str, str]]  #22: GENDER_SHORTHAND: Final[dict[str, str]] = {
-if "__annotations__" not in _coconut.locals():  #22: GENDER_SHORTHAND: Final[dict[str, str]] = {
-    __annotations__ = {}  # type: ignore  #22: GENDER_SHORTHAND: Final[dict[str, str]] = {
-__annotations__["GENDER_SHORTHAND"] = 'Final[dict[str, str]]'  #22: GENDER_SHORTHAND: Final[dict[str, str]] = {
+"""Mapping of gender values to their more concise abbreviated forms."""  #22: """Mapping of gender values to their more concise abbreviated forms."""
+GENDER_SHORTHAND = _coconut.dict((("m", "masculine"), ("f", "feminine"), ("n", "neuter")))  # type: Final[dict[str, str]]  #23: GENDER_SHORTHAND: Final[dict[str, str]] = {
+if "__annotations__" not in _coconut.locals():  #23: GENDER_SHORTHAND: Final[dict[str, str]] = {
+    __annotations__ = {}  # type: ignore  #23: GENDER_SHORTHAND: Final[dict[str, str]] = {
+__annotations__["GENDER_SHORTHAND"] = 'Final[dict[str, str]]'  #23: GENDER_SHORTHAND: Final[dict[str, str]] = {
 
 
-@_coconut_tco  #29: def _regenerate_vocab_list(vocab_list: VocabList) -> VocabList:
-def _regenerate_vocab_list(vocab_list  # type: VocabList  #29: def _regenerate_vocab_list(vocab_list: VocabList) -> VocabList:
-    ):  #29: def _regenerate_vocab_list(vocab_list: VocabList) -> VocabList:
+@_coconut_tco  #30: def _regenerate_vocab_list(vocab_list: VocabList) -> VocabList:
+def _regenerate_vocab_list(vocab_list  # type: VocabList  #30: def _regenerate_vocab_list(vocab_list: VocabList) -> VocabList:
+    ):  #30: def _regenerate_vocab_list(vocab_list: VocabList) -> VocabList:
 # type: (...) -> VocabList
     """Regenerates a VocabList from a VocabList.
 
@@ -120,43 +121,44 @@ def _regenerate_vocab_list(vocab_list  # type: VocabList  #29: def _regenerate_v
     -------
     VocabList
         The regenerated VocabList.
-    """  #44:     """
-    word = _coconut.typing.cast(_coconut.typing.Any, _coconut.Ellipsis)  # type: accido.endings._Word  #45:     word: accido.endings._Word
-    if "__annotations__" not in _coconut.locals():  #45:     word: accido.endings._Word
-        __annotations__ = {}  # type: ignore  #45:     word: accido.endings._Word
-    __annotations__["word"] = 'accido.endings._Word'  #45:     word: accido.endings._Word
-    new_vocab = []  # type: list[accido.endings._Word]  #46:     new_vocab: list[accido.endings._Word] = []
-    if "__annotations__" not in _coconut.locals():  #46:     new_vocab: list[accido.endings._Word] = []
-        __annotations__ = {}  # type: ignore  #46:     new_vocab: list[accido.endings._Word] = []
-    __annotations__["new_vocab"] = 'list[accido.endings._Word]'  #46:     new_vocab: list[accido.endings._Word] = []
+    """  #45:     """
+    word = _coconut.typing.cast(_coconut.typing.Any, _coconut.Ellipsis)  # type: accido.endings._Word  #46:     word: accido.endings._Word
+    if "__annotations__" not in _coconut.locals():  #46:     word: accido.endings._Word
+        __annotations__ = {}  # type: ignore  #46:     word: accido.endings._Word
+    __annotations__["word"] = 'accido.endings._Word'  #46:     word: accido.endings._Word
+    new_vocab = []  # type: list[accido.endings._Word]  #47:     new_vocab: list[accido.endings._Word] = []
+    if "__annotations__" not in _coconut.locals():  #47:     new_vocab: list[accido.endings._Word] = []
+        __annotations__ = {}  # type: ignore  #47:     new_vocab: list[accido.endings._Word] = []
+    __annotations__["new_vocab"] = 'list[accido.endings._Word]'  #47:     new_vocab: list[accido.endings._Word] = []
 
-    for word in vocab_list.vocab:  #48:     for word in vocab_list.vocab:
-        if type(word) is accido.endings.RegularWord:  #49:         if type(word) is accido.endings.RegularWord:
-            new_vocab.append(accido.endings.RegularWord(word=word.word, meaning=word.meaning))  #50:             new_vocab.append(
-        elif type(word) is accido.endings.Verb:  #56:         elif type(word) is accido.endings.Verb:
-            new_vocab.append(accido.endings.Verb(present=word.present, infinitive=word.infinitive, perfect=word.perfect, ppp=word.ppp, meaning=word.meaning))  #57:             new_vocab.append(
-        elif type(word) is accido.endings.Noun:  #66:         elif type(word) is accido.endings.Noun:
-            new_vocab.append(accido.endings.Noun(nominative=word.nominative, genitive=word.genitive, meaning=word.meaning, gender=word.gender))  #67:             new_vocab.append(
-        elif type(word) is accido.endings.Adjective:  #75:         elif type(word) is accido.endings.Adjective:
-            new_vocab.append(accido.endings.Adjective(*word._principal_parts, termination=word.termination, declension=word.declension, meaning=word.meaning))  # type: ignore[misc, arg-type]  #76:             new_vocab.append(
-        elif type(word) is accido.endings.Pronoun:  #84:         elif type(word) is accido.endings.Pronoun:
-            new_vocab.append(accido.endings.Pronoun(pronoun=word.pronoun, meaning=word.meaning))  #85:             new_vocab.append(
-        else:  # pragma: no cover # this should never happen  #91:         else:  # pragma: no cover # this should never happen
-            raise ValueError("Unknown word type: {_coconut_format_0}".format(_coconut_format_0=(type(word))))  # noqa: DOC501  #92:             raise ValueError(f"Unknown word type: {type(word)}")  # noqa: DOC501
+    for word in vocab_list.vocab:  #49:     for word in vocab_list.vocab:
+        if type(word) is accido.endings.RegularWord:  #50:         if type(word) is accido.endings.RegularWord:
+            new_vocab.append(accido.endings.RegularWord(word=word.word, meaning=word.meaning))  #51:             new_vocab.append(
+        elif type(word) is accido.endings.Verb:  #57:         elif type(word) is accido.endings.Verb:
+            new_vocab.append(accido.endings.Verb(present=word.present, infinitive=word.infinitive, perfect=word.perfect, ppp=word.ppp, meaning=word.meaning))  #58:             new_vocab.append(
+        elif type(word) is accido.endings.Noun:  #67:         elif type(word) is accido.endings.Noun:
+            new_vocab.append(accido.endings.Noun(nominative=word.nominative, genitive=word.genitive, meaning=word.meaning, gender=word.gender))  #68:             new_vocab.append(
+        elif type(word) is accido.endings.Adjective:  #76:         elif type(word) is accido.endings.Adjective:
+            new_vocab.append(accido.endings.Adjective(*word._principal_parts, termination=word.termination, declension=word.declension, meaning=word.meaning))  # type: ignore[misc, arg-type]  #77:             new_vocab.append(
+        elif type(word) is accido.endings.Pronoun:  #85:         elif type(word) is accido.endings.Pronoun:
+            new_vocab.append(accido.endings.Pronoun(pronoun=word.pronoun, meaning=word.meaning))  #86:             new_vocab.append(
+        else:  # pragma: no cover # this should never happen  #92:         else:  # pragma: no cover # this should never happen
+            raise ValueError("Unknown word type: {_coconut_format_0}".format(_coconut_format_0=(type(word))))  # noqa: DOC501  #93:             raise ValueError(f"Unknown word type: {type(word)}")  # noqa: DOC501
 
-    return _coconut_tail_call(VocabList, new_vocab)  #94:     return VocabList(new_vocab)
+    return _coconut_tail_call(VocabList, new_vocab)  #95:     return VocabList(new_vocab)
 
 
 
-@_coconut_tco  #97: def read_vocab_dump(filename: Path) -> VocabList:
-def read_vocab_dump(filename  # type: Path  #97: def read_vocab_dump(filename: Path) -> VocabList:
-    ):  #97: def read_vocab_dump(filename: Path) -> VocabList:
+@_coconut_tco  #98: def read_vocab_dump(filename: Path) -> VocabList:
+def read_vocab_dump(filename  # type: Path  #98: def read_vocab_dump(filename: Path) -> VocabList:
+    ):  #98: def read_vocab_dump(filename: Path) -> VocabList:
 # type: (...) -> VocabList
     """Reads a vocabulary dump file and returns a VocabList object.
 
     The pickle files are signed with a HMAC signature to ensure the data
     has not been tampered with. If the data is invalid, an exception is
     raised.
+    If the file ends in .lz4, the file is decompressed using lz4.
 
     Parameters
     ----------
@@ -179,48 +181,63 @@ def read_vocab_dump(filename  # type: Path  #97: def read_vocab_dump(filename: P
     Examples
     --------
     >>> read_vocab_dump(Path("path_to_file.pickle"))  # doctest: +SKIP
-    """  #125:     """
-    with open(filename, "rb") as file:  #126:     with open(filename, "rb") as file:
-        content = file.read()  # type: bytes  #127:         content: bytes = file.read()
-        if "__annotations__" not in _coconut.locals():  #127:         content: bytes = file.read()
-            __annotations__ = {}  # type: ignore  #127:         content: bytes = file.read()
-        __annotations__["content"] = 'bytes'  #127:         content: bytes = file.read()
-        pickled_data = content[:-64]  # type: bytes  #128:         pickled_data: bytes = content[:-64]
-        if "__annotations__" not in _coconut.locals():  #128:         pickled_data: bytes = content[:-64]
-            __annotations__ = {}  # type: ignore  #128:         pickled_data: bytes = content[:-64]
-        __annotations__["pickled_data"] = 'bytes'  #128:         pickled_data: bytes = content[:-64]
-        signature = content[-64:].decode()  # type: str  #129:         signature: str = content[-64:].decode()
-        if "__annotations__" not in _coconut.locals():  #129:         signature: str = content[-64:].decode()
-            __annotations__ = {}  # type: ignore  #129:         signature: str = content[-64:].decode()
-        __annotations__["signature"] = 'str'  #129:         signature: str = content[-64:].decode()
+    """  #127:     """
+    if filename.suffix == ".lz4":  #128:     if filename.suffix == ".lz4":
+        with lz4.frame.open(filename, "rb") as file:  #129:         with lz4.frame.open(filename, "rb") as file:
+            content = file.read()  # type: bytes  #130:             content: bytes = file.read()
+            if "__annotations__" not in _coconut.locals():  #130:             content: bytes = file.read()
+                __annotations__ = {}  # type: ignore  #130:             content: bytes = file.read()
+            __annotations__["content"] = 'bytes'  #130:             content: bytes = file.read()
+            pickled_data = content[:-64]  # type: bytes  #131:             pickled_data: bytes = content[:-64]
+            if "__annotations__" not in _coconut.locals():  #131:             pickled_data: bytes = content[:-64]
+                __annotations__ = {}  # type: ignore  #131:             pickled_data: bytes = content[:-64]
+            __annotations__["pickled_data"] = 'bytes'  #131:             pickled_data: bytes = content[:-64]
+            signature = content[-64:].decode()  # type: str  #132:             signature: str = content[-64:].decode()
+            if "__annotations__" not in _coconut.locals():  #132:             signature: str = content[-64:].decode()
+                __annotations__ = {}  # type: ignore  #132:             signature: str = content[-64:].decode()
+            __annotations__["signature"] = 'str'  #132:             signature: str = content[-64:].decode()
+    else:  #133:     else:
+        with open(filename, "rb") as file:  #134:         with open(filename, "rb") as file:
+            content = file.read()  # type: bytes  #135:             content: bytes = file.read()
+            if "__annotations__" not in _coconut.locals():  #135:             content: bytes = file.read()
+                __annotations__ = {}  # type: ignore  #135:             content: bytes = file.read()
+            __annotations__["content"] = 'bytes'  #135:             content: bytes = file.read()
+            pickled_data = content[:-64]  # type: bytes  #136:             pickled_data: bytes = content[:-64]
+            if "__annotations__" not in _coconut.locals():  #136:             pickled_data: bytes = content[:-64]
+                __annotations__ = {}  # type: ignore  #136:             pickled_data: bytes = content[:-64]
+            __annotations__["pickled_data"] = 'bytes'  #136:             pickled_data: bytes = content[:-64]
+            signature = content[-64:].decode()  # type: str  #137:             signature: str = content[-64:].decode()
+            if "__annotations__" not in _coconut.locals():  #137:             signature: str = content[-64:].decode()
+                __annotations__ = {}  # type: ignore  #137:             signature: str = content[-64:].decode()
+            __annotations__["signature"] = 'str'  #137:             signature: str = content[-64:].decode()
 
-    if (hmac.new(KEY, pickled_data, hashlib.sha256).hexdigest() != signature):  # pragma: no cover # this should never happen  #131:     if (
-        raise InvalidVocabDumpError("Data integrity check failed for vocab dump.")  #134:         raise InvalidVocabDumpError(
+    if (hmac.new(KEY, pickled_data, hashlib.sha256).hexdigest() != signature):  # pragma: no cover # this should never happen  #139:     if (
+        raise InvalidVocabDumpError("Data integrity check failed for vocab dump.")  #142:         raise InvalidVocabDumpError(
 
-    output = pickle.loads(pickled_data)  #138:     output = pickle.loads(pickled_data)
-    if type(output) is VocabList:  # type: ignore[comparison-overlap] # mypy cannot recognise this  #139:     if type(output) is VocabList:  # type: ignore[comparison-overlap] # mypy cannot recognise this
-        if output.version == src.__version__:  #140:         if output.version == src.__version__:
-            return output  #141:             return output
-        warnings.warn("Vocab dump is from a different version of vocab-tester.", stacklevel=2)  #142:         warnings.warn(
-        return _coconut_tail_call(_regenerate_vocab_list, output)  #146:         return _regenerate_vocab_list(output)
+    raw_data = pickle.loads(pickled_data)  #146:     raw_data = pickle.loads(pickled_data)
+    if type(raw_data) is VocabList:  # type: ignore[comparison-overlap] # mypy cannot recognise this  #147:     if type(raw_data) is VocabList:  # type: ignore[comparison-overlap] # mypy cannot recognise this
+        if raw_data.version == src.__version__:  #148:         if raw_data.version == src.__version__:
+            return raw_data  #149:             return raw_data
+        warnings.warn("Vocab dump is from a different version of vocab-tester.", stacklevel=2)  #150:         warnings.warn(
+        return _coconut_tail_call(_regenerate_vocab_list, raw_data)  #154:         return _regenerate_vocab_list(raw_data)
 
-    raise InvalidVocabDumpError("Vocab dump is not valid.")  # pragma: no cover # this should never happen  #148:     raise InvalidVocabDumpError(
+    raise InvalidVocabDumpError("Vocab dump is not valid.")  # pragma: no cover # this should never happen  #156:     raise InvalidVocabDumpError(
 
 
 
-@_coconut_tco  #153: def _generate_meaning(meaning: str) -> accido.type_aliases.Meaning:
-def _generate_meaning(meaning  # type: str  #153: def _generate_meaning(meaning: str) -> accido.type_aliases.Meaning:
-    ):  #153: def _generate_meaning(meaning: str) -> accido.type_aliases.Meaning:
+@_coconut_tco  #161: def _generate_meaning(meaning: str) -> accido.type_aliases.Meaning:
+def _generate_meaning(meaning  # type: str  #161: def _generate_meaning(meaning: str) -> accido.type_aliases.Meaning:
+    ):  #161: def _generate_meaning(meaning: str) -> accido.type_aliases.Meaning:
 # type: (...) -> accido.type_aliases.Meaning
-    if "/" in meaning:  #154:     if "/" in meaning:
-        return _coconut_tail_call(accido.misc.MultipleMeanings, [x.strip() for x in meaning.split("/")])  #155:         return accido.misc.MultipleMeanings([
-    return meaning  #158:     return meaning
+    if "/" in meaning:  #162:     if "/" in meaning:
+        return _coconut_tail_call(accido.misc.MultipleMeanings, [x.strip() for x in meaning.split("/")])  #163:         return accido.misc.MultipleMeanings([
+    return meaning  #166:     return meaning
 
 
 
-@_coconut_tco  #161: def read_vocab_file(file_path: Path) -> VocabList:
-def read_vocab_file(file_path  # type: Path  #161: def read_vocab_file(file_path: Path) -> VocabList:
-    ):  #161: def read_vocab_file(file_path: Path) -> VocabList:
+@_coconut_tco  #169: def read_vocab_file(file_path: Path) -> VocabList:
+def read_vocab_file(file_path  # type: Path  #169: def read_vocab_file(file_path: Path) -> VocabList:
+    ):  #169: def read_vocab_file(file_path: Path) -> VocabList:
 # type: (...) -> VocabList
     """Reads a vocabulary file and returns a VocabList object.
 
@@ -245,190 +262,190 @@ def read_vocab_file(file_path  # type: Path  #161: def read_vocab_file(file_path
     Examples
     --------
     >>> read_vocab_file(Path("path_to_file.txt"))  # doctest: +SKIP
-    """  #185:     """
-    vocab = []  # type: list[accido.endings._Word]  #186:     vocab: list[accido.endings._Word] = []
-    if "__annotations__" not in _coconut.locals():  #186:     vocab: list[accido.endings._Word] = []
-        __annotations__ = {}  # type: ignore  #186:     vocab: list[accido.endings._Word] = []
-    __annotations__["vocab"] = 'list[accido.endings._Word]'  #186:     vocab: list[accido.endings._Word] = []
-    file = _coconut.typing.cast(_coconut.typing.Any, _coconut.Ellipsis)  # type: TextIOWrapper  #187:     file: TextIOWrapper
-    if "__annotations__" not in _coconut.locals():  #187:     file: TextIOWrapper
-        __annotations__ = {}  # type: ignore  #187:     file: TextIOWrapper
-    __annotations__["file"] = 'TextIOWrapper'  #187:     file: TextIOWrapper
+    """  #193:     """
+    vocab = []  # type: list[accido.endings._Word]  #194:     vocab: list[accido.endings._Word] = []
+    if "__annotations__" not in _coconut.locals():  #194:     vocab: list[accido.endings._Word] = []
+        __annotations__ = {}  # type: ignore  #194:     vocab: list[accido.endings._Word] = []
+    __annotations__["vocab"] = 'list[accido.endings._Word]'  #194:     vocab: list[accido.endings._Word] = []
+    file = _coconut.typing.cast(_coconut.typing.Any, _coconut.Ellipsis)  # type: TextIOWrapper  #195:     file: TextIOWrapper
+    if "__annotations__" not in _coconut.locals():  #195:     file: TextIOWrapper
+        __annotations__ = {}  # type: ignore  #195:     file: TextIOWrapper
+    __annotations__["file"] = 'TextIOWrapper'  #195:     file: TextIOWrapper
 
-    with file_path.open("r") as file:  #189:     with file_path.open("r") as file:
-        line = _coconut.typing.cast(_coconut.typing.Any, _coconut.Ellipsis)  # type: str  #190:         line: str
-        if "__annotations__" not in _coconut.locals():  #190:         line: str
-            __annotations__ = {}  # type: ignore  #190:         line: str
-        __annotations__["line"] = 'str'  #190:         line: str
-        current = ""  # type: str  #191:         current: str = ""
-        if "__annotations__" not in _coconut.locals():  #191:         current: str = ""
-            __annotations__ = {}  # type: ignore  #191:         current: str = ""
-        __annotations__["current"] = 'str'  #191:         current: str = ""
+    with file_path.open("r") as file:  #197:     with file_path.open("r") as file:
+        line = _coconut.typing.cast(_coconut.typing.Any, _coconut.Ellipsis)  # type: str  #198:         line: str
+        if "__annotations__" not in _coconut.locals():  #198:         line: str
+            __annotations__ = {}  # type: ignore  #198:         line: str
+        __annotations__["line"] = 'str'  #198:         line: str
+        current = ""  # type: str  #199:         current: str = ""
+        if "__annotations__" not in _coconut.locals():  #199:         current: str = ""
+            __annotations__ = {}  # type: ignore  #199:         current: str = ""
+        __annotations__["current"] = 'str'  #199:         current: str = ""
 
-        for line in (raw_line.strip() for raw_line in file.read().split("\n") if raw_line.strip()):  # for line in file  # remove whitespace  # but skip if the line is blank  #193:         for line in (
-            _coconut_case_match_to_1 = line[0]  #198:             match line[0]:
-            _coconut_case_match_check_1 = False  #198:             match line[0]:
-            if _coconut_case_match_to_1 == "#":  #198:             match line[0]:
-                _coconut_case_match_check_1 = True  #198:             match line[0]:
-            if _coconut_case_match_check_1:  #198:             match line[0]:
-                continue  #200:                     continue
+        for line in (raw_line.strip() for raw_line in file.read().split("\n") if raw_line.strip()):  # but skip if the line is blank  # for line in file  # remove whitespace  #201:         for line in (
+            _coconut_case_match_to_1 = line[0]  #206:             match line[0]:
+            _coconut_case_match_check_1 = False  #206:             match line[0]:
+            if _coconut_case_match_to_1 == "#":  #206:             match line[0]:
+                _coconut_case_match_check_1 = True  #206:             match line[0]:
+            if _coconut_case_match_check_1:  #206:             match line[0]:
+                continue  #208:                     continue
 
-            if not _coconut_case_match_check_1:  #202:                 case "@":
-                if _coconut_case_match_to_1 == "@":  #202:                 case "@":
-                    _coconut_case_match_check_1 = True  #202:                 case "@":
-                if _coconut_case_match_check_1:  #202:                 case "@":
-                    _coconut_case_match_to_0 = line[1:].strip()  #202:                 case "@":
-                    _coconut_case_match_check_0 = False  #202:                 case "@":
-                    _coconut_case_match_check_0 = True  #202:                 case "@":
-                    if _coconut_case_match_check_0:  #202:                 case "@":
-                        _coconut_case_match_check_0 = False  #202:                 case "@":
-                        if not _coconut_case_match_check_0:  #202:                 case "@":
-                            if _coconut_case_match_to_0 == "Verb":  #202:                 case "@":
-                                _coconut_case_match_check_0 = True  #202:                 case "@":
+            if not _coconut_case_match_check_1:  #210:                 case "@":
+                if _coconut_case_match_to_1 == "@":  #210:                 case "@":
+                    _coconut_case_match_check_1 = True  #210:                 case "@":
+                if _coconut_case_match_check_1:  #210:                 case "@":
+                    _coconut_case_match_to_0 = line[1:].strip()  #210:                 case "@":
+                    _coconut_case_match_check_0 = False  #210:                 case "@":
+                    _coconut_case_match_check_0 = True  #210:                 case "@":
+                    if _coconut_case_match_check_0:  #210:                 case "@":
+                        _coconut_case_match_check_0 = False  #210:                 case "@":
+                        if not _coconut_case_match_check_0:  #210:                 case "@":
+                            if _coconut_case_match_to_0 == "Verb":  #210:                 case "@":
+                                _coconut_case_match_check_0 = True  #210:                 case "@":
 
-                        if not _coconut_case_match_check_0:  #202:                 case "@":
-                            if _coconut_case_match_to_0 == "Adjective":  #202:                 case "@":
-                                _coconut_case_match_check_0 = True  #202:                 case "@":
+                        if not _coconut_case_match_check_0:  #210:                 case "@":
+                            if _coconut_case_match_to_0 == "Adjective":  #210:                 case "@":
+                                _coconut_case_match_check_0 = True  #210:                 case "@":
 
-                        if not _coconut_case_match_check_0:  #202:                 case "@":
-                            if _coconut_case_match_to_0 == "Noun":  #202:                 case "@":
-                                _coconut_case_match_check_0 = True  #202:                 case "@":
+                        if not _coconut_case_match_check_0:  #210:                 case "@":
+                            if _coconut_case_match_to_0 == "Noun":  #210:                 case "@":
+                                _coconut_case_match_check_0 = True  #210:                 case "@":
 
-                        if not _coconut_case_match_check_0:  #202:                 case "@":
-                            if _coconut_case_match_to_0 == "Regular":  #202:                 case "@":
-                                _coconut_case_match_check_0 = True  #202:                 case "@":
+                        if not _coconut_case_match_check_0:  #210:                 case "@":
+                            if _coconut_case_match_to_0 == "Regular":  #210:                 case "@":
+                                _coconut_case_match_check_0 = True  #210:                 case "@":
 
-                        if not _coconut_case_match_check_0:  #202:                 case "@":
-                            if _coconut_case_match_to_0 == "Pronoun":  #202:                 case "@":
-                                _coconut_case_match_check_0 = True  #202:                 case "@":
-
-
-                    if _coconut_case_match_check_0:  #202:                 case "@":
-                        current = line[1:].strip()  #211:                             current = line[1:].strip()
-
-                    if not _coconut_case_match_check_0:  #213:                         case (
-                        _coconut_case_match_check_0 = True  #213:                         case (
-                        if _coconut_case_match_check_0:  #213:                         case (
-                            _coconut_case_match_check_0 = False  #213:                         case (
-                            if not _coconut_case_match_check_0:  #213:                         case (
-                                if _coconut_case_match_to_0 == "Verbs":  #213:                         case (
-                                    _coconut_case_match_check_0 = True  #213:                         case (
-
-                            if not _coconut_case_match_check_0:  #213:                         case (
-                                if _coconut_case_match_to_0 == "Adjectives":  #213:                         case (
-                                    _coconut_case_match_check_0 = True  #213:                         case (
-
-                            if not _coconut_case_match_check_0:  #213:                         case (
-                                if _coconut_case_match_to_0 == "Nouns":  #213:                         case (
-                                    _coconut_case_match_check_0 = True  #213:                         case (
-
-                            if not _coconut_case_match_check_0:  #213:                         case (
-                                if _coconut_case_match_to_0 == "Regulars":  #213:                         case (
-                                    _coconut_case_match_check_0 = True  #213:                         case (
-
-                            if not _coconut_case_match_check_0:  #213:                         case (
-                                if _coconut_case_match_to_0 == "Pronouns":  #213:                         case (
-                                    _coconut_case_match_check_0 = True  #213:                         case (
+                        if not _coconut_case_match_check_0:  #210:                 case "@":
+                            if _coconut_case_match_to_0 == "Pronoun":  #210:                 case "@":
+                                _coconut_case_match_check_0 = True  #210:                 case "@":
 
 
-                        if _coconut_case_match_check_0:  #213:                         case (
-                            current = line[1:-1].strip()  #220:                             current = line[1:-1].strip()
+                    if _coconut_case_match_check_0:  #210:                 case "@":
+                        current = line[1:].strip()  #219:                             current = line[1:].strip()
 
-                    if not _coconut_case_match_check_0:  #222:                         case _:
-                        _coconut_case_match_check_0 = True  #222:                         case _:
-                        if _coconut_case_match_check_0:  #222:                         case _:
-                            raise InvalidVocabFileFormatError("Invalid part of speech: {_coconut_format_0}".format(_coconut_format_0=(line[1:].strip())))  #223:                             raise InvalidVocabFileFormatError(
+                    if not _coconut_case_match_check_0:  #221:                         case (
+                        _coconut_case_match_check_0 = True  #221:                         case (
+                        if _coconut_case_match_check_0:  #221:                         case (
+                            _coconut_case_match_check_0 = False  #221:                         case (
+                            if not _coconut_case_match_check_0:  #221:                         case (
+                                if _coconut_case_match_to_0 == "Verbs":  #221:                         case (
+                                    _coconut_case_match_check_0 = True  #221:                         case (
 
-            if not _coconut_case_match_check_1:  #227:                 case _:
-                _coconut_case_match_check_1 = True  #227:                 case _:
-                if _coconut_case_match_check_1:  #227:                 case _:
-                    parts = line.strip().split(":")  # type: list[str]  #227:                 case _:
-                    if "__annotations__" not in _coconut.locals():  #227:                 case _:
-                        __annotations__ = {}  # type: ignore  #227:                 case _:
-                    __annotations__["parts"] = 'list[str]'  #228:                     parts: list[str] = line.strip().split(":")
-                    if len(parts) != 2:  #229:                     if len(parts) != 2:
-                        raise InvalidVocabFileFormatError("Invalid line format: {_coconut_format_0}".format(_coconut_format_0=(line)))  #230:                         raise InvalidVocabFileFormatError(
+                            if not _coconut_case_match_check_0:  #221:                         case (
+                                if _coconut_case_match_to_0 == "Adjectives":  #221:                         case (
+                                    _coconut_case_match_check_0 = True  #221:                         case (
 
-                    meaning = _generate_meaning(parts[0].strip())  # type: accido.type_aliases.Meaning  #234:                     meaning: accido.type_aliases.Meaning = _generate_meaning(
-                    if "__annotations__" not in _coconut.locals():  #234:                     meaning: accido.type_aliases.Meaning = _generate_meaning(
-                        __annotations__ = {}  # type: ignore  #234:                     meaning: accido.type_aliases.Meaning = _generate_meaning(
-                    __annotations__["meaning"] = 'accido.type_aliases.Meaning'  #234:                     meaning: accido.type_aliases.Meaning = _generate_meaning(
-                    latin_parts = [raw_part.strip() for raw_part in parts[1].split(",")]  # type: list[str]  #237:                     latin_parts: list[str] = [
-                    if "__annotations__" not in _coconut.locals():  #237:                     latin_parts: list[str] = [
-                        __annotations__ = {}  # type: ignore  #237:                     latin_parts: list[str] = [
-                    __annotations__["latin_parts"] = 'list[str]'  #237:                     latin_parts: list[str] = [
+                            if not _coconut_case_match_check_0:  #221:                         case (
+                                if _coconut_case_match_to_0 == "Nouns":  #221:                         case (
+                                    _coconut_case_match_check_0 = True  #221:                         case (
 
-                    if not current:  #241:                     if not current:
-                        raise InvalidVocabFileFormatError("Part of speech was not given")  #242:                         raise InvalidVocabFileFormatError(
+                            if not _coconut_case_match_check_0:  #221:                         case (
+                                if _coconut_case_match_to_0 == "Regulars":  #221:                         case (
+                                    _coconut_case_match_check_0 = True  #221:                         case (
 
-                    vocab.append(_parse_line(current, latin_parts, meaning, line))  #246:                     vocab.append(
-    return _coconut_tail_call(VocabList, vocab)  #249:     return VocabList(vocab)
+                            if not _coconut_case_match_check_0:  #221:                         case (
+                                if _coconut_case_match_to_0 == "Pronouns":  #221:                         case (
+                                    _coconut_case_match_check_0 = True  #221:                         case (
+
+
+                        if _coconut_case_match_check_0:  #221:                         case (
+                            current = line[1:-1].strip()  #228:                             current = line[1:-1].strip()
+
+                    if not _coconut_case_match_check_0:  #230:                         case _:
+                        _coconut_case_match_check_0 = True  #230:                         case _:
+                        if _coconut_case_match_check_0:  #230:                         case _:
+                            raise InvalidVocabFileFormatError("Invalid part of speech: {_coconut_format_0}".format(_coconut_format_0=(line[1:].strip())))  #231:                             raise InvalidVocabFileFormatError(
+
+            if not _coconut_case_match_check_1:  #235:                 case _:
+                _coconut_case_match_check_1 = True  #235:                 case _:
+                if _coconut_case_match_check_1:  #235:                 case _:
+                    parts = line.strip().split(":")  # type: list[str]  #235:                 case _:
+                    if "__annotations__" not in _coconut.locals():  #235:                 case _:
+                        __annotations__ = {}  # type: ignore  #235:                 case _:
+                    __annotations__["parts"] = 'list[str]'  #236:                     parts: list[str] = line.strip().split(":")
+                    if len(parts) != 2:  #237:                     if len(parts) != 2:
+                        raise InvalidVocabFileFormatError("Invalid line format: {_coconut_format_0}".format(_coconut_format_0=(line)))  #238:                         raise InvalidVocabFileFormatError(
+
+                    meaning = _generate_meaning(parts[0].strip())  # type: accido.type_aliases.Meaning  #242:                     meaning: accido.type_aliases.Meaning = _generate_meaning(
+                    if "__annotations__" not in _coconut.locals():  #242:                     meaning: accido.type_aliases.Meaning = _generate_meaning(
+                        __annotations__ = {}  # type: ignore  #242:                     meaning: accido.type_aliases.Meaning = _generate_meaning(
+                    __annotations__["meaning"] = 'accido.type_aliases.Meaning'  #242:                     meaning: accido.type_aliases.Meaning = _generate_meaning(
+                    latin_parts = [raw_part.strip() for raw_part in parts[1].split(",")]  # type: list[str]  #245:                     latin_parts: list[str] = [
+                    if "__annotations__" not in _coconut.locals():  #245:                     latin_parts: list[str] = [
+                        __annotations__ = {}  # type: ignore  #245:                     latin_parts: list[str] = [
+                    __annotations__["latin_parts"] = 'list[str]'  #245:                     latin_parts: list[str] = [
+
+                    if not current:  #249:                     if not current:
+                        raise InvalidVocabFileFormatError("Part of speech was not given")  #250:                         raise InvalidVocabFileFormatError(
+
+                    vocab.append(_parse_line(current, latin_parts, meaning, line))  #254:                     vocab.append(
+    return _coconut_tail_call(VocabList, vocab)  #257:     return VocabList(vocab)
 
 
 # type: ignore[return]
-@_coconut_tco  # type: ignore[return]  #252: def _parse_line(  # type: ignore[return]
-def _parse_line(current,  # type: str  # type: ignore[return]  #252: def _parse_line(  # type: ignore[return]
-    latin_parts,  # type: list[str]  # type: ignore[return]  #252: def _parse_line(  # type: ignore[return]
-    meaning,  # type: accido.type_aliases.Meaning  # type: ignore[return]  #252: def _parse_line(  # type: ignore[return]
-    line,  # type: str  # type: ignore[return]  #252: def _parse_line(  # type: ignore[return]
-    ):  # type: ignore[return]  #252: def _parse_line(  # type: ignore[return]
+@_coconut_tco  # type: ignore[return]  #260: def _parse_line(  # type: ignore[return]
+def _parse_line(current,  # type: str  # type: ignore[return]  #260: def _parse_line(  # type: ignore[return]
+    latin_parts,  # type: list[str]  # type: ignore[return]  #260: def _parse_line(  # type: ignore[return]
+    meaning,  # type: accido.type_aliases.Meaning  # type: ignore[return]  #260: def _parse_line(  # type: ignore[return]
+    line,  # type: str  # type: ignore[return]  #260: def _parse_line(  # type: ignore[return]
+    ):  # type: ignore[return]  #260: def _parse_line(  # type: ignore[return]
 # type: (...) -> accido.endings._Word  # type: ignore[return]
-    _coconut_case_match_to_2 = current  #258:     match current:
-    _coconut_case_match_check_2 = False  #258:     match current:
-    if _coconut_case_match_to_2 == "Verb":  #258:     match current:
-        _coconut_case_match_check_2 = True  #258:     match current:
-    if _coconut_case_match_check_2:  #258:     match current:
-        if len(latin_parts) not in _coconut.set((3, 4)):  #260:             if len(latin_parts) not in {3, 4}:
-            raise InvalidVocabFileFormatError("Invalid verb format: {_coconut_format_0}".format(_coconut_format_0=(line)))  #261:                 raise InvalidVocabFileFormatError(
+    _coconut_case_match_to_2 = current  #266:     match current:
+    _coconut_case_match_check_2 = False  #266:     match current:
+    if _coconut_case_match_to_2 == "Verb":  #266:     match current:
+        _coconut_case_match_check_2 = True  #266:     match current:
+    if _coconut_case_match_check_2:  #266:     match current:
+        if len(latin_parts) not in _coconut.set((3, 4)):  #268:             if len(latin_parts) not in {3, 4}:
+            raise InvalidVocabFileFormatError("Invalid verb format: {_coconut_format_0}".format(_coconut_format_0=(line)))  #269:                 raise InvalidVocabFileFormatError(
 
-        if len(latin_parts) > 3:  #265:             if len(latin_parts) > 3:
-            return _coconut_tail_call(accido.endings.Verb, present=latin_parts[0], infinitive=latin_parts[1], perfect=latin_parts[2], ppp=latin_parts[3], meaning=meaning)  #266:                 return accido.endings.Verb(
-        return _coconut_tail_call(accido.endings.Verb, present=latin_parts[0], infinitive=latin_parts[1], perfect=latin_parts[2], meaning=meaning)  #273:             return accido.endings.Verb(
+        if len(latin_parts) > 3:  #273:             if len(latin_parts) > 3:
+            return _coconut_tail_call(accido.endings.Verb, present=latin_parts[0], infinitive=latin_parts[1], perfect=latin_parts[2], ppp=latin_parts[3], meaning=meaning)  #274:                 return accido.endings.Verb(
+        return _coconut_tail_call(accido.endings.Verb, present=latin_parts[0], infinitive=latin_parts[1], perfect=latin_parts[2], meaning=meaning)  #281:             return accido.endings.Verb(
 
-    if not _coconut_case_match_check_2:  #280:         case "Noun":
-        if _coconut_case_match_to_2 == "Noun":  #280:         case "Noun":
-            _coconut_case_match_check_2 = True  #280:         case "Noun":
-        if _coconut_case_match_check_2:  #280:         case "Noun":
-            if len(latin_parts) != 3:  #281:             if len(latin_parts) != 3:
-                raise InvalidVocabFileFormatError("Invalid noun format: {_coconut_format_0}".format(_coconut_format_0=(line)))  #282:                 raise InvalidVocabFileFormatError(
+    if not _coconut_case_match_check_2:  #288:         case "Noun":
+        if _coconut_case_match_to_2 == "Noun":  #288:         case "Noun":
+            _coconut_case_match_check_2 = True  #288:         case "Noun":
+        if _coconut_case_match_check_2:  #288:         case "Noun":
+            if len(latin_parts) != 3:  #289:             if len(latin_parts) != 3:
+                raise InvalidVocabFileFormatError("Invalid noun format: {_coconut_format_0}".format(_coconut_format_0=(line)))  #290:                 raise InvalidVocabFileFormatError(
 
-            try:  #286:             try:
-                return accido.endings.Noun(meaning=meaning, nominative=latin_parts[0], genitive=latin_parts[1].split()[0], gender=GENDER_SHORTHAND[latin_parts[2].split()[-1].strip("()")])  #287:                 return accido.endings.Noun(
-            except KeyError as e:  #295:             except KeyError as e:
-                _coconut_raise_from_0 = InvalidVocabFileFormatError("Invalid gender: {_coconut_format_0}".format(_coconut_format_0=(latin_parts[2].split()[-1].strip('()'))))  #296:                 raise InvalidVocabFileFormatError(
-                _coconut_raise_from_0.__cause__ = e  #296:                 raise InvalidVocabFileFormatError(
-                raise _coconut_raise_from_0  #296:                 raise InvalidVocabFileFormatError(
+            try:  #294:             try:
+                return accido.endings.Noun(meaning=meaning, nominative=latin_parts[0], genitive=latin_parts[1].split()[0], gender=GENDER_SHORTHAND[latin_parts[2].split()[-1].strip("()")])  #295:                 return accido.endings.Noun(
+            except KeyError as e:  #303:             except KeyError as e:
+                _coconut_raise_from_0 = InvalidVocabFileFormatError("Invalid gender: {_coconut_format_0}".format(_coconut_format_0=(latin_parts[2].split()[-1].strip('()'))))  #304:                 raise InvalidVocabFileFormatError(
+                _coconut_raise_from_0.__cause__ = e  #304:                 raise InvalidVocabFileFormatError(
+                raise _coconut_raise_from_0  #304:                 raise InvalidVocabFileFormatError(
 
-    if not _coconut_case_match_check_2:  #300:         case "Adjective":
-        if _coconut_case_match_to_2 == "Adjective":  #300:         case "Adjective":
-            _coconut_case_match_check_2 = True  #300:         case "Adjective":
-        if _coconut_case_match_check_2:  #300:         case "Adjective":
-            if len(latin_parts) not in _coconut.set((3, 4)):  #301:             if len(latin_parts) not in {3, 4}:
-                raise InvalidVocabFileFormatError("Invalid adjective format: {_coconut_format_0}".format(_coconut_format_0=(line)))  #302:                 raise InvalidVocabFileFormatError(
+    if not _coconut_case_match_check_2:  #308:         case "Adjective":
+        if _coconut_case_match_to_2 == "Adjective":  #308:         case "Adjective":
+            _coconut_case_match_check_2 = True  #308:         case "Adjective":
+        if _coconut_case_match_check_2:  #308:         case "Adjective":
+            if len(latin_parts) not in _coconut.set((3, 4)):  #309:             if len(latin_parts) not in {3, 4}:
+                raise InvalidVocabFileFormatError("Invalid adjective format: {_coconut_format_0}".format(_coconut_format_0=(line)))  #310:                 raise InvalidVocabFileFormatError(
 
-            declension = latin_parts[-1].strip("()")  # type: str  #306:             declension: str = latin_parts[-1].strip("()")
-            if "__annotations__" not in _coconut.locals():  #306:             declension: str = latin_parts[-1].strip("()")
-                __annotations__ = {}  # type: ignore  #306:             declension: str = latin_parts[-1].strip("()")
-            __annotations__["declension"] = 'str'  #306:             declension: str = latin_parts[-1].strip("()")
+            declension = latin_parts[-1].strip("()")  # type: str  #314:             declension: str = latin_parts[-1].strip("()")
+            if "__annotations__" not in _coconut.locals():  #314:             declension: str = latin_parts[-1].strip("()")
+                __annotations__ = {}  # type: ignore  #314:             declension: str = latin_parts[-1].strip("()")
+            __annotations__["declension"] = 'str'  #314:             declension: str = latin_parts[-1].strip("()")
 
-            if declension not in _coconut.set(("212", "2-1-2")) and not match(r"^3-.$", declension):  #308:             if declension not in {"212", "2-1-2"} and not match(
-                raise InvalidVocabFileFormatError("Invalid adjective declension: {_coconut_format_0}".format(_coconut_format_0=(declension)))  #312:                 raise InvalidVocabFileFormatError(
-            if declension.startswith("3"):  #315:             if declension.startswith("3"):
-                return _coconut_tail_call(accido.endings.Adjective, *latin_parts[:-1], termination=int(declension[2]), declension="3", meaning=meaning)  #316:                 return accido.endings.Adjective(
-            return _coconut_tail_call(accido.endings.Adjective, *latin_parts[:-1], meaning=meaning, declension="212")  #322:             return accido.endings.Adjective(
-    if not _coconut_case_match_check_2:  #327:         case "Regular":
-        if _coconut_case_match_to_2 == "Regular":  #327:         case "Regular":
-            _coconut_case_match_check_2 = True  #327:         case "Regular":
-        if _coconut_case_match_check_2:  #327:         case "Regular":
-            return _coconut_tail_call(accido.endings.RegularWord, word=latin_parts[0], meaning=meaning)  #328:             return accido.endings.RegularWord(
+            if declension not in _coconut.set(("212", "2-1-2")) and not match(r"^3-.$", declension):  #316:             if declension not in {"212", "2-1-2"} and not match(
+                raise InvalidVocabFileFormatError("Invalid adjective declension: {_coconut_format_0}".format(_coconut_format_0=(declension)))  #320:                 raise InvalidVocabFileFormatError(
+            if declension.startswith("3"):  #323:             if declension.startswith("3"):
+                return _coconut_tail_call(accido.endings.Adjective, *latin_parts[:-1], termination=int(declension[2]), declension="3", meaning=meaning)  #324:                 return accido.endings.Adjective(
+            return _coconut_tail_call(accido.endings.Adjective, *latin_parts[:-1], meaning=meaning, declension="212")  #330:             return accido.endings.Adjective(
+    if not _coconut_case_match_check_2:  #335:         case "Regular":
+        if _coconut_case_match_to_2 == "Regular":  #335:         case "Regular":
+            _coconut_case_match_check_2 = True  #335:         case "Regular":
+        if _coconut_case_match_check_2:  #335:         case "Regular":
+            return _coconut_tail_call(accido.endings.RegularWord, word=latin_parts[0], meaning=meaning)  #336:             return accido.endings.RegularWord(
 
-    if not _coconut_case_match_check_2:  #333:         case "Pronoun":
-        if _coconut_case_match_to_2 == "Pronoun":  #333:         case "Pronoun":
-            _coconut_case_match_check_2 = True  #333:         case "Pronoun":
-        if _coconut_case_match_check_2:  #333:         case "Pronoun":
-            return _coconut_tail_call(accido.endings.Pronoun, meaning=meaning, pronoun=latin_parts[0])  #334:             return accido.endings.Pronoun(
+    if not _coconut_case_match_check_2:  #341:         case "Pronoun":
+        if _coconut_case_match_to_2 == "Pronoun":  #341:         case "Pronoun":
+            _coconut_case_match_check_2 = True  #341:         case "Pronoun":
+        if _coconut_case_match_check_2:  #341:         case "Pronoun":
+            return _coconut_tail_call(accido.endings.Pronoun, meaning=meaning, pronoun=latin_parts[0])  #342:             return accido.endings.Pronoun(
 
-    if not _coconut_case_match_check_2:  # pragma: no cover # this should never happen  #339:         case _:  # pragma: no cover # this should never happen
-        _coconut_case_match_check_2 = True  # pragma: no cover # this should never happen  #339:         case _:  # pragma: no cover # this should never happen
-        if _coconut_case_match_check_2:  # pragma: no cover # this should never happen  #339:         case _:  # pragma: no cover # this should never happen
-            raise ValueError  #340:             raise ValueError
+    if not _coconut_case_match_check_2:  # pragma: no cover # this should never happen  #347:         case _:  # pragma: no cover # this should never happen
+        _coconut_case_match_check_2 = True  # pragma: no cover # this should never happen  #347:         case _:  # pragma: no cover # this should never happen
+        if _coconut_case_match_check_2:  # pragma: no cover # this should never happen  #347:         case _:  # pragma: no cover # this should never happen
+            raise ValueError  #348:             raise ValueError

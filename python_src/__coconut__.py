@@ -11,7 +11,7 @@
 from __future__ import print_function, absolute_import, unicode_literals, division
 import sys as _coconut_sys
 import os as _coconut_os
-_coconut_header_info = ('3.1.2', '', True)
+_coconut_header_info = ('3.1.2', '', False)
 try:
     __file__ = _coconut_os.path.abspath(__file__) if __file__ else __file__
 except NameError:
@@ -2963,23 +2963,14 @@ else:
     _coconut_async_map_ns = {"_coconut": _coconut, 'zip': zip}
     _coconut_exec('async def async_map(async_func, *iters, strict=False):\n    """Map async_func over iters asynchronously using anyio."""\n    import anyio\n    results = []\n    async def store_func_in_of(i, args):\n        got = await async_func(*args)\n        results.extend([None] * (1 + i - _coconut.len(results)))\n        results[i] = got\n    async with anyio.create_task_group() as nursery:\n        for i, args in _coconut.enumerate(zip(*iters, strict=strict)):\n            nursery.start_soon(store_func_in_of, i, args)\n    return results', _coconut_async_map_ns)
     async_map = _coconut_async_map_ns["async_map"]
-def prepattern(*args, **kwargs):
-    """Deprecated Coconut built-in 'prepattern' disabled by --strict compilation; use 'addpattern' instead."""
-    raise _coconut.NameError("deprecated Coconut built-in 'prepattern' disabled by --strict compilation; use 'addpattern' instead")
-def datamaker(*args, **kwargs):
-    """Deprecated Coconut built-in 'datamaker' disabled by --strict compilation; use 'makedata' instead."""
-    raise _coconut.NameError("deprecated Coconut built-in 'datamaker' disabled by --strict compilation; use 'makedata' instead")
-def of(*args, **kwargs):
-    """Deprecated Coconut built-in 'of' disabled by --strict compilation; use 'call' instead."""
-    raise _coconut.NameError("deprecated Coconut built-in 'of' disabled by --strict compilation; use 'call' instead")
-def parallel_map(*args, **kwargs):
-    """Deprecated Coconut built-in 'parallel_map' disabled by --strict compilation; use 'process_map' instead."""
-    raise _coconut.NameError("deprecated Coconut built-in 'parallel_map' disabled by --strict compilation; use 'process_map' instead")
-def concurrent_map(*args, **kwargs):
-    """Deprecated Coconut built-in 'concurrent_map' disabled by --strict compilation; use 'thread_map' instead."""
-    raise _coconut.NameError("deprecated Coconut built-in 'concurrent_map' disabled by --strict compilation; use 'thread_map' instead")
-def recursive_iterator(*args, **kwargs):
-    """Deprecated Coconut built-in 'recursive_iterator' disabled by --strict compilation; use 'recursive_generator' instead."""
-    raise _coconut.NameError("deprecated Coconut built-in 'recursive_iterator' disabled by --strict compilation; use 'recursive_generator' instead")
+def prepattern(base_func, **kwargs):
+    """DEPRECATED: use addpattern instead."""
+    def pattern_prepender(func):
+        return addpattern(func, base_func, **kwargs)
+    return pattern_prepender
+def datamaker(data_type):
+    """DEPRECATED: use makedata instead."""
+    return _coconut_partial(makedata, data_type)
+of, parallel_map, concurrent_map, recursive_iterator = call, process_map, thread_map, recursive_generator
 _coconut_self_match_types = (bool, bytearray, bytes, dict, float, frozenset, int, py_int, list, set, str, py_str, tuple)
 TYPE_CHECKING, _coconut_Expected, _coconut_MatchError, _coconut_cartesian_product, _coconut_count, _coconut_cycle, _coconut_enumerate, _coconut_flatten, _coconut_fmap, _coconut_filter, _coconut_groupsof, _coconut_ident, _coconut_lift, _coconut_map, _coconut_mapreduce, _coconut_multiset, _coconut_range, _coconut_reiterable, _coconut_reversed, _coconut_scan, _coconut_starmap, _coconut_tee, _coconut_windowsof, _coconut_zip, _coconut_zip_longest = False, Expected, MatchError, cartesian_product, count, cycle, enumerate, flatten, fmap, filter, groupsof, ident, lift, map, mapreduce, multiset, range, reiterable, reversed, scan, starmap, tee, windowsof, zip, zip_longest
