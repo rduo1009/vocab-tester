@@ -4,5 +4,6 @@
     "config:recommended"
   ],
   "baseBranches": ["compat-package", "compat-coconut"],
-  "prHourlyLimit": 5
+  "prHourlyLimit": 5,
+  "commitMessagePrefix": "🚧 build(deps):"
 }
