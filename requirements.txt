@@ -1,6 +1,6 @@
 aenum @ git+https://github.com/rduo1009/aenum.git@8ccbb09513017f148fa4b66f23e49d7be75674fb
 click==8.1.7
-dill==0.3.8
+dill==0.3.9
 future_typing @ git+https://github.com/rduo1009/future-typing.git@ff8be71d90b5c1872460038983502a91728ec15c
 inflect==7.4.0
 joblib==1.4.2
