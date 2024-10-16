@@ -8,7 +8,7 @@ lemminflect==0.2.3
 lz4==4.3.3
 more-itertools==10.5.0
 nltk==3.9.1
-numpy==2.1.0
+numpy==2.1.2
 regex==2024.9.11
 tqdm==4.66.5
 typeguard==4.3.0
