@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 """Contains miscellaneous functions, classes and constants used by accido."""
 

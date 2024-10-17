@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 """Representation of a Latin noun with endings."""
 
@@ -28,15 +27,18 @@ class Noun(_Word):
 
     Attributes
     ----------
-    nominative, genitive : str
+    nominative : str
+    genitive : str | None
+        The genitive, if applicable (only for regular nouns).
     meaning : Meaning
-    declension : {0, 1, 2, 3, 4, 5}
+    declension : NounDeclension
         The declension of the noun. The value 0 represents an irregular
         declension.
     endings : Endings
     plurale_tantum : bool
         If the noun is a plurale tantum or not.
-    gender : str
+    gender : Gender | None
+        The gender, if applicable (only for regular nouns).
 
     Examples
     --------
@@ -69,8 +71,11 @@ class Noun(_Word):
 
         Parameters
         ----------
-        nominative, genitive : str
-        gender : str
+        nominative : str
+        genitive : str | None
+            The genitive, if applicable (only for regular nouns).
+        gender : Gender | None
+            The gender, if applicable (only for regular nouns).
         meaning : Meaning
 
         Raises

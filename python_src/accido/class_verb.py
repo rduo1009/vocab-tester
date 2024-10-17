@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 """Representation of a Latin verb with endings."""
 
@@ -38,7 +37,7 @@ class Verb(_Word):
         The present perfect participle form of the verb. If the verb does
         not have participle endings, ppp is an empty string.
     meaning : Meaning
-    conjugation : {0, 1, 2, 3, 4, 5}
+    conjugation : Conjugation
         The conjugation of the verb. The value 5 represents the third
         declension -io verbs, and the value 0 represents an irregular
         conjugation.
@@ -460,9 +459,9 @@ class Verb(_Word):
 
         Parameters
         ----------
-        person : Optional[Person], default = None
+        person : Person | None, default = None
             The person of the ending, if applicable (not participle).
-        number : Optional[Number], default = None
+        number : Number | None, default = None
             The number of the ending, if applicable (not participle).
         tense : Tense
             The tense of the ending.
@@ -470,9 +469,9 @@ class Verb(_Word):
             The voice of the ending.
         mood : Mood
             The mood of the ending.
-        participle_gender : Optional[Gender], default = None
+        participle_gender : Gender | None, default = None
             The gender of the participle, if applicable.
-        participle_case : Optional[Case], default = None
+        participle_case : Case | None, default = None
             The case of the participle, if applicable.
 
         Returns

@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 """Representation of a Latin adjective with endings."""
 
@@ -41,10 +40,10 @@ class Adjective(_Word):
     ----------
     meaning : Meaning
     endings : Endings
-    declension : str
+    declension : AdjectiveDeclension
         The declension of the adjective. "212" represents a 2-1-2
         adjective, while "3" represents a third declension adjective.
-    termination : Optional[int]
+    termination : Termination | None
         The termination of the adjective if applicable (only third
         declension adjectives).
     irregular_flag : bool
@@ -83,10 +82,10 @@ class Adjective(_Word):
         ----------
         *principal_parts : str
             The principal parts of the adjective.
-        termination : Optional[int], default = None
+        termination : Termination | None, default = None
             The termination of the adjective if applicable (only third
             declension adjectives).
-        declension : str
+        declension : AdjectiveDeclension
             The declension of the adjective. "212" represents a 2-1-2
             adjective, while "3" represents a third declension adjective.
         meaning: Meaning
@@ -182,8 +181,7 @@ class Adjective(_Word):
             else:
                 self._spr_stem = f"{self._pos_stem}issim"  # car- -> carissim-
 
-        endings: Endings
-        endings = {
+        endings: Endings = {
             "Aposmnomsg": self.mascnom,  # carus
             "Aposmvocsg": f"{self._pos_stem}e",  # care
             "Aposmaccsg": f"{self._pos_stem}um",  # carum
@@ -343,8 +341,7 @@ class Adjective(_Word):
                     f"{self._pos_stem}issim"  # ingent- -> ingentissim-
                 )
 
-        endings: Endings
-        endings = {
+        endings: Endings = {
             "Aposmnomsg": self.mascnom,  # ingens
             "Aposmvocsg": self.mascnom,  # ingens
             "Aposmaccsg": f"{self._pos_stem}em",  # ingentem
@@ -497,8 +494,7 @@ class Adjective(_Word):
                     f"{self._pos_stem}issim"  # fort- -> fortissim-
                 )
 
-        endings: Endings
-        endings = {
+        endings: Endings = {
             "Aposmnomsg": self.mascnom,  # fortis
             "Aposmvocsg": self.mascnom,  # fortis
             "Aposmaccsg": f"{self._pos_stem}em",  # fortem
@@ -651,8 +647,7 @@ class Adjective(_Word):
             else:  # pragma: no cover
                 self._spr_stem = f"{self._pos_stem}issim"  # levis -> levissim-
 
-        endings: Endings
-        endings = {
+        endings: Endings = {
             "Aposmnomsg": self.mascnom,  # acer
             "Aposmvocsg": self.mascnom,  # acer
             "Aposmaccsg": f"{self._pos_stem}em",  # acrem
@@ -801,11 +796,11 @@ class Adjective(_Word):
         ----------
         degree : Degree
             The degree of the adjective.
-        gender : Optional[Gender], default = None
+        gender : Gender | None, default = None
             The gender of the ending, if applicable (not an adverb).
-        case : Optional[Case], default = None
+        case : Case | None, default = None
             The case of the ending, if applicable (not an adverb).
-        number : Optional[Number], default = None
+        number : Number | None, default = None
             The number of the ending, if applicable (not an adverb).
         adverb : bool, default = False
             Whether the queried ending is an adverb or not.
@@ -841,14 +836,11 @@ class Adjective(_Word):
 
         if adverb:
             if gender or case or number:
-                assert gender is not None
-                assert case is not None
-                assert number is not None
-
                 raise InvalidInputError(
                     "Adverbs do not have gender, case or number "
-                    f"(given '{gender.regular}', '{case.regular}' "
-                    f"and '{number.regular}')",
+                    f"(given '{gender.regular if gender else None}', "
+                    f"'{case.regular if case else None}' "
+                    f"and '{number.regular if number else None}')",
                 )
 
             short_degree = degree.shorthand
@@ -900,6 +892,7 @@ class Adjective(_Word):
                 f"{self.meaning}: {', '.join(self._principal_parts)}, "
                 f"({self.declension}-{self.termination})"
             )
+
         return f"{self.meaning}: {', '.join(self._principal_parts)}, (2-1-2)"
 
     def __repr__(self) -> str:

@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 """Representation of a Latin word."""
 
@@ -28,6 +27,8 @@ class _Word(ABC):  # noqa: PLW1641
     _first : str
         The first principal part. Used so that the word classes can be
         alphabetically sorted.
+    meaning : Meaning
+        The meaning of the word.
     """
 
     def __init__(self) -> None:
@@ -81,9 +82,9 @@ class _Word(ABC):  # noqa: PLW1641
     ) -> (
         Ending | None
     ):  # pragma: no cover # sourcery skip: docstrings-for-functions
-        pass
+        ...
 
     @staticmethod
     @abstractmethod
     def _create_namespace(key: str) -> EndingComponents:  # pragma: no cover
-        pass
+        ...

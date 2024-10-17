@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 """Contains a function for saving vocabulary files."""
 
@@ -33,7 +32,7 @@ def save_vocab_dump(
 
     Parameters
     ----------
-    file_path : pathlib.Path
+    file_path : Path
         The path to the vocabulary dump file.
     vocab_list : VocabList
         The vocabulary to save.
