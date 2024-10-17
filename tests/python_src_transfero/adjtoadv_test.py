@@ -4,8 +4,8 @@ import sys  # noqa: E401
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
 import pytest
+from python_src.transfero.adj_to_adv import adj_to_adv
 from python_src.transfero.exceptions import InvalidWordError
-from python_src.transfero.words import adj_to_adv
 
 
 def test_adjtoadv():
