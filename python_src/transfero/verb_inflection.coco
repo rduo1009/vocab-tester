@@ -2,7 +2,6 @@
 
 from typing import Literal
 
-
 import lemminflect
 
 from .edge_cases import STATIVE_VERBS
@@ -145,7 +144,8 @@ def find_verb_inflections(  # type: ignore[return]
 
         case _:
             raise NotImplementedError(
-                f"The {components.tense} {components.voice} {components.mood} has not been implemented",
+                f"The {components.tense} {components.voice} "
+                + f"{components.mood} has not been implemented",
             )
 
 
@@ -342,7 +342,8 @@ def _find_participle_inflections(  # type: ignore[return]
 
         case _:
             raise NotImplementedError(
-                f"The {components.tense} {components.voice} participle has not been implemented",
+                f"The {components.tense} {components.voice} participle has "
+                + "not been implemented",
             )
 
 

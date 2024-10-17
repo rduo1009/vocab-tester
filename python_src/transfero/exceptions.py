@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# __coconut_hash__ = 0xe8f234ff
+# __coconut_hash__ = 0xaff55d19
 
 # Compiled with Coconut version 3.1.2
 
@@ -61,6 +61,6 @@ else:
 
 
 class InvalidWordError(Exception):  #4: class InvalidWordError(Exception):
-    """An error that is raised when an invalid word is given to a transfero function."""  #5:     """An error that is raised when an invalid word is given to a transfero function."""
+    """An error that is raised when an invalid word is given to a transfero function."""  # noqa: E501  #5:     """An error that is raised when an invalid word is given to a transfero function."""  # noqa: E501
 
-_coconut_call_set_names(InvalidWordError)  #6:     """An error that is raised when an invalid word is given to a transfero function."""
+_coconut_call_set_names(InvalidWordError)  #6:     """An error that is raised when an invalid word is given to a transfero function."""  # noqa: E501

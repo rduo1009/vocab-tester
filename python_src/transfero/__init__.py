@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# __coconut_hash__ = 0xf0d86f3a
+# __coconut_hash__ = 0x83e2ccd9
 
 # Compiled with Coconut version 3.1.2
 
@@ -57,7 +57,7 @@ else:
 
 # Compiled Coconut: -----------------------------------------------------------
 
-
+# noqa: E501
 
 from . import exceptions  # noqa  #3: from . import exceptions, words  # noqa
 from . import words  # noqa  #3: from . import exceptions, words  # noqa

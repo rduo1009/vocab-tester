@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# __coconut_hash__ = 0x3eb99180
+# __coconut_hash__ = 0xbb2eb65d
 
 # Compiled with Coconut version 3.1.2
 
@@ -61,6 +61,6 @@ else:
 
 
 class InvalidInputError(Exception):  #4: class InvalidInputError(Exception):
-    """An error that is raised when an invalid input is given to an accido class."""  #5:     """An error that is raised when an invalid input is given to an accido class."""
+    """An error that is raised when an invalid input is given to an accido class."""  # noqa: E501  #5:     """An error that is raised when an invalid input is given to an accido class."""  # noqa: E501
 
-_coconut_call_set_names(InvalidInputError)  #6:     """An error that is raised when an invalid input is given to an accido class."""
+_coconut_call_set_names(InvalidInputError)  #6:     """An error that is raised when an invalid input is given to an accido class."""  # noqa: E501

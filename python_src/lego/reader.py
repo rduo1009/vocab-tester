@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# __coconut_hash__ = 0x50afef89
+# __coconut_hash__ = 0x6d08a3a
 
 # Compiled with Coconut version 3.1.2
 
@@ -282,7 +282,7 @@ def read_vocab_file(file_path  # type: Path  #169: def read_vocab_file(file_path
             __annotations__ = {}  # type: ignore  #199:         current: str = ""
         __annotations__["current"] = 'str'  #199:         current: str = ""
 
-        for line in (raw_line.strip() for raw_line in file.read().split("\n") if raw_line.strip()):  # but skip if the line is blank  # for line in file  # remove whitespace  #201:         for line in (
+        for line in (raw_line.strip() for raw_line in file.read().split("\n") if raw_line.strip()):  # remove whitespace  # but skip if the line is blank  # for line in file  #201:         for line in (
             _coconut_case_match_to_1 = line[0]  #206:             match line[0]:
             _coconut_case_match_check_1 = False  #206:             match line[0]:
             if _coconut_case_match_to_1 == "#":  #206:             match line[0]:
@@ -412,40 +412,40 @@ def _parse_line(current,  # type: str  # type: ignore[return]  #260: def _parse_
             try:  #294:             try:
                 return accido.endings.Noun(meaning=meaning, nominative=latin_parts[0], genitive=latin_parts[1].split()[0], gender=GENDER_SHORTHAND[latin_parts[2].split()[-1].strip("()")])  #295:                 return accido.endings.Noun(
             except KeyError as e:  #303:             except KeyError as e:
-                _coconut_raise_from_0 = InvalidVocabFileFormatError("Invalid gender: {_coconut_format_0}".format(_coconut_format_0=(latin_parts[2].split()[-1].strip('()'))))  #304:                 raise InvalidVocabFileFormatError(
+                _coconut_raise_from_0 = InvalidVocabFileFormatError("Invalid gender: " + "{_coconut_format_0}".format(_coconut_format_0=(latin_parts[2].split()[-1].strip('()'))))  #304:                 raise InvalidVocabFileFormatError(
                 _coconut_raise_from_0.__cause__ = e  #304:                 raise InvalidVocabFileFormatError(
                 raise _coconut_raise_from_0  #304:                 raise InvalidVocabFileFormatError(
 
-    if not _coconut_case_match_check_2:  #308:         case "Adjective":
-        if _coconut_case_match_to_2 == "Adjective":  #308:         case "Adjective":
-            _coconut_case_match_check_2 = True  #308:         case "Adjective":
-        if _coconut_case_match_check_2:  #308:         case "Adjective":
-            if len(latin_parts) not in _coconut.set((3, 4)):  #309:             if len(latin_parts) not in {3, 4}:
-                raise InvalidVocabFileFormatError("Invalid adjective format: {_coconut_format_0}".format(_coconut_format_0=(line)))  #310:                 raise InvalidVocabFileFormatError(
+    if not _coconut_case_match_check_2:  #309:         case "Adjective":
+        if _coconut_case_match_to_2 == "Adjective":  #309:         case "Adjective":
+            _coconut_case_match_check_2 = True  #309:         case "Adjective":
+        if _coconut_case_match_check_2:  #309:         case "Adjective":
+            if len(latin_parts) not in _coconut.set((3, 4)):  #310:             if len(latin_parts) not in {3, 4}:
+                raise InvalidVocabFileFormatError("Invalid adjective format: {_coconut_format_0}".format(_coconut_format_0=(line)))  #311:                 raise InvalidVocabFileFormatError(
 
-            declension = latin_parts[-1].strip("()")  # type: str  #314:             declension: str = latin_parts[-1].strip("()")
-            if "__annotations__" not in _coconut.locals():  #314:             declension: str = latin_parts[-1].strip("()")
-                __annotations__ = {}  # type: ignore  #314:             declension: str = latin_parts[-1].strip("()")
-            __annotations__["declension"] = 'str'  #314:             declension: str = latin_parts[-1].strip("()")
+            declension = latin_parts[-1].strip("()")  # type: str  #315:             declension: str = latin_parts[-1].strip("()")
+            if "__annotations__" not in _coconut.locals():  #315:             declension: str = latin_parts[-1].strip("()")
+                __annotations__ = {}  # type: ignore  #315:             declension: str = latin_parts[-1].strip("()")
+            __annotations__["declension"] = 'str'  #315:             declension: str = latin_parts[-1].strip("()")
 
-            if declension not in _coconut.set(("212", "2-1-2")) and not match(r"^3-.$", declension):  #316:             if declension not in {"212", "2-1-2"} and not match(
-                raise InvalidVocabFileFormatError("Invalid adjective declension: {_coconut_format_0}".format(_coconut_format_0=(declension)))  #320:                 raise InvalidVocabFileFormatError(
-            if declension.startswith("3"):  #323:             if declension.startswith("3"):
-                return _coconut_tail_call(accido.endings.Adjective, *latin_parts[:-1], termination=int(declension[2]), declension="3", meaning=meaning)  #324:                 return accido.endings.Adjective(
-            return _coconut_tail_call(accido.endings.Adjective, *latin_parts[:-1], meaning=meaning, declension="212")  #330:             return accido.endings.Adjective(
-    if not _coconut_case_match_check_2:  #335:         case "Regular":
-        if _coconut_case_match_to_2 == "Regular":  #335:         case "Regular":
-            _coconut_case_match_check_2 = True  #335:         case "Regular":
-        if _coconut_case_match_check_2:  #335:         case "Regular":
-            return _coconut_tail_call(accido.endings.RegularWord, word=latin_parts[0], meaning=meaning)  #336:             return accido.endings.RegularWord(
+            if declension not in _coconut.set(("212", "2-1-2")) and not match(r"^3-.$", declension):  #317:             if declension not in {"212", "2-1-2"} and not match(
+                raise InvalidVocabFileFormatError("Invalid adjective declension: {_coconut_format_0}".format(_coconut_format_0=(declension)))  #321:                 raise InvalidVocabFileFormatError(
+            if declension.startswith("3"):  #324:             if declension.startswith("3"):
+                return _coconut_tail_call(accido.endings.Adjective, *latin_parts[:-1], termination=int(declension[2]), declension="3", meaning=meaning)  #325:                 return accido.endings.Adjective(
+            return _coconut_tail_call(accido.endings.Adjective, *latin_parts[:-1], meaning=meaning, declension="212")  #331:             return accido.endings.Adjective(
+    if not _coconut_case_match_check_2:  #336:         case "Regular":
+        if _coconut_case_match_to_2 == "Regular":  #336:         case "Regular":
+            _coconut_case_match_check_2 = True  #336:         case "Regular":
+        if _coconut_case_match_check_2:  #336:         case "Regular":
+            return _coconut_tail_call(accido.endings.RegularWord, word=latin_parts[0], meaning=meaning)  #337:             return accido.endings.RegularWord(
 
-    if not _coconut_case_match_check_2:  #341:         case "Pronoun":
-        if _coconut_case_match_to_2 == "Pronoun":  #341:         case "Pronoun":
-            _coconut_case_match_check_2 = True  #341:         case "Pronoun":
-        if _coconut_case_match_check_2:  #341:         case "Pronoun":
-            return _coconut_tail_call(accido.endings.Pronoun, meaning=meaning, pronoun=latin_parts[0])  #342:             return accido.endings.Pronoun(
+    if not _coconut_case_match_check_2:  #342:         case "Pronoun":
+        if _coconut_case_match_to_2 == "Pronoun":  #342:         case "Pronoun":
+            _coconut_case_match_check_2 = True  #342:         case "Pronoun":
+        if _coconut_case_match_check_2:  #342:         case "Pronoun":
+            return _coconut_tail_call(accido.endings.Pronoun, meaning=meaning, pronoun=latin_parts[0])  #343:             return accido.endings.Pronoun(
 
-    if not _coconut_case_match_check_2:  # pragma: no cover # this should never happen  #347:         case _:  # pragma: no cover # this should never happen
-        _coconut_case_match_check_2 = True  # pragma: no cover # this should never happen  #347:         case _:  # pragma: no cover # this should never happen
-        if _coconut_case_match_check_2:  # pragma: no cover # this should never happen  #347:         case _:  # pragma: no cover # this should never happen
-            raise ValueError  #348:             raise ValueError
+    if not _coconut_case_match_check_2:  # pragma: no cover # this should never happen  #348:         case _:  # pragma: no cover # this should never happen
+        _coconut_case_match_check_2 = True  # pragma: no cover # this should never happen  #348:         case _:  # pragma: no cover # this should never happen
+        if _coconut_case_match_check_2:  # pragma: no cover # this should never happen  #348:         case _:  # pragma: no cover # this should never happen
+            raise ValueError  #349:             raise ValueError

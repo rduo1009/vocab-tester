@@ -612,7 +612,10 @@ class Verb(_Word):
                 number=key_from_value(NUMBER_SHORTHAND, key[10:12]),
                 person=PERSON_SHORTHAND[int(key[12])],
             )
-            output.string = f"{output.tense} {output.voice} {output.mood} {output.number} {output.person}"
+            output.string = (
+                f"{output.tense} {output.voice} {output.mood} "
+                + f"{output.number} {output.person}"
+            )
             return output
         if len(key) == 16 and key[7:10] == "ptc":
             output = EndingComponents(
@@ -623,7 +626,10 @@ class Verb(_Word):
                 case=key_from_value(CASE_SHORTHAND, key[11:14]),
                 number=key_from_value(NUMBER_SHORTHAND, key[14:16]),
             )
-            output.string = f"{output.tense} {output.voice} participle {output.gender} {output.case} {output.number}"
+            output.string = (
+                f"{output.tense} {output.voice} participle "
+                + f"{output.gender} {output.case} {output.number}"
+            )
             return output
 
         raise InvalidInputError(
@@ -631,9 +637,18 @@ class Verb(_Word):
         )  # pragma: no cover # this should never happen
 
     def __repr__(self) -> str:
-        return f"Verb({self.present}, {self.infinitive}, {self.perfect}, {self.ppp}, {self.meaning})"
+        return (
+            f"Verb({self.present}, {self.infinitive}, {self.perfect}, "
+            + f"{self.ppp}, {self.meaning})"
+        )
 
     def __str__(self) -> str:
         if self.ppp:
-            return f"{self.meaning}: {self.present}, {self.infinitive}, {self.perfect}, {self.ppp}"
-        return f"{self.meaning}: {self.present}, {self.infinitive}, {self.perfect}"
+            return (
+                f"{self.meaning}: {self.present}, {self.infinitive}, "
+                + f"{self.perfect}, {self.ppp}"
+            )
+        return (
+            f"{self.meaning}: {self.present},"
+            + f"{self.infinitive}, {self.perfect}"
+        )

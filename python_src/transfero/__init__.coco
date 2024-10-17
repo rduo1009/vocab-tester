@@ -1,4 +1,4 @@
-"""A package for finding equivalent English words/phrases for Latin words/phrases."""
+"""A package for finding equivalent English words/phrases for Latin words/phrases."""  # noqa: E501
 
 from . import exceptions, words  # noqa
 

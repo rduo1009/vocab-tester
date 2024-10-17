@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# __coconut_hash__ = 0xaf386668
+# __coconut_hash__ = 0xdfe417b1
 
 # Compiled with Coconut version 3.1.2
 
@@ -77,66 +77,65 @@ else:  #3: from typing import Literal
 if _coconut_sys_0 is not _coconut_sentinel:  #3: from typing import Literal
     sys = _coconut_sys_0  #3: from typing import Literal
 
+import lemminflect  #5: import lemminflect
 
-import lemminflect  #6: import lemminflect
+from .edge_cases import STATIVE_VERBS  #7: from .edge_cases import STATIVE_VERBS
+from .exceptions import InvalidWordError  #8: from .exceptions import InvalidWordError
 
-from .edge_cases import STATIVE_VERBS  #8: from .edge_cases import STATIVE_VERBS
-from .exceptions import InvalidWordError  #9: from .exceptions import InvalidWordError
-
-if TYPE_CHECKING:  #11: if TYPE_CHECKING:
-    from .. import accido  #12:     from .. import accido
+if TYPE_CHECKING:  #10: if TYPE_CHECKING:
+    from .. import accido  #11:     from .. import accido
 
 
-def _verify_verb_inflections(components  # type: accido.misc.EndingComponents  #15: def _verify_verb_inflections(components: accido.misc.EndingComponents) -> None:
-    ):  #15: def _verify_verb_inflections(components: accido.misc.EndingComponents) -> None:
+def _verify_verb_inflections(components  # type: accido.misc.EndingComponents  #14: def _verify_verb_inflections(components: accido.misc.EndingComponents) -> None:
+    ):  #14: def _verify_verb_inflections(components: accido.misc.EndingComponents) -> None:
 # type: (...) -> None
-    if not hasattr(components, "tense"):  #16:     if not hasattr(components, "tense"):
-        raise ValueError("Tense must be specified")  #17:         raise ValueError("Tense must be specified")
+    if not hasattr(components, "tense"):  #15:     if not hasattr(components, "tense"):
+        raise ValueError("Tense must be specified")  #16:         raise ValueError("Tense must be specified")
 
-    if not hasattr(components, "voice"):  #19:     if not hasattr(components, "voice"):
-        raise ValueError("Voice must be specified")  #20:         raise ValueError("Voice must be specified")
+    if not hasattr(components, "voice"):  #18:     if not hasattr(components, "voice"):
+        raise ValueError("Voice must be specified")  #19:         raise ValueError("Voice must be specified")
 
-    if not hasattr(components, "mood"):  #22:     if not hasattr(components, "mood"):
-        raise ValueError("Mood must be specified")  #23:         raise ValueError("Mood must be specified")
+    if not hasattr(components, "mood"):  #21:     if not hasattr(components, "mood"):
+        raise ValueError("Mood must be specified")  #22:         raise ValueError("Mood must be specified")
 
 # not an infinitive
-    if components.mood != "infinitive":  #26:     if components.mood != "infinitive":
-        if not hasattr(components, "number"):  #27:         if not hasattr(components, "number"):
-            raise ValueError("Number must be specified")  #28:             raise ValueError("Number must be specified")
+    if components.mood != "infinitive":  #25:     if components.mood != "infinitive":
+        if not hasattr(components, "number"):  #26:         if not hasattr(components, "number"):
+            raise ValueError("Number must be specified")  #27:             raise ValueError("Number must be specified")
 
-        if components.number not in _coconut.set(("singular", "plural")):  #30:         if components.number not in {"singular", "plural"}:
-            raise ValueError("Invalid number: '{_coconut_format_0}'".format(_coconut_format_0=(components.number)))  #31:             raise ValueError(f"Invalid number: '{components.number}'")
+        if components.number not in _coconut.set(("singular", "plural")):  #29:         if components.number not in {"singular", "plural"}:
+            raise ValueError("Invalid number: '{_coconut_format_0}'".format(_coconut_format_0=(components.number)))  #30:             raise ValueError(f"Invalid number: '{components.number}'")
 
 # not a participle or an infinitive
-        if components.mood != "participle":  #34:         if components.mood != "participle":
-            if not hasattr(components, "person"):  #35:             if not hasattr(components, "person"):
-                raise ValueError("Person must be specified")  #36:                 raise ValueError("Person must be specified")
+        if components.mood != "participle":  #33:         if components.mood != "participle":
+            if not hasattr(components, "person"):  #34:             if not hasattr(components, "person"):
+                raise ValueError("Person must be specified")  #35:                 raise ValueError("Person must be specified")
 
-            if components.person not in _coconut.set((1, 2, 3)):  #38:             if components.person not in {1, 2, 3}:
-                raise ValueError("Invalid person: '{_coconut_format_0}'".format(_coconut_format_0=(components.person)))  #39:                 raise ValueError(f"Invalid person: '{components.person}'")
+            if components.person not in _coconut.set((1, 2, 3)):  #37:             if components.person not in {1, 2, 3}:
+                raise ValueError("Invalid person: '{_coconut_format_0}'".format(_coconut_format_0=(components.person)))  #38:                 raise ValueError(f"Invalid person: '{components.person}'")
 
-        else:  #41:         else:
-            if not hasattr(components, "case"):  #42:             if not hasattr(components, "case"):
-                raise ValueError("Case must be specified")  #43:                 raise ValueError("Case must be specified")
+        else:  #40:         else:
+            if not hasattr(components, "case"):  #41:             if not hasattr(components, "case"):
+                raise ValueError("Case must be specified")  #42:                 raise ValueError("Case must be specified")
 
-            if not hasattr(components, "gender"):  #45:             if not hasattr(components, "gender"):
-                raise ValueError("Gender must be specified")  #46:                 raise ValueError("Gender must be specified")
+            if not hasattr(components, "gender"):  #44:             if not hasattr(components, "gender"):
+                raise ValueError("Gender must be specified")  #45:                 raise ValueError("Gender must be specified")
 
-    if components.voice not in _coconut.set(("active", "passive")):  #48:     if components.voice not in {"active", "passive"}:
-        raise ValueError("Invalid voice: '{_coconut_format_0}'".format(_coconut_format_0=(components.voice)))  #49:         raise ValueError(f"Invalid voice: '{components.voice}'")
+    if components.voice not in _coconut.set(("active", "passive")):  #47:     if components.voice not in {"active", "passive"}:
+        raise ValueError("Invalid voice: '{_coconut_format_0}'".format(_coconut_format_0=(components.voice)))  #48:         raise ValueError(f"Invalid voice: '{components.voice}'")
 
-    if components.mood not in _coconut.set(("indicative", "imperative", "subjunctive", "infinitive", "participle",)):  #51:     if components.mood not in {
-        raise ValueError("Invalid mood: '{_coconut_format_0}'".format(_coconut_format_0=(components.mood)))  #58:         raise ValueError(f"Invalid mood: '{components.mood}'")
+    if components.mood not in _coconut.set(("indicative", "imperative", "subjunctive", "infinitive", "participle",)):  #50:     if components.mood not in {
+        raise ValueError("Invalid mood: '{_coconut_format_0}'".format(_coconut_format_0=(components.mood)))  #57:         raise ValueError(f"Invalid mood: '{components.mood}'")
 
-    if components.tense not in _coconut.set(("pluperfect", "perfect", "imperfect", "present", "future", "future perfect",)):  #60:     if components.tense not in {
-        raise ValueError("Invalid tense: '{_coconut_format_0}'".format(_coconut_format_0=(components.tense)))  #68:         raise ValueError(f"Invalid tense: '{components.tense}'")
+    if components.tense not in _coconut.set(("pluperfect", "perfect", "imperfect", "present", "future", "future perfect",)):  #59:     if components.tense not in {
+        raise ValueError("Invalid tense: '{_coconut_format_0}'".format(_coconut_format_0=(components.tense)))  #67:         raise ValueError(f"Invalid tense: '{components.tense}'")
 
 
 # type: ignore[return]
-@_coconut_tco  # type: ignore[return]  #71: def find_verb_inflections(  # type: ignore[return]
-def find_verb_inflections(verb,  # type: str  # type: ignore[return]  #71: def find_verb_inflections(  # type: ignore[return]
-    components,  # type: accido.misc.EndingComponents  # type: ignore[return]  #71: def find_verb_inflections(  # type: ignore[return]
-    ):  # type: ignore[return]  #71: def find_verb_inflections(  # type: ignore[return]
+@_coconut_tco  # type: ignore[return]  #70: def find_verb_inflections(  # type: ignore[return]
+def find_verb_inflections(verb,  # type: str  # type: ignore[return]  #70: def find_verb_inflections(  # type: ignore[return]
+    components,  # type: accido.misc.EndingComponents  # type: ignore[return]  #70: def find_verb_inflections(  # type: ignore[return]
+    ):  # type: ignore[return]  #70: def find_verb_inflections(  # type: ignore[return]
 # type: (...) -> set[str]  # type: ignore[return]
     """Inflect English verbs using the tense, voice, mood, number and
     person. If a participle is queried, find_participle_inflections is ran
@@ -163,63 +162,63 @@ def find_verb_inflections(verb,  # type: str  # type: ignore[return]  #71: def f
         If the word is not a valid English verb.
     ValueError
         If the input (other than the word itself) is invalid.
-    """  # noqa: D205  #100:     """  # noqa: D205
-    _verify_verb_inflections(components)  #101:     _verify_verb_inflections(components)
+    """  # noqa: D205  #99:     """  # noqa: D205
+    _verify_verb_inflections(components)  #100:     _verify_verb_inflections(components)
 
-    if components.mood == "participle":  #103:     if components.mood == "participle":
-        return _coconut_tail_call(_find_participle_inflections, verb, components)  #104:         return _find_participle_inflections(verb, components)
+    if components.mood == "participle":  #102:     if components.mood == "participle":
+        return _coconut_tail_call(_find_participle_inflections, verb, components)  #103:         return _find_participle_inflections(verb, components)
 
-    try:  #106:     try:
-        lemma = lemminflect.getLemma(verb, "VERB")[0]  # type: str  #107:         lemma: str = lemminflect.getLemma(verb, "VERB")[0]
-        if "__annotations__" not in _coconut.locals():  #107:         lemma: str = lemminflect.getLemma(verb, "VERB")[0]
-            __annotations__ = {}  # type: ignore  #107:         lemma: str = lemminflect.getLemma(verb, "VERB")[0]
-        __annotations__["lemma"] = 'str'  #107:         lemma: str = lemminflect.getLemma(verb, "VERB")[0]
-    except KeyError as e:  #108:     except KeyError as e:
-        _coconut_raise_from_0 = InvalidWordError("Word {_coconut_format_0} is not a verb".format(_coconut_format_0=(verb)))  #109:         raise InvalidWordError(f"Word {verb} is not a verb") from e
-        _coconut_raise_from_0.__cause__ = e  #109:         raise InvalidWordError(f"Word {verb} is not a verb") from e
-        raise _coconut_raise_from_0  #109:         raise InvalidWordError(f"Word {verb} is not a verb") from e
+    try:  #105:     try:
+        lemma = lemminflect.getLemma(verb, "VERB")[0]  # type: str  #106:         lemma: str = lemminflect.getLemma(verb, "VERB")[0]
+        if "__annotations__" not in _coconut.locals():  #106:         lemma: str = lemminflect.getLemma(verb, "VERB")[0]
+            __annotations__ = {}  # type: ignore  #106:         lemma: str = lemminflect.getLemma(verb, "VERB")[0]
+        __annotations__["lemma"] = 'str'  #106:         lemma: str = lemminflect.getLemma(verb, "VERB")[0]
+    except KeyError as e:  #107:     except KeyError as e:
+        _coconut_raise_from_0 = InvalidWordError("Word {_coconut_format_0} is not a verb".format(_coconut_format_0=(verb)))  #108:         raise InvalidWordError(f"Word {verb} is not a verb") from e
+        _coconut_raise_from_0.__cause__ = e  #108:         raise InvalidWordError(f"Word {verb} is not a verb") from e
+        raise _coconut_raise_from_0  #108:         raise InvalidWordError(f"Word {verb} is not a verb") from e
 
-    _coconut_case_match_to_0 = (components.tense, components.voice, components.mood)  #111:     match (components.tense, components.voice, components.mood):
-    _coconut_case_match_check_0 = False  #111:     match (components.tense, components.voice, components.mood):
-    if (_coconut.isinstance(_coconut_case_match_to_0, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_0) == 3) and (_coconut_case_match_to_0[0] == "present") and (_coconut_case_match_to_0[1] == "active") and (_coconut_case_match_to_0[2] == "indicative"):  #111:     match (components.tense, components.voice, components.mood):
-        _coconut_case_match_check_0 = True  #111:     match (components.tense, components.voice, components.mood):
-    if _coconut_case_match_check_0:  #111:     match (components.tense, components.voice, components.mood):
-        return _coconut_tail_call(_find_preactind_inflections, lemma, components.number, components.person)  #113:             return _find_preactind_inflections(
+    _coconut_case_match_to_0 = (components.tense, components.voice, components.mood)  #110:     match (components.tense, components.voice, components.mood):
+    _coconut_case_match_check_0 = False  #110:     match (components.tense, components.voice, components.mood):
+    if (_coconut.isinstance(_coconut_case_match_to_0, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_0) == 3) and (_coconut_case_match_to_0[0] == "present") and (_coconut_case_match_to_0[1] == "active") and (_coconut_case_match_to_0[2] == "indicative"):  #110:     match (components.tense, components.voice, components.mood):
+        _coconut_case_match_check_0 = True  #110:     match (components.tense, components.voice, components.mood):
+    if _coconut_case_match_check_0:  #110:     match (components.tense, components.voice, components.mood):
+        return _coconut_tail_call(_find_preactind_inflections, lemma, components.number, components.person)  #112:             return _find_preactind_inflections(
 
-    if not _coconut_case_match_check_0:  #119:         case ("imperfect", "active", "indicative"):
-        if (_coconut.isinstance(_coconut_case_match_to_0, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_0) == 3) and (_coconut_case_match_to_0[0] == "imperfect") and (_coconut_case_match_to_0[1] == "active") and (_coconut_case_match_to_0[2] == "indicative"):  #119:         case ("imperfect", "active", "indicative"):
-            _coconut_case_match_check_0 = True  #119:         case ("imperfect", "active", "indicative"):
-        if _coconut_case_match_check_0:  #119:         case ("imperfect", "active", "indicative"):
-            return _coconut_tail_call(_find_impactind_inflections, lemma, components.number, components.person)  #120:             return _find_impactind_inflections(
+    if not _coconut_case_match_check_0:  #118:         case ("imperfect", "active", "indicative"):
+        if (_coconut.isinstance(_coconut_case_match_to_0, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_0) == 3) and (_coconut_case_match_to_0[0] == "imperfect") and (_coconut_case_match_to_0[1] == "active") and (_coconut_case_match_to_0[2] == "indicative"):  #118:         case ("imperfect", "active", "indicative"):
+            _coconut_case_match_check_0 = True  #118:         case ("imperfect", "active", "indicative"):
+        if _coconut_case_match_check_0:  #118:         case ("imperfect", "active", "indicative"):
+            return _coconut_tail_call(_find_impactind_inflections, lemma, components.number, components.person)  #119:             return _find_impactind_inflections(
 
-    if not _coconut_case_match_check_0:  #126:         case ("perfect", "active", "indicative"):
-        if (_coconut.isinstance(_coconut_case_match_to_0, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_0) == 3) and (_coconut_case_match_to_0[0] == "perfect") and (_coconut_case_match_to_0[1] == "active") and (_coconut_case_match_to_0[2] == "indicative"):  #126:         case ("perfect", "active", "indicative"):
-            _coconut_case_match_check_0 = True  #126:         case ("perfect", "active", "indicative"):
-        if _coconut_case_match_check_0:  #126:         case ("perfect", "active", "indicative"):
-            return _coconut_tail_call(_find_peractind_inflections, lemma, components.number, components.person)  #127:             return _find_peractind_inflections(
+    if not _coconut_case_match_check_0:  #125:         case ("perfect", "active", "indicative"):
+        if (_coconut.isinstance(_coconut_case_match_to_0, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_0) == 3) and (_coconut_case_match_to_0[0] == "perfect") and (_coconut_case_match_to_0[1] == "active") and (_coconut_case_match_to_0[2] == "indicative"):  #125:         case ("perfect", "active", "indicative"):
+            _coconut_case_match_check_0 = True  #125:         case ("perfect", "active", "indicative"):
+        if _coconut_case_match_check_0:  #125:         case ("perfect", "active", "indicative"):
+            return _coconut_tail_call(_find_peractind_inflections, lemma, components.number, components.person)  #126:             return _find_peractind_inflections(
 
-    if not _coconut_case_match_check_0:  #133:         case ("pluperfect", "active", "indicative"):
-        if (_coconut.isinstance(_coconut_case_match_to_0, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_0) == 3) and (_coconut_case_match_to_0[0] == "pluperfect") and (_coconut_case_match_to_0[1] == "active") and (_coconut_case_match_to_0[2] == "indicative"):  #133:         case ("pluperfect", "active", "indicative"):
-            _coconut_case_match_check_0 = True  #133:         case ("pluperfect", "active", "indicative"):
-        if _coconut_case_match_check_0:  #133:         case ("pluperfect", "active", "indicative"):
-            return _coconut_tail_call(_find_plpactind_inflections, lemma, components.number, components.person)  #134:             return _find_plpactind_inflections(
+    if not _coconut_case_match_check_0:  #132:         case ("pluperfect", "active", "indicative"):
+        if (_coconut.isinstance(_coconut_case_match_to_0, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_0) == 3) and (_coconut_case_match_to_0[0] == "pluperfect") and (_coconut_case_match_to_0[1] == "active") and (_coconut_case_match_to_0[2] == "indicative"):  #132:         case ("pluperfect", "active", "indicative"):
+            _coconut_case_match_check_0 = True  #132:         case ("pluperfect", "active", "indicative"):
+        if _coconut_case_match_check_0:  #132:         case ("pluperfect", "active", "indicative"):
+            return _coconut_tail_call(_find_plpactind_inflections, lemma, components.number, components.person)  #133:             return _find_plpactind_inflections(
 
-    if not _coconut_case_match_check_0:  #140:         case ("present", "active", "infinitive"):
-        if (_coconut.isinstance(_coconut_case_match_to_0, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_0) == 3) and (_coconut_case_match_to_0[0] == "present") and (_coconut_case_match_to_0[1] == "active") and (_coconut_case_match_to_0[2] == "infinitive"):  #140:         case ("present", "active", "infinitive"):
-            _coconut_case_match_check_0 = True  #140:         case ("present", "active", "infinitive"):
-        if _coconut_case_match_check_0:  #140:         case ("present", "active", "infinitive"):
-            return _coconut_tail_call(_find_preactinf_inflections, lemma)  #141:             return _find_preactinf_inflections(lemma)
+    if not _coconut_case_match_check_0:  #139:         case ("present", "active", "infinitive"):
+        if (_coconut.isinstance(_coconut_case_match_to_0, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_0) == 3) and (_coconut_case_match_to_0[0] == "present") and (_coconut_case_match_to_0[1] == "active") and (_coconut_case_match_to_0[2] == "infinitive"):  #139:         case ("present", "active", "infinitive"):
+            _coconut_case_match_check_0 = True  #139:         case ("present", "active", "infinitive"):
+        if _coconut_case_match_check_0:  #139:         case ("present", "active", "infinitive"):
+            return _coconut_tail_call(_find_preactinf_inflections, lemma)  #140:             return _find_preactinf_inflections(lemma)
 
-    if not _coconut_case_match_check_0:  #143:         case ("present", "active", "imperative"):
-        if (_coconut.isinstance(_coconut_case_match_to_0, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_0) == 3) and (_coconut_case_match_to_0[0] == "present") and (_coconut_case_match_to_0[1] == "active") and (_coconut_case_match_to_0[2] == "imperative"):  #143:         case ("present", "active", "imperative"):
-            _coconut_case_match_check_0 = True  #143:         case ("present", "active", "imperative"):
-        if _coconut_case_match_check_0:  #143:         case ("present", "active", "imperative"):
-            return _coconut_tail_call(_find_preipe_inflections, lemma)  #144:             return _find_preipe_inflections(lemma)
+    if not _coconut_case_match_check_0:  #142:         case ("present", "active", "imperative"):
+        if (_coconut.isinstance(_coconut_case_match_to_0, _coconut.abc.Sequence)) and (_coconut.len(_coconut_case_match_to_0) == 3) and (_coconut_case_match_to_0[0] == "present") and (_coconut_case_match_to_0[1] == "active") and (_coconut_case_match_to_0[2] == "imperative"):  #142:         case ("present", "active", "imperative"):
+            _coconut_case_match_check_0 = True  #142:         case ("present", "active", "imperative"):
+        if _coconut_case_match_check_0:  #142:         case ("present", "active", "imperative"):
+            return _coconut_tail_call(_find_preipe_inflections, lemma)  #143:             return _find_preipe_inflections(lemma)
 
-    if not _coconut_case_match_check_0:  #146:         case _:
-        _coconut_case_match_check_0 = True  #146:         case _:
-        if _coconut_case_match_check_0:  #146:         case _:
-            raise NotImplementedError("The {_coconut_format_0} {_coconut_format_1} {_coconut_format_2} has not been implemented".format(_coconut_format_0=(components.tense), _coconut_format_1=(components.voice), _coconut_format_2=(components.mood)))  #147:             raise NotImplementedError(
+    if not _coconut_case_match_check_0:  #145:         case _:
+        _coconut_case_match_check_0 = True  #145:         case _:
+        if _coconut_case_match_check_0:  #145:         case _:
+            raise NotImplementedError("The {_coconut_format_0} {_coconut_format_1} ".format(_coconut_format_0=(components.tense), _coconut_format_1=(components.voice)) + "{_coconut_format_0} has not been implemented".format(_coconut_format_0=(components.mood)))  #146:             raise NotImplementedError(
 
 
 
@@ -538,20 +537,20 @@ def _find_participle_inflections(verb,  # type: str  # type: ignore[return]  #32
     if not _coconut_case_match_check_6:  #343:         case _:
         _coconut_case_match_check_6 = True  #343:         case _:
         if _coconut_case_match_check_6:  #343:         case _:
-            raise NotImplementedError("The {_coconut_format_0} {_coconut_format_1} participle has not been implemented".format(_coconut_format_0=(components.tense), _coconut_format_1=(components.voice)))  #344:             raise NotImplementedError(
+            raise NotImplementedError("The {_coconut_format_0} {_coconut_format_1} participle has ".format(_coconut_format_0=(components.tense), _coconut_format_1=(components.voice)) + "not been implemented")  #344:             raise NotImplementedError(
 
 
 
-@_coconut_tco  #349: def _find_preactinf_inflections(lemma: str) -> set[str]:
-def _find_preactinf_inflections(lemma  # type: str  #349: def _find_preactinf_inflections(lemma: str) -> set[str]:
-    ):  #349: def _find_preactinf_inflections(lemma: str) -> set[str]:
+@_coconut_tco  #350: def _find_preactinf_inflections(lemma: str) -> set[str]:
+def _find_preactinf_inflections(lemma  # type: str  #350: def _find_preactinf_inflections(lemma: str) -> set[str]:
+    ):  #350: def _find_preactinf_inflections(lemma: str) -> set[str]:
 # type: (...) -> set[str]
-    return _coconut_tail_call(_coconut.set, ("to {_coconut_format_0}".format(_coconut_format_0=(lemma)),))  #350:     return {f"to {lemma}"}
+    return _coconut_tail_call(_coconut.set, ("to {_coconut_format_0}".format(_coconut_format_0=(lemma)),))  #351:     return {f"to {lemma}"}
 
 
 
-@_coconut_tco  #353: def _find_preipe_inflections(lemma: str) -> set[str]:
-def _find_preipe_inflections(lemma  # type: str  #353: def _find_preipe_inflections(lemma: str) -> set[str]:
-    ):  #353: def _find_preipe_inflections(lemma: str) -> set[str]:
+@_coconut_tco  #354: def _find_preipe_inflections(lemma: str) -> set[str]:
+def _find_preipe_inflections(lemma  # type: str  #354: def _find_preipe_inflections(lemma: str) -> set[str]:
+    ):  #354: def _find_preipe_inflections(lemma: str) -> set[str]:
 # type: (...) -> set[str]
-    return _coconut_tail_call(_coconut.set, ("{_coconut_format_0}".format(_coconut_format_0=(lemma)),))  #354:     return {f"{lemma}"}
+    return _coconut_tail_call(_coconut.set, ("{_coconut_format_0}".format(_coconut_format_0=(lemma)),))  #355:     return {f"{lemma}"}

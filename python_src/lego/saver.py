@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# __coconut_hash__ = 0x5dfb1291
+# __coconut_hash__ = 0xe83789f8
 
 # Compiled with Coconut version 3.1.2
 
@@ -134,20 +134,20 @@ def save_vocab_dump(file_path,  # type: Path  #17: def save_vocab_dump(
     if compress:  #71:     if compress:
 # Add lz4 extension if it is not already there
         if file_path.suffix != ".lz4":  #73:         if file_path.suffix != ".lz4":
-            warnings.warn("The file '{_coconut_format_0}' is being compressed, but the '.lz4' extension is not present and is being added.".format(_coconut_format_0=(file_path)), category=MisleadingFilenameWarning, stacklevel=2)  #74:             warnings.warn(
-            file_path = file_path.with_suffix(file_path.suffix + ".lz4")  # type: Path  #79:             file_path: Path = file_path.with_suffix(file_path.suffix + ".lz4")
-            if "__annotations__" not in _coconut.locals():  #79:             file_path: Path = file_path.with_suffix(file_path.suffix + ".lz4")
-                __annotations__ = {}  # type: ignore  #79:             file_path: Path = file_path.with_suffix(file_path.suffix + ".lz4")
-            __annotations__["file_path"] = 'Path'  #79:             file_path: Path = file_path.with_suffix(file_path.suffix + ".lz4")
+            warnings.warn("The file '{_coconut_format_0}' is being compressed, ".format(_coconut_format_0=(file_path)) + "but the '.lz4' extension is not present and is being added.", category=MisleadingFilenameWarning, stacklevel=2)  #74:             warnings.warn(
+            file_path = file_path.with_suffix(file_path.suffix + ".lz4")  # type: Path  #80:             file_path: Path = file_path.with_suffix(file_path.suffix + ".lz4")
+            if "__annotations__" not in _coconut.locals():  #80:             file_path: Path = file_path.with_suffix(file_path.suffix + ".lz4")
+                __annotations__ = {}  # type: ignore  #80:             file_path: Path = file_path.with_suffix(file_path.suffix + ".lz4")
+            __annotations__["file_path"] = 'Path'  #80:             file_path: Path = file_path.with_suffix(file_path.suffix + ".lz4")
 
-        with lz4.frame.open(file_path, "wb") as file:  #81:         with lz4.frame.open(file_path, "wb") as file:
-            file.write(pickled_data)  #82:             file.write(pickled_data)
-            file.write(signature.encode())  #83:             file.write(signature.encode())
-        return  #84:         return
+        with lz4.frame.open(file_path, "wb") as file:  #82:         with lz4.frame.open(file_path, "wb") as file:
+            file.write(pickled_data)  #83:             file.write(pickled_data)
+            file.write(signature.encode())  #84:             file.write(signature.encode())
+        return  #85:         return
 
-    if file_path.suffix == ".lz4":  #86:     if file_path.suffix == ".lz4":
-        warnings.warn("The file '{_coconut_format_0}' is not being compressed, but the file extension ('.lz4') suggests it is.".format(_coconut_format_0=(file_path)), category=MisleadingFilenameWarning, stacklevel=2)  #87:         warnings.warn(
+    if file_path.suffix == ".lz4":  #87:     if file_path.suffix == ".lz4":
+        warnings.warn("The file '{_coconut_format_0}' is not being compressed,".format(_coconut_format_0=(file_path)) + "but the file extension ('.lz4') suggests it is.", category=MisleadingFilenameWarning, stacklevel=2)  #88:         warnings.warn(
 
-    with open(file_path, "wb") as file:  #93:     with open(file_path, "wb") as file:
-        file.write(pickled_data)  #94:         file.write(pickled_data)
-        file.write(signature.encode())  #95:         file.write(signature.encode())
+    with open(file_path, "wb") as file:  #95:     with open(file_path, "wb") as file:
+        file.write(pickled_data)  #96:         file.write(pickled_data)
+        file.write(signature.encode())  #97:         file.write(signature.encode())

@@ -302,7 +302,8 @@ def _parse_line(  # type: ignore[return]
                 )
             except KeyError as e:
                 raise InvalidVocabFileFormatError(
-                    f"Invalid gender: {latin_parts[2].split()[-1].strip('()')}",
+                    "Invalid gender: "
+                    + f"{latin_parts[2].split()[-1].strip('()')}",
                 ) from e
 
         case "Adjective":
