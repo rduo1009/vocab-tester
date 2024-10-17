@@ -82,9 +82,9 @@ class _Word(ABC):  # noqa: PLW1641
     ) -> (
         Ending | None
     ):  # pragma: no cover # sourcery skip: docstrings-for-functions
-        pass
+        ...
 
     @staticmethod
     @abstractmethod
     def _create_namespace(key: str) -> EndingComponents:  # pragma: no cover
-        pass
+        ...
