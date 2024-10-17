@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 """Contains functions that generate questions and check answers."""
 
 from __future__ import annotations
 
 import random
-from typing import TYPE_CHECKING, Any, Final, Generator
+from typing import TYPE_CHECKING, Final, Generator, overload
 
 from .. import accido, lego, transfero
 from ..accido.misc import Case, Gender, Mood, Number
@@ -70,7 +69,7 @@ def _pick_ending(
 
 def ask_question_without_sr(
     vocab_list: lego.misc.VocabList, amount: int, settings: Settings
-) -> Generator[Question, None, None]:
+) -> Generator[Question]:
     """Ask a question about Latin vocabulary.
 
     Parameters
@@ -100,13 +99,12 @@ def ask_question_without_sr(
 
         # TODO: if ever using mypyc, make a new variable for every type
         # for now, any type to allow variable to be reused
-        output: Any
+        output: Question | None
         match question_type:
             case QuestionClasses.TYPEIN_ENGTOLAT:
                 if output := _generate_typein_engtolat(
                     chosen_word, filtered_endings
                 ):
-                    assert type(output) is TypeInEngToLatQuestion
                     yield output
                 else:
                     continue
@@ -115,28 +113,24 @@ def ask_question_without_sr(
                 if output := _generate_typein_lattoeng(
                     chosen_word, filtered_endings
                 ):
-                    assert type(output) is TypeInLatToEngQuestion
                     yield output
                 else:
                     continue
 
             case QuestionClasses.PARSEWORD_LATTOCOMP:
                 if output := _generate_parse(chosen_word, filtered_endings):
-                    assert type(output) is ParseWordLatToCompQuestion
                     yield output
                 else:
                     continue
 
             case QuestionClasses.PARSEWORD_COMPTOLAT:
                 if output := _generate_inflect(chosen_word, filtered_endings):
-                    assert type(output) is ParseWordCompToLatQuestion
                     yield output
                 else:
                     continue
 
             case QuestionClasses.PRINCIPAL_PARTS:
                 if output := _generate_principal_parts_question(chosen_word):
-                    assert type(output) is PrincipalPartsQuestion
                     yield output
                 else:
                     continue
@@ -323,6 +317,15 @@ def _generate_typein_engtolat(  # noqa: PLR0914, PLR0915
             answers = {chosen_ending}
 
     elif pronoun_flag:
+
+        @overload
+        def _convert_to_tuple(
+            ending: Ending,
+        ) -> tuple[str, ...]: ...
+        @overload
+        def _convert_to_tuple(
+            ending: None,
+        ) -> tuple[None]: ...
 
         def _convert_to_tuple(
             ending: Ending | None,

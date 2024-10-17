@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 """Contains rules for filtering words and questions."""
 
@@ -12,7 +11,13 @@ from .. import accido
 from .question_classes import QuestionClasses
 
 if TYPE_CHECKING:
-    from ..accido.type_aliases import Ending, Endings
+    from ..accido.type_aliases import (
+        AdjectiveDeclension,
+        Conjugation,
+        Ending,
+        Endings,
+        NounDeclension,
+    )
     from ..lego.misc import VocabList
     from .type_aliases import Settings, Vocab
 
@@ -179,7 +184,7 @@ def filter_words(vocab_list: VocabList, settings: Settings) -> Vocab:
             assert type(settings["exclude-verb-fourth-conjugation"]) is bool
             assert type(settings["exclude-verb-thirdio-conjugation"]) is bool
 
-            current_conjugation: int = item.conjugation
+            current_conjugation: Conjugation = item.conjugation
             conjugation_excluded: bool = (
                 (
                     settings["exclude-verb-first-conjugation"]
@@ -213,7 +218,7 @@ def filter_words(vocab_list: VocabList, settings: Settings) -> Vocab:
             assert type(settings["exclude-noun-fifth-declension"]) is bool
             assert type(settings["exclude-noun-irregular-declension"]) is bool
 
-            current_declension: int = item.declension
+            current_declension: NounDeclension = item.declension
             declension_excluded: bool = (
                 (
                     settings["exclude-noun-first-declension"]
@@ -247,7 +252,7 @@ def filter_words(vocab_list: VocabList, settings: Settings) -> Vocab:
             assert type(settings["exclude-adjective-212-declension"]) is bool
             assert type(settings["exclude-adjective-third-declension"]) is bool
 
-            current_adj_declension: str = item.declension
+            current_adj_declension: AdjectiveDeclension = item.declension
             if (
                 settings["exclude-adjective-212-declension"]
                 and current_adj_declension == "212"
@@ -274,7 +279,7 @@ def filter_endings(endings: Endings, settings: Settings) -> dict[str, Ending]:
     dict[str, Ending]
         The filtered endings.
     """
-    filtered_endings: dict[str, Ending] = dict(endings)
+    filtered_endings: dict[str, Ending] = endings
 
     for setting, value in settings.items():
         if value and (setting in RULE_REGEX):
