@@ -27,6 +27,8 @@ class _Word(ABC):  # noqa: PLW1641
     _first : str
         The first principal part. Used so that the word classes can be
         alphabetically sorted.
+    meaning : Meaning
+        The meaning of the word.
     """
 
     def __init__(self) -> None:

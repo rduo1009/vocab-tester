@@ -53,8 +53,8 @@ def cache_vocab_file(
     ----------
     cache_folder : Path
         The path to the cache folder.
-    vocab_list : VocabList
-        The vocabulary to save.
+    vocab_file_path : Path
+        The path to the vocab file that is to be read.
 
     Returns
     -------

@@ -32,7 +32,7 @@ def save_vocab_dump(
 
     Parameters
     ----------
-    file_path : pathlib.Path
+    file_path : Path
         The path to the vocabulary dump file.
     vocab_list : VocabList
         The vocabulary to save.

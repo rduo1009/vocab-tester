@@ -27,21 +27,6 @@ if TYPE_CHECKING:
 
 
 def _regenerate_vocab_list(vocab_list: VocabList) -> VocabList:
-    """Regenerates a VocabList from a VocabList.
-
-    This is useful for regenerating a VocabList if it was created in a
-    previous version of the package.
-
-    Parameters
-    ----------
-    vocab_list : VocabList
-        The VocabList to regenerate.
-
-    Returns
-    -------
-    VocabList
-        The regenerated VocabList.
-    """
     word: accido.endings._Word
     new_vocab: list[accido.endings._Word] = []
 
@@ -89,7 +74,7 @@ def _regenerate_vocab_list(vocab_list: VocabList) -> VocabList:
                 ),
             )
         else:  # pragma: no cover # this should never happen
-            raise TypeError(f"Unknown word type: {type(word)}")  # noqa: DOC501
+            raise TypeError(f"Unknown word type: {type(word)}")
 
     return VocabList(new_vocab)
 
@@ -104,7 +89,7 @@ def read_vocab_dump(filename: Path) -> VocabList:
 
     Parameters
     ----------
-    filename : pathlib.Path
+    filename : Path
         The path to the vocabulary dump file.
 
     Returns
@@ -170,7 +155,7 @@ def read_vocab_file(file_path: Path) -> VocabList:
 
     Parameters
     ----------
-    file_path : pathlib.Path
+    file_path : Path
         The path to the vocabulary file.
 
     Returns
