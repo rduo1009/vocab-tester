@@ -1,4 +1,4 @@
-anyio==4.4.0 ; python_version >= "3.12"
+anyio==4.6.2.post1 ; python_version >= "3.12"
 asttokens==2.4.1 ; python_version >= "3.12"
 async-generator==1.10 ; python_version >= "3.12"
 click==8.1.7 ; python_version >= "3.12"
