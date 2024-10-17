@@ -6,7 +6,7 @@
 from __future__ import annotations
 
 from .. import accido
-from .adj_to_adv import adj_to_adv as adj_to_adv
+from .adj_to_adv import adj_to_adv
 from .adjective_inflection import (
     find_adjective_inflections,
     find_main_adjective_inflection,

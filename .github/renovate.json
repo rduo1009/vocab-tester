@@ -1,0 +1,10 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended"
+  ],
+  "baseBranches": ["compat-package", "compat-coconut"],
+  "prHourlyLimit": 5,
+  "commitMessagePrefix": "🚧 build(deps):",
+  "commitMessageAction": "update"
+}
