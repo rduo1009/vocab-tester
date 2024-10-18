@@ -96,6 +96,8 @@ IRREGULAR_VERBS: Final[dict[str, Endings]] = {
         "Vplpactindpl2": "fueratis",
         "Vplpactindpl3": "fuerant",
         "Vpreactinf   ": "esse",
+        "Vpreactipesg2": "es",
+        "Vpreactipepl2": "este",
         "Vimpactsbjsg1": "essem",
         "Vimpactsbjsg2": "esses",
         "Vimpactsbjsg3": "esset",
@@ -109,7 +111,7 @@ IRREGULAR_VERBS: Final[dict[str, Endings]] = {
         "Vplpactsbjpl2": "fuissetis",
         "Vplpactsbjpl3": "fuissent",
     },
-    "possum": {
+    "possum": {  # no imperatives
         "Vpreactindsg1": "possum",
         "Vpreactindsg2": "potes",
         "Vpreactindsg3": "potest",
@@ -148,7 +150,7 @@ IRREGULAR_VERBS: Final[dict[str, Endings]] = {
         "Vplpactsbjpl2": "potuissetis",
         "Vplpactsbjpl3": "potuissent",
     },
-    "volo": {
+    "volo": {  # no imperatives
         "Vpreactindsg1": "volo",
         "Vpreactindsg2": "vis",
         "Vpreactindsg3": "vult",
@@ -187,7 +189,7 @@ IRREGULAR_VERBS: Final[dict[str, Endings]] = {
         "Vplpactsbjpl2": "voluissetis",
         "Vplpactsbjpl3": "voluissent",
     },
-    "nolo": {
+    "nolo": {  # no imperatives
         "Vpreactindsg1": "nolo",
         "Vpreactindsg2": "non vis",
         "Vpreactindsg3": "non vult",
@@ -308,7 +310,7 @@ IRREGULAR_VERBS: Final[dict[str, Endings]] = {
         "Vplpactsbjpl2": "iissetis",
         "Vplpactsbjpl3": "iissent",
     },
-    "absum": {
+    "absum": {  # no imperatives
         "Vpreactindsg1": "absum",
         "Vpreactindsg2": "abes",
         "Vpreactindsg3": "abest",
@@ -347,7 +349,7 @@ IRREGULAR_VERBS: Final[dict[str, Endings]] = {
         "Vplpactsbjpl2": "afuissetis",
         "Vplpactsbjpl3": "afuissent",
     },
-    "adsum": {
+    "adsum": {  # no imperatives
         "Vpreactindsg1": "adsum",
         "Vpreactindsg2": "ades",
         "Vpreactindsg3": "adest",
@@ -549,7 +551,7 @@ def find_irregular_endings(present: str) -> Endings | None:
     ) -> dict[str, str | MultipleEndings]:
         return {key: pre + value for key, value in endings.items()}
 
-    if present in IRREGULAR_VERBS:  # pragma: no cover
+    if present in IRREGULAR_VERBS:
         return IRREGULAR_VERBS[present]
 
     for (

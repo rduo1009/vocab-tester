@@ -93,16 +93,6 @@ class Verb(_Word):
         self._first = self.present
         self.conjugation: Conjugation
 
-        if not self.present.endswith("o"):
-            raise InvalidInputError(
-                f"Invalid present form: '{self.present}' (must end in '-o')",
-            )
-
-        if not self.perfect.endswith("i"):
-            raise InvalidInputError(
-                f"Invalid perfect form: '{self.perfect}' (must end in '-i')",
-            )
-
         # Conjugation edge cases
         if irregular_endings := find_irregular_endings(self.present):
             self.endings = irregular_endings
@@ -120,6 +110,16 @@ class Verb(_Word):
         else:
             raise InvalidInputError(
                 f"Invalid infinitive form: '{self.infinitive}'",
+            )
+
+        if not self.present.endswith("o"):
+            raise InvalidInputError(
+                f"Invalid present form: '{self.present}' (must end in '-o')",
+            )
+
+        if not self.perfect.endswith("i"):
+            raise InvalidInputError(
+                f"Invalid perfect form: '{self.perfect}' (must end in '-i')",
             )
 
         self._pre_stem: str = self.present[:-1]
