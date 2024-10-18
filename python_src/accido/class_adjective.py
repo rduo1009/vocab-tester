@@ -175,11 +175,11 @@ class Adjective(_Word):
 
         endings: Endings = {
             "Aposmnomsg": self.mascnom,  # carus
-            "Aposmvocsg": f"{self._pos_stem}e"  # care
-            if not self.mascnom.endswith(
+            "Aposmvocsg": self.mascnom
+            if self.mascnom.endswith(
                 "er",
             )
-            else self.mascnom,  # miser
+            else f"{self._pos_stem}e",  # miser
             "Aposmaccsg": f"{self._pos_stem}um",  # carum
             "Aposmgensg": f"{self._pos_stem}i",  # cari
             "Aposmdatsg": f"{self._pos_stem}o",  # caro

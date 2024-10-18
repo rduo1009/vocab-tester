@@ -11,24 +11,24 @@ from nltk import download
 from nltk.corpus import wordnet
 from nltk.data import find, path
 
-project_root: Path = Path(__file__).parent.parent.parent
-nltk_data_path: Path = project_root / "nltk_data"
-nltk_data_path.mkdir(parents=True, exist_ok=True)
-path.append(str(nltk_data_path))
+_project_root: Path = Path(__file__).parent.parent.parent
+_nltk_data_path: Path = _project_root / "nltk_data"
+_nltk_data_path.mkdir(parents=True, exist_ok=True)
+path.append(str(_nltk_data_path))
 
-if not nltk_data_path.exists():  # pragma: no cover
-    nltk_data_path.mkdir(parents=True, exist_ok=True)
+if not _nltk_data_path.exists():  # pragma: no cover
+    _nltk_data_path.mkdir(parents=True, exist_ok=True)
     warnings.warn(
-        f"The directory {nltk_data_path} did not exist and has been created",
+        f"The directory {_nltk_data_path} did not exist and has been created",
         stacklevel=2,
     )
 
 try:
     find("corpora/wordnet.zip")
 except LookupError:  # pragma: no cover
-    download("wordnet", download_dir=str(nltk_data_path))
+    download("wordnet", download_dir=str(_nltk_data_path))
     warnings.warn(
-        f"The wordnet dataset was not found in {nltk_data_path} and has "
+        f"The wordnet dataset was not found in {_nltk_data_path} and has "
         "been downloaded",
         stacklevel=2,
     )
