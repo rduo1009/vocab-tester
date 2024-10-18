@@ -5,7 +5,7 @@
 from __future__ import annotations
 
 from functools import total_ordering
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Literal, overload
 
 from .class_word import _Word
 from .edge_cases import (
@@ -14,13 +14,7 @@ from .edge_cases import (
     NO_ADVERB_ADJECTIVES,
 )
 from .exceptions import InvalidInputError
-from .misc import (
-    Case,
-    Degree,
-    EndingComponents,
-    Gender,
-    Number,
-)
+from .misc import Case, Degree, EndingComponents, Gender, Number
 
 if TYPE_CHECKING:
     from .type_aliases import (
@@ -68,6 +62,13 @@ class Adjective(_Word):
     The same can be said with the termination argument for third declension
     adjectives.
     """
+
+    # fmt: off
+    @overload
+    def __init__(self, *principal_parts: str, declension: Literal["212"], meaning: Meaning) -> None: ...  # noqa: E501
+    @overload
+    def __init__(self, *principal_parts: str, termination: Termination, declension: Literal["3"], meaning: Meaning) -> None: ...  # noqa: E501
+    # fmt: on
 
     def __init__(
         self,
@@ -779,6 +780,13 @@ class Adjective(_Word):
             }
 
         return endings
+
+    # fmt: off
+    @overload
+    def get(self, *, degree: Degree, adverb: Literal[True]) -> Ending | None: ...  # noqa: E501
+    @overload
+    def get(self, *, degree: Degree, gender: Gender, case: Case, number: Number, adverb: Literal[False] = False) -> Ending | None: ...  # noqa: E501
+    # fmt: on
 
     def get(
         self,

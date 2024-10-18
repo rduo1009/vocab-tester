@@ -4,7 +4,7 @@ import sys  # noqa: E401
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
 from python_src import accido
-from python_src.accido.misc import Case, Degree, Gender, Mood, Number, Tense, Voice
+from python_src.accido.misc import Case, ComponentsSubtype, Degree, Gender, Mood, Number, Tense, Voice
 from python_src.transfero.words import find_inflection
 
 
@@ -58,5 +58,5 @@ def test_mainwordinflection_regularword():
 
 def test_mainwordinflection_nounlikepronoun():
     components = accido.misc.EndingComponents(case=Case.GENITIVE, number=Number.SINGULAR)
-    components.subtype = "pronoun"
+    components.subtype = ComponentsSubtype.PRONOUN
     assert find_inflection("I", components, main=True) == "of me"

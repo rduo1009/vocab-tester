@@ -13,11 +13,6 @@ from python_src.utils import compare
 
 
 class TestAdjectiveErrors:
-    def test_errors_termination_with_212(self):
-        with pytest.raises(InvalidInputError) as error:
-            Adjective("laetus", "laeta", "laetum", declension="212", meaning="happy", termination=3)
-        assert "2-1-2 adjectives cannot have a termination (termination '3' given)" == str(error.value)
-
     def test_errors_wrong_number_principal_parts_212(self):
         with pytest.raises(InvalidInputError) as error:
             Adjective("laetus", "laeta", declension="212", meaning="happy")
@@ -42,30 +37,6 @@ class TestAdjectiveErrors:
         with pytest.raises(InvalidInputError) as error:
             Adjective("laetus", "laeta", declension="3", meaning="happy", termination=3)
         assert "Third-termination adjectives must have 3 principal parts (adjective 'laetus' given)" == str(error.value)
-
-    def test_errors_adverbs_donothave(self):
-        with pytest.raises(InvalidInputError) as error:
-            word = Adjective("laetus", "laeta", "laetum", declension="212", meaning="happy")
-            word.get(case=Case.NOMINATIVE, gender=Gender.MASCULINE, number=Number.SINGULAR, degree=Degree.POSITIVE, adverb=True)
-        assert "Adverbs do not have gender, case or number (given 'masculine', 'nominative' and 'singular')" == str(error.value)
-
-    def test_errors_get_gendernotgiven(self):
-        with pytest.raises(InvalidInputError) as error:
-            word = Adjective("laetus", "laeta", "laetum", declension="212", meaning="happy")
-            word.get(case=Case.NOMINATIVE, number=Number.SINGULAR, degree=Degree.POSITIVE)
-        assert "Gender not given" == str(error.value)
-
-    def test_errors_get_casenotgiven(self):
-        with pytest.raises(InvalidInputError) as error:
-            word = Adjective("laetus", "laeta", "laetum", declension="212", meaning="happy")
-            word.get(gender=Gender.MASCULINE, number=Number.SINGULAR, degree=Degree.POSITIVE)
-        assert "Case not given" == str(error.value)
-
-    def test_errors_get_numbernotgiven(self):
-        with pytest.raises(InvalidInputError) as error:
-            word = Adjective("laetus", "laeta", "laetum", declension="212", meaning="happy")
-            word.get(case=Case.NOMINATIVE, gender=Gender.MASCULINE, degree=Degree.POSITIVE)
-        assert "Number not given" == str(error.value)
 
 
 class TestAdjectiveDunder:

@@ -58,14 +58,26 @@ def _regenerate_vocab_list(vocab_list: VocabList) -> VocabList:
                 ),
             )
         elif isinstance(word, accido.endings.Adjective):
-            new_vocab.append(
-                accido.endings.Adjective(
-                    *word._principal_parts,  # noqa: SLF001
-                    termination=word.termination,
-                    declension=word.declension,
-                    meaning=word.meaning,
-                ),
-            )
+            match word.declension:
+                case "212":
+                    new_vocab.append(
+                        accido.endings.Adjective(
+                            *word._principal_parts,  # noqa: SLF001
+                            declension="212",
+                            meaning=word.meaning,
+                        ),
+                    )
+                case "3":
+                    assert word.termination is not None
+
+                    new_vocab.append(
+                        accido.endings.Adjective(
+                            *word._principal_parts,  # noqa: SLF001
+                            termination=word.termination,
+                            declension="3",
+                            meaning=word.meaning,
+                        ),
+                    )
         elif isinstance(word, accido.endings.Pronoun):
             new_vocab.append(
                 accido.endings.Pronoun(

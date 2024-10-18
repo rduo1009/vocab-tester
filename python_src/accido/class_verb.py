@@ -5,7 +5,7 @@
 from __future__ import annotations
 
 from functools import total_ordering
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, overload
 
 from .class_word import _Word
 from .edge_cases import check_io_verb, find_irregular_endings
@@ -438,6 +438,15 @@ class Verb(_Word):
             "Vperpasptcnablpl": f"{self._ppp_stem}is",  # portatis
         }
 
+    # fmt: off
+    @overload
+    def get(self, *, tense: Tense, voice: Voice, mood: Mood, person: Person, number: Number) -> Ending | None: ...  # noqa: E501
+    @overload
+    def get(self, *, tense: Tense, voice: Voice, mood: Mood, number: Number, participle_gender: Gender, participle_case: Case) -> Ending | None: ...  # noqa: E501
+    @overload
+    def get(self, *, tense: Tense, voice: Voice, mood: Mood) -> Ending | None: ...  # noqa: E501
+    # fmt: on
+
     def get(
         self,
         *,
@@ -517,6 +526,15 @@ class Verb(_Word):
         'celatus'
 
         Similar with participle endings.
+
+        >>> foo.get(
+        ...     tense=Tense.PRESENT,
+        ...     voice=Voice.ACTIVE,
+        ...     mood=Mood.INFINITIVE,
+        ... )
+        'celare'
+
+        Infinitives.
         """
         if mood == Mood.PARTICIPLE:
             if person:

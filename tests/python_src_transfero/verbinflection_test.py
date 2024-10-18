@@ -11,7 +11,7 @@ from python_src.transfero.verb_inflection import find_main_verb_inflection, find
 def test_invalid_type():
     with pytest.raises(ValueError) as error:
         find_verb_inflections("teach", EndingComponents(case=Case.NOMINATIVE, number=Number.SINGULAR, gender=Gender.NEUTER))
-    assert "Invalid type: '<class 'python_src.accido.class_pronoun.Pronoun'>'" == str(error.value)
+    assert "Invalid type: 'pronoun'" == str(error.value)
 
 
 def test_invalid_type_participle():

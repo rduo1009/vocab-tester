@@ -4,12 +4,16 @@
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 import lemminflect
 
-from .. import accido
-from ..accido.misc import Degree
+from ..accido.misc import ComponentsType, Degree
 from .edge_cases import NOT_COMPARABLE_ADJECTIVES
 from .exceptions import InvalidWordError
+
+if TYPE_CHECKING:
+    from .. import accido
 
 
 def find_adjective_inflections(
@@ -37,7 +41,7 @@ def find_adjective_inflections(
     ValueError
         If the input (other than the word itself) is invalid.
     """
-    if components.type is not accido.endings.Adjective:
+    if components.type != ComponentsType.ADJECTIVE:
         raise ValueError(f"Invalid type: '{components.type}'")
     if components.subtype is not None:
         raise ValueError(f"Invalid subtype: '{components.subtype}'")
@@ -80,7 +84,7 @@ def find_main_adjective_inflection(
     ValueError
         If the input (other than the word itself) is invalid.
     """
-    if components.type is not accido.endings.Adjective:
+    if components.type != ComponentsType.ADJECTIVE:
         raise ValueError(f"Invalid type: '{components.type}'")
     if components.subtype is not None:
         raise ValueError(f"Invalid subtype: '{components.subtype}'")

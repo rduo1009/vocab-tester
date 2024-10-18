@@ -5,17 +5,12 @@
 from __future__ import annotations
 
 from functools import total_ordering
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, overload
 
 from .class_word import _Word
 from .edge_cases import IRREGULAR_NOUNS
 from .exceptions import InvalidInputError
-from .misc import (
-    Case,
-    EndingComponents,
-    Gender,
-    Number,
-)
+from .misc import Case, ComponentsSubtype, EndingComponents, Gender, Number
 
 if TYPE_CHECKING:
     from .type_aliases import Ending, Endings, Meaning, NounDeclension
@@ -59,12 +54,19 @@ class Noun(_Word):
     tantum fifth declension nouns (there doesn't seem to be any).
     """
 
+    # fmt: off
+    @overload
+    def __init__(self, *, nominative: str, meaning: Meaning) -> None: ...
+    @overload
+    def __init__(self, *, nominative: str, genitive: str, gender: Gender, meaning: Meaning) -> None: ...  # noqa: E501
+    # fmt: on
+
     def __init__(
         self,
         *,
         nominative: str,
-        genitive: str | None,
-        gender: Gender | None,
+        genitive: str | None = None,
+        gender: Gender | None = None,
         meaning: Meaning,
     ) -> None:
         """Initialises Noun and determines the declension and endings.
@@ -316,7 +318,7 @@ class Noun(_Word):
         )
         output.string = f"{output.case.regular} {output.number.regular}"
         if self.declension == 0:
-            output.subtype = "pronoun"
+            output.subtype = ComponentsSubtype.PRONOUN
         return output
 
     def __repr__(self) -> str:

@@ -6,9 +6,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from types import SimpleNamespace
-from typing import TYPE_CHECKING, Final, Literal
-
-from .. import accido
+from typing import TYPE_CHECKING, Final, overload
 
 if TYPE_CHECKING:
     # HACK: To avoid mypy errors.
@@ -17,6 +15,7 @@ if TYPE_CHECKING:
     from .type_aliases import Person
 else:
     from aenum import Enum
+from enum import StrEnum, auto
 
 from aenum import MultiValue  # type: ignore[import-untyped]
 
@@ -110,7 +109,23 @@ PERSON_SHORTHAND: Final[dict[int, str]] = {
 }
 
 
-type _Subtype = Literal["infinitive", "participle", "adverb", "pronoun"]
+class ComponentsType(StrEnum):
+    """Represents the type of an EndingComponents object."""
+
+    ADJECTIVE = auto()
+    NOUN = auto()
+    PRONOUN = auto()
+    REGULARWORD = auto()
+    VERB = auto()
+
+
+class ComponentsSubtype(StrEnum):
+    """Represents the subtype of an EndingComponents object."""
+
+    INFINITIVE = auto()
+    PARTICIPLE = auto()
+    ADVERB = auto()
+    PRONOUN = auto()
 
 
 class EndingComponents:
@@ -194,7 +209,32 @@ class EndingComponents:
     'infinitive'
 
     For infinitives.
+
+    >>> foo = EndingComponents(string="")
+    >>> foo.string
+    ''
+
+    For regular words.
     """
+
+    # fmt: off
+    @overload
+    def __init__(self, *, case: Case, number: Number, string: str = "") -> None: ...  # noqa: E501
+    @overload
+    def __init__(self, *, case: Case, number: Number, gender: Gender, string: str = "") -> None: ...  # noqa: E501
+    @overload
+    def __init__(self, *, case: Case, number: Number, gender: Gender, degree: Degree, string: str = "") -> None: ...  # noqa: E501
+    @overload
+    def __init__(self, *, degree: Degree, string: str = "") -> None: ... 
+    @overload
+    def __init__(self, *, tense: Tense, voice: Voice, mood: Mood, number: Number, person: Person, string: str = "") -> None: ...  # noqa: E501
+    @overload
+    def __init__(self, *, tense: Tense, voice: Voice, mood: Mood, gender: Gender, case: Case, number: Number, string: str = "") -> None: ...  # noqa: E501
+    @overload
+    def __init__(self, *, tense: Tense, voice: Voice, mood: Mood, string: str = "") -> None: ...  # noqa: E501
+    @overload
+    def __init__(self, *, string: str = "") -> None: ...  
+    # fmt: on
 
     def __init__(
         self,
@@ -205,7 +245,7 @@ class EndingComponents:
         tense: Tense | None = None,
         voice: Voice | None = None,
         mood: Mood | None = None,
-        person: Person | None = None,  # avoiding circular imports
+        person: Person | None = None,
         degree: Degree | None = None,
         string: str = "",
     ) -> None:
@@ -257,8 +297,8 @@ class EndingComponents:
             self.person: Person = person
         self.string: str = string
 
-        self.type: type[accido.endings._Word]
-        self.subtype: _Subtype | None
+        self.type: ComponentsType
+        self.subtype: ComponentsSubtype | None
         self.type, self.subtype = self._determine_type()
 
     def _get_non_null_attributes(self) -> list[str]:
@@ -270,13 +310,13 @@ class EndingComponents:
 
     def _determine_type(
         self,
-    ) -> tuple[type[accido.endings._Word], _Subtype | None]:
+    ) -> tuple[ComponentsType, ComponentsSubtype | None]:
         attributes = self._get_non_null_attributes()
 
         if set(attributes) == {"tense", "voice", "mood", "person", "number"}:
-            return (accido.endings.Verb, None)
+            return (ComponentsType.VERB, None)
         if set(attributes) == {"tense", "voice", "mood"}:
-            return (accido.endings.Verb, "infinitive")
+            return (ComponentsType.VERB, ComponentsSubtype.INFINITIVE)
         if set(attributes) == {
             "tense",
             "voice",
@@ -285,17 +325,17 @@ class EndingComponents:
             "gender",
             "case",
         }:
-            return (accido.endings.Verb, "participle")
+            return (ComponentsType.VERB, ComponentsSubtype.PARTICIPLE)
         if set(attributes) == {"degree"}:
-            return (accido.endings.Adjective, "adverb")
+            return (ComponentsType.ADJECTIVE, ComponentsSubtype.ADVERB)
         if set(attributes) == {"number", "gender", "case", "degree"}:
-            return (accido.endings.Adjective, None)
+            return (ComponentsType.ADJECTIVE, None)
         if set(attributes) == {"number", "gender", "case"}:
-            return (accido.endings.Pronoun, None)
+            return (ComponentsType.PRONOUN, None)
         if set(attributes) == {"number", "case"}:
-            return (accido.endings.Noun, None)
+            return (ComponentsType.NOUN, None)
         if not set(attributes):
-            return (accido.endings.RegularWord, None)
+            return (ComponentsType.REGULARWORD, None)
         raise ValueError(
             f"Invalid combination of attributes: {', '.join(attributes)}"
         )

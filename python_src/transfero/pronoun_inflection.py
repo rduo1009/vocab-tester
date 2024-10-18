@@ -4,10 +4,12 @@
 
 from __future__ import annotations
 
-from typing import Final
+from typing import TYPE_CHECKING, Final
 
-from .. import accido
-from ..accido.misc import Case, Number
+from ..accido.misc import Case, ComponentsType, Number
+
+if TYPE_CHECKING:
+    from .. import accido
 
 
 def find_pronoun_inflections(
@@ -37,7 +39,7 @@ def find_pronoun_inflections(
     ValueError
         If the input (other than the word itself) is invalid.
     """
-    if components.type not in {accido.endings.Noun, accido.endings.Pronoun}:
+    if components.type not in {ComponentsType.NOUN, ComponentsType.PRONOUN}:
         raise ValueError(f"Invalid type: '{components.type}'")
 
     return set(_inflect_lemma(pronoun, components.case, components.number))
@@ -70,7 +72,7 @@ def find_main_pronoun_inflection(
     ValueError
         If the input (other than the word itself) is invalid.
     """
-    if components.type not in {accido.endings.Noun, accido.endings.Pronoun}:
+    if components.type not in {ComponentsType.NOUN, ComponentsType.PRONOUN}:
         raise ValueError(f"Invalid type: '{components.type}'")
 
     return _inflect_lemma(pronoun, components.case, components.number)[0]

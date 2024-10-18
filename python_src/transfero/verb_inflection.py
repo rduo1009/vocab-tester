@@ -8,17 +8,17 @@ from typing import TYPE_CHECKING
 
 import lemminflect
 
-from .. import accido
-from ..accido.misc import Mood, Number, Tense, Voice
+from ..accido.misc import ComponentsType, Mood, Number, Tense, Voice
 from .edge_cases import STATIVE_VERBS
 from .exceptions import InvalidWordError
 
 if TYPE_CHECKING:
+    from .. import accido
     from ..accido.type_aliases import Person
 
 
 def _verify_verb_inflections(components: accido.misc.EndingComponents) -> None:
-    if components.type is not accido.endings.Verb:
+    if components.type is not ComponentsType.VERB:
         raise ValueError(f"Invalid type: '{components.type}'")
 
     if (

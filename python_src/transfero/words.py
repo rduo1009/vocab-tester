@@ -4,7 +4,9 @@
 
 from __future__ import annotations
 
-from .. import accido
+from typing import TYPE_CHECKING
+
+from ..accido.misc import ComponentsSubtype, ComponentsType
 from .adj_to_adv import adj_to_adv
 from .adjective_inflection import (
     find_adjective_inflections,
@@ -20,6 +22,9 @@ from .pronoun_inflection import (
     find_pronoun_inflections,
 )
 from .verb_inflection import find_main_verb_inflection, find_verb_inflections
+
+if TYPE_CHECKING:
+    from .. import accido
 
 
 def find_inflection(
@@ -52,8 +57,8 @@ def find_inflection(
         If the part of speech is unknown. This should never happen.
     """
     match components.type:
-        case accido.endings.Adjective:
-            if components.subtype == "adverb":
+        case ComponentsType.ADJECTIVE:
+            if components.subtype == ComponentsSubtype.ADVERB:
                 return (
                     find_main_adverb_inflection(word, components)
                     if main
@@ -65,8 +70,8 @@ def find_inflection(
                 else find_adjective_inflections(word, components)
             )
 
-        case accido.endings.Noun:
-            if components.subtype == "pronoun":
+        case ComponentsType.NOUN:
+            if components.subtype == ComponentsSubtype.PRONOUN:
                 return (
                     find_main_pronoun_inflection(word, components)
                     if main
@@ -78,24 +83,19 @@ def find_inflection(
                 else find_noun_inflections(word, components)
             )
 
-        case accido.endings.Verb:
+        case ComponentsType.VERB:
             return (
                 find_main_verb_inflection(word, components)
                 if main
                 else find_verb_inflections(word, components)
             )
 
-        case accido.endings.Pronoun:
+        case ComponentsType.PRONOUN:
             return (
                 find_main_pronoun_inflection(word, components)
                 if main
                 else find_pronoun_inflections(word, components)
             )
 
-        case accido.endings.RegularWord:
+        case ComponentsType.REGULARWORD:
             return word if main else {word}
-
-        case _:  # pragma: no cover
-            raise ValueError(
-                f"Unknown part of speech: {components.type}"
-            )  # should never happen

@@ -27,30 +27,6 @@ class TestVerbErrors:
             Verb(present="celo", infinitive="celare", perfect="error", ppp="celatus", meaning="hide")
         assert "Invalid perfect form: 'error' (must end in '-i')" == str(error.value)
 
-    def test_errors_person_with_participle(self):
-        with pytest.raises(InvalidInputError) as error:
-            word = Verb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
-            word.get(number=Number.SINGULAR, tense=Tense.PERFECT, voice=Voice.PASSIVE, mood=Mood.PARTICIPLE, participle_gender=Gender.MASCULINE, participle_case=Case.NOMINATIVE, person=1)
-        assert "Participle cannot have a person (person '1')" == str(error.value)
-
-    def test_errors_participle_gender_not_given(self):
-        with pytest.raises(InvalidInputError) as error:
-            word = Verb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
-            word.get(number=Number.SINGULAR, tense=Tense.PRESENT, voice=Voice.ACTIVE, mood=Mood.PARTICIPLE, participle_case=Case.NOMINATIVE)
-        assert "Gender not given" == str(error.value)
-
-    def test_errors_participle_case_not_given(self):
-        with pytest.raises(InvalidInputError) as error:
-            word = Verb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
-            word.get(number=Number.SINGULAR, tense=Tense.PRESENT, voice=Voice.ACTIVE, mood=Mood.PARTICIPLE, participle_gender=Gender.MASCULINE)
-        assert "Case not given" == str(error.value)
-
-    def test_errors_number_not_given(self):
-        with pytest.raises(InvalidInputError) as error:
-            word = Verb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
-            word.get(tense=Tense.PRESENT, voice=Voice.ACTIVE, mood=Mood.PARTICIPLE, participle_case=Case.NOMINATIVE, participle_gender=Gender.MASCULINE)
-        assert "Number not given" == str(error.value)
-
 
 class TestVerbDunder:
     def test_getnone(self):
