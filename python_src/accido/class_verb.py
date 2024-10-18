@@ -5,7 +5,7 @@
 from __future__ import annotations
 
 from functools import total_ordering
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, overload
 
 from .class_word import _Word
 from .edge_cases import check_io_verb, find_irregular_endings
@@ -92,16 +92,6 @@ class Verb(_Word):
         self._first = self.present
         self.conjugation: Conjugation
 
-        if not self.present.endswith("o"):
-            raise InvalidInputError(
-                f"Invalid present form: '{self.present}' (must end in '-o')",
-            )
-
-        if not self.perfect.endswith("i"):
-            raise InvalidInputError(
-                f"Invalid perfect form: '{self.perfect}' (must end in '-i')",
-            )
-
         # Conjugation edge cases
         if irregular_endings := find_irregular_endings(self.present):
             self.endings = irregular_endings
@@ -119,6 +109,16 @@ class Verb(_Word):
         else:
             raise InvalidInputError(
                 f"Invalid infinitive form: '{self.infinitive}'",
+            )
+
+        if not self.present.endswith("o"):
+            raise InvalidInputError(
+                f"Invalid present form: '{self.present}' (must end in '-o')",
+            )
+
+        if not self.perfect.endswith("i"):
+            raise InvalidInputError(
+                f"Invalid perfect form: '{self.perfect}' (must end in '-i')",
             )
 
         self._pre_stem: str = self.present[:-1]
@@ -140,11 +140,6 @@ class Verb(_Word):
 
             case 5:
                 self.endings = self._third_io_conjugation()
-
-            case _:  # pragma: no cover
-                raise ValueError(  # noqa: DOC501
-                    f"Conjugation {self.conjugation} not recognised",
-                )
 
         if self.ppp:
             self.endings |= self._participles()
@@ -442,6 +437,15 @@ class Verb(_Word):
             "Vperpasptcnablpl": f"{self._ppp_stem}is",  # portatis
         }
 
+    # fmt: off
+    @overload
+    def get(self, *, tense: Tense, voice: Voice, mood: Mood, person: Person, number: Number) -> Ending | None: ...  # noqa: E501
+    @overload
+    def get(self, *, tense: Tense, voice: Voice, mood: Mood, number: Number, participle_gender: Gender, participle_case: Case) -> Ending | None: ...  # noqa: E501
+    @overload
+    def get(self, *, tense: Tense, voice: Voice, mood: Mood) -> Ending | None: ...  # noqa: E501
+    # fmt: on
+
     def get(
         self,
         *,
@@ -521,21 +525,20 @@ class Verb(_Word):
         'celatus'
 
         Similar with participle endings.
+
+        >>> foo.get(
+        ...     tense=Tense.PRESENT,
+        ...     voice=Voice.ACTIVE,
+        ...     mood=Mood.INFINITIVE,
+        ... )
+        'celare'
+
+        Infinitives.
         """
         if mood == Mood.PARTICIPLE:
-            if person:
-                raise InvalidInputError(
-                    f"Participle cannot have a person (person '{person}')",
-                )
-
-            if not participle_case:
-                raise InvalidInputError("Case not given")
-
-            if not participle_gender:
-                raise InvalidInputError("Gender not given")
-
-            if not number:
-                raise InvalidInputError("Number not given")
+            assert number is not None
+            assert participle_gender is not None
+            assert participle_case is not None
 
             return self._get_participle(
                 tense=tense,

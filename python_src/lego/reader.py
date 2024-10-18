@@ -8,7 +8,7 @@ import hashlib
 import hmac
 import warnings
 from re import match
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Literal, cast
 
 import dill as pickle
 import lz4.frame  # type: ignore[import-untyped]
@@ -17,7 +17,7 @@ import python_src as src
 
 from .. import accido
 from ..accido.misc import Gender
-from ..accido.type_aliases import is_termination
+from ..accido.type_aliases import Meaning, is_termination
 from .exceptions import InvalidVocabDumpError, InvalidVocabFileFormatError
 from .misc import KEY, VocabList
 
@@ -58,14 +58,26 @@ def _regenerate_vocab_list(vocab_list: VocabList) -> VocabList:
                 ),
             )
         elif isinstance(word, accido.endings.Adjective):
-            new_vocab.append(
-                accido.endings.Adjective(
-                    *word._principal_parts,  # noqa: SLF001
-                    termination=word.termination,
-                    declension=word.declension,
-                    meaning=word.meaning,
-                ),
-            )
+            match word.declension:
+                case "212":
+                    new_vocab.append(
+                        accido.endings.Adjective(
+                            *word._principal_parts,  # noqa: SLF001
+                            declension="212",
+                            meaning=word.meaning,
+                        ),
+                    )
+                case "3":
+                    assert word.termination is not None
+
+                    new_vocab.append(
+                        accido.endings.Adjective(
+                            *word._principal_parts,  # noqa: SLF001
+                            termination=word.termination,
+                            declension="3",
+                            meaning=word.meaning,
+                        ),
+                    )
         elif isinstance(word, accido.endings.Pronoun):
             new_vocab.append(
                 accido.endings.Pronoun(
@@ -131,6 +143,7 @@ def read_vocab_dump(filename: Path) -> VocabList:
     if isinstance(raw_data, VocabList):
         if raw_data.version == src.__version__:
             return raw_data
+
         warnings.warn(
             "Vocab dump is from a different version of vocab-tester.",
             stacklevel=2,
@@ -142,12 +155,25 @@ def read_vocab_dump(filename: Path) -> VocabList:
     )  # pragma: no cover # this should never happen
 
 
-def _generate_meaning(meaning: str) -> accido.type_aliases.Meaning:
+def _generate_meaning(meaning: str) -> Meaning:
     if "/" in meaning:
         return accido.misc.MultipleMeanings([
             x.strip() for x in meaning.split("/")
         ])
     return meaning
+
+
+type _PartOfSpeech = Literal["Verb", "Adjective", "Noun", "Regular", "Pronoun"]
+
+
+def _is_typeofspeech(x: str) -> bool:
+    return x in {
+        "Verb",
+        "Adjective",
+        "Noun",
+        "Regular",
+        "Pronoun",
+    }
 
 
 def read_vocab_file(file_path: Path) -> VocabList:
@@ -180,7 +206,7 @@ def read_vocab_file(file_path: Path) -> VocabList:
 
     with file_path.open("r") as file:
         line: str
-        current: str = ""
+        current: _PartOfSpeech | Literal[""] = ""
 
         for line in (
             raw_line.strip()  # remove whitespace
@@ -200,7 +226,8 @@ def read_vocab_file(file_path: Path) -> VocabList:
                             | "Regular"
                             | "Pronoun"
                         ):
-                            current = line[1:].strip()
+                            assert _is_typeofspeech(line[1:].strip())
+                            current = cast(_PartOfSpeech, line[1:].strip())
 
                         case (
                             "Verbs"
@@ -209,7 +236,8 @@ def read_vocab_file(file_path: Path) -> VocabList:
                             | "Regulars"
                             | "Pronouns"
                         ):
-                            current = line[1:-1].strip()
+                            assert _is_typeofspeech(line[1:-1].strip())
+                            current = cast(_PartOfSpeech, line[1:-1].strip())
 
                         case _:
                             raise InvalidVocabFileFormatError(
@@ -224,7 +252,7 @@ def read_vocab_file(file_path: Path) -> VocabList:
                             f"Invalid line format: '{line}'",
                         )
 
-                    meaning: accido.type_aliases.Meaning = _generate_meaning(
+                    meaning: Meaning = _generate_meaning(
                         parts[0].strip(),
                     )
                     latin_parts: list[str] = [
@@ -243,9 +271,9 @@ def read_vocab_file(file_path: Path) -> VocabList:
 
 
 def _parse_line(
-    current: str,
+    current: _PartOfSpeech,
     latin_parts: list[str],
-    meaning: accido.type_aliases.Meaning,
+    meaning: Meaning,
     line: str,
 ) -> accido.endings._Word:
     match current:
@@ -255,6 +283,7 @@ def _parse_line(
                     f"Invalid verb format: '{line}'",
                 )
 
+            # Verb with ppp
             if len(latin_parts) > 3:
                 return accido.endings.Verb(
                     present=latin_parts[0],
@@ -263,6 +292,8 @@ def _parse_line(
                     ppp=latin_parts[3],
                     meaning=meaning,
                 )
+
+            # Verb without ppp
             return accido.endings.Verb(
                 present=latin_parts[0],
                 infinitive=latin_parts[1],
@@ -304,6 +335,8 @@ def _parse_line(
                 raise InvalidVocabFileFormatError(
                     f"Invalid adjective declension: '{declension}'",
                 )
+
+            # Third declension adjective
             if declension.startswith("3"):
                 termination = int(declension[2])
                 assert is_termination(termination)
@@ -314,11 +347,14 @@ def _parse_line(
                     declension="3",
                     meaning=meaning,
                 )
+
+            # Second declension adjective
             return accido.endings.Adjective(
                 *latin_parts[:-1],
                 meaning=meaning,
                 declension="212",
             )
+
         case "Regular":
             return accido.endings.RegularWord(
                 word=latin_parts[0],
@@ -330,6 +366,3 @@ def _parse_line(
                 meaning=meaning,
                 pronoun=latin_parts[0],
             )
-
-        case _:  # pragma: no cover # this should never happen
-            raise ValueError

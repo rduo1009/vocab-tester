@@ -10,11 +10,11 @@ from python_src.transfero.adjective_inflection import find_adjective_inflections
 def test_invalid_type():
     with pytest.raises(ValueError) as error:
         find_adjective_inflections("happy", EndingComponents(case=Case.NOMINATIVE, number=Number.SINGULAR, gender=Gender.NEUTER))
-    assert "Invalid type: '<class 'python_src.accido.class_pronoun.Pronoun'>'" == str(error.value)
+    assert "Invalid type: 'pronoun'" == str(error.value)
 
     with pytest.raises(ValueError) as error:
         find_main_adjective_inflection("happy", EndingComponents(case=Case.NOMINATIVE, number=Number.SINGULAR, gender=Gender.NEUTER))
-    assert "Invalid type: '<class 'python_src.accido.class_pronoun.Pronoun'>'" == str(error.value)
+    assert "Invalid type: 'pronoun'" == str(error.value)
 
 
 def test_invalid_subtype():

@@ -4,12 +4,16 @@
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 import lemminflect
 from inflect import engine
 
-from .. import accido
-from ..accido.misc import Case, Number
+from ..accido.misc import Case, ComponentsType, Number
 from .exceptions import InvalidWordError
+
+if TYPE_CHECKING:
+    from .. import accido
 
 # Distinguish from the lemminflect module
 pluralinflect = engine()  # sourcery skip: avoid-global-variables
@@ -49,7 +53,7 @@ def find_noun_inflections(
     ValueError
         If the input (other than the word itself) is invalid.
     """
-    if components.type is not accido.endings.Noun:
+    if components.type != ComponentsType.NOUN:
         raise ValueError(f"Invalid type: '{components.type}'")
 
     try:
@@ -91,7 +95,7 @@ def find_main_noun_inflection(
     ValueError
         If the input (other than the word itself) is invalid.
     """
-    if components.type not in {accido.endings.Noun, accido.endings.Pronoun}:
+    if components.type != ComponentsType.NOUN:
         raise ValueError(f"Invalid type: '{components.type}'")
 
     try:

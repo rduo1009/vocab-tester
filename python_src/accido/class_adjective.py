@@ -5,7 +5,7 @@
 from __future__ import annotations
 
 from functools import total_ordering
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Literal, overload
 
 from .class_word import _Word
 from .edge_cases import (
@@ -14,13 +14,7 @@ from .edge_cases import (
     NO_ADVERB_ADJECTIVES,
 )
 from .exceptions import InvalidInputError
-from .misc import (
-    Case,
-    Degree,
-    EndingComponents,
-    Gender,
-    Number,
-)
+from .misc import Case, Degree, EndingComponents, Gender, Number
 
 if TYPE_CHECKING:
     from .type_aliases import (
@@ -68,6 +62,13 @@ class Adjective(_Word):
     The same can be said with the termination argument for third declension
     adjectives.
     """
+
+    # fmt: off
+    @overload
+    def __init__(self, *principal_parts: str, declension: Literal["212"], meaning: Meaning) -> None: ...  # noqa: E501
+    @overload
+    def __init__(self, *principal_parts: str, termination: Termination, declension: Literal["3"], meaning: Meaning) -> None: ...  # noqa: E501
+    # fmt: on
 
     def __init__(
         self,
@@ -117,9 +118,6 @@ class Adjective(_Word):
             self.irregular_flag = True
             irregular_data = IRREGULAR_ADJECTIVES[self.mascnom]
 
-            assert irregular_data[0] is not None
-            assert irregular_data[1] is not None
-
             self._cmp_stem = irregular_data[0]
             self._spr_stem = irregular_data[1]
 
@@ -153,12 +151,6 @@ class Adjective(_Word):
                         self.endings = self._33_endings()
 
     def _212_endings(self) -> Endings:
-        if self.termination:
-            raise InvalidInputError(
-                "2-1-2 adjectives cannot have a termination "
-                f"(termination '{self.termination}' given)",
-            )
-
         if len(self._principal_parts) != 3:
             raise InvalidInputError(
                 "2-1-2 adjectives must have 3 principal parts "
@@ -174,7 +166,7 @@ class Adjective(_Word):
             self._cmp_stem = f"{self._pos_stem}ior"  # car- -> carior-
             if self.mascnom.endswith(
                 "er",
-            ):  # pragma: no cover
+            ):
                 self._spr_stem = f"{self.mascnom}rim"  # miser- -> miserrim-
             elif self.mascnom in LIS_ADJECTIVES:  # pragma: no cover
                 self._spr_stem = f"{self._pos_stem}lim"  # facil- -> facillim-
@@ -183,7 +175,11 @@ class Adjective(_Word):
 
         endings: Endings = {
             "Aposmnomsg": self.mascnom,  # carus
-            "Aposmvocsg": f"{self._pos_stem}e",  # care
+            "Aposmvocsg": self.mascnom
+            if self.mascnom.endswith(
+                "er",
+            )
+            else f"{self._pos_stem}e",  # miser
             "Aposmaccsg": f"{self._pos_stem}um",  # carum
             "Aposmgensg": f"{self._pos_stem}i",  # cari
             "Aposmdatsg": f"{self._pos_stem}o",  # caro
@@ -779,6 +775,13 @@ class Adjective(_Word):
 
         return endings
 
+    # fmt: off
+    @overload
+    def get(self, *, degree: Degree, adverb: Literal[True]) -> Ending | None: ...  # noqa: E501
+    @overload
+    def get(self, *, degree: Degree, gender: Gender, case: Case, number: Number, adverb: Literal[False] = False) -> Ending | None: ...  # noqa: E501
+    # fmt: on
+
     def get(
         self,
         *,
@@ -835,23 +838,12 @@ class Adjective(_Word):
         short_degree: str
 
         if adverb:
-            if gender or case or number:
-                raise InvalidInputError(
-                    "Adverbs do not have gender, case or number "
-                    f"(given '{gender.regular if gender else None}', "
-                    f"'{case.regular if case else None}' "
-                    f"and '{number.regular if number else None}')",
-                )
-
             short_degree = degree.shorthand
             return self.endings.get(f"D{short_degree}")
 
-        if not gender:
-            raise InvalidInputError("Gender not given")
-        if not case:
-            raise InvalidInputError("Case not given")
-        if not number:
-            raise InvalidInputError("Number not given")
+        assert gender is not None
+        assert case is not None
+        assert number is not None
 
         short_degree = degree.shorthand
         short_gender: str = gender.shorthand

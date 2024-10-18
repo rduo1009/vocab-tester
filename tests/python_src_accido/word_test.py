@@ -5,7 +5,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../.
 
 import pytest
 from python_src.accido.endings import Noun, Pronoun, Verb
-from python_src.accido.misc import Case, EndingComponents, Gender, Number
+from python_src.accido.misc import Case, ComponentsSubtype, EndingComponents, Gender, Number
 
 
 def test_eq():
@@ -36,7 +36,7 @@ def test_find_same():
 
 
 def test_find_multipleendings():
-    word = Noun(nominative="ego", genitive=None, gender=None, meaning="I")
+    word = Noun(nominative="ego", meaning="I")
     a = EndingComponents(case=Case.GENITIVE, number=Number.PLURAL, string="genitive plural")
-    a.subtype = "pronoun"
+    a.subtype = ComponentsSubtype.PRONOUN
     assert word.find("nostrum") == [a]

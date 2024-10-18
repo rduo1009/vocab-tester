@@ -13,11 +13,6 @@ from python_src.utils import compare
 
 
 class TestAdjectiveErrors:
-    def test_errors_termination_with_212(self):
-        with pytest.raises(InvalidInputError) as error:
-            Adjective("laetus", "laeta", "laetum", declension="212", meaning="happy", termination=3)
-        assert "2-1-2 adjectives cannot have a termination (termination '3' given)" == str(error.value)
-
     def test_errors_wrong_number_principal_parts_212(self):
         with pytest.raises(InvalidInputError) as error:
             Adjective("laetus", "laeta", declension="212", meaning="happy")
@@ -42,30 +37,6 @@ class TestAdjectiveErrors:
         with pytest.raises(InvalidInputError) as error:
             Adjective("laetus", "laeta", declension="3", meaning="happy", termination=3)
         assert "Third-termination adjectives must have 3 principal parts (adjective 'laetus' given)" == str(error.value)
-
-    def test_errors_adverbs_donothave(self):
-        with pytest.raises(InvalidInputError) as error:
-            word = Adjective("laetus", "laeta", "laetum", declension="212", meaning="happy")
-            word.get(case=Case.NOMINATIVE, gender=Gender.MASCULINE, number=Number.SINGULAR, degree=Degree.POSITIVE, adverb=True)
-        assert "Adverbs do not have gender, case or number (given 'masculine', 'nominative' and 'singular')" == str(error.value)
-
-    def test_errors_get_gendernotgiven(self):
-        with pytest.raises(InvalidInputError) as error:
-            word = Adjective("laetus", "laeta", "laetum", declension="212", meaning="happy")
-            word.get(case=Case.NOMINATIVE, number=Number.SINGULAR, degree=Degree.POSITIVE)
-        assert "Gender not given" == str(error.value)
-
-    def test_errors_get_casenotgiven(self):
-        with pytest.raises(InvalidInputError) as error:
-            word = Adjective("laetus", "laeta", "laetum", declension="212", meaning="happy")
-            word.get(gender=Gender.MASCULINE, number=Number.SINGULAR, degree=Degree.POSITIVE)
-        assert "Case not given" == str(error.value)
-
-    def test_errors_get_numbernotgiven(self):
-        with pytest.raises(InvalidInputError) as error:
-            word = Adjective("laetus", "laeta", "laetum", declension="212", meaning="happy")
-            word.get(case=Case.NOMINATIVE, gender=Gender.MASCULINE, degree=Degree.POSITIVE)
-        assert "Number not given" == str(error.value)
 
 
 class TestAdjectiveDunder:
@@ -236,6 +207,125 @@ class TestAdjectiveDeclension:
         assert word.get(degree=Degree.SUPERLATIVE, gender=Gender.NEUTER, case=Case.GENITIVE, number=Number.PLURAL) == "laetissimorum"
         assert word.get(degree=Degree.SUPERLATIVE, gender=Gender.NEUTER, case=Case.DATIVE, number=Number.PLURAL) == "laetissimis"
         assert word.get(degree=Degree.SUPERLATIVE, gender=Gender.NEUTER, case=Case.ABLATIVE, number=Number.PLURAL) == "laetissimis"
+
+    def test_declension212_er(self):
+        word = Adjective("miser", "misera", "miserum", declension="212", meaning="happy")
+        assert word.get(degree=Degree.POSITIVE, gender=Gender.MASCULINE, case=Case.NOMINATIVE, number=Number.SINGULAR) == "miser"
+        assert word.get(degree=Degree.POSITIVE, gender=Gender.MASCULINE, case=Case.VOCATIVE, number=Number.SINGULAR) == "miser"
+        assert word.get(degree=Degree.POSITIVE, gender=Gender.MASCULINE, case=Case.ACCUSATIVE, number=Number.SINGULAR) == "miserum"
+        assert word.get(degree=Degree.POSITIVE, gender=Gender.MASCULINE, case=Case.GENITIVE, number=Number.SINGULAR) == "miseri"
+        assert word.get(degree=Degree.POSITIVE, gender=Gender.MASCULINE, case=Case.DATIVE, number=Number.SINGULAR) == "misero"
+        assert word.get(degree=Degree.POSITIVE, gender=Gender.MASCULINE, case=Case.ABLATIVE, number=Number.SINGULAR) == "misero"
+        assert word.get(degree=Degree.POSITIVE, gender=Gender.MASCULINE, case=Case.NOMINATIVE, number=Number.PLURAL) == "miseri"
+        assert word.get(degree=Degree.POSITIVE, gender=Gender.MASCULINE, case=Case.VOCATIVE, number=Number.PLURAL) == "miseri"
+        assert word.get(degree=Degree.POSITIVE, gender=Gender.MASCULINE, case=Case.ACCUSATIVE, number=Number.PLURAL) == "miseros"
+        assert word.get(degree=Degree.POSITIVE, gender=Gender.MASCULINE, case=Case.GENITIVE, number=Number.PLURAL) == "miserorum"
+        assert word.get(degree=Degree.POSITIVE, gender=Gender.MASCULINE, case=Case.DATIVE, number=Number.PLURAL) == "miseris"
+        assert word.get(degree=Degree.POSITIVE, gender=Gender.MASCULINE, case=Case.ABLATIVE, number=Number.PLURAL) == "miseris"
+
+        assert word.get(degree=Degree.POSITIVE, gender=Gender.FEMININE, case=Case.NOMINATIVE, number=Number.SINGULAR) == "misera"
+        assert word.get(degree=Degree.POSITIVE, gender=Gender.FEMININE, case=Case.VOCATIVE, number=Number.SINGULAR) == "misera"
+        assert word.get(degree=Degree.POSITIVE, gender=Gender.FEMININE, case=Case.ACCUSATIVE, number=Number.SINGULAR) == "miseram"
+        assert word.get(degree=Degree.POSITIVE, gender=Gender.FEMININE, case=Case.GENITIVE, number=Number.SINGULAR) == "miserae"
+        assert word.get(degree=Degree.POSITIVE, gender=Gender.FEMININE, case=Case.DATIVE, number=Number.SINGULAR) == "miserae"
+        assert word.get(degree=Degree.POSITIVE, gender=Gender.FEMININE, case=Case.ABLATIVE, number=Number.SINGULAR) == "misera"
+        assert word.get(degree=Degree.POSITIVE, gender=Gender.FEMININE, case=Case.NOMINATIVE, number=Number.PLURAL) == "miserae"
+        assert word.get(degree=Degree.POSITIVE, gender=Gender.FEMININE, case=Case.VOCATIVE, number=Number.PLURAL) == "miserae"
+        assert word.get(degree=Degree.POSITIVE, gender=Gender.FEMININE, case=Case.ACCUSATIVE, number=Number.PLURAL) == "miseras"
+        assert word.get(degree=Degree.POSITIVE, gender=Gender.FEMININE, case=Case.GENITIVE, number=Number.PLURAL) == "miserarum"
+        assert word.get(degree=Degree.POSITIVE, gender=Gender.FEMININE, case=Case.DATIVE, number=Number.PLURAL) == "miseris"
+        assert word.get(degree=Degree.POSITIVE, gender=Gender.FEMININE, case=Case.ABLATIVE, number=Number.PLURAL) == "miseris"
+
+        assert word.get(degree=Degree.POSITIVE, gender=Gender.NEUTER, case=Case.NOMINATIVE, number=Number.SINGULAR) == "miserum"
+        assert word.get(degree=Degree.POSITIVE, gender=Gender.NEUTER, case=Case.VOCATIVE, number=Number.SINGULAR) == "miserum"
+        assert word.get(degree=Degree.POSITIVE, gender=Gender.NEUTER, case=Case.ACCUSATIVE, number=Number.SINGULAR) == "miserum"
+        assert word.get(degree=Degree.POSITIVE, gender=Gender.NEUTER, case=Case.GENITIVE, number=Number.SINGULAR) == "miseri"
+        assert word.get(degree=Degree.POSITIVE, gender=Gender.NEUTER, case=Case.DATIVE, number=Number.SINGULAR) == "misero"
+        assert word.get(degree=Degree.POSITIVE, gender=Gender.NEUTER, case=Case.ABLATIVE, number=Number.SINGULAR) == "misero"
+        assert word.get(degree=Degree.POSITIVE, gender=Gender.NEUTER, case=Case.NOMINATIVE, number=Number.PLURAL) == "misera"
+        assert word.get(degree=Degree.POSITIVE, gender=Gender.NEUTER, case=Case.VOCATIVE, number=Number.PLURAL) == "misera"
+        assert word.get(degree=Degree.POSITIVE, gender=Gender.NEUTER, case=Case.ACCUSATIVE, number=Number.PLURAL) == "misera"
+        assert word.get(degree=Degree.POSITIVE, gender=Gender.NEUTER, case=Case.GENITIVE, number=Number.PLURAL) == "miserorum"
+        assert word.get(degree=Degree.POSITIVE, gender=Gender.NEUTER, case=Case.DATIVE, number=Number.PLURAL) == "miseris"
+        assert word.get(degree=Degree.POSITIVE, gender=Gender.NEUTER, case=Case.ABLATIVE, number=Number.PLURAL) == "miseris"
+
+        assert word.get(degree=Degree.COMPARATIVE, gender=Gender.MASCULINE, case=Case.NOMINATIVE, number=Number.SINGULAR) == "miserior"
+        assert word.get(degree=Degree.COMPARATIVE, gender=Gender.MASCULINE, case=Case.VOCATIVE, number=Number.SINGULAR) == "miserior"
+        assert word.get(degree=Degree.COMPARATIVE, gender=Gender.MASCULINE, case=Case.ACCUSATIVE, number=Number.SINGULAR) == "miseriorem"
+        assert word.get(degree=Degree.COMPARATIVE, gender=Gender.MASCULINE, case=Case.GENITIVE, number=Number.SINGULAR) == "miserioris"
+        assert word.get(degree=Degree.COMPARATIVE, gender=Gender.MASCULINE, case=Case.DATIVE, number=Number.SINGULAR) == "miseriori"
+        assert word.get(degree=Degree.COMPARATIVE, gender=Gender.MASCULINE, case=Case.ABLATIVE, number=Number.SINGULAR) == "miseriore"
+        assert word.get(degree=Degree.COMPARATIVE, gender=Gender.MASCULINE, case=Case.NOMINATIVE, number=Number.PLURAL) == "miseriores"
+        assert word.get(degree=Degree.COMPARATIVE, gender=Gender.MASCULINE, case=Case.VOCATIVE, number=Number.PLURAL) == "miseriores"
+        assert word.get(degree=Degree.COMPARATIVE, gender=Gender.MASCULINE, case=Case.ACCUSATIVE, number=Number.PLURAL) == "miseriores"
+        assert word.get(degree=Degree.COMPARATIVE, gender=Gender.MASCULINE, case=Case.GENITIVE, number=Number.PLURAL) == "miseriorum"
+        assert word.get(degree=Degree.COMPARATIVE, gender=Gender.MASCULINE, case=Case.DATIVE, number=Number.PLURAL) == "miserioribus"
+        assert word.get(degree=Degree.COMPARATIVE, gender=Gender.MASCULINE, case=Case.ABLATIVE, number=Number.PLURAL) == "miserioribus"
+
+        assert word.get(degree=Degree.COMPARATIVE, gender=Gender.FEMININE, case=Case.NOMINATIVE, number=Number.SINGULAR) == "miserior"
+        assert word.get(degree=Degree.COMPARATIVE, gender=Gender.FEMININE, case=Case.VOCATIVE, number=Number.SINGULAR) == "miserior"
+        assert word.get(degree=Degree.COMPARATIVE, gender=Gender.FEMININE, case=Case.ACCUSATIVE, number=Number.SINGULAR) == "miseriorem"
+        assert word.get(degree=Degree.COMPARATIVE, gender=Gender.FEMININE, case=Case.GENITIVE, number=Number.SINGULAR) == "miserioris"
+        assert word.get(degree=Degree.COMPARATIVE, gender=Gender.FEMININE, case=Case.DATIVE, number=Number.SINGULAR) == "miseriori"
+        assert word.get(degree=Degree.COMPARATIVE, gender=Gender.FEMININE, case=Case.ABLATIVE, number=Number.SINGULAR) == "miseriore"
+        assert word.get(degree=Degree.COMPARATIVE, gender=Gender.FEMININE, case=Case.NOMINATIVE, number=Number.PLURAL) == "miseriores"
+        assert word.get(degree=Degree.COMPARATIVE, gender=Gender.FEMININE, case=Case.VOCATIVE, number=Number.PLURAL) == "miseriores"
+        assert word.get(degree=Degree.COMPARATIVE, gender=Gender.FEMININE, case=Case.ACCUSATIVE, number=Number.PLURAL) == "miseriores"
+        assert word.get(degree=Degree.COMPARATIVE, gender=Gender.FEMININE, case=Case.GENITIVE, number=Number.PLURAL) == "miseriorum"
+        assert word.get(degree=Degree.COMPARATIVE, gender=Gender.FEMININE, case=Case.DATIVE, number=Number.PLURAL) == "miserioribus"
+        assert word.get(degree=Degree.COMPARATIVE, gender=Gender.FEMININE, case=Case.ABLATIVE, number=Number.PLURAL) == "miserioribus"
+
+        assert word.get(degree=Degree.COMPARATIVE, gender=Gender.NEUTER, case=Case.NOMINATIVE, number=Number.SINGULAR) == "miserius"
+        assert word.get(degree=Degree.COMPARATIVE, gender=Gender.NEUTER, case=Case.VOCATIVE, number=Number.SINGULAR) == "miserius"
+        assert word.get(degree=Degree.COMPARATIVE, gender=Gender.NEUTER, case=Case.ACCUSATIVE, number=Number.SINGULAR) == "miserius"
+        assert word.get(degree=Degree.COMPARATIVE, gender=Gender.NEUTER, case=Case.GENITIVE, number=Number.SINGULAR) == "miserioris"
+        assert word.get(degree=Degree.COMPARATIVE, gender=Gender.NEUTER, case=Case.DATIVE, number=Number.SINGULAR) == "miseriori"
+        assert word.get(degree=Degree.COMPARATIVE, gender=Gender.NEUTER, case=Case.ABLATIVE, number=Number.SINGULAR) == "miseriore"
+        assert word.get(degree=Degree.COMPARATIVE, gender=Gender.NEUTER, case=Case.NOMINATIVE, number=Number.PLURAL) == "miseriora"
+        assert word.get(degree=Degree.COMPARATIVE, gender=Gender.NEUTER, case=Case.VOCATIVE, number=Number.PLURAL) == "miseriora"
+        assert word.get(degree=Degree.COMPARATIVE, gender=Gender.NEUTER, case=Case.ACCUSATIVE, number=Number.PLURAL) == "miseriora"
+        assert word.get(degree=Degree.COMPARATIVE, gender=Gender.NEUTER, case=Case.GENITIVE, number=Number.PLURAL) == "miseriorum"
+        assert word.get(degree=Degree.COMPARATIVE, gender=Gender.NEUTER, case=Case.DATIVE, number=Number.PLURAL) == "miserioribus"
+        assert word.get(degree=Degree.COMPARATIVE, gender=Gender.NEUTER, case=Case.ABLATIVE, number=Number.PLURAL) == "miserioribus"
+
+        assert word.get(degree=Degree.SUPERLATIVE, gender=Gender.MASCULINE, case=Case.NOMINATIVE, number=Number.SINGULAR) == "miserrimus"
+        assert word.get(degree=Degree.SUPERLATIVE, gender=Gender.MASCULINE, case=Case.VOCATIVE, number=Number.SINGULAR) == "miserrime"
+        assert word.get(degree=Degree.SUPERLATIVE, gender=Gender.MASCULINE, case=Case.ACCUSATIVE, number=Number.SINGULAR) == "miserrimum"
+        assert word.get(degree=Degree.SUPERLATIVE, gender=Gender.MASCULINE, case=Case.GENITIVE, number=Number.SINGULAR) == "miserrimi"
+        assert word.get(degree=Degree.SUPERLATIVE, gender=Gender.MASCULINE, case=Case.DATIVE, number=Number.SINGULAR) == "miserrimo"
+        assert word.get(degree=Degree.SUPERLATIVE, gender=Gender.MASCULINE, case=Case.ABLATIVE, number=Number.SINGULAR) == "miserrimo"
+        assert word.get(degree=Degree.SUPERLATIVE, gender=Gender.MASCULINE, case=Case.NOMINATIVE, number=Number.PLURAL) == "miserrimi"
+        assert word.get(degree=Degree.SUPERLATIVE, gender=Gender.MASCULINE, case=Case.VOCATIVE, number=Number.PLURAL) == "miserrimi"
+        assert word.get(degree=Degree.SUPERLATIVE, gender=Gender.MASCULINE, case=Case.ACCUSATIVE, number=Number.PLURAL) == "miserrimos"
+        assert word.get(degree=Degree.SUPERLATIVE, gender=Gender.MASCULINE, case=Case.GENITIVE, number=Number.PLURAL) == "miserrimorum"
+        assert word.get(degree=Degree.SUPERLATIVE, gender=Gender.MASCULINE, case=Case.DATIVE, number=Number.PLURAL) == "miserrimis"
+        assert word.get(degree=Degree.SUPERLATIVE, gender=Gender.MASCULINE, case=Case.ABLATIVE, number=Number.PLURAL) == "miserrimis"
+
+        assert word.get(degree=Degree.SUPERLATIVE, gender=Gender.FEMININE, case=Case.NOMINATIVE, number=Number.SINGULAR) == "miserrima"
+        assert word.get(degree=Degree.SUPERLATIVE, gender=Gender.FEMININE, case=Case.VOCATIVE, number=Number.SINGULAR) == "miserrima"
+        assert word.get(degree=Degree.SUPERLATIVE, gender=Gender.FEMININE, case=Case.ACCUSATIVE, number=Number.SINGULAR) == "miserrimam"
+        assert word.get(degree=Degree.SUPERLATIVE, gender=Gender.FEMININE, case=Case.GENITIVE, number=Number.SINGULAR) == "miserrimae"
+        assert word.get(degree=Degree.SUPERLATIVE, gender=Gender.FEMININE, case=Case.DATIVE, number=Number.SINGULAR) == "miserrimae"
+        assert word.get(degree=Degree.SUPERLATIVE, gender=Gender.FEMININE, case=Case.ABLATIVE, number=Number.SINGULAR) == "miserrima"
+        assert word.get(degree=Degree.SUPERLATIVE, gender=Gender.FEMININE, case=Case.NOMINATIVE, number=Number.PLURAL) == "miserrimae"
+        assert word.get(degree=Degree.SUPERLATIVE, gender=Gender.FEMININE, case=Case.VOCATIVE, number=Number.PLURAL) == "miserrimae"
+        assert word.get(degree=Degree.SUPERLATIVE, gender=Gender.FEMININE, case=Case.ACCUSATIVE, number=Number.PLURAL) == "miserrimas"
+        assert word.get(degree=Degree.SUPERLATIVE, gender=Gender.FEMININE, case=Case.GENITIVE, number=Number.PLURAL) == "miserrimarum"
+        assert word.get(degree=Degree.SUPERLATIVE, gender=Gender.FEMININE, case=Case.DATIVE, number=Number.PLURAL) == "miserrimis"
+        assert word.get(degree=Degree.SUPERLATIVE, gender=Gender.FEMININE, case=Case.ABLATIVE, number=Number.PLURAL) == "miserrimis"
+
+        assert word.get(degree=Degree.SUPERLATIVE, gender=Gender.NEUTER, case=Case.NOMINATIVE, number=Number.SINGULAR) == "miserrimum"
+        assert word.get(degree=Degree.SUPERLATIVE, gender=Gender.NEUTER, case=Case.VOCATIVE, number=Number.SINGULAR) == "miserrimum"
+        assert word.get(degree=Degree.SUPERLATIVE, gender=Gender.NEUTER, case=Case.ACCUSATIVE, number=Number.SINGULAR) == "miserrimum"
+        assert word.get(degree=Degree.SUPERLATIVE, gender=Gender.NEUTER, case=Case.GENITIVE, number=Number.SINGULAR) == "miserrimi"
+        assert word.get(degree=Degree.SUPERLATIVE, gender=Gender.NEUTER, case=Case.DATIVE, number=Number.SINGULAR) == "miserrimo"
+        assert word.get(degree=Degree.SUPERLATIVE, gender=Gender.NEUTER, case=Case.ABLATIVE, number=Number.SINGULAR) == "miserrimo"
+        assert word.get(degree=Degree.SUPERLATIVE, gender=Gender.NEUTER, case=Case.NOMINATIVE, number=Number.PLURAL) == "miserrima"
+        assert word.get(degree=Degree.SUPERLATIVE, gender=Gender.NEUTER, case=Case.VOCATIVE, number=Number.PLURAL) == "miserrima"
+        assert word.get(degree=Degree.SUPERLATIVE, gender=Gender.NEUTER, case=Case.ACCUSATIVE, number=Number.PLURAL) == "miserrima"
+        assert word.get(degree=Degree.SUPERLATIVE, gender=Gender.NEUTER, case=Case.GENITIVE, number=Number.PLURAL) == "miserrimorum"
+        assert word.get(degree=Degree.SUPERLATIVE, gender=Gender.NEUTER, case=Case.DATIVE, number=Number.PLURAL) == "miserrimis"
+        assert word.get(degree=Degree.SUPERLATIVE, gender=Gender.NEUTER, case=Case.ABLATIVE, number=Number.PLURAL) == "miserrimis"
 
     def test_declension212_irregular(self):
         word = Adjective("bonus", "bona", "bonum", declension="212", meaning="happy")

@@ -35,7 +35,6 @@ class _Word(ABC):  # noqa: PLW1641
         """Initialises _Word (and all classes that inherit from it)."""
         self.endings: Endings
         self._first: str
-        self._unique_endings: set[Ending] = set()
         self.meaning: Meaning
 
     def __eq__(self, other: object) -> bool:

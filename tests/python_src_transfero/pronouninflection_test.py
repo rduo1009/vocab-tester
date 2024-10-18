@@ -10,11 +10,11 @@ from python_src.transfero.pronoun_inflection import find_main_pronoun_inflection
 def test_invalid_type():
     with pytest.raises(ValueError) as error:
         find_pronoun_inflections("house", EndingComponents(case=Case.NOMINATIVE, number=Number.SINGULAR, gender=Gender.NEUTER, degree=Degree.POSITIVE))
-    assert "Invalid type: '<class 'python_src.accido.class_adjective.Adjective'>'" == str(error.value)
+    assert "Invalid type: 'adjective'" == str(error.value)
 
     with pytest.raises(ValueError) as error:
         find_main_pronoun_inflection("house", EndingComponents(case=Case.NOMINATIVE, number=Number.SINGULAR, gender=Gender.NEUTER, degree=Degree.POSITIVE))
-    assert "Invalid type: '<class 'python_src.accido.class_adjective.Adjective'>'" == str(error.value)
+    assert "Invalid type: 'adjective'" == str(error.value)
 
 
 class TestPronounInflection:

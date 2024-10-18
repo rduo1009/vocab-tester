@@ -4,11 +4,15 @@
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 import lemminflect
 
-from .. import accido
-from ..accido.misc import Degree
+from ..accido.misc import ComponentsSubtype, ComponentsType, Degree
 from .exceptions import InvalidWordError
+
+if TYPE_CHECKING:
+    from .. import accido
 
 
 def find_adverb_inflections(
@@ -36,9 +40,9 @@ def find_adverb_inflections(
     ValueError
         If the input (other than the word itself) is invalid.
     """
-    if components.type is not accido.endings.Adjective:
+    if components.type != ComponentsType.ADJECTIVE:
         raise ValueError(f"Invalid type: '{components.type}'")
-    if components.subtype != "adverb":  # pragma: no cover
+    if components.subtype != ComponentsSubtype.ADVERB:  # pragma: no cover
         raise ValueError(f"Invalid subtype: '{components.subtype}'")
 
     try:
@@ -77,7 +81,7 @@ def find_main_adverb_inflection(
     ValueError
         If the input (other than the word itself) is invalid.
     """
-    if components.type is not accido.endings.Adjective:
+    if components.type is not ComponentsType.ADJECTIVE:
         raise ValueError(f"Invalid type: '{components.type}'")
     if components.subtype != "adverb":
         raise ValueError(f"Invalid subtype: '{components.subtype}'")
