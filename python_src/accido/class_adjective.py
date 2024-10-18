@@ -171,7 +171,7 @@ class Adjective(_Word):
             self._cmp_stem = f"{self._pos_stem}ior"  # car- -> carior-
             if self.mascnom.endswith(
                 "er",
-            ):  # pragma: no cover
+            ):
                 self._spr_stem = f"{self.mascnom}rim"  # miser- -> miserrim-
             elif self.mascnom in LIS_ADJECTIVES:  # pragma: no cover
                 self._spr_stem = f"{self._pos_stem}lim"  # facil- -> facillim-
@@ -180,7 +180,11 @@ class Adjective(_Word):
 
         endings: Endings = {
             "Aposmnomsg": self.mascnom,  # carus
-            "Aposmvocsg": f"{self._pos_stem}e",  # care
+            "Aposmvocsg": f"{self._pos_stem}e"  # care
+            if not self.mascnom.endswith(
+                "er",
+            )
+            else self.mascnom,  # miser
             "Aposmaccsg": f"{self._pos_stem}um",  # carum
             "Aposmgensg": f"{self._pos_stem}i",  # cari
             "Aposmdatsg": f"{self._pos_stem}o",  # caro
