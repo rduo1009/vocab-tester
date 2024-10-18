@@ -117,9 +117,6 @@ class Adjective(_Word):
             self.irregular_flag = True
             irregular_data = IRREGULAR_ADJECTIVES[self.mascnom]
 
-            assert irregular_data[0] is not None
-            assert irregular_data[1] is not None
-
             self._cmp_stem = irregular_data[0]
             self._spr_stem = irregular_data[1]
 

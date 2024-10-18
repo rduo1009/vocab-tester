@@ -619,23 +619,25 @@ LIS_ADJECTIVES: Final[set[str]] = {
 # superlative and adverb forms.
 # Note that some of these adjectives do not have adverb forms, so the adverb
 # forms are given a None value instead.
-IRREGULAR_ADJECTIVES: Final[dict[str, list[str | None]]] = {
-    "bonus": ["melior", "optim", "bene", "melius", "optime"],
-    "malus": ["peior", "pessim", "male", "peius", "pessime"],
-    "magnus": ["maior", "maxim", None, None, None],
-    "parvus": ["minor", "minim", None, None, None],
+IRREGULAR_ADJECTIVES: Final[
+    dict[str, tuple[str, str, str | None, str | None, str | None]]
+] = {
+    "bonus": ("melior", "optim", "bene", "melius", "optime"),
+    "malus": ("peior", "pessim", "male", "peius", "pessime"),
+    "magnus": ("maior", "maxim", None, None, None),
+    "parvus": ("minor", "minim", None, None, None),
     # multo (adverb) exists but that would very much stuff up things
-    "multus": ["plus", "plurim", None, None, None],
+    "multus": ("plus", "plurim", None, None, None),
     # nequam should probably just be put in as a regular
-    "nequam": ["nequior", "nequissim", None, None, None],
-    "frugi": [
+    "nequam": ("nequior", "nequissim", None, None, None),
+    "frugi": (
         "frugalior",
         "frugalissim",
         "frugaliter",
         "frugalius",
         "frugalissime",
-    ],
-    "dexter": ["dexterior", "dextim", None, None, None],
+    ),
+    "dexter": ("dexterior", "dextim", None, None, None),
 }
 
 # TODO: Add to this
