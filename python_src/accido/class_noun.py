@@ -158,6 +158,8 @@ class Noun(_Word):
             )
 
     def _determine_endings(self) -> Endings:
+        assert self.declension != 0
+
         match self.declension:
             case 1:
                 return {
@@ -242,11 +244,6 @@ class Noun(_Word):
                     "Ndatpl": f"{self._stem}ebus",  # rebus
                     "Nablpl": f"{self._stem}ebus",  # rebus
                 }
-
-            case _:  # pragma: no cover # this should never happen
-                raise ValueError(
-                    f"Declension {self.declension} not recognised",
-                )
 
     def _neuter_endings(self) -> None:
         self.endings["Naccsg"] = self.nominative  # templum

@@ -142,11 +142,6 @@ class Verb(_Word):
             case 5:
                 self.endings = self._third_io_conjugation()
 
-            case _:  # pragma: no cover
-                raise ValueError(  # noqa: DOC501
-                    f"Conjugation {self.conjugation} not recognised",
-                )
-
         if self.ppp:
             self.endings |= self._participles()
 
