@@ -336,7 +336,7 @@ class EndingComponents:
             return (ComponentsType.NOUN, None)
         if not set(attributes):
             return (ComponentsType.REGULARWORD, None)
-        raise ValueError(
+        raise ValueError(  # pragma: no cover
             f"Invalid combination of attributes: {', '.join(attributes)}"
         )
 

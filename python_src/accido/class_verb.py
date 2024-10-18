@@ -537,19 +537,9 @@ class Verb(_Word):
         Infinitives.
         """
         if mood == Mood.PARTICIPLE:
-            if person:
-                raise InvalidInputError(
-                    f"Participle cannot have a person (person '{person}')",
-                )
-
-            if not participle_case:
-                raise InvalidInputError("Case not given")
-
-            if not participle_gender:
-                raise InvalidInputError("Gender not given")
-
-            if not number:
-                raise InvalidInputError("Number not given")
+            assert number is not None
+            assert participle_gender is not None
+            assert participle_case is not None
 
             return self._get_participle(
                 tense=tense,

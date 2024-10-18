@@ -151,12 +151,6 @@ class Adjective(_Word):
                         self.endings = self._33_endings()
 
     def _212_endings(self) -> Endings:
-        if self.termination:
-            raise InvalidInputError(
-                "2-1-2 adjectives cannot have a termination "
-                f"(termination '{self.termination}' given)",
-            )
-
         if len(self._principal_parts) != 3:
             raise InvalidInputError(
                 "2-1-2 adjectives must have 3 principal parts "
@@ -844,23 +838,12 @@ class Adjective(_Word):
         short_degree: str
 
         if adverb:
-            if gender or case or number:
-                raise InvalidInputError(
-                    "Adverbs do not have gender, case or number "
-                    f"(given '{gender.regular if gender else None}', "
-                    f"'{case.regular if case else None}' "
-                    f"and '{number.regular if number else None}')",
-                )
-
             short_degree = degree.shorthand
             return self.endings.get(f"D{short_degree}")
 
-        if not gender:
-            raise InvalidInputError("Gender not given")
-        if not case:
-            raise InvalidInputError("Case not given")
-        if not number:
-            raise InvalidInputError("Number not given")
+        assert gender is not None
+        assert case is not None
+        assert number is not None
 
         short_degree = degree.shorthand
         short_gender: str = gender.shorthand
