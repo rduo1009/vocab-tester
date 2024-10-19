@@ -65,9 +65,9 @@ class Adjective(_Word):
 
     # fmt: off
     @overload
-    def __init__(self, *principal_parts: str, declension: Literal["212"], meaning: Meaning) -> None: ...  # noqa: E501
+    def __init__(self, *principal_parts: str, declension: Literal["212"], meaning: Meaning) -> None: ...
     @overload
-    def __init__(self, *principal_parts: str, termination: Termination, declension: Literal["3"], meaning: Meaning) -> None: ...  # noqa: E501
+    def __init__(self, *principal_parts: str, termination: Termination, declension: Literal["3"], meaning: Meaning) -> None: ...
     # fmt: on
 
     def __init__(
@@ -777,9 +777,9 @@ class Adjective(_Word):
 
     # fmt: off
     @overload
-    def get(self, *, degree: Degree, adverb: Literal[True]) -> Ending | None: ...  # noqa: E501
+    def get(self, *, degree: Degree, adverb: Literal[True]) -> Ending | None: ...
     @overload
-    def get(self, *, degree: Degree, gender: Gender, case: Case, number: Number, adverb: Literal[False] = False) -> Ending | None: ...  # noqa: E501
+    def get(self, *, degree: Degree, gender: Gender, case: Case, number: Number, adverb: Literal[False] = False) -> Ending | None: ...
     # fmt: on
 
     def get(
@@ -834,7 +834,7 @@ class Adjective(_Word):
         'egens'
 
         Note that the arguments of get are keyword-only.
-        """  # noqa: E501
+        """
         short_degree: str
 
         if adverb:
