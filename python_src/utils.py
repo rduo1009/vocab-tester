@@ -23,7 +23,7 @@ def compare[T](first: Iterable[T], second: Iterable[T]) -> bool:
     Returns
     -------
     bool
-        True if the iterables are equal, False otherwise.
+        True if the iterables are equal, False otherwise.s
 
     Notes
     -----

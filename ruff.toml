@@ -39,7 +39,7 @@ ignore = [
     "TD003",
     "FIX002",
 ]
-extend-select = ["E501", "W505"]
+extend-select = ["W505"]
 
 [lint.pydocstyle]
 convention = "numpy"

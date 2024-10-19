@@ -58,7 +58,7 @@ class Noun(_Word):
     @overload
     def __init__(self, *, nominative: str, meaning: Meaning) -> None: ...
     @overload
-    def __init__(self, *, nominative: str, genitive: str, gender: Gender, meaning: Meaning) -> None: ...  # noqa: E501
+    def __init__(self, *, nominative: str, genitive: str, gender: Gender, meaning: Meaning) -> None: ...
     # fmt: on
 
     def __init__(

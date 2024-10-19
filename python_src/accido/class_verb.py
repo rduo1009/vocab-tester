@@ -439,11 +439,11 @@ class Verb(_Word):
 
     # fmt: off
     @overload
-    def get(self, *, tense: Tense, voice: Voice, mood: Mood, person: Person, number: Number) -> Ending | None: ...  # noqa: E501
+    def get(self, *, tense: Tense, voice: Voice, mood: Mood, person: Person, number: Number) -> Ending | None: ...
     @overload
-    def get(self, *, tense: Tense, voice: Voice, mood: Mood, number: Number, participle_gender: Gender, participle_case: Case) -> Ending | None: ...  # noqa: E501
+    def get(self, *, tense: Tense, voice: Voice, mood: Mood, number: Number, participle_gender: Gender, participle_case: Case) -> Ending | None: ...
     @overload
-    def get(self, *, tense: Tense, voice: Voice, mood: Mood) -> Ending | None: ...  # noqa: E501
+    def get(self, *, tense: Tense, voice: Voice, mood: Mood) -> Ending | None: ...
     # fmt: on
 
     def get(

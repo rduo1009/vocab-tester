@@ -4,7 +4,7 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Literal, overload
 
 from ..accido.misc import ComponentsSubtype, ComponentsType
 from .adj_to_adv import adj_to_adv
@@ -25,6 +25,14 @@ from .verb_inflection import find_main_verb_inflection, find_verb_inflections
 
 if TYPE_CHECKING:
     from .. import accido
+
+
+# fmt: off
+@overload
+def find_inflection(word: str, components: accido.misc.EndingComponents) -> set[str]: ...
+@overload
+def find_inflection(word: str, components: accido.misc.EndingComponents, *, main: Literal[True]) -> str: ...
+# fmt: on
 
 
 def find_inflection(
