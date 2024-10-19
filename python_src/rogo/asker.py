@@ -5,12 +5,16 @@
 from __future__ import annotations
 
 import random
+from copy import deepcopy
 from typing import TYPE_CHECKING, Final, Generator, overload
 
 from .. import accido, lego, transfero
 from ..accido.misc import Case, Gender, Mood, Number
+from ..utils import set_choice
 from .exceptions import InvalidSettingsError
 from .question_classes import (
+    MultipleChoiceEngToLatQuestion,
+    MultipleChoiceLattoEngQuestion,
     ParseWordCompToLatQuestion,
     ParseWordLatToCompQuestion,
     PrincipalPartsQuestion,
@@ -19,12 +23,11 @@ from .question_classes import (
     TypeInLatToEngQuestion,
 )
 from .rules import filter_endings, filter_questions, filter_words
-from .type_aliases import Settings
+from .type_aliases import Settings, Vocab
 
 if TYPE_CHECKING:
     from ..accido.type_aliases import Ending, Meaning
     from .question_classes import Question
-    from .type_aliases import Vocab
 
 REQUIRED_SETTINGS: Final[set[str]] = set(Settings.__annotations__.keys())
 
@@ -85,17 +88,24 @@ def ask_question_without_sr(
     ------
     Question
         The question to ask.
+
+    Raises
+    ------
+    InvalidSettingsError
+        If the settings are invalid.
     """
     _verify_settings(settings)
     vocab: Vocab = filter_words(vocab_list, settings)
-    filtered_questions: list[QuestionClasses] = filter_questions(settings)
+    filtered_questions: set[QuestionClasses] = filter_questions(settings)
+    if not filtered_questions:
+        raise InvalidSettingsError("No question type has been enabled.")
 
     for _ in range(amount):
         chosen_word: accido.endings._Word = random.choice(vocab)
         filtered_endings: dict[str, Ending] = filter_endings(
             chosen_word.endings, settings
         )
-        question_type: QuestionClasses = random.choice(filtered_questions)
+        question_type: QuestionClasses = set_choice(filtered_questions)
 
         # TODO: if ever using mypyc, make a new variable for every type
         # for now, any type to allow variable to be reused
@@ -135,6 +145,36 @@ def ask_question_without_sr(
                 else:
                     continue
 
+            case QuestionClasses.MULTIPLECHOICE_ENGTOLAT:
+                if output := _generate_multiplechoice_engtolat(
+                    vocab,
+                    chosen_word,
+                    settings["number-multiplechoice-options"],
+                ):
+                    yield output
+                else:
+                    continue
+
+            case QuestionClasses.MULTIPLECHOICE_LATTOENG:
+                if output := _generate_multiplechoice_lattoeng(
+                    vocab_list=vocab,
+                    chosen_word=chosen_word,
+                    number_multiplechoice_options=settings[
+                        "number-multiplechoice-options"
+                    ],
+                ):
+                    yield output
+                else:
+                    continue
+
+
+def _pick_ending_from_multipleendings(ending: Ending) -> str:
+    if type(ending) is accido.misc.MultipleEndings:
+        return random.choice(ending.get_all())
+
+    assert type(ending) is str
+    return ending
+
 
 def _generate_typein_engtolat(  # noqa: PLR0914, PLR0915
     chosen_word: accido.endings._Word, filtered_endings: dict[str, Ending]
@@ -143,9 +183,7 @@ def _generate_typein_engtolat(  # noqa: PLR0914, PLR0915
     chosen_ending: Ending
     ending_components_key, chosen_ending = _pick_ending(filtered_endings)
 
-    if type(chosen_ending) is accido.misc.MultipleEndings:
-        chosen_ending = random.choice(chosen_ending.get_all())
-    assert type(chosen_ending) is str
+    chosen_ending = _pick_ending_from_multipleendings(chosen_ending)
 
     # HACK: Uses a private method but there's no alternative
     ending_components: accido.misc.EndingComponents = (
@@ -206,12 +244,9 @@ def _generate_typein_engtolat(  # noqa: PLR0914, PLR0915
     # Get the best meaning if it is a MultipleMeanings, or
     # just the meaning if it is a string
     raw_meaning: str = str(chosen_word.meaning)
-    inflected_meaning: str = random.choice(
-        tuple(
-            transfero.words.find_inflection(
-                word=raw_meaning,
-                components=ending_components,
-            )
+    inflected_meaning: str = set_choice(
+        transfero.words.find_inflection(
+            word=raw_meaning, components=ending_components
         )
     )
 
@@ -223,8 +258,7 @@ def _generate_typein_engtolat(  # noqa: PLR0914, PLR0915
         answers = {chosen_ending}
         endings_to_add: tuple[Ending | None, ...] = (
             chosen_word.get(
-                case=Case.ACCUSATIVE,
-                number=ending_components.number,
+                case=Case.ACCUSATIVE, number=ending_components.number
             ),
             chosen_word.get(
                 case=Case.VOCATIVE, number=ending_components.number
@@ -319,13 +353,9 @@ def _generate_typein_engtolat(  # noqa: PLR0914, PLR0915
     elif pronoun_flag:
 
         @overload
-        def _convert_to_tuple(
-            ending: Ending,
-        ) -> tuple[str, ...]: ...
+        def _convert_to_tuple(ending: Ending) -> tuple[str, ...]: ...
         @overload
-        def _convert_to_tuple(
-            ending: None,
-        ) -> tuple[None]: ...
+        def _convert_to_tuple(ending: None) -> tuple[None]: ...
 
         def _convert_to_tuple(
             ending: Ending | None,
@@ -364,9 +394,7 @@ def _generate_typein_engtolat(  # noqa: PLR0914, PLR0915
         }
 
     return TypeInEngToLatQuestion(
-        prompt=inflected_meaning,
-        main_answer=chosen_ending,
-        answers=answers,
+        prompt=inflected_meaning, main_answer=chosen_ending, answers=answers
     )
 
 
@@ -376,9 +404,7 @@ def _generate_typein_lattoeng(
     chosen_ending: Ending
     _, chosen_ending = _pick_ending(filtered_endings)
 
-    if type(chosen_ending) is accido.misc.MultipleEndings:
-        chosen_ending = random.choice(chosen_ending.get_all())
-    assert type(chosen_ending) is str
+    chosen_ending = _pick_ending_from_multipleendings(chosen_ending)
 
     inflected_meanings: set[str] = set()
 
@@ -418,18 +444,14 @@ def _generate_typein_lattoeng(
         for meaning in meanings:
             inflected_meanings.update(
                 transfero.words.find_inflection(
-                    word=meaning,
-                    components=ending_components,
+                    word=meaning, components=ending_components
                 )
             )
 
         possible_main_answers.add(
-            random.choice(
-                tuple(
-                    transfero.words.find_inflection(
-                        word=main_meaning,
-                        components=ending_components,
-                    )
+            set_choice(
+                transfero.words.find_inflection(
+                    word=main_meaning, components=ending_components
                 )
             )
         )
@@ -462,9 +484,7 @@ def _generate_parse(
         chosen_word._create_namespace(ending_components_key)  # noqa: SLF001
     )
 
-    if type(chosen_ending) is accido.misc.MultipleEndings:
-        chosen_ending = random.choice(chosen_ending.get_all())
-    assert type(chosen_ending) is str
+    chosen_ending = _pick_ending_from_multipleendings(chosen_ending)
 
     all_ending_components: set[accido.misc.EndingComponents] = set(
         chosen_word.find(chosen_ending)
@@ -538,10 +558,7 @@ def _generate_principal_parts_question(
 
     elif type(chosen_word) is accido.endings.Noun:
         if chosen_word.genitive:
-            principal_parts = (
-                chosen_word.nominative,
-                chosen_word.genitive,
-            )
+            principal_parts = (chosen_word.nominative, chosen_word.genitive)
         else:  # irregular noun
             return None
 
@@ -581,4 +598,81 @@ def _generate_principal_parts_question(
 
     return PrincipalPartsQuestion(
         prompt=principal_parts[0], principal_parts=principal_parts
+    )
+
+
+def _generate_multiplechoice_engtolat(
+    vocab_list: Vocab,
+    chosen_word: accido.endings._Word,
+    number_multiplechoice_options: int,
+) -> MultipleChoiceEngToLatQuestion | None:
+    vocab_list = deepcopy(vocab_list)
+    vocab_list.remove(chosen_word)
+
+    meaning: Meaning = chosen_word.meaning
+    if type(meaning) is accido.misc.MultipleMeanings:
+        meaning = random.choice(meaning.meanings)
+    assert type(meaning) is str
+
+    answer: str = chosen_word._first  # noqa: SLF001
+
+    other_choices = tuple(
+        vocab._first  # noqa: SLF001
+        for vocab in random.sample(
+            vocab_list,
+            # minus one as the chosen word is already in the question
+            number_multiplechoice_options - 1,
+        )
+    )
+
+    choices: list[str] = [answer, *other_choices]
+    random.shuffle(choices)
+
+    return MultipleChoiceEngToLatQuestion(
+        prompt=meaning, answer=answer, choices=tuple(choices)
+    )
+
+
+def _generate_multiplechoice_lattoeng(
+    vocab_list: Vocab,
+    chosen_word: accido.endings._Word,
+    number_multiplechoice_options: int,
+) -> MultipleChoiceLattoEngQuestion | None:
+    prompt: str = chosen_word._first  # noqa: SLF001
+
+    chosen_word_meanings: tuple[str, ...]
+    if type(chosen_word.meaning) is accido.misc.MultipleMeanings:
+        chosen_word_meanings = tuple(chosen_word.meaning.meanings)
+    else:
+        assert type(chosen_word.meaning) is str
+        chosen_word_meanings = (chosen_word.meaning,)
+
+    answer: str = random.choice(chosen_word_meanings)
+
+    possible_choices: list[str] = []
+    current_meaning: Meaning
+    for vocab in vocab_list:
+        current_meaning = vocab.meaning
+        if type(current_meaning) is str:
+            if current_meaning in chosen_word_meanings:
+                continue
+            possible_choices.append(current_meaning)
+        else:
+            assert type(current_meaning) is accido.misc.MultipleMeanings
+
+            for meaning in current_meaning.meanings:
+                if meaning in chosen_word_meanings:
+                    continue
+                possible_choices.append(meaning)
+
+    choices: list[str] = [
+        answer,
+        *random.sample(possible_choices, number_multiplechoice_options - 1),
+    ]
+    random.shuffle(choices)
+
+    return MultipleChoiceLattoEngQuestion(
+        prompt=prompt,
+        answer=answer,
+        choices=tuple(choices),
     )

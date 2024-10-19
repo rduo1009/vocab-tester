@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 """Contains representations of questions about Latin vocabulary."""
 
@@ -20,6 +19,8 @@ class QuestionClasses(Enum):
     PARSEWORD_LATTOCOMP = "ParseWordLattoCompQuestion"
     PARSEWORD_COMPTOLAT = "ParseWordComptoLatQuestion"
     PRINCIPAL_PARTS = "PrincipalPartsQuestion"
+    MULTIPLECHOICE_ENGTOLAT = "MultipleChoiceEngtoLatQuestion"
+    MULTIPLECHOICE_LATTOENG = "MultipleChoiceLattoEngQuestion"
 
 
 class Question(Protocol):
@@ -52,6 +53,30 @@ class _MultiAnswerQuestion[T]:
             True if the response is correct, False otherwise.
         """
         return response in self.answers
+
+
+@dataclass
+class _MultipleChoiceQuestion:
+    """Generic class for multiple choice questions."""
+
+    prompt: str
+    answer: str
+    choices: tuple[str, ...]
+
+    def check(self, response: str) -> bool:
+        """Check if the given answer is correct.
+
+        Parameters
+        ----------
+        response : str
+            The answer to check.
+
+        Returns
+        -------
+        bool
+            True if the given answer is correct, False otherwise.
+        """
+        return response == self.answer
 
 
 @dataclass
@@ -156,7 +181,7 @@ class PrincipalPartsQuestion:
 
         Parameters
         ----------
-        response : list[str]
+        response : tuple[str, ...]
             The principal parts to check.
 
         Returns
@@ -165,3 +190,13 @@ class PrincipalPartsQuestion:
             True if the given principal parts are correct, False otherwise.
         """
         return response == self.principal_parts
+
+
+@dataclass
+class MultipleChoiceEngToLatQuestion(_MultipleChoiceQuestion):
+    """An English to Latin multiple choice question."""
+
+
+@dataclass
+class MultipleChoiceLattoEngQuestion(_MultipleChoiceQuestion):
+    """A Latin to English multiple choice question."""

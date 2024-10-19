@@ -15,7 +15,7 @@ def test_multiple_endings():
 
 def test_getall():
     multiple_endings = MultipleEndings(baz="a", foo="b", bar="c")
-    assert multiple_endings.get_all() == ["a", "b", "c"]
+    assert multiple_endings.get_all() == ("a", "b", "c")
 
 
 def test_prefix():

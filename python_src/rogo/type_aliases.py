@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 """Contains type aliases used by rogo."""
 
@@ -99,5 +98,8 @@ Settings = TypedDict(
         "include-parse": ReadOnly[bool],
         "include-inflect": ReadOnly[bool],
         "include-principal-parts": ReadOnly[bool],
+        "include-multiplechoice-engtolat": ReadOnly[bool],
+        "include-multiplechoice-lattoeng": ReadOnly[bool],
+        "number-multiplechoice-options": ReadOnly[int],
     },
 )

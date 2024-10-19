@@ -5,6 +5,7 @@
 from __future__ import annotations
 
 import re
+from copy import deepcopy
 from typing import TYPE_CHECKING, Final
 
 from .. import accido
@@ -33,37 +34,37 @@ RULE_REGEX: Final[dict[str, str]] = {
     "exclude-verb-pluperfect-active-subjunctive": r"^Vplpactsbj[a-z][a-z]\d$",
 
     # Verb number
-    "exclude-verb-singular": r"^V[a-z][a-z][a-z][a-z][a-z][a-z][a-z][a-z][a-z]sg\d$",  # noqa: E501
-    "exclude-verb-plural": r"^V[a-z][a-z][a-z][a-z][a-z][a-z][a-z][a-z][a-z]pl\d$",  # noqa: E501
+    "exclude-verb-singular": r"^V[a-z][a-z][a-z][a-z][a-z][a-z][a-z][a-z][a-z]sg\d$",
+    "exclude-verb-plural": r"^V[a-z][a-z][a-z][a-z][a-z][a-z][a-z][a-z][a-z]pl\d$",
 
     # Verb person
-    "exclude-verb-1st-person": r"^V[a-z][a-z][a-z][a-z][a-z][a-z][a-z][a-z][a-z][a-z][a-z]1$",  # noqa: E501
-    "exclude-verb-2nd-person": r"^V[a-z][a-z][a-z][a-z][a-z][a-z][a-z][a-z][a-z][a-z][a-z]2$",  # noqa: E501
-    "exclude-verb-3rd-person": r"^V[a-z][a-z][a-z][a-z][a-z][a-z][a-z][a-z][a-z][a-z][a-z]3$",  # noqa: E501
+    "exclude-verb-1st-person": r"^V[a-z][a-z][a-z][a-z][a-z][a-z][a-z][a-z][a-z][a-z][a-z]1$",
+    "exclude-verb-2nd-person": r"^V[a-z][a-z][a-z][a-z][a-z][a-z][a-z][a-z][a-z][a-z][a-z]2$",
+    "exclude-verb-3rd-person": r"^V[a-z][a-z][a-z][a-z][a-z][a-z][a-z][a-z][a-z][a-z][a-z]3$",
 
     # Participles
-    "exclude-participles": r"^V[a-z][a-z][a-z][a-z][a-z][a-z]ptc[a-z][a-z][a-z][a-z][a-z][a-z]$",  # noqa: E501
+    "exclude-participles": r"^V[a-z][a-z][a-z][a-z][a-z][a-z]ptc[a-z][a-z][a-z][a-z][a-z][a-z]$",
 
     # Participle tense/voice
-    "exclude-participle-present-active": r"^Vpreactptc[a-z][a-z][a-z][a-z][a-z][a-z]$",  # noqa: E501
-    "exclude-participle-perfect-passive": r"^Vperpasptc[a-z][a-z][a-z][a-z][a-z][a-z]$",  # noqa: E501
+    "exclude-participle-present-active": r"^Vpreactptc[a-z][a-z][a-z][a-z][a-z][a-z]$",
+    "exclude-participle-perfect-passive": r"^Vperpasptc[a-z][a-z][a-z][a-z][a-z][a-z]$",
 
     # Participle gender
-    "exclude-participle-masculine": r"^V[a-z][a-z][a-z][a-z][a-z][a-z]ptcm[a-z][a-z][a-z][a-z][a-z]$",  # noqa: E501
-    "exclude-participle-feminine": r"^V[a-z][a-z][a-z][a-z][a-z][a-z]ptcf[a-z][a-z][a-z][a-z][a-z]$",  # noqa: E501
-    "exclude-participle-neuter": r"^V[a-z][a-z][a-z][a-z][a-z][a-z]ptcn[a-z][a-z][a-z][a-z][a-z]$",  # noqa: E501
+    "exclude-participle-masculine": r"^V[a-z][a-z][a-z][a-z][a-z][a-z]ptcm[a-z][a-z][a-z][a-z][a-z]$",
+    "exclude-participle-feminine": r"^V[a-z][a-z][a-z][a-z][a-z][a-z]ptcf[a-z][a-z][a-z][a-z][a-z]$",
+    "exclude-participle-neuter": r"^V[a-z][a-z][a-z][a-z][a-z][a-z]ptcn[a-z][a-z][a-z][a-z][a-z]$",
 
     # Participle case
-    "exclude-participle-nominative": r"^V[a-z][a-z][a-z][a-z][a-z][a-z]ptc[a-z]nom[a-z][a-z]$",  # noqa: E501
-    "exclude-participle-vocative": r"^V[a-z][a-z][a-z][a-z][a-z][a-z]ptc[a-z]voc[a-z][a-z]$",  # noqa: E501
-    "exclude-participle-accusative": r"^V[a-z][a-z][a-z][a-z][a-z][a-z]ptc[a-z]acc[a-z][a-z]$",  # noqa: E501
-    "exclude-participle-genitive": r"^V[a-z][a-z][a-z][a-z][a-z][a-z]ptc[a-z]gen[a-z][a-z]$",  # noqa: E501
-    "exclude-participle-dative": r"^V[a-z][a-z][a-z][a-z][a-z][a-z]ptc[a-z]dat[a-z][a-z]$",  # noqa: E501
-    "exclude-participle-ablative": r"^V[a-z][a-z][a-z][a-z][a-z][a-z]ptc[a-z]abl[a-z][a-z]$",  # noqa: E501
+    "exclude-participle-nominative": r"^V[a-z][a-z][a-z][a-z][a-z][a-z]ptc[a-z]nom[a-z][a-z]$",
+    "exclude-participle-vocative": r"^V[a-z][a-z][a-z][a-z][a-z][a-z]ptc[a-z]voc[a-z][a-z]$",
+    "exclude-participle-accusative": r"^V[a-z][a-z][a-z][a-z][a-z][a-z]ptc[a-z]acc[a-z][a-z]$",
+    "exclude-participle-genitive": r"^V[a-z][a-z][a-z][a-z][a-z][a-z]ptc[a-z]gen[a-z][a-z]$",
+    "exclude-participle-dative": r"^V[a-z][a-z][a-z][a-z][a-z][a-z]ptc[a-z]dat[a-z][a-z]$",
+    "exclude-participle-ablative": r"^V[a-z][a-z][a-z][a-z][a-z][a-z]ptc[a-z]abl[a-z][a-z]$",
 
     # Participle number
-    "exclude-participle-singular": r"^V[a-z][a-z][a-z][a-z][a-z][a-z]ptc[a-z][a-z][a-z][a-z]sg$",  # noqa: E501
-    "exclude-participle-plural": r"^V[a-z][a-z][a-z][a-z][a-z][a-z]ptc[a-z][a-z][a-z][a-z]pl$",  # noqa: E501
+    "exclude-participle-singular": r"^V[a-z][a-z][a-z][a-z][a-z][a-z]ptc[a-z][a-z][a-z][a-z]sg$",
+    "exclude-participle-plural": r"^V[a-z][a-z][a-z][a-z][a-z][a-z]ptc[a-z][a-z][a-z][a-z]pl$",
 
     # Noun case
     "exclude-noun-nominative": r"^Nnom[a-z][a-z]$",
@@ -78,9 +79,9 @@ RULE_REGEX: Final[dict[str, str]] = {
     "exclude-noun-plural": r"^N[a-z][a-z][a-z]pl$",
 
     # Adjective gender
-    "exclude-adjective-masculine": r"^A[a-z][a-z][a-z]m[a-z][a-z][a-z][a-z][a-z]$",  # noqa: E501
-    "exclude-adjective-feminine": r"^A[a-z][a-z][a-z]f[a-z][a-z][a-z][a-z][a-z]$",  # noqa: E501
-    "exclude-adjective-neuter": r"^A[a-z][a-z][a-z]n[a-z][a-z][a-z][a-z][a-z]$",  # noqa: E501
+    "exclude-adjective-masculine": r"^A[a-z][a-z][a-z]m[a-z][a-z][a-z][a-z][a-z]$",
+    "exclude-adjective-feminine": r"^A[a-z][a-z][a-z]f[a-z][a-z][a-z][a-z][a-z]$",
+    "exclude-adjective-neuter": r"^A[a-z][a-z][a-z]n[a-z][a-z][a-z][a-z][a-z]$",
 
     # Adjective case
     "exclude-adjective-nominative": r"^A[a-z][a-z][a-z][a-z]nom[a-z][a-z]$",
@@ -131,6 +132,8 @@ CLASS_RULES: Final[dict[str, QuestionClasses]] = {
     "include-parse": QuestionClasses.PARSEWORD_LATTOCOMP,
     "include-inflect": QuestionClasses.PARSEWORD_COMPTOLAT,
     "include-principal-parts": QuestionClasses.PRINCIPAL_PARTS,
+    "include-multiplechoice-engtolat": QuestionClasses.MULTIPLECHOICE_ENGTOLAT,
+    "include-multiplechoice-lattoeng": QuestionClasses.MULTIPLECHOICE_LATTOENG,
 }
 
 
@@ -176,7 +179,7 @@ def filter_words(vocab_list: VocabList, settings: Settings) -> Vocab:
     item: accido.endings._Word
 
     # Iterate over copy of list to avoid errors
-    for item in vocab[:]:
+    for item in deepcopy(vocab):
         if type(item) is accido.endings.Verb:
             assert type(settings["exclude-verb-first-conjugation"]) is bool
             assert type(settings["exclude-verb-second-conjugation"]) is bool
@@ -293,7 +296,7 @@ def filter_endings(endings: Endings, settings: Settings) -> dict[str, Ending]:
     return filtered_endings
 
 
-def filter_questions(settings: Settings) -> list[QuestionClasses]:
+def filter_questions(settings: Settings) -> set[QuestionClasses]:
     """Filter the question types using the settings.
 
     Parameters
@@ -303,11 +306,11 @@ def filter_questions(settings: Settings) -> list[QuestionClasses]:
 
     Returns
     -------
-    list[str]
+    set[str]
         The filtered classes.
     """
-    classes: list[QuestionClasses] = []
+    classes: set[QuestionClasses] = set()
     for key, value in CLASS_RULES.items():
         if settings[key]:  # type: ignore[literal-required]
-            classes.append(value)
+            classes.add(value)
     return classes

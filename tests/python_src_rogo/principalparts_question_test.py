@@ -97,6 +97,9 @@ settings: Settings = {
     "include-parse": False,
     "include-inflect": False,
     "include-principal-parts": True,
+    "include-multiplechoice-engtolat": False,
+    "include-multiplechoice-lattoeng": False,
+    "number-multiplechoice-options": 3,
 }
 
 
