@@ -36,7 +36,7 @@ pytest-watch==4.2.0
 pytest-xdist==3.6.1
 PyYAML==6.0.2
 regex==2024.9.11
-ruff==0.6.9
+ruff==0.7.0
 six==1.16.0
 termcolor==2.5.0
 tqdm==4.66.5
