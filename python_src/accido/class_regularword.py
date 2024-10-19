@@ -41,6 +41,7 @@ class RegularWord(_Word):
         meaning : Meaning
         """
         self.word: str = word
+        self._first: str = self.word
         self.meaning: Meaning = meaning
         self.endings = {"": self.word}
 

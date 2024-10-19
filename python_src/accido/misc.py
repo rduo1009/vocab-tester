@@ -424,10 +424,10 @@ class MultipleEndings(SimpleNamespace):
     'nostri/nostrum'
 
     >>> foo.get_all()
-    ['nostri', 'nostrum']
+    ('nostri', 'nostrum')
     """  # noqa: D205
 
-    def get_all(self) -> tuple[str]:
+    def get_all(self) -> tuple[str, ...]:
         """Returns a list of all the possible endings.
 
         Returns
