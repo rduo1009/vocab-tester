@@ -650,9 +650,8 @@ def _generate_multiplechoice_lattoeng(
     answer: str = random.choice(chosen_word_meanings)
 
     possible_choices: list[str] = []
-    current_meaning: Meaning
     for vocab in vocab_list:
-        current_meaning = vocab.meaning
+        current_meaning: Meaning = vocab.meaning
         if type(current_meaning) is str:
             if current_meaning in chosen_word_meanings:
                 continue
@@ -660,11 +659,11 @@ def _generate_multiplechoice_lattoeng(
         else:
             assert type(current_meaning) is accido.misc.MultipleMeanings
 
-            for meaning in current_meaning.meanings:
-                if meaning in chosen_word_meanings:
-                    continue
-                possible_choices.append(meaning)
-
+            possible_choices.extend(
+                meaning
+                for meaning in current_meaning.meanings
+                if meaning not in chosen_word_meanings
+            )
     choices: list[str] = [
         answer,
         *random.sample(possible_choices, number_multiplechoice_options - 1),
