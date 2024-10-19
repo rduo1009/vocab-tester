@@ -2,16 +2,11 @@
 
 """Representation of a Latin word that is undeclinable."""
 
-from __future__ import annotations
-
 from functools import total_ordering
-from typing import TYPE_CHECKING
 
 from .class_word import _Word
 from .misc import EndingComponents
-
-if TYPE_CHECKING:
-    from .type_aliases import Meaning
+from .type_aliases import Meaning
 
 
 @total_ordering

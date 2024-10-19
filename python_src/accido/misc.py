@@ -13,6 +13,7 @@ if TYPE_CHECKING:
     from enum import Enum
 
     from .type_aliases import Person
+
 else:
     from aenum import Enum
 from enum import StrEnum, auto

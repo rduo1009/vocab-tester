@@ -2,21 +2,16 @@
 
 """Contains a function for saving vocabulary files."""
 
-from __future__ import annotations
-
 import hashlib
 import hmac
 import warnings
-from typing import TYPE_CHECKING
+from pathlib import Path
 
 import dill as pickle
 import lz4.frame  # type: ignore[import-untyped]
 
 from .exceptions import MisleadingFilenameWarning
 from .misc import KEY, VocabList
-
-if TYPE_CHECKING:
-    from pathlib import Path
 
 
 def save_vocab_dump(

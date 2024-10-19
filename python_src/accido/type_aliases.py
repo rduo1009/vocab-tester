@@ -2,8 +2,6 @@
 
 """Contains type aliases used by accido."""
 
-from __future__ import annotations
-
 from typing import Literal, TypeIs
 
 from ..accido.misc import MultipleEndings, MultipleMeanings
