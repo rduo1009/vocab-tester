@@ -7,7 +7,7 @@ Notes
 Code taken from https://stackoverflow.com/a/7829388
 """
 
-from typing import Iterable
+from collections.abc import Iterable
 
 
 def compare[T](first: Iterable[T], second: Iterable[T]) -> bool:

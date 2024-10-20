@@ -6,7 +6,7 @@ from __future__ import annotations
 
 import random
 from copy import deepcopy
-from typing import TYPE_CHECKING, Final, Generator, overload
+from typing import TYPE_CHECKING, Final, overload
 
 from .. import accido, lego, transfero
 from ..accido.misc import Case, Gender, Mood, Number
@@ -26,6 +26,8 @@ from .rules import filter_endings, filter_questions, filter_words
 from .type_aliases import Settings, Vocab
 
 if TYPE_CHECKING:
+    from collections.abc import Iterable
+
     from ..accido.type_aliases import Ending, Meaning
     from .question_classes import Question
 
@@ -72,7 +74,7 @@ def _pick_ending(
 
 def ask_question_without_sr(
     vocab_list: lego.misc.VocabList, amount: int, settings: Settings
-) -> Generator[Question]:
+) -> Iterable[Question]:
     """Ask a question about Latin vocabulary.
 
     Parameters
