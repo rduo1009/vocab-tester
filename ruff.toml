@@ -1,5 +1,6 @@
 line-length = 79
 unsafe-fixes = true
+exclude = ["python_src/_vendor/**"]
 
 [lint]
 preview = true

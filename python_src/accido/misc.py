@@ -15,10 +15,12 @@ if TYPE_CHECKING:
     from .type_aliases import Person
 
 else:
-    from aenum import Enum
+    from .._vendor.aenum import Enum
+
+
 from enum import StrEnum, auto
 
-from aenum import MultiValue  # type: ignore[import-untyped]
+from .._vendor.aenum import MultiValue
 
 
 class _EndingComponentEnum(Enum):
