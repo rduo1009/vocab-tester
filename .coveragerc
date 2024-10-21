@@ -1,9 +1,11 @@
 [run]
-omit = ["tests/*"]
+branch = True
+omit = 
+    tests/*
+    */_vendor/*
 
 [report]
 exclude_also = 
-    def __repr__
     if self\\.debug
 
     raise AssertionError
@@ -14,5 +16,6 @@ exclude_also =
     if __name__ == .__main__.:
 
     @(abc\\.)?abstractmethod
+    @overload
 
     if TYPE_CHECKING:
