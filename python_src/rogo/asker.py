@@ -99,6 +99,11 @@ def ask_question_without_sr(
     _verify_settings(settings)
     vocab: Vocab = filter_words(vocab_list, settings)
     filtered_questions: set[QuestionClasses] = filter_questions(settings)
+
+    if len(vocab_list.vocab) < settings["number-multiplechoice-options"]:
+        filtered_questions.discard(QuestionClasses.MULTIPLECHOICE_ENGTOLAT)
+        filtered_questions.discard(QuestionClasses.MULTIPLECHOICE_LATTOENG)
+
     if not filtered_questions:
         raise InvalidSettingsError("No question type has been enabled.")
 
