@@ -5,8 +5,12 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../.
 
 from pathlib import Path
 
+from python_src.accido.endings import Adjective, Noun, Pronoun, RegularWord, Verb
+from python_src.accido.misc import Gender
+from python_src.lego.misc import VocabList
 from python_src.lego.reader import read_vocab_file
 from python_src.rogo.asker import ask_question_without_sr
+from python_src.rogo.question_classes import ParseWordLatToCompQuestion
 from python_src.rogo.type_aliases import Settings
 
 settings: Settings = {
@@ -107,4 +111,84 @@ def test_parse_question():
     vocab_list = read_vocab_file(Path("tests/python_src_lego/test_vocab_files/regular_list.txt"))
     amount = 1000
     for output in ask_question_without_sr(vocab_list, amount, settings):
+        assert type(output) is ParseWordLatToCompQuestion
+
         ic(output)  # type: ignore[name-defined] # noqa: F821
+
+
+def test_parse_question_adjective():
+    word = Adjective("laetus", "laeta", "laetum", declension="212", meaning="happy")
+    vocab_list = VocabList([word])
+    amount = 1000
+
+    for output in ask_question_without_sr(vocab_list, amount, settings):
+        assert type(output) is ParseWordLatToCompQuestion
+
+        assert output.main_answer in output.answers
+        assert output.prompt in word.endings.values()
+        for answer in output.answers:
+            if answer.subtype == "adverb":
+                assert word.get(degree=answer.degree, adverb=True) == output.prompt
+            else:
+                assert word.get(degree=answer.degree, gender=answer.gender, case=answer.case, number=answer.number) == output.prompt
+
+
+def test_parse_question_noun():
+    word = Noun(nominative="puella", genitive="puellae", gender=Gender.FEMININE, meaning="girl")
+    vocab_list = VocabList([word])
+    amount = 1000
+
+    for output in ask_question_without_sr(vocab_list, amount, settings):
+        assert type(output) is ParseWordLatToCompQuestion
+
+        assert output.main_answer in output.answers
+        assert output.prompt in word.endings.values()
+        for answer in output.answers:
+            assert word.get(case=answer.case, number=answer.number) == output.prompt
+
+
+def test_parse_question_pronoun():
+    word = Pronoun(pronoun="hic", meaning="this")
+    vocab_list = VocabList([word])
+    amount = 1000
+
+    for output in ask_question_without_sr(vocab_list, amount, settings):
+        assert type(output) is ParseWordLatToCompQuestion
+
+        assert output.main_answer in output.answers
+        assert output.prompt in word.endings.values()
+        for answer in output.answers:
+            assert word.get(gender=answer.gender, case=answer.case, number=answer.number) == output.prompt
+
+
+def test_parse_question_verb():
+    word = Verb(present="doceo", infinitive="docere", perfect="docui", ppp="doctus", meaning="teach")
+    vocab_list = VocabList([word])
+    amount = 1000
+
+    for output in ask_question_without_sr(vocab_list, amount, settings):
+        assert type(output) is ParseWordLatToCompQuestion
+
+        assert output.main_answer in output.answers
+        assert output.prompt in word.endings.values()
+        for answer in output.answers:
+            if answer.subtype == "participle":
+                assert word.get(tense=answer.tense, voice=answer.voice, mood=answer.mood, participle_case=answer.case, participle_gender=answer.gender, number=answer.number) == output.prompt
+            elif answer.subtype == "infinitive":
+                assert word.get(tense=answer.tense, voice=answer.voice, mood=answer.mood) == output.prompt
+            else:
+                assert word.get(tense=answer.tense, voice=answer.voice, mood=answer.mood, person=answer.person, number=answer.number) == output.prompt
+
+
+def test_parse_question_regularword():
+    word = RegularWord(word="in", meaning="in")
+    vocab_list = VocabList([word])
+    amount = 1000
+
+    for output in ask_question_without_sr(vocab_list, amount, settings):
+        assert type(output) is ParseWordLatToCompQuestion
+
+        assert output.main_answer in output.answers
+        assert output.prompt in word.endings.values()
+        for answer in output.answers:
+            assert word.get() == output.prompt
