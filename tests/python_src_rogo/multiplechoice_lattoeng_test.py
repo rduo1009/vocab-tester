@@ -186,4 +186,4 @@ def test_multiplechoice_engtolat_regularword():
 
         assert output.answer in output.choices
         assert set(output.choices) == {"in", "out of", "after"}
-        assert (output.prompt, output.answer) in {("in", "in"), ("out of", "e"), ("after", "post")}
+        assert (output.prompt, output.answer) in {("in", "in"), ("e", "out of"), ("post", "after")}
