@@ -4,8 +4,8 @@
 
 Notes
 -----
-The code and json file is taken from github.com/gutfeeling/word_forms. The
-original python package is not used as it has been unmaintained for a few
+The code and json file is taken from https://github.com/gutfeeling/word_forms.
+The original python package is not used as it has been unmaintained for a few
 years now.
 """
 

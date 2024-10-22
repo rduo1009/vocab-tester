@@ -5,8 +5,11 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from enum import StrEnum, auto
 from types import SimpleNamespace
 from typing import TYPE_CHECKING, Final, overload
+
+from .._vendor.aenum import MultiValue
 
 if TYPE_CHECKING:
     # HACK: To avoid mypy errors.
@@ -16,11 +19,6 @@ if TYPE_CHECKING:
 
 else:
     from .._vendor.aenum import Enum
-
-
-from enum import StrEnum, auto
-
-from .._vendor.aenum import MultiValue
 
 
 class _EndingComponentEnum(Enum):

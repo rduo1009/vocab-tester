@@ -102,7 +102,7 @@ def find_main_adjective_inflection(
 def _inflect_lemma(lemma: str, degree: Degree) -> tuple[str, set[str]]:
     not_comparable: bool = lemma in NOT_COMPARABLE_ADJECTIVES
 
-    match degree:
+    match degree:  # pragma: no branch
         case Degree.POSITIVE:
             return (lemma, {lemma})
         case Degree.COMPARATIVE:
@@ -113,7 +113,7 @@ def _inflect_lemma(lemma: str, degree: Degree) -> tuple[str, set[str]]:
                 f"more {lemma}" if not_comparable else comparatives[0],
                 {*comparatives, f"more {lemma}"},
             )
-        case Degree.SUPERLATIVE:
+        case Degree.SUPERLATIVE:  # pragma: no branch
             superlatives: tuple[str, ...] = lemminflect.getInflection(
                 lemma, "RBS"
             )

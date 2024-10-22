@@ -67,7 +67,7 @@ def _regenerate_vocab_list(vocab_list: VocabList) -> VocabList:
                             meaning=word.meaning,
                         ),
                     )
-                case "3":
+                case "3":  # pragma: no branch
                     assert word.termination is not None
 
                     new_vocab.append(
@@ -361,7 +361,7 @@ def _parse_line(
                 meaning=meaning,
             )
 
-        case "Pronoun":
+        case "Pronoun":  # pragma: no branch
             return accido.endings.Pronoun(
                 meaning=meaning,
                 pronoun=latin_parts[0],

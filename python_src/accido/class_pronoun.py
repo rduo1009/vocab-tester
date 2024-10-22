@@ -10,12 +10,7 @@ from typing import TYPE_CHECKING
 from .class_word import _Word
 from .edge_cases import PRONOUNS
 from .exceptions import InvalidInputError
-from .misc import (
-    Case,
-    EndingComponents,
-    Gender,
-    Number,
-)
+from .misc import Case, EndingComponents, Gender, Number
 
 if TYPE_CHECKING:
     from .type_aliases import Ending, Meaning

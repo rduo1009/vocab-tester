@@ -231,7 +231,7 @@ class Noun(_Word):
                     "Nablpl": f"{self._stem}ibus",  # manibus
                 }
 
-            case 5:
+            case 5:  # pragma: no branch
                 return {
                     "Nnomsg": self.nominative,  # res
                     "Nvocsg": self.nominative,  # res

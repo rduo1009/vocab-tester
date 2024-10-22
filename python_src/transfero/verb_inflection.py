@@ -261,7 +261,7 @@ def _find_preactind_inflections(  # type: ignore[return] # mypy cannot manage tu
                 },
             )
 
-        case (Number.PLURAL, 3):
+        case (Number.PLURAL, 3):  # pragma: no branch
             return (
                 f"they {present_nonthird}",
                 {
@@ -316,11 +316,12 @@ def _find_impactind_inflections(  # type: ignore[return] # mypy cannot manage tu
                     },
                 )
 
-            case (Number.PLURAL, 3):
+            case (Number.PLURAL, 3):  # pragma: no branch
                 return (
                     f"they {past}",
                     {f"they {past}", f"they were {present_participle}"},
                 )
+
     match (number, person):
         case (Number.SINGULAR, 1):
             return (
@@ -350,7 +351,7 @@ def _find_impactind_inflections(  # type: ignore[return] # mypy cannot manage tu
                 },
             )
 
-        case (Number.PLURAL, 3):
+        case (Number.PLURAL, 3):  # pragma: no branch
             return (
                 f"they were {present_participle}",
                 {f"they were {present_participle}"},
@@ -411,7 +412,7 @@ def _find_peractind_inflections(  # type: ignore[return] # mypy cannot manage tu
                 },
             )
 
-        case (Number.PLURAL, 3):
+        case (Number.PLURAL, 3):  # pragma: no branch
             return (
                 f"they {past}",
                 {
@@ -452,7 +453,7 @@ def _find_plpactind_inflections(  # type: ignore[return] # mypy cannot manage tu
                 },
             )
 
-        case (Number.PLURAL, 3):
+        case (Number.PLURAL, 3):  # pragma: no branch
             return (
                 f"they had {past_participle}",
                 {f"they had {past_participle}"},
