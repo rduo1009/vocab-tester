@@ -21,3 +21,7 @@ class TestEndingComponentsDunder:
         a = EndingComponents(case=Case.ACCUSATIVE, number=Number.PLURAL, gender=Gender.NEUTER)
         b = EndingComponents(case=Case.ACCUSATIVE, number=Number.PLURAL, gender=Gender.NEUTER)
         assert hash(a) == hash(b)
+
+    def test_repr(self):
+        a = EndingComponents(case=Case.ACCUSATIVE, number=Number.PLURAL, gender=Gender.NEUTER, string="accusative plural neuter")
+        assert repr(a) == "accusative plural neuter"
