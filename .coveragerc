@@ -3,6 +3,7 @@ branch = True
 omit = 
     tests/*
     */_vendor/*
+    */utils/*
 
 [report]
 exclude_also = 
