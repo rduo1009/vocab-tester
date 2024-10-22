@@ -116,7 +116,7 @@ def _inflect_lemma(
         case Number.SINGULAR:
             base_forms = {*lemminflect.getInflection(lemma, "NN")}
             best_form = lemminflect.getInflection(lemma, "NN")[0]
-        case Number.PLURAL:
+        case Number.PLURAL:  # pragma: no branch
             normal_plural: str = pluralinflect.plural_noun(lemma)
             pluralinflect.classical(all=True)
             classical_plural: str = pluralinflect.plural_noun(lemma)
@@ -178,7 +178,7 @@ def _inflect_lemma(
                     | {f"to {base_form}" for base_form in base_forms}
                 ),
             )
-        case Case.ABLATIVE:
+        case Case.ABLATIVE:  # pragma: no branch
             if number == Number.SINGULAR:
                 return (
                     f"by the {best_form}",

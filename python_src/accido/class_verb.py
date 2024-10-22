@@ -139,7 +139,7 @@ class Verb(_Word):
             case 4:
                 self.endings = self._fourth_conjugation()
 
-            case 5:
+            case 5:  # pragma: no branch
                 self.endings = self._third_io_conjugation()
 
         if self.ppp:

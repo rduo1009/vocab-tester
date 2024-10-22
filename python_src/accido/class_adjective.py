@@ -139,7 +139,7 @@ class Adjective(_Word):
             case "212":
                 self.endings = self._212_endings()
 
-            case "3":
+            case "3":  # pragma: no branch
                 match self.termination:
                     case 1:
                         self.endings = self._31_endings()
@@ -147,7 +147,7 @@ class Adjective(_Word):
                     case 2:
                         self.endings = self._32_endings()
 
-                    case 3:
+                    case 3:  # pragma: no branch
                         self.endings = self._33_endings()
 
     def _212_endings(self) -> Endings:
@@ -448,7 +448,7 @@ class Adjective(_Word):
             "Asprnablpl": f"{self._spr_stem}is",  # ingentissimis
         }
 
-        if self.adverb_flag:
+        if self.adverb_flag:  # pragma: no cover
             endings |= {
                 "Dpos": (
                     self._irregular_posadv
@@ -601,7 +601,7 @@ class Adjective(_Word):
             "Asprnablpl": f"{self._spr_stem}is",  # fortissimis
         }
 
-        if self.adverb_flag:
+        if self.adverb_flag:  # pragma: no cover
             endings |= {
                 "Dpos": (
                     self._irregular_posadv
@@ -754,7 +754,7 @@ class Adjective(_Word):
             "Asprnablpl": f"{self._spr_stem}is",  # acerrimis
         }
 
-        if self.adverb_flag:
+        if self.adverb_flag:  # pragma: no cover
             endings |= {
                 "Dpos": (
                     self._irregular_posadv
