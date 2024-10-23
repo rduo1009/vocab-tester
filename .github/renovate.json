@@ -6,5 +6,6 @@
   "baseBranches": ["compat-package", "compat-coconut"],
   "prHourlyLimit": 5,
   "commitMessagePrefix": "🚧 build(deps):",
-  "commitMessageAction": "update"
+  "commitMessageAction": "update",
+  "rebaseWhen": "behind-base-branch"
 }
