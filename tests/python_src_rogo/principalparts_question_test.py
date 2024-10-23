@@ -5,8 +5,12 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../.
 
 from pathlib import Path
 
+from python_src.accido.endings import Adjective, Noun, Pronoun, RegularWord, Verb
+from python_src.accido.misc import Gender
+from python_src.lego.misc import VocabList
 from python_src.lego.reader import read_vocab_file
 from python_src.rogo.asker import ask_question_without_sr
+from python_src.rogo.question_classes import PrincipalPartsQuestion
 from python_src.rogo.type_aliases import Settings
 
 settings: Settings = {
@@ -107,4 +111,82 @@ def test_principalparts_question():
     vocab_list = read_vocab_file(Path("tests/python_src_lego/test_vocab_files/regular_list.txt"))
     amount = 1000
     for output in ask_question_without_sr(vocab_list, amount, settings):
+        assert type(output) is PrincipalPartsQuestion
+
         ic(output)  # type: ignore[name-defined] # noqa: F821
+
+
+def test_principalparts_adjective():
+    word = Adjective("laetus", "laeta", "laetum", declension="212", meaning="happy")
+    vocab_list = VocabList([word])
+    amount = 1000
+
+    for output in ask_question_without_sr(vocab_list, amount, settings):
+        assert type(output) is PrincipalPartsQuestion
+
+        assert output.prompt == "laetus"
+        assert output.principal_parts == ("laetus", "laeta", "laetum")
+
+    word = Adjective("ingens", "ingentis", declension="3", termination=2, meaning="large")
+    vocab_list = VocabList([word])
+    amount = 1000
+
+    for output in ask_question_without_sr(vocab_list, amount, settings):
+        assert type(output) is PrincipalPartsQuestion
+
+        assert output.prompt == "ingens"
+        assert output.principal_parts == ("ingens", "ingentis")
+
+
+def test_principalparts_noun():
+    word = Noun(nominative="puella", genitive="puellae", gender=Gender.FEMININE, meaning="girl")
+    vocab_list = VocabList([word])
+    amount = 1000
+
+    for output in ask_question_without_sr(vocab_list, amount, settings):
+        assert type(output) is PrincipalPartsQuestion
+
+        assert output.prompt == "puella"
+        assert output.principal_parts == ("puella", "puellae")
+
+
+def test_principalparts_pronoun():
+    word = Pronoun(pronoun="hic", meaning="this")
+    vocab_list = VocabList([word])
+    amount = 1000
+
+    for output in ask_question_without_sr(vocab_list, amount, settings):
+        assert type(output) is PrincipalPartsQuestion
+
+        assert output.prompt == "hic"
+        assert output.principal_parts == ("hic", "haec", "hoc")
+
+
+def test_principalparts_verb():
+    word = Verb(present="doceo", infinitive="docere", perfect="docui", ppp="doctus", meaning="teach")
+    vocab_list = VocabList([word])
+    amount = 1000
+
+    for output in ask_question_without_sr(vocab_list, amount, settings):
+        assert type(output) is PrincipalPartsQuestion
+
+        assert output.prompt == "doceo"
+        assert output.principal_parts == ("doceo", "docere", "docui", "doctus")
+
+    word = Verb(present="traho", infinitive="trahere", perfect="traxi", meaning="drag")
+    vocab_list = VocabList([word])
+    amount = 1000
+
+    for output in ask_question_without_sr(vocab_list, amount, settings):
+        assert type(output) is PrincipalPartsQuestion
+
+        assert output.prompt == "traho"
+        assert output.principal_parts == ("traho", "trahere", "traxi")
+
+
+def test_principalparts_regularword():
+    word = RegularWord(word="in", meaning="in")
+    vocab_list = VocabList([word])
+    amount = 1000
+
+    assert not tuple(ask_question_without_sr(vocab_list, amount, settings))
