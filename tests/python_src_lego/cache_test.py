@@ -9,7 +9,7 @@ from python_src import lego
 
 
 def test_cache():
-    hash_string = "219fc649c2e04aba7788c48c363bca798b278c9e509b7a14622f0da3ff8f22a7"
+    hash_string = "66c21bdeb3dcfc4673e51ad4a2513e75ed1cea2e18047847e0f1a1f6f71070d7"
     x, _ = lego.cache.cache_vocab_file(Path("tests/python_src_lego/test_vocab_files/testdump/cache"), Path("tests/python_src_lego/test_vocab_files/regular_list.txt"))
     y = lego.reader.read_vocab_dump(Path(f"tests/python_src_lego/test_vocab_files/testdump/cache/{hash_string}"))
     assert x == y

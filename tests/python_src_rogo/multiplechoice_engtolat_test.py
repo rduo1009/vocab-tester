@@ -12,6 +12,7 @@ from python_src.lego.reader import read_vocab_file
 from python_src.rogo.asker import ask_question_without_sr
 from python_src.rogo.question_classes import MultipleChoiceEngToLatQuestion
 from python_src.rogo.type_aliases import Settings
+from python_src.utils import contains_duplicates
 
 settings: Settings = {
     "exclude-verb-present-active-indicative": False,
@@ -113,6 +114,10 @@ def test_multiplechoice_engtolat():
     for output in ask_question_without_sr(vocab_list, amount, settings):
         assert type(output) is MultipleChoiceEngToLatQuestion
 
+        assert not contains_duplicates(output.choices)
+        assert output.answer in output.choices
+        assert len(output.choices) == 3
+
         ic(output)  # type: ignore[name-defined] # noqa: F821
 
 
@@ -125,7 +130,10 @@ def test_multiplechoice_engtolat_adjective():
 
     for output in ask_question_without_sr(vocab_list, amount, settings):
         assert type(output) is MultipleChoiceEngToLatQuestion
+
+        assert not contains_duplicates(output.choices)
         assert output.answer in output.choices
+        assert len(output.choices) == 3
         assert set(output.choices) == {"laetus", "ingens", "fortis"}
         assert (output.prompt, output.answer) in {("happy", "laetus"), ("large", "ingens"), ("strong", "fortis")}
 
@@ -139,7 +147,10 @@ def test_multiplechoice_engtolat_noun():
 
     for output in ask_question_without_sr(vocab_list, amount, settings):
         assert type(output) is MultipleChoiceEngToLatQuestion
+
+        assert not contains_duplicates(output.choices)
         assert output.answer in output.choices
+        assert len(output.choices) == 3
         assert set(output.choices) == {"puella", "servus", "canis"}
         assert (output.prompt, output.answer) in {("girl", "puella"), ("slave", "servus"), ("dog", "canis")}
 
@@ -154,7 +165,9 @@ def test_multiplechoice_engtolat_pronoun():
     for output in ask_question_without_sr(vocab_list, amount, settings):
         assert type(output) is MultipleChoiceEngToLatQuestion
 
+        assert not contains_duplicates(output.choices)
         assert output.answer in output.choices
+        assert len(output.choices) == 3
         assert set(output.choices) == {"hic", "ille", "qui"}
         assert (output.prompt, output.answer) in {("this", "hic"), ("that", "ille"), ("who", "qui")}
 
@@ -169,7 +182,9 @@ def test_multiplechoice_engtolat_verb():
     for output in ask_question_without_sr(vocab_list, amount, settings):
         assert type(output) is MultipleChoiceEngToLatQuestion
 
+        assert not contains_duplicates(output.choices)
         assert output.answer in output.choices
+        assert len(output.choices) == 3
         assert set(output.choices) == {"doceo", "traho", "audio"}
         assert (output.prompt, output.answer) in {("teach", "doceo"), ("drag", "traho"), ("hear", "audio")}
 
@@ -184,6 +199,8 @@ def test_multiplechoice_engtolat_regularword():
     for output in ask_question_without_sr(vocab_list, amount, settings):
         assert type(output) is MultipleChoiceEngToLatQuestion
 
+        assert not contains_duplicates(output.choices)
         assert output.answer in output.choices
+        assert len(output.choices) == 3
         assert set(output.choices) == {"in", "e", "post"}
         assert (output.prompt, output.answer) in {("in", "in"), ("out of", "e"), ("after", "post")}

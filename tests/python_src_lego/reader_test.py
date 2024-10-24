@@ -27,7 +27,7 @@ def test_reader():
         Adjective("levis", "leve", termination=2, declension="3", meaning="light"),
         Adjective("acer", "acris", "acre", termination=3, declension="3", meaning="keen"),
         Adjective("bonus", "bona", "bonum", declension="212", meaning="good"),
-        Adjective("bonus", "bona", "bonum", declension="212", meaning="good"),
+        Adjective("laetus", "laeta", "laetum", declension="212", meaning="happy"),
         RegularWord(word="in", meaning="into"),
         RegularWord(word="e", meaning="from"),
         Pronoun(pronoun="hic", meaning="this"),

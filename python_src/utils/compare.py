@@ -1,11 +1,6 @@
 #!/usr/bin/env python3
 
-"""Contains a function that compares iterables.
-
-Notes
------
-Code taken from https://stackoverflow.com/a/7829388
-"""
+"""Contains a function that compares iterables."""
 
 from collections.abc import Iterable
 
@@ -23,8 +18,11 @@ def compare[T](first: Iterable[T], second: Iterable[T]) -> bool:
     Returns
     -------
     bool
-        True if the iterables are equal, False otherwise.s
+        True if the iterables are equal, False otherwise.
 
+    Notes
+    -----
+    Code taken from https://stackoverflow.com/a/7829388
     """
     comparison: list[T] = list(second)  # make a mutable copy
     try:
