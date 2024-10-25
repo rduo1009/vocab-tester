@@ -34,7 +34,8 @@
         "**/monkeytype.sqlite3": true,
         "**/poetry.lock": true,
         ".dmypy.json": true,
-        ".testmondata": true
+        ".testmondata": true,
+        "cosmic-ray.sqlite": true
     },
     "autoDocstring.docstringFormat": "numpy",
     "ruff.nativeServer": true,
