@@ -6,10 +6,16 @@ import os
 import sys
 import warnings
 
-import icecream
-
 warnings.filterwarnings("ignore")
-icecream.install()
+
+
+def install():
+    builtins = __import__("builtins")
+    ic = lambda *a: None if not a else (a[0] if len(a) == 1 else a)  # noqa: E731
+    setattr(builtins, "ic", ic)
+
+
+install()
 
 
 def run_tests_in_class(cls):
@@ -17,8 +23,8 @@ def run_tests_in_class(cls):
 
     for name, func in inspect.getmembers(cls, predicate=inspect.isfunction):
         if name.startswith("test_"):
-            func(instance)
             # print(f"Running {cls.__name__}.{test_func.__name__}...")
+            func(instance)
 
 
 if __name__ == "__main__":
