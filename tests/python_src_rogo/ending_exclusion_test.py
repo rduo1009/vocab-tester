@@ -4,12 +4,10 @@ import sys  # noqa: E401
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
 from itertools import combinations
-from pathlib import Path
 
 from python_src.accido.endings import Adjective, Noun, Pronoun, RegularWord, Verb
 from python_src.accido.misc import Case, Degree, Gender, Mood, Number, Tense, Voice
 from python_src.lego.misc import VocabList
-from python_src.lego.reader import read_vocab_file
 from python_src.rogo.asker import ask_question_without_sr
 from python_src.rogo.question_classes import ParseWordCompToLatQuestion
 from python_src.rogo.type_aliases import Settings
