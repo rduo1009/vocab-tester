@@ -6,7 +6,7 @@ from __future__ import annotations
 
 import random
 from copy import deepcopy
-from typing import TYPE_CHECKING, Final, overload
+from typing import TYPE_CHECKING, overload
 
 from .. import accido, lego, transfero
 from ..accido.misc import Case, Gender, Mood, Number
@@ -23,47 +23,13 @@ from .question_classes import (
     TypeInLatToEngQuestion,
 )
 from .rules import filter_endings, filter_questions, filter_words
-from .type_aliases import Settings, Vocab
 
 if TYPE_CHECKING:
     from collections.abc import Iterable
 
     from ..accido.type_aliases import Ending, Meaning
     from .question_classes import Question
-
-REQUIRED_SETTINGS: Final[set[str]] = set(Settings.__annotations__.keys())
-
-
-def _verify_settings(settings: Settings) -> None:
-    """Verifies that the settings are valid.
-
-    Parameters
-    ----------
-    settings : Settings
-        The settings to verify.
-
-    Raises
-    ------
-    InvalidSettingsError
-        If the settings are invalid.
-    """
-    # Convert dictionary keys to a set
-    setting_keys: set[str] = set(settings.keys())
-
-    # Compare the sets
-    if setting_keys == REQUIRED_SETTINGS:
-        return
-    unrecognised_settings: set[str] = setting_keys - REQUIRED_SETTINGS
-    missing_settings: set[str] = REQUIRED_SETTINGS - setting_keys
-
-    if unrecognised_settings:
-        raise InvalidSettingsError(
-            f"Unrecognised settings: {", ".join(unrecognised_settings)}"
-        )
-    if missing_settings:
-        raise InvalidSettingsError(
-            f"Missing settings: {", ".join(missing_settings)}"
-        )
+    from .type_aliases import Settings, Vocab
 
 
 def _pick_ending(
@@ -96,7 +62,6 @@ def ask_question_without_sr(
     InvalidSettingsError
         If the settings are invalid.
     """
-    _verify_settings(settings)
     vocab: Vocab = filter_words(vocab_list, settings)
     filtered_questions: set[QuestionClasses] = filter_questions(settings)
 
