@@ -89,6 +89,7 @@ settings: Settings = {
     "exclude-verb-third-conjugation": False,
     "exclude-verb-fourth-conjugation": False,
     "exclude-verb-thirdio-conjugation": False,
+    "exclude-verb-irregular-conjugation": False,
     "exclude-noun-first-declension": False,
     "exclude-noun-second-declension": False,
     "exclude-noun-third-declension": False,
@@ -114,6 +115,7 @@ def test_multiplechoice_engtolat():
     for output in ask_question_without_sr(vocab_list, amount, settings):
         assert type(output) is MultipleChoiceEngToLatQuestion
 
+        assert output.check(output.answer)
         assert not contains_duplicates(output.choices)
         assert output.answer in output.choices
         assert len(output.choices) == 3

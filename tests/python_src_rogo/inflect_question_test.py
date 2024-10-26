@@ -88,6 +88,7 @@ settings: Settings = {
     "exclude-verb-third-conjugation": False,
     "exclude-verb-fourth-conjugation": False,
     "exclude-verb-thirdio-conjugation": False,
+    "exclude-verb-irregular-conjugation": False,
     "exclude-noun-first-declension": False,
     "exclude-noun-second-declension": False,
     "exclude-noun-third-declension": False,
@@ -113,6 +114,7 @@ def test_inflect_question():
     for output in ask_question_without_sr(vocab_list, amount, settings):
         assert type(output) is ParseWordCompToLatQuestion
 
+        assert output.check(output.main_answer)
         ic(output)  # type: ignore[name-defined] # noqa: F821
 
 

@@ -3,14 +3,15 @@ import sys  # noqa: E401
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
+from itertools import combinations
 from pathlib import Path
 
+from python_src.accido.endings import Adjective, Noun, Pronoun, RegularWord, Verb
 from python_src.lego.reader import read_vocab_file
-from python_src.rogo.asker import ask_question_without_sr
-from python_src.rogo.question_classes import TypeInLatToEngQuestion
+from python_src.rogo.rules import filter_words
 from python_src.rogo.type_aliases import Settings
 
-settings: Settings = {
+default_settings: Settings = {
     "exclude-verb-present-active-indicative": False,
     "exclude-verb-imperfect-active-indicative": False,
     "exclude-verb-perfect-active-indicative": False,
@@ -95,7 +96,7 @@ settings: Settings = {
     "exclude-adjective-212-declension": False,
     "exclude-adjective-third-declension": False,
     "include-typein-engtolat": False,
-    "include-typein-lattoeng": True,
+    "include-typein-lattoeng": False,
     "include-parse": False,
     "include-inflect": False,
     "include-principal-parts": False,
@@ -103,13 +104,26 @@ settings: Settings = {
     "include-multiplechoice-lattoeng": False,
     "number-multiplechoice-options": 3,
 }
+exclude_classes = {
+    "exclude-adjectives": Adjective,
+    "exclude-nouns": Noun,
+    "exclude-pronouns": Pronoun,
+    "exclude-verbs": Verb,
+    "exclude-regulars": RegularWord,
+}
 
 
-def test_typein_lattoeng():
+def test_class_exclusion():
     vocab_list = read_vocab_file(Path("tests/python_src_lego/test_vocab_files/regular_list.txt"))
-    amount = 1000
-    for output in ask_question_without_sr(vocab_list, amount, settings):
-        assert type(output) is TypeInLatToEngQuestion
+    keys = tuple(exclude_classes.keys())
+    all_key_combinations = [combo for r in range(2, 5) for combo in combinations(keys, r)]
 
-        assert output.check(output.main_answer)
-        ic(output)  # type: ignore[name-defined] # noqa: F821
+    for key_combination in all_key_combinations:
+        settings = default_settings.copy()
+
+        for key in key_combination:
+            settings[key] = True  # type: ignore[literal-required]
+
+        vocab = filter_words(vocab_list, settings)
+        for word in vocab:
+            assert not any(isinstance(word, exclude_classes[key]) for key in key_combination)

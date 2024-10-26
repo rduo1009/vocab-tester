@@ -7,6 +7,7 @@ from pathlib import Path
 
 from python_src.lego.reader import read_vocab_file
 from python_src.rogo.asker import ask_question_without_sr
+from python_src.rogo.question_classes import TypeInEngToLatQuestion
 from python_src.rogo.type_aliases import Settings
 
 settings: Settings = {
@@ -84,6 +85,7 @@ settings: Settings = {
     "exclude-verb-third-conjugation": False,
     "exclude-verb-fourth-conjugation": False,
     "exclude-verb-thirdio-conjugation": False,
+    "exclude-verb-irregular-conjugation": False,
     "exclude-noun-first-declension": False,
     "exclude-noun-second-declension": False,
     "exclude-noun-third-declension": False,
@@ -107,4 +109,7 @@ def test_typein_engtolat():
     vocab_list = read_vocab_file(Path("tests/python_src_lego/test_vocab_files/regular_list.txt"))
     amount = 1000
     for output in ask_question_without_sr(vocab_list, amount, settings):
+        assert type(output) is TypeInEngToLatQuestion
+
+        assert output.check(output.main_answer)
         ic(output)  # type: ignore[name-defined] # noqa: F821
