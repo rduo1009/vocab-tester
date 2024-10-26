@@ -85,6 +85,7 @@ Settings = TypedDict(
         "exclude-verb-third-conjugation": ReadOnly[bool],
         "exclude-verb-fourth-conjugation": ReadOnly[bool],
         "exclude-verb-thirdio-conjugation": ReadOnly[bool],
+        "exclude-verb-irregular-conjugation": ReadOnly[bool],
         "exclude-noun-first-declension": ReadOnly[bool],
         "exclude-noun-second-declension": ReadOnly[bool],
         "exclude-noun-third-declension": ReadOnly[bool],

@@ -112,6 +112,9 @@ def ask_question_without_sr(
         filtered_endings: dict[str, Ending] = filter_endings(
             chosen_word.endings, settings
         )
+        if not filtered_endings:
+            continue
+
         question_type: QuestionClasses = set_choice(filtered_questions)
 
         # TODO: if ever using mypyc, make a new variable for every type

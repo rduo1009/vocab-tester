@@ -159,7 +159,7 @@ def filter_words(vocab_list: VocabList, settings: Settings) -> Vocab:
     ) -> Vocab:
         return [item for item in vocab_list if not isinstance(item, classes)]
 
-    vocab: Vocab = vocab_list.vocab
+    vocab: Vocab = vocab_list.vocab.copy()
     to_exclude: list[type] = []
 
     if settings["exclude-nouns"]:
@@ -208,6 +208,10 @@ def filter_words(vocab_list: VocabList, settings: Settings) -> Vocab:
                 or (
                     settings["exclude-verb-thirdio-conjugation"]
                     and current_conjugation == 5
+                )
+                or (
+                    settings["exclude-verb-irregular-conjugation"]
+                    and current_conjugation == 0
                 )
             )
             if conjugation_excluded:
