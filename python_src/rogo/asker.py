@@ -121,26 +121,18 @@ def ask_question_without_sr(
                     continue
 
             case QuestionClasses.MULTIPLECHOICE_ENGTOLAT:
-                if output := _generate_multiplechoice_engtolat(
+                yield _generate_multiplechoice_engtolat(
                     vocab,
                     chosen_word,
                     settings["number-multiplechoice-options"],
-                ):
-                    yield output
-                else:
-                    continue
+                )
 
             case QuestionClasses.MULTIPLECHOICE_LATTOENG:
-                if output := _generate_multiplechoice_lattoeng(
-                    vocab_list=vocab,
-                    chosen_word=chosen_word,
-                    number_multiplechoice_options=settings[
-                        "number-multiplechoice-options"
-                    ],
-                ):
-                    yield output
-                else:
-                    continue
+                yield _generate_multiplechoice_lattoeng(
+                    vocab,
+                    chosen_word,
+                    settings["number-multiplechoice-options"],
+                )
 
 
 def _pick_ending_from_multipleendings(ending: Ending) -> str:
@@ -580,7 +572,7 @@ def _generate_multiplechoice_engtolat(
     vocab_list: Vocab,
     chosen_word: accido.endings._Word,
     number_multiplechoice_options: int,
-) -> MultipleChoiceEngToLatQuestion | None:
+) -> MultipleChoiceEngToLatQuestion:
     vocab_list = deepcopy(vocab_list)
     vocab_list.remove(chosen_word)
 
@@ -612,7 +604,7 @@ def _generate_multiplechoice_lattoeng(
     vocab_list: Vocab,
     chosen_word: accido.endings._Word,
     number_multiplechoice_options: int,
-) -> MultipleChoiceLattoEngQuestion | None:
+) -> MultipleChoiceLattoEngQuestion:
     prompt: str = chosen_word._first  # noqa: SLF001
 
     chosen_word_meanings: tuple[str, ...]
