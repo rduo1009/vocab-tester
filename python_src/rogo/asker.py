@@ -27,13 +27,13 @@ from .rules import filter_endings, filter_questions, filter_words
 if TYPE_CHECKING:
     from collections.abc import Iterable
 
-    from ..accido.type_aliases import Ending, Meaning
+    from ..accido.type_aliases import Ending, Endings, Meaning
     from .question_classes import Question
     from .type_aliases import Settings, Vocab
 
 
 def _pick_ending(
-    endings: dict[str, Ending],
+    endings: Endings,
 ) -> tuple[str, Ending]:
     return random.choice(list(endings.items()))
 
@@ -74,7 +74,7 @@ def ask_question_without_sr(
 
     for _ in range(amount):
         chosen_word: accido.endings._Word = random.choice(vocab)
-        filtered_endings: dict[str, Ending] = filter_endings(
+        filtered_endings: Endings = filter_endings(
             chosen_word.endings, settings
         )
         if not filtered_endings:
@@ -144,7 +144,7 @@ def _pick_ending_from_multipleendings(ending: Ending) -> str:
 
 
 def _generate_typein_engtolat(  # noqa: PLR0914, PLR0915
-    chosen_word: accido.endings._Word, filtered_endings: dict[str, Ending]
+    chosen_word: accido.endings._Word, filtered_endings: Endings
 ) -> TypeInEngToLatQuestion | None:
     ending_components_key: str
     chosen_ending: Ending
@@ -366,7 +366,7 @@ def _generate_typein_engtolat(  # noqa: PLR0914, PLR0915
 
 
 def _generate_typein_lattoeng(
-    chosen_word: accido.endings._Word, filtered_endings: dict[str, Ending]
+    chosen_word: accido.endings._Word, filtered_endings: Endings
 ) -> TypeInLatToEngQuestion | None:
     chosen_ending: Ending
     _, chosen_ending = _pick_ending(filtered_endings)
@@ -438,7 +438,7 @@ def _generate_typein_lattoeng(
 
 
 def _generate_parse(
-    chosen_word: accido.endings._Word, filtered_endings: dict[str, Ending]
+    chosen_word: accido.endings._Word, filtered_endings: Endings
 ) -> ParseWordLatToCompQuestion | None:
     if type(chosen_word) is accido.endings.RegularWord:
         return None
@@ -467,7 +467,7 @@ def _generate_parse(
 
 
 def _generate_inflect(
-    chosen_word: accido.endings._Word, filtered_endings: dict[str, Ending]
+    chosen_word: accido.endings._Word, filtered_endings: Endings
 ) -> ParseWordCompToLatQuestion | None:
     if type(chosen_word) is accido.endings.RegularWord:
         return None

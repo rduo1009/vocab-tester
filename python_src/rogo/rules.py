@@ -15,7 +15,6 @@ if TYPE_CHECKING:
     from ..accido.type_aliases import (
         AdjectiveDeclension,
         Conjugation,
-        Ending,
         Endings,
         NounDeclension,
     )
@@ -181,12 +180,6 @@ def filter_words(vocab_list: VocabList, settings: Settings) -> Vocab:
     # Iterate over copy of list to avoid errors
     for item in deepcopy(vocab):
         if type(item) is accido.endings.Verb:
-            assert type(settings["exclude-verb-first-conjugation"]) is bool
-            assert type(settings["exclude-verb-second-conjugation"]) is bool
-            assert type(settings["exclude-verb-third-conjugation"]) is bool
-            assert type(settings["exclude-verb-fourth-conjugation"]) is bool
-            assert type(settings["exclude-verb-thirdio-conjugation"]) is bool
-
             current_conjugation: Conjugation = item.conjugation
             conjugation_excluded: bool = (
                 (
@@ -218,13 +211,6 @@ def filter_words(vocab_list: VocabList, settings: Settings) -> Vocab:
                 vocab.remove(item)
 
         elif type(item) is accido.endings.Noun:
-            assert type(settings["exclude-noun-first-declension"]) is bool
-            assert type(settings["exclude-noun-second-declension"]) is bool
-            assert type(settings["exclude-noun-third-declension"]) is bool
-            assert type(settings["exclude-noun-fourth-declension"]) is bool
-            assert type(settings["exclude-noun-fifth-declension"]) is bool
-            assert type(settings["exclude-noun-irregular-declension"]) is bool
-
             current_declension: NounDeclension = item.declension
             declension_excluded: bool = (
                 (
@@ -256,9 +242,6 @@ def filter_words(vocab_list: VocabList, settings: Settings) -> Vocab:
                 vocab.remove(item)
 
         elif type(item) is accido.endings.Adjective:
-            assert type(settings["exclude-adjective-212-declension"]) is bool
-            assert type(settings["exclude-adjective-third-declension"]) is bool
-
             current_adj_declension: AdjectiveDeclension = item.declension
             if (
                 settings["exclude-adjective-212-declension"]
@@ -271,7 +254,7 @@ def filter_words(vocab_list: VocabList, settings: Settings) -> Vocab:
     return vocab
 
 
-def filter_endings(endings: Endings, settings: Settings) -> dict[str, Ending]:
+def filter_endings(endings: Endings, settings: Settings) -> Endings:
     """Filter the endings to exclude any endings specified in the settings.
 
     Parameters
@@ -283,10 +266,10 @@ def filter_endings(endings: Endings, settings: Settings) -> dict[str, Ending]:
 
     Returns
     -------
-    dict[str, Ending]
+    Endings
         The filtered endings.
     """
-    filtered_endings: dict[str, Ending] = endings
+    filtered_endings: Endings = endings
 
     for setting, value in settings.items():
         if value and (setting in RULE_REGEX):
