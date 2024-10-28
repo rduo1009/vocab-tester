@@ -6,6 +6,7 @@ from __future__ import annotations
 
 import ctypes
 from dataclasses import dataclass
+from pathlib import Path
 from typing import TYPE_CHECKING, Final
 
 import python_src as src
@@ -53,8 +54,9 @@ class VocabList:
         return f"VocabList([{object_reprs}], version={self.version})"
 
 
-LIBKEY: ctypes.CDLL = ctypes.CDLL("python_src/lego/libkey.so")
-LIBKEY.get_key.restype = ctypes.c_char_p
+_libkey: ctypes.CDLL = ctypes.CDLL(str(Path(__file__).parent / "libkey.so"))
+
+_libkey.get_key.restype = ctypes.c_char_p
 
 """The key used to sign vocabulary pickle files."""
-KEY: Final[bytes] = LIBKEY.get_key()
+KEY: Final[bytes] = _libkey.get_key()
