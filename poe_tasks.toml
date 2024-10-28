@@ -1,0 +1,11 @@
+[tool.poe.tasks.coverage]
+shell = "./scripts/coverage.sh"
+help = "Run coverage on the project."
+
+[tool.poe.tasks.build]
+cmd = "poetry build"
+help = "Build the project."
+
+[tool.poe.tasks.test]
+cmd = "tox --parallel"
+help = "Run tests on the project."
