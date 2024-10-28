@@ -69,7 +69,7 @@ class Noun(_Word):
         gender: Gender | None = None,
         meaning: Meaning,
     ) -> None:
-        """Initialises Noun and determines the declension and endings.
+        """Initialise Noun and determines the declension and endings.
 
         Parameters
         ----------
@@ -270,7 +270,7 @@ class Noun(_Word):
             self.endings["Nvocpl"] = f"{self._stem}a"  # templa
 
     def get(self, *, case: Case, number: Number) -> Ending | None:
-        """Returns the ending of the noun.
+        """Return the ending of the noun.
 
         The function returns None if no ending is found.
 

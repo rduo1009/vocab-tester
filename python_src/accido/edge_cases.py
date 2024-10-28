@@ -53,8 +53,7 @@ THIRD_IO_VERBS: Final[set[str]] = {
 
 
 def check_io_verb(present: str) -> bool:
-    """Checks if the given word matches any of the third conjugation -io
-    verbs in the THIRD_IO_VERBS set.
+    """Check if the given word is a third conjugation -io verb.
 
     Parameters
     ----------
@@ -65,7 +64,7 @@ def check_io_verb(present: str) -> bool:
     -------
     bool
         If the prefix matches a third conjugation -io verb
-    """  # noqa: D205
+    """
     return any(present.endswith(io_verb) for io_verb in THIRD_IO_VERBS)
 
 
@@ -531,8 +530,7 @@ DERIVED_IRREGULAR_ENDINGS: Final[dict[str, Endings]] = {
 
 
 def find_irregular_endings(present: str) -> Endings | None:
-    """Detects if a verb is irregular (using the irregular verb dictionary)
-    and returns its endings.
+    """Detect if a verb is irregular and returns its endings.
 
     Parameters
     ----------
@@ -543,7 +541,7 @@ def find_irregular_endings(present: str) -> Endings | None:
     -------
     Endings | None
         The endings. None if the verb is not irregular.
-    """  # noqa: D205
+    """
 
     def _prefix(
         pre: str,

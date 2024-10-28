@@ -67,7 +67,7 @@ class Verb(_Word):
         ppp: str = "",
         meaning: Meaning,
     ) -> None:
-        """Initialises Verb and determines the conjugation and endings.
+        """Initialise Verb and determines the conjugation and endings.
 
         Parameters
         ----------
@@ -458,7 +458,7 @@ class Verb(_Word):
         participle_gender: Gender | None = None,
         participle_case: Case | None = None,
     ) -> Ending | None:
-        """Returns the ending of the verb.
+        """Return the ending of the verb.
 
         The function returns None if no ending is found.
 

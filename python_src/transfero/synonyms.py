@@ -37,7 +37,7 @@ del find, download, path
 
 
 def find_synonyms(word: str) -> set[str]:
-    """Finds synonyms of a word.
+    """Find synonyms of a word.
 
     Parameters
     ----------

@@ -17,7 +17,7 @@ from .misc import KEY, VocabList
 def save_vocab_dump(
     file_path: Path, vocab_list: VocabList, *, compress: bool = False
 ) -> None:
-    """Saves a vocabulary dump file.
+    """Save a vocabulary dump file.
 
     The pickle files are signed with a HMAC signature to ensure the data
     has not been tampered with.
