@@ -1,9 +1,9 @@
-#include "obfuscate.h"
+#include "../_vendor/Obfuscate/obfuscate.h"
 
 extern "C" {
 const char *get_key() {
   /**
-   * This function returns the obfuscated key.
+   * This function returns the obfuscated ksey.
    * Note that when the code is compiled, the key is obfuscated.
    * It can probably still be extracted by a determined attacker, but
    * it will do for this simple project.

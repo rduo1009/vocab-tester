@@ -15,3 +15,5 @@ monkeytype.sqlite3
 .dmypy.json
 .testmondata
 cosmic-ray.sqlite
+setup.py
+build/

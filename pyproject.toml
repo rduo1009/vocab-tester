@@ -1,6 +1,6 @@
 [build-system]
 build-backend = "poetry.core.masonry.api"
-requires = [ "poetry-core" ]
+requires = [ "poetry-core", "setuptools" ]
 
 [tool.poetry]
 name = "vocab-tester"
@@ -9,7 +9,11 @@ description = "An application that tests Latin vocabulary and grammar."
 authors = [ "rduo1009 <robertduong09alt@gmail.com>" ]
 readme = "README.md"
 packages = [ { include = "python_src" } ]
+include = [ "nltk_data/**/*.zip", "python_src/lego/libkey.so" ]
 
+[tool.poetry.build]
+script = "build.py"
+generate-setup-file = true
 [tool.poetry.dependencies]
 python = ">=3.12,<4.0"
 dill = "==0.3.9"
@@ -17,6 +21,7 @@ nltk = "==3.9.1"
 lemminflect = "==0.2.3"
 inflect = "==7.4.0"
 lz4 = "==4.3.3"
+setuptools = "==75.2.0"
 
 [tool.poetry.group.dev.dependencies]
 icecream = "==2.1.3"
@@ -38,3 +43,4 @@ cosmic-ray = "==8.3.15"
 
 [tool.poetry.group.types.dependencies]
 types-regex = "==2024.9.11.20240912"
+types-setuptools = "==75.2.0.20241025"
