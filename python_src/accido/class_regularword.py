@@ -28,7 +28,7 @@ class RegularWord(_Word):
     """
 
     def __init__(self, *, word: str, meaning: Meaning) -> None:
-        """Initialises RegularWord.
+        """Initialise RegularWord.
 
         Parameters
         ----------
@@ -41,7 +41,7 @@ class RegularWord(_Word):
         self.endings = {"": self.word}
 
     def get(self) -> str:
-        """Returns the word.
+        """Return the word.
 
         Returns
         -------

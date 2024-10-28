@@ -6,7 +6,7 @@ from collections.abc import Iterable
 
 
 def compare[T](first: Iterable[T], second: Iterable[T]) -> bool:
-    """Compares two iterables.
+    """Compare two iterables.
 
     Parameters
     ----------

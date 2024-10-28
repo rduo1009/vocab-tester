@@ -8,7 +8,7 @@ import random
 
 
 def set_choice[T](s: set[T]) -> T:
-    """Chooses a random element from a set.
+    """Choose a random element from a set.
 
     Parameters
     ----------
@@ -24,7 +24,7 @@ def set_choice[T](s: set[T]) -> T:
 
 
 def set_choice_pop[T](s: set[T]) -> T:
-    """Chooses a random element from a set and removes it from the set.
+    """Choose a random element from a set and removes it from the set.
 
     Parameters
     ----------

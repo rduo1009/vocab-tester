@@ -77,7 +77,7 @@ class Adjective(_Word):
         declension: AdjectiveDeclension,
         meaning: Meaning,
     ) -> None:
-        """Initialises Adjective and determines the endings.
+        """Initialise Adjective and determines the endings.
 
         Parameters
         ----------
@@ -791,7 +791,7 @@ class Adjective(_Word):
         number: Number | None = None,
         adverb: bool = False,
     ) -> Ending | None:
-        """Returns the ending of the adjective.
+        """Return the ending of the adjective.
 
         The function returns None if no ending is found.
 

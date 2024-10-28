@@ -9,7 +9,7 @@ def _is_hashable[T](sequence: Sequence[T]) -> bool:
 
 
 def contains_duplicates[T](sequence: Sequence[T]) -> bool:
-    """Determines if a list or tuple contains duplicate items.
+    """Determine if a list or tuple contains duplicate items.
 
     Parameters
     ----------
@@ -37,7 +37,7 @@ def contains_duplicates[T](sequence: Sequence[T]) -> bool:
 
 
 def remove_duplicates[C](sequence: Sequence[C]) -> Sequence[C]:
-    """Removes duplicates from a list or tuple.
+    """Remove duplicates from a list or tuple.
 
     Note that this does not keep order.
 

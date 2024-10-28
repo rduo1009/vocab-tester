@@ -36,7 +36,7 @@ class Pronoun(_Word):
     """
 
     def __init__(self, *, pronoun: str, meaning: Meaning) -> None:
-        """Initialises Pronoun and determines the endings.
+        """Initialise Pronoun and determines the endings.
 
         Parameters
         ----------
@@ -78,7 +78,7 @@ class Pronoun(_Word):
     def get(
         self, *, gender: Gender, case: Case, number: Number
     ) -> Ending | None:
-        """Returns the ending of the pronoun.
+        """Return the ending of the pronoun.
 
         The function returns None if no ending is found.
 

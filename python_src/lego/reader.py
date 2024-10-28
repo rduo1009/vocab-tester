@@ -92,7 +92,7 @@ def _regenerate_vocab_list(vocab_list: VocabList) -> VocabList:
 
 
 def read_vocab_dump(filename: Path) -> VocabList:
-    """Reads a vocabulary dump file and returns a VocabList object.
+    """Read a vocabulary dump file and returns a VocabList object.
 
     The pickle files are signed with a HMAC signature to ensure the data
     has not been tampered with. If the data is invalid, an exception is
@@ -177,7 +177,7 @@ def _is_typeofspeech(x: str) -> bool:
 
 
 def read_vocab_file(file_path: Path) -> VocabList:
-    """Reads a vocabulary file and returns a VocabList object.
+    """Read a vocabulary file and returns a VocabList object.
 
     Parameters
     ----------

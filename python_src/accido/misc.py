@@ -250,7 +250,7 @@ class EndingComponents:
         degree: Degree | None = None,
         string: str = "",
     ) -> None:
-        """Initialises EndingComponents.
+        """Initialise EndingComponents.
 
         Determines the type and subtype of the ending.
 
@@ -429,7 +429,7 @@ class MultipleEndings(SimpleNamespace):
     """  # noqa: D205
 
     def get_all(self) -> tuple[str, ...]:
-        """Returns a list of all the possible endings.
+        """Return a list of all the possible endings.
 
         Returns
         -------

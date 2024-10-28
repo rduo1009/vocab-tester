@@ -32,7 +32,7 @@ class _Word(ABC):  # noqa: PLW1641
     """
 
     def __init__(self) -> None:
-        """Initialises _Word (and all classes that inherit from it)."""
+        """Initialise _Word (and all classes that inherit from it)."""
         self.endings: Endings
         self._first: str
         self.meaning: Meaning
@@ -51,7 +51,7 @@ class _Word(ABC):  # noqa: PLW1641
         return self.endings[key]
 
     def find(self, form: str) -> list[EndingComponents]:
-        """Finds the accido properties that match the given form.
+        """Find the ending components that match the given form.
 
         Attributes
         ----------
@@ -62,7 +62,7 @@ class _Word(ABC):  # noqa: PLW1641
         -------
         list[EndingComponents]
             The list of EndingComponents objects that represent the endings
-            that match the given form.
+            components that match the given form.
         """
         return [
             self._create_namespace(key)

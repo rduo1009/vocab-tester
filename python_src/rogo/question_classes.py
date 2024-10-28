@@ -29,7 +29,7 @@ class Question(Protocol):
     prompt: Any
 
     def check(self, response: Any) -> bool:
-        """Checks if the response is correct."""
+        """Check if the response is correct."""
 
 
 @dataclass
