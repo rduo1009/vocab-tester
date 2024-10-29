@@ -14,7 +14,7 @@ large: ingens, ingentis, (3-1)
 light: levis, leve, (3-2)
 keen: acer, acris, acre, (3-3)
 good: bonus, bona, bonum, (212)
-good: bonus, bona, bonum, (2-1-2)
+happy: laetus, laeta, laetum, (2-1-2)
 
 @ Regular
 into: in

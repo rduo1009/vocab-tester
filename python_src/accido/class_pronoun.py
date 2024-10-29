@@ -66,9 +66,14 @@ class Pronoun(_Word):
         self._first = self.pronoun
         self.meaning: Meaning = meaning
 
-        self.mascnom: Ending = self.endings["Pmnomsg"]
-        self.femnom: Ending = self.endings["Pfnomsg"]
-        self.neutnom: Ending = self.endings["Pnnomsg"]
+        # HACK: hopefully this is the case!
+        assert type(self.endings["Pmnomsg"]) is str
+        assert type(self.endings["Pfnomsg"]) is str
+        assert type(self.endings["Pnnomsg"]) is str
+
+        self.mascnom: str = self.endings["Pmnomsg"]
+        self.femnom: str = self.endings["Pfnomsg"]
+        self.neutnom: str = self.endings["Pnnomsg"]
 
     def get(
         self, *, gender: Gender, case: Case, number: Number

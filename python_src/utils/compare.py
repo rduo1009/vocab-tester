@@ -1,13 +1,8 @@
 #!/usr/bin/env python3
 
-"""General functions used by vocab-tester and its tests."""
+"""Contains a function that compares iterables."""
 
-from __future__ import annotations
-
-from typing import TYPE_CHECKING
-
-if TYPE_CHECKING:
-    from collections.abc import Iterable
+from collections.abc import Iterable
 
 
 def compare[T](first: Iterable[T], second: Iterable[T]) -> bool:
@@ -23,7 +18,7 @@ def compare[T](first: Iterable[T], second: Iterable[T]) -> bool:
     Returns
     -------
     bool
-        True if the iterables are equal, False otherwise.s
+        True if the iterables are equal, False otherwise.
 
     Notes
     -----

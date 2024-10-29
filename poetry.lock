@@ -557,6 +557,17 @@ files = [
 ]
 
 [[package]]
+name = "fsrs"
+version = "2.5.1"
+description = "Free Spaced Repetition Scheduler"
+optional = false
+python-versions = ">=3.9"
+files = [
+    {file = "fsrs-2.5.1-py3-none-any.whl", hash = "sha256:2c6cbc4a759f6603bc6eeda663c5091a600333f1cde28025e893b8bbd293f879"},
+    {file = "fsrs-2.5.1.tar.gz", hash = "sha256:0a02fd3c1dede612272bcad32de4097b1a6e778d95b704531c40480de73f2977"},
+]
+
+[[package]]
 name = "gitdb"
 version = "4.0.11"
 description = "Git Object Database"
@@ -2174,4 +2185,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.12,<4.0"
-content-hash = "38b4e8c030e34dc3909cb91eeec20f5b8388963815dfea28adb3531981b9ae83"
+content-hash = "cd55dc1e93e289ba2fa068bf004bd4017efd44284fba573364ad43f0412f117f"

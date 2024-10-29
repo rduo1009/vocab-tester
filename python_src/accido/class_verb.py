@@ -83,7 +83,6 @@ class Verb(_Word):
             If the input is invalid (incorrect perfect or infinitive).
         """
         super().__init__()
-
         self.present: str = present
         self.infinitive: str = infinitive
         self.perfect: str = perfect
