@@ -320,8 +320,7 @@ class Adjective(_Word):
 
         if not self.mascgen.endswith("is"):
             raise InvalidInputError(
-                f"Invalid genitive form: '{self.mascgen}' "
-                "(must end in '-is')",
+                f"Invalid genitive form: '{self.mascgen}' (must end in '-is')",
             )
 
         self._pos_stem = self.mascgen[:-2]  # ingentis -> ingent-
