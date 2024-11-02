@@ -1,9 +1,0 @@
-version: 0.2.3-dev, adjective: 1.191 s
-version: 0.2.3-dev, noun: 0.168 s
-version: 0.2.3-dev, verb: 1.732 s
-version: 0.2.3-dev, pronoun: 0.059 s
-
-version: 0.2.4-dev, adjective: 1.196 s
-version: 0.2.4-dev, noun: 0.170 s
-version: 0.2.4-dev, pronoun: 0.057 s
-version: 0.2.4-dev, verb: 1.688 s

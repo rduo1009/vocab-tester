@@ -1,5 +1,0 @@
-version: 0.2.3-dev, reader: 15.178 s
-version: 0.2.3-dev, saver: 276.082 s
-
-version: 0.2.4-dev, reader: 16.145 s
-version: 0.2.4-dev, saver: 283.051 s
