@@ -49,20 +49,14 @@ def find_inflection(
         The word to inflect.
     components : accido.misc.EndingComponents
         The components of the word.
-    main : bool, optional = False
+    main : bool
         Whether to return the main inflection or all of the inflections.
+        Default is False.
 
     Returns
     -------
-    str
-        The main inflection of the word.
-    set[str]
-        The inflections of the word.
-
-    Raises
-    ------
-    ValueError
-        If the part of speech is unknown. This should never happen.
+    set[str] | str
+        The main inflection of the word or the inflections of the word.
     """
     match components.type:
         case ComponentsType.ADJECTIVE:

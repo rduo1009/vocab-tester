@@ -26,7 +26,7 @@ def find_adjective_inflections(
     ----------
     adjective : str
         The adjective to inflect.
-    components : EndingComponents
+    components : accido.misc.EndingComponents
         The components of the ending.
 
     Returns
@@ -65,11 +65,11 @@ def find_main_adjective_inflection(
 ) -> str:
     """Find the main inflection of an English adjective.
 
-    Parameters.
+    Parameters
     ----------
     adjective : str
         The adjective to inflect.
-    components : EndingComponents
+    components : accido.misc.EndingComponents
         The components of the ending.
 
     Returns

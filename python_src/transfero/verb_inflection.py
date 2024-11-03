@@ -38,8 +38,9 @@ def find_verb_inflections(
     verb: str,
     components: accido.misc.EndingComponents,
 ) -> set[str]:
-    """Inflect English verbs using the tense, voice, mood, number and
-    person. If a participle is queried, find_participle_inflections is ran
+    """Inflect English verbs using the ending components.
+
+    If a participle is queried, find_participle_inflections is ran
     instead.
 
     Note that subjunctives are not supported as they do not have an exact
@@ -49,7 +50,7 @@ def find_verb_inflections(
     ----------
     verb : str
         The verb to inflect.
-    components : EndingComponents
+    components : accido.misc.EndingComponents
         The components of the ending.
 
     Returns
@@ -61,9 +62,7 @@ def find_verb_inflections(
     ------
     InvalidWordError
         If the word is not a valid English verb.
-    ValueError
-        If the input (other than the word itself) is invalid.
-    """  # noqa: D205
+    """
     _verify_verb_inflections(components)
 
     if components.mood == Mood.PARTICIPLE:
@@ -102,11 +101,11 @@ def find_main_verb_inflection(
 ) -> str:
     """Find the main inflection of an English verb.
 
-    Parameters.
+    Parameters
     ----------
     verb : str
         The verb to inflect.
-    components : EndingComponents
+    components : accido.misc.EndingComponents
         The components of the ending.
 
     Returns
@@ -147,6 +146,9 @@ def find_main_verb_inflection(
         components.voice,
         components.mood,
     )[0]
+
+    # HACK: workaround for pydoclint
+    raise ValueError  # pragma: no cover
 
 
 def _find_lemma(  # noqa: PLR0917

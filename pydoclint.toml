@@ -1,0 +1,9 @@
+[tool.pydoclint]
+style = 'numpy'
+exclude = '\.git|\.tox|\.venv|build|tests|\_vendor|setup.py'
+quiet = true
+baseline = 'docs/pydoclint-baseline.txt'
+
+allow-init-docstring = true
+skip-checking-short-docstrings = true
+check-class-attributes = true

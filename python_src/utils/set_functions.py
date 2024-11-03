@@ -13,7 +13,7 @@ def set_choice[T](s: set[T]) -> T:
     Parameters
     ----------
     s : set[T]
-    The set to choose from.
+        The set to choose from.
 
     Returns
     -------
@@ -28,7 +28,7 @@ def set_choice_pop[T](s: set[T]) -> T:
 
     Parameters
     ----------
-    x : set[T]
+    s : set[T]
         The set to choose from.
 
     Returns

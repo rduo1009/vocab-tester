@@ -154,6 +154,9 @@ def read_vocab_dump(filename: Path) -> VocabList:
         "Vocab dump is not valid.",
     )  # pragma: no cover # this should never happen
 
+    # HACK: workaround for pydoclint
+    raise FileNotFoundError  # pragma: no cover
+
 
 def _generate_meaning(meaning: str) -> Meaning:
     if "/" in meaning:
@@ -267,7 +270,11 @@ def read_vocab_file(file_path: Path) -> VocabList:
                     vocab.append(
                         _parse_line(current, latin_parts, meaning, line),
                     )
+
     return VocabList(vocab)
+
+    # HACK: workaround for pydoclint
+    raise FileNotFoundError  # pragma: no cover
 
 
 def _parse_line(

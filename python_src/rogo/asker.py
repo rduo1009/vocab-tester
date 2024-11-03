@@ -45,7 +45,7 @@ def ask_question_without_sr(
 
     Parameters
     ----------
-    vocab_list : VocabList
+    vocab_list : lego.misc.VocabList
         The vocabulary list to use.
     amount : int
         The number of questions to ask.

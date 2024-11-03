@@ -272,13 +272,9 @@ class EndingComponents:
             The person of the ending.
         degree : Degree | None, optional
             The degree of the ending.
-        string : str, default=""
+        string : str
             The string representation of the ending, if needed.
-
-        Raises
-        ------
-        ValueError
-            If no string is provided. (should never happen)
+            Defaults to "".
         """
         if case:
             self.case: Case = case
@@ -401,8 +397,7 @@ class MultipleMeanings:
 
 
 class MultipleEndings(SimpleNamespace):
-    """Represents multiple endings for a word, where each ending is a
-    separate string.
+    """Represents multiple endings for a word.
 
     The fact that the attribute names can be customised means that this
     class can be used for many use cases.
@@ -426,14 +421,14 @@ class MultipleEndings(SimpleNamespace):
 
     >>> foo.get_all()
     ('nostri', 'nostrum')
-    """  # noqa: D205
+    """
 
     def get_all(self) -> tuple[str, ...]:
         """Return a list of all the possible endings.
 
         Returns
         -------
-        tuple[str]
+        tuple[str, ...]
             The endings.
         """
         return tuple(self.__dict__.values())

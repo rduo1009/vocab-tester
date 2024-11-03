@@ -293,7 +293,7 @@ def filter_questions(settings: Settings) -> set[QuestionClasses]:
 
     Returns
     -------
-    set[str]
+    set[QuestionClasses]
         The filtered classes.
     """
     classes: set[QuestionClasses] = {

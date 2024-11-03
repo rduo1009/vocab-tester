@@ -38,7 +38,7 @@ def find_noun_inflections(
     ----------
     noun : str
         The noun to inflect.
-    components : EndingComponents
+    components : accido.misc.EndingComponents
         The components of the ending.
 
     Returns
@@ -76,11 +76,11 @@ def find_main_noun_inflection(
 ) -> str:
     """Find the main inflection of an English noun.
 
-    Parameters.
+    Parameters
     ----------
     noun : str
         The noun to inflect.
-    components : EndingComponents
+    components : accido.misc.EndingComponents
         The components of the ending.
 
     Returns

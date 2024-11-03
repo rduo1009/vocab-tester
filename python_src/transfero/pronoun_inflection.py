@@ -24,7 +24,7 @@ def find_pronoun_inflections(
     ----------
     pronoun : str
         The pronoun to inflect.
-    components : EndingComponents
+    components : accido.misc.EndingComponents
         The components of the ending.
 
     Returns
@@ -35,7 +35,8 @@ def find_pronoun_inflections(
     Raises
     ------
     NotImplementedError
-        If the word is not a valid English pronoun.
+        If the word is not a pronoun supported by transfero (or not a
+        pronoun at all).
     ValueError
         If the input (other than the word itself) is invalid.
     """
@@ -43,6 +44,9 @@ def find_pronoun_inflections(
         raise ValueError(f"Invalid type: '{components.type}'")
 
     return set(_inflect_lemma(pronoun, components.case, components.number))
+
+    # HACK: workaround for pydoclint
+    raise NotImplementedError  # pragma: no cover
 
 
 def find_main_pronoun_inflection(
@@ -57,7 +61,7 @@ def find_main_pronoun_inflection(
     ----------
     pronoun : str
         The pronoun to inflect.
-    components : EndingComponents
+    components : accido.misc.EndingComponents
         The components of the ending.
 
     Returns
@@ -67,8 +71,9 @@ def find_main_pronoun_inflection(
 
     Raises
     ------
-    InvalidWordError
-        If the word is not a valid English pronoun.
+    NotImplementedError
+        If the word is not a pronoun supported by transfero (or not a
+        pronoun at all).
     ValueError
         If the input (other than the word itself) is invalid.
     """
@@ -76,6 +81,9 @@ def find_main_pronoun_inflection(
         raise ValueError(f"Invalid type: '{components.type}'")
 
     return _inflect_lemma(pronoun, components.case, components.number)[0]
+
+    # HACK: workaround for pydoclint
+    raise NotImplementedError  # pragma: no cover
 
 
 def _inflect_lemma(lemma: str, case: Case, number: Number) -> tuple[str, ...]:

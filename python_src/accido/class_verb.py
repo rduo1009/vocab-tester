@@ -32,7 +32,9 @@ class Verb(_Word):
 
     Attributes
     ----------
-    present, infinitive, perfect : str
+    present : str
+    infinitive : str
+    perfect : str
     ppp : str
         The present perfect participle form of the verb. If the verb does
         not have participle endings, ppp is an empty string.
@@ -71,10 +73,12 @@ class Verb(_Word):
 
         Parameters
         ----------
-        present, infinitive, perfect : str
-        ppp : str, default = ""
+        present : str
+        infinitive : str
+        perfect : str
+        ppp : str
             The ppp ending of the verb. If the verb does not have
-            participle endings, ppp is an empty string.
+            participle endings, ppp defaults to an empty string.
         meaning : Meaning
 
         Raises
@@ -463,9 +467,9 @@ class Verb(_Word):
 
         Parameters
         ----------
-        person : Person | None, default = None
+        person : Person | None
             The person of the ending, if applicable (not participle).
-        number : Number | None, default = None
+        number : Number | None
             The number of the ending, if applicable (not participle).
         tense : Tense
             The tense of the ending.
@@ -473,26 +477,15 @@ class Verb(_Word):
             The voice of the ending.
         mood : Mood
             The mood of the ending.
-        participle_gender : Gender | None, default = None
+        participle_gender : Gender | None
             The gender of the participle, if applicable.
-        participle_case : Case | None, default = None
+        participle_case : Case | None
             The case of the participle, if applicable.
 
         Returns
         -------
-        Ending
-            The ending found
-        None
-            If no ending is found
-
-        Raises
-        ------
-        InvalidInputError
-            If the inputs are not valid. Note that the inputs must be the
-            full words, e.g. 'singular', 'plural', 'masculine', 'feminine'.
-
-            If the ending cannot be found.
-
+        Ending | None
+            The ending found, or None if no ending is found
 
         Examples
         --------

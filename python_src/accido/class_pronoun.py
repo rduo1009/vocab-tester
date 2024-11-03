@@ -93,17 +93,8 @@ class Pronoun(_Word):
 
         Returns
         -------
-        Ending
-            The ending found.
-        None
-            If no ending is found
-
-        Raises
-        ------
-        InvalidInputError
-            If the input is invalid.
-
-            If an ending cannot be found.
+        Ending | None
+            The ending found, or None if no ending is found
 
         Examples
         --------

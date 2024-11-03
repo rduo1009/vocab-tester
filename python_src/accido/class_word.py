@@ -31,11 +31,9 @@ class _Word(ABC):  # noqa: PLW1641
         The meaning of the word.
     """
 
-    def __init__(self) -> None:
-        """Initialise _Word (and all classes that inherit from it)."""
-        self.endings: Endings
-        self._first: str
-        self.meaning: Meaning
+    endings: Endings
+    _first: str
+    meaning: Meaning
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, _Word):
@@ -53,7 +51,7 @@ class _Word(ABC):  # noqa: PLW1641
     def find(self, form: str) -> list[EndingComponents]:
         """Find the ending components that match the given form.
 
-        Attributes
+        Parameters
         ----------
         form : str
             The form to search for.

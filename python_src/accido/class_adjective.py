@@ -89,12 +89,7 @@ class Adjective(_Word):
         declension : AdjectiveDeclension
             The declension of the adjective. "212" represents a 2-1-2
             adjective, while "3" represents a third declension adjective.
-        meaning: Meaning
-
-        Raises
-        ------
-        InvalidInputError
-            If the input is invalid.
+        meaning : Meaning
         """
         super().__init__()
 
@@ -798,26 +793,23 @@ class Adjective(_Word):
         ----------
         degree : Degree
             The degree of the adjective.
-        gender : Gender | None, default = None
+        gender : Gender | None
             The gender of the ending, if applicable (not an adverb).
-        case : Case | None, default = None
+            Default is None.
+        case : Case | None
             The case of the ending, if applicable (not an adverb).
-        number : Number | None, default = None
+            Default is None.
+        number : Number | None
             The number of the ending, if applicable (not an adverb).
-        adverb : bool, default = False
-            Whether the queried ending is an adverb or not.
+            Default is None.
+        adverb : bool
+            Whether the queried ending is an adverb or not. Defaults to
+            False.
 
         Returns
         -------
-        Ending
-            The ending found.
-        None
-            If no ending is found.
-
-        Raises
-        ------
-        InvalidInputError
-            If the input is invalid.
+        Ending | None
+            The ending found, or None if no ending is found.
 
         Examples
         --------

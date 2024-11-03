@@ -27,7 +27,7 @@ def is_person(x: int) -> TypeIs[Person]:
 
     Returns
     -------
-    bool
+    TypeIs[Person]
         True if the value is a valid person, False otherwise.
     """
     return x in {1, 2, 3}
@@ -43,7 +43,7 @@ def is_termination(x: int) -> TypeIs[Termination]:
 
     Returns
     -------
-    bool
+    TypeIs[Termination]
         True if the value is a valid termination, False otherwise.
     """
     return x in {1, 2, 3}

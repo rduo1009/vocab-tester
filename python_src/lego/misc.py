@@ -9,7 +9,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import TYPE_CHECKING, Final
 
-import python_src as src
+import python_src
 
 if TYPE_CHECKING:
     from .. import accido
@@ -47,7 +47,7 @@ class VocabList:
 
     def __post_init__(self) -> None:
         # Set the version using the package version.
-        self.version: str = src.__version__
+        self.version: str = python_src.__version__
 
     def __repr__(self) -> str:
         object_reprs: str = ", ".join(repr(word) for word in self.vocab)

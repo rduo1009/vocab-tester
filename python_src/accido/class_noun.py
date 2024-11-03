@@ -40,7 +40,7 @@ class Noun(_Word):
     >>> foo = Noun(
     ...     nominative="ancilla",
     ...     genitive="ancillae",
-    ...     gender="feminine",
+    ...     gender=Gender.FEMININE,
     ...     meaning="slavegirl",
     ... )
     >>> foo["Nnomsg"]
@@ -116,6 +116,10 @@ class Noun(_Word):
             self.endings = {
                 k: v for k, v in self.endings.items() if not k.endswith("sg")
             }
+
+        # HACK: workaround for pydoclint
+        if False:  # pragma: no cover
+            raise InvalidInputError
 
     def _find_declension(self) -> None:
         # The ordering of this is strange because
@@ -283,22 +287,15 @@ class Noun(_Word):
 
         Returns
         -------
-        Ending
-            The ending found.
-        None
-            If no ending is found.
-
-        Raises
-        ------
-        InvalidInputError
-            If the input is invalid.
+        Ending | None
+            The ending found, or None if no ending is found.
 
         Examples
         --------
         >>> foo = Noun(
         ...     nominative="ancilla",
         ...     genitive="ancillae",
-        ...     gender="feminine",
+        ...     gender=Gender.FEMININE,
         ...     meaning="slavegirl",
         ... )
         >>> foo.get(case=Case.NOMINATIVE, number=Number.SINGULAR)

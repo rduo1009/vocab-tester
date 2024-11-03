@@ -58,8 +58,10 @@ def cache_vocab_file(
 
     Returns
     -------
-    (VocabList, bool)
-        The vocab list, and whether it was generated from cache or not.
+    VocabList
+        The vocab list.
+    bool
+        Whether the vocab list was generated from cache or not.
 
     Warnings
     --------

@@ -31,8 +31,8 @@ def save_vocab_dump(
         The path to the vocabulary dump file.
     vocab_list : VocabList
         The vocabulary to save.
-    compress : bool, default = False
-        Whether to compress the pickle file.
+    compress : bool
+        Whether to compress the pickle file. The default is False.
 
     Raises
     ------

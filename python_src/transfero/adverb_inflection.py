@@ -25,7 +25,7 @@ def find_adverb_inflections(
     ----------
     adverb : str
         The adverb to inflect.
-    components : EndingComponents
+    components : accido.misc.EndingComponents
         The components of the ending.
 
     Returns
@@ -66,7 +66,7 @@ def find_main_adverb_inflection(
     ----------
     adverb : str
         The adverb to inflect.
-    components : EndingComponents
+    components : accido.misc.EndingComponents
         The components of the ending.
 
     Returns
