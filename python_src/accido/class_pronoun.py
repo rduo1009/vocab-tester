@@ -115,7 +115,7 @@ class Pronoun(_Word):
         return self.endings.get(f"P{short_gender}{short_case}{short_number}")
 
     @staticmethod
-    def _create_namespace(key: str) -> EndingComponents:
+    def _create_components(key: str) -> EndingComponents:
         output: EndingComponents = EndingComponents(
             gender=Gender(key[1]),
             case=Case(key[2:5]),

@@ -573,7 +573,7 @@ class Verb(_Word):
         )
 
     @staticmethod
-    def _create_namespace(key: str) -> EndingComponents:
+    def _create_components(key: str) -> EndingComponents:
         output: EndingComponents
         if len(key) == 13 and key[7:10] == "inf":
             output = EndingComponents(

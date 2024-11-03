@@ -846,7 +846,7 @@ class Adjective(_Word):
         )
 
     @staticmethod
-    def _create_namespace(key: str) -> EndingComponents:
+    def _create_components(key: str) -> EndingComponents:
         output: EndingComponents
 
         if key[0] == "A":

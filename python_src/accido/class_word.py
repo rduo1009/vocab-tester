@@ -63,7 +63,7 @@ class _Word(ABC):  # noqa: PLW1641
             components that match the given form.
         """
         return [
-            self._create_namespace(key)
+            self._create_components(key)
             for key, value in self.endings.items()
             if (isinstance(value, MultipleEndings) and form in value.get_all())
             or (not isinstance(value, MultipleEndings) and value == form)
@@ -83,5 +83,5 @@ class _Word(ABC):  # noqa: PLW1641
 
     @staticmethod
     @abstractmethod
-    def _create_namespace(key: str) -> EndingComponents:  # pragma: no cover
+    def _create_components(key: str) -> EndingComponents:  # pragma: no cover
         ...

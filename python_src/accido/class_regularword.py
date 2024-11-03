@@ -57,7 +57,7 @@ class RegularWord(_Word):
         return self.word
 
     @staticmethod
-    def _create_namespace(
+    def _create_components(
         key: str,  # noqa: ARG004
     ) -> EndingComponents:  # pragma: no cover # this should never be ran
         return EndingComponents(string="")

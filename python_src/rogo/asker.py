@@ -154,7 +154,7 @@ def _generate_typein_engtolat(  # noqa: PLR0914, PLR0915
 
     # HACK: Uses a private method but there's no alternative
     ending_components: accido.misc.EndingComponents = (
-        chosen_word._create_namespace(ending_components_key)  # noqa: SLF001
+        chosen_word._create_components(ending_components_key)  # noqa: SLF001
     )
 
     verb_subjunctive: bool = (  # not supported with this question
@@ -448,7 +448,7 @@ def _generate_parse(
     ending_components_key, chosen_ending = _pick_ending(filtered_endings)
 
     main_ending_components: accido.misc.EndingComponents = (
-        chosen_word._create_namespace(ending_components_key)  # noqa: SLF001
+        chosen_word._create_components(ending_components_key)  # noqa: SLF001
     )
 
     chosen_ending = _pick_ending_from_multipleendings(chosen_ending)
@@ -477,7 +477,7 @@ def _generate_inflect(
     ending_components_key, chosen_ending = _pick_ending(filtered_endings)
 
     ending_components: accido.misc.EndingComponents = (
-        chosen_word._create_namespace(ending_components_key)  # noqa: SLF001
+        chosen_word._create_components(ending_components_key)  # noqa: SLF001
     )
 
     main_answer: str
