@@ -36,6 +36,6 @@ def set_choice_pop[T](s: set[T]) -> T:
     T
         A random element from the set.
     """
-    value = random.choice(tuple(s))
+    value: T = random.choice(tuple(s))
     s.remove(value)
     return value

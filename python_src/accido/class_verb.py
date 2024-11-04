@@ -20,10 +20,10 @@ from .misc import (
     Tense,
     Voice,
 )
-from .type_aliases import Ending, Endings, Meaning, Person, is_person
+from .type_aliases import is_person
 
 if TYPE_CHECKING:
-    from .type_aliases import Conjugation
+    from .type_aliases import Conjugation, Ending, Endings, Meaning, Person
 
 
 @total_ordering

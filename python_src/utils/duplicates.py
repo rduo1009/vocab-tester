@@ -1,7 +1,17 @@
+#!/usr/bin/env python3
+
 """Contains functions that deal with duplicates in tuples and lists."""
 
-from collections.abc import Hashable, Sequence
+from __future__ import annotations
+
+from collections.abc import Hashable
 from itertools import groupby
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from collections.abc import Sequence
+
+    from optype import CanLt
 
 
 def _is_hashable[T](sequence: Sequence[T]) -> bool:
@@ -36,7 +46,7 @@ def contains_duplicates[T](sequence: Sequence[T]) -> bool:
     return False
 
 
-def remove_duplicates[C](sequence: Sequence[C]) -> Sequence[C]:
+def remove_duplicates[C: CanLt](sequence: Sequence[C]) -> Sequence[C]:
     """Remove duplicates from a list or tuple.
 
     Note that this does not keep order.
@@ -58,4 +68,4 @@ def remove_duplicates[C](sequence: Sequence[C]) -> Sequence[C]:
     if _is_hashable(sequence):
         return type(sequence)(set(sequence))  # type: ignore[call-arg]
 
-    return type(sequence)(k for k, v in groupby(sorted(sequence)))  # type: ignore[call-arg, type-var]
+    return type(sequence)(k for k, v in groupby(sorted(sequence)))  # type: ignore[call-arg]

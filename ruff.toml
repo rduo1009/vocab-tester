@@ -45,6 +45,10 @@ exclude = ["build.py"]
 [lint.pydocstyle]
 convention = "numpy"
 
+[lint.flake8-type-checking]
+quote-annotations = true
+strict = true
+
 [format]
 preview = true
 quote-style = "double"

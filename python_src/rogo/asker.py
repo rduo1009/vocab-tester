@@ -8,7 +8,7 @@ import random
 from copy import deepcopy
 from typing import TYPE_CHECKING, overload
 
-from .. import accido, lego, transfero
+from .. import accido, transfero
 from ..accido.misc import Case, Gender, Mood, Number
 from ..utils import set_choice
 from .exceptions import InvalidSettingsError
@@ -27,6 +27,7 @@ from .rules import filter_endings, filter_questions, filter_words
 if TYPE_CHECKING:
     from collections.abc import Iterable
 
+    from .. import lego
     from ..accido.type_aliases import Ending, Endings, Meaning
     from .question_classes import Question
     from .type_aliases import Settings, Vocab

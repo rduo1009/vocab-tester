@@ -17,13 +17,15 @@ import python_src as src
 
 from .. import accido
 from ..accido.misc import Gender
-from ..accido.type_aliases import Meaning, is_termination
+from ..accido.type_aliases import is_termination
 from .exceptions import InvalidVocabDumpError, InvalidVocabFileFormatError
 from .misc import KEY, VocabList
 
 if TYPE_CHECKING:
     from io import TextIOWrapper
     from pathlib import Path
+
+    from ..accido.type_aliases import Meaning
 
 
 def _regenerate_vocab_list(vocab_list: VocabList) -> VocabList:

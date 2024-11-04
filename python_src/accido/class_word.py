@@ -8,9 +8,10 @@ from abc import ABC, abstractmethod
 from functools import total_ordering
 from typing import TYPE_CHECKING, Any
 
-from .misc import EndingComponents, MultipleEndings
+from .misc import MultipleEndings
 
 if TYPE_CHECKING:
+    from .misc import EndingComponents
     from .type_aliases import Ending, Endings, Meaning
 
 

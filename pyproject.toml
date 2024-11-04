@@ -46,3 +46,4 @@ pydoclint = "==0.5.9"
 [tool.poetry.group.types.dependencies]
 types-regex = "==2024.9.11.20240912"
 types-setuptools = "==75.2.0.20241025"
+optype = "==0.6.1"
