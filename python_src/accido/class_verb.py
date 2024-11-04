@@ -142,7 +142,7 @@ class Verb(_Word):
             case 4:
                 self.endings = self._fourth_conjugation()
 
-            case 5:  # pragma: no branch
+            case _:
                 self.endings = self._third_io_conjugation()
 
         if self.ppp:
@@ -548,6 +548,7 @@ class Verb(_Word):
 
         if mood == Mood.INFINITIVE:
             return self.endings.get(f"V{short_tense}{short_voice}inf   ")
+
         short_mood: str = mood.shorthand
         return self.endings.get(
             f"V{short_tense}{short_voice}{short_mood}{short_number}{person}",
@@ -575,6 +576,7 @@ class Verb(_Word):
     @staticmethod
     def _create_components(key: str) -> EndingComponents:
         output: EndingComponents
+
         if len(key) == 13 and key[7:10] == "inf":
             output = EndingComponents(
                 tense=Tense(key[1:4]),
@@ -621,9 +623,7 @@ class Verb(_Word):
             )
             return output
 
-        raise InvalidInputError(
-            f"Key '{key}' is invalid"
-        )  # pragma: no cover # this should never happen
+        raise InvalidInputError(f"Key '{key}' is invalid")
 
     def __repr__(self) -> str:
         return (

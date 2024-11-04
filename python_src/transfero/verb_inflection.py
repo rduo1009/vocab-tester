@@ -70,7 +70,7 @@ def find_verb_inflections(
 
     try:
         lemmas: tuple[str, ...] = lemminflect.getLemma(verb, "VERB")
-    except KeyError as e:  # pragma: no cover
+    except KeyError as e:
         raise InvalidWordError(f"Word {verb} is not a verb") from e
 
     inflections: set[str] = set()
@@ -127,7 +127,7 @@ def find_main_verb_inflection(
 
     try:
         lemma: str = lemminflect.getLemma(verb, "VERB")[0]
-    except KeyError as e:  # pragma: no cover
+    except KeyError as e:
         raise InvalidWordError(f"Word {verb} is not a verb") from e
 
     if hasattr(components, "number") and hasattr(components, "person"):
@@ -263,14 +263,13 @@ def _find_preactind_inflections(  # type: ignore[return] # mypy cannot manage tu
                 },
             )
 
-        case (Number.PLURAL, 3):  # pragma: no branch
-            return (
-                f"they {present_nonthird}",
-                {
-                    f"they {present_nonthird}",
-                    f"they are {present_participle}",
-                },
-            )
+    return (
+        f"they {present_nonthird}",
+        {
+            f"they {present_nonthird}",
+            f"they are {present_participle}",
+        },
+    )
 
 
 def _find_impactind_inflections(  # type: ignore[return] # mypy cannot manage tuple match
@@ -318,11 +317,10 @@ def _find_impactind_inflections(  # type: ignore[return] # mypy cannot manage tu
                     },
                 )
 
-            case (Number.PLURAL, 3):  # pragma: no branch
-                return (
-                    f"they {past}",
-                    {f"they {past}", f"they were {present_participle}"},
-                )
+        return (
+            f"they {past}",
+            {f"they {past}", f"they were {present_participle}"},
+        )
 
     match (number, person):
         case (Number.SINGULAR, 1):
@@ -353,11 +351,10 @@ def _find_impactind_inflections(  # type: ignore[return] # mypy cannot manage tu
                 },
             )
 
-        case (Number.PLURAL, 3):  # pragma: no branch
-            return (
-                f"they were {present_participle}",
-                {f"they were {present_participle}"},
-            )
+    return (
+        f"they were {present_participle}",
+        {f"they were {present_participle}"},
+    )
 
 
 def _find_peractind_inflections(  # type: ignore[return] # mypy cannot manage tuple match
@@ -414,15 +411,14 @@ def _find_peractind_inflections(  # type: ignore[return] # mypy cannot manage tu
                 },
             )
 
-        case (Number.PLURAL, 3):  # pragma: no branch
-            return (
-                f"they {past}",
-                {
-                    f"they {past}",
-                    f"they have {past}",
-                    f"they did {lemma}",
-                },
-            )
+    return (
+        f"they {past}",
+        {
+            f"they {past}",
+            f"they have {past}",
+            f"they did {lemma}",
+        },
+    )
 
 
 def _find_plpactind_inflections(  # type: ignore[return] # mypy cannot manage tuple match
@@ -455,11 +451,10 @@ def _find_plpactind_inflections(  # type: ignore[return] # mypy cannot manage tu
                 },
             )
 
-        case (Number.PLURAL, 3):  # pragma: no branch
-            return (
-                f"they had {past_participle}",
-                {f"they had {past_participle}"},
-            )
+    return (
+        f"they had {past_participle}",
+        {f"they had {past_participle}"},
+    )
 
 
 def _find_participle_inflections(

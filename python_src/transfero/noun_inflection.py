@@ -58,7 +58,7 @@ def find_noun_inflections(
 
     try:
         lemmas: tuple[str, ...] = lemminflect.getLemma(noun, "NOUN")
-    except KeyError as e:  # pragma: no cover
+    except KeyError as e:
         raise InvalidWordError(f"Word {noun} is not a noun") from e
 
     inflections: set[str] = set()
@@ -100,7 +100,7 @@ def find_main_noun_inflection(
 
     try:
         lemma: str = lemminflect.getLemma(noun, "NOUN")[0]
-    except KeyError as e:  # pragma: no cover
+    except KeyError as e:
         raise InvalidWordError(f"Word {noun} is not a noun") from e
 
     return _inflect_lemma(lemma, components.case, components.number)[0]
@@ -112,25 +112,25 @@ def _inflect_lemma(
     base_forms: set[str] = set()
     best_form: str
 
-    match number:
-        case Number.SINGULAR:
-            base_forms = {*lemminflect.getInflection(lemma, "NN")}
-            best_form = lemminflect.getInflection(lemma, "NN")[0]
-        case Number.PLURAL:  # pragma: no branch
-            normal_plural: str = pluralinflect.plural_noun(lemma)
-            pluralinflect.classical(all=True)
-            classical_plural: str = pluralinflect.plural_noun(lemma)
-            pluralinflect.classical(all=False)
-            base_forms.update({normal_plural, classical_plural})
+    if number == Number.SINGULAR:
+        base_forms = {*lemminflect.getInflection(lemma, "NN")}
+        best_form = lemminflect.getInflection(lemma, "NN")[0]
+    else:
+        normal_plural: str = pluralinflect.plural_noun(lemma)
+        pluralinflect.classical(all=True)
+        classical_plural: str = pluralinflect.plural_noun(lemma)
+        pluralinflect.classical(all=False)
+        base_forms.update({normal_plural, classical_plural})
 
-            # If the noun has a classical plural form, then that is used,
-            # but if it doesn't then classical_plural is just the normal
-            # plural
-            best_form = classical_plural
+        # If the noun has a classical plural form, then that is used,
+        # but if it doesn't then classical_plural is just the normal
+        # plural
+        best_form = classical_plural
 
     match case:
         case Case.NOMINATIVE | Case.VOCATIVE | Case.ACCUSATIVE:
             return (best_form, base_forms)
+
         case Case.GENITIVE:
             possessive_genitive: set[str] = {
                 _get_possessive(base_form) for base_form in base_forms
@@ -152,6 +152,7 @@ def _inflect_lemma(
                 possessive_genitive
                 | {f"of the {base_form}" for base_form in base_forms},
             )
+
         case Case.DATIVE:
             if number == Number.SINGULAR:
                 return (
@@ -169,6 +170,7 @@ def _inflect_lemma(
                         }
                     ),
                 )
+
             return (
                 f"for the {best_form}",
                 (
@@ -178,43 +180,36 @@ def _inflect_lemma(
                     | {f"to {base_form}" for base_form in base_forms}
                 ),
             )
-        case Case.ABLATIVE:  # pragma: no branch
-            if number == Number.SINGULAR:
-                return (
-                    f"by the {best_form}",
-                    (
-                        base_forms
-                        | {f"with the {base_form}" for base_form in base_forms}
-                        | {
-                            pluralinflect.inflect(f"with a('{base_form}')")
-                            for base_form in base_forms
-                        }
-                        | {f"by the {base_form}" for base_form in base_forms}
-                        | {
-                            pluralinflect.inflect(f"by a('{base_form}')")
-                            for base_form in base_forms
-                        }
-                        | {
-                            f"by means of the {base_form}"
-                            for base_form in base_forms
-                        }
-                        | {
-                            pluralinflect.inflect(
-                                f"by means of a('{base_form}')"
-                            )
-                            for base_form in base_forms
-                        }
-                    ),
-                )
-            return (
-                f"by the {best_form}",
-                (
-                    base_forms
-                    | {f"with the {base_form}" for base_form in base_forms}
-                    | {f"by the {base_form}" for base_form in base_forms}
-                    | {
-                        f"by means of the {base_form}"
-                        for base_form in base_forms
-                    }
-                ),
-            )
+
+    if number == Number.SINGULAR:
+        return (
+            f"by the {best_form}",
+            (
+                base_forms
+                | {f"with the {base_form}" for base_form in base_forms}
+                | {
+                    pluralinflect.inflect(f"with a('{base_form}')")
+                    for base_form in base_forms
+                }
+                | {f"by the {base_form}" for base_form in base_forms}
+                | {
+                    pluralinflect.inflect(f"by a('{base_form}')")
+                    for base_form in base_forms
+                }
+                | {f"by means of the {base_form}" for base_form in base_forms}
+                | {
+                    pluralinflect.inflect(f"by means of a('{base_form}')")
+                    for base_form in base_forms
+                }
+            ),
+        )
+
+    return (
+        f"by the {best_form}",
+        (
+            base_forms
+            | {f"with the {base_form}" for base_form in base_forms}
+            | {f"by the {base_form}" for base_form in base_forms}
+            | {f"by means of the {base_form}" for base_form in base_forms}
+        ),
+    )

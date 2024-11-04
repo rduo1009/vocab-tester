@@ -34,7 +34,7 @@ def compare[T](first: Sequence[T], second: Sequence[T]) -> bool:
     try:
         for elem in first:
             comparison.remove(elem)
-    except ValueError:  # pragma: no cover
+    except ValueError:
         return False
 
     return not comparison

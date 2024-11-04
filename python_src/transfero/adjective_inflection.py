@@ -48,7 +48,7 @@ def find_adjective_inflections(
 
     try:
         lemmas: tuple[str, ...] = lemminflect.getLemma(adjective, "ADJ")
-    except KeyError as e:  # pragma: no cover
+    except KeyError as e:
         raise InvalidWordError(
             f"Word '{adjective}' is not an adjective"
         ) from e
@@ -91,7 +91,7 @@ def find_main_adjective_inflection(
 
     try:
         lemma: str = lemminflect.getLemma(adjective, "ADJ")[0]
-    except KeyError as e:  # pragma: no cover
+    except KeyError as e:
         raise InvalidWordError(
             f"Word '{adjective}' is not an adjective"
         ) from e
@@ -102,9 +102,10 @@ def find_main_adjective_inflection(
 def _inflect_lemma(lemma: str, degree: Degree) -> tuple[str, set[str]]:
     not_comparable: bool = lemma in NOT_COMPARABLE_ADJECTIVES
 
-    match degree:  # pragma: no branch
+    match degree:
         case Degree.POSITIVE:
             return (lemma, {lemma})
+
         case Degree.COMPARATIVE:
             comparatives: tuple[str, ...] = lemminflect.getInflection(
                 lemma, "RBR"
@@ -113,19 +114,17 @@ def _inflect_lemma(lemma: str, degree: Degree) -> tuple[str, set[str]]:
                 f"more {lemma}" if not_comparable else comparatives[0],
                 {*comparatives, f"more {lemma}"},
             )
-        case Degree.SUPERLATIVE:  # pragma: no branch
-            superlatives: tuple[str, ...] = lemminflect.getInflection(
-                lemma, "RBS"
-            )
-            return (
-                f"most {lemma}" if not_comparable else superlatives[0],
-                {
-                    *superlatives,
-                    f"most {lemma}",
-                    f"very {lemma}",
-                    f"extremely {lemma}",
-                    f"rather {lemma}",
-                    f"too {lemma}",
-                    f"quite {lemma}",
-                },
-            )
+
+    superlatives: tuple[str, ...] = lemminflect.getInflection(lemma, "RBS")
+    return (
+        f"most {lemma}" if not_comparable else superlatives[0],
+        {
+            *superlatives,
+            f"most {lemma}",
+            f"very {lemma}",
+            f"extremely {lemma}",
+            f"rather {lemma}",
+            f"too {lemma}",
+            f"quite {lemma}",
+        },
+    )

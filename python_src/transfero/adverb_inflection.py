@@ -42,12 +42,13 @@ def find_adverb_inflections(
     """
     if components.type != ComponentsType.ADJECTIVE:
         raise ValueError(f"Invalid type: '{components.type}'")
-    if components.subtype != ComponentsSubtype.ADVERB:  # pragma: no cover
+
+    if components.subtype != ComponentsSubtype.ADVERB:
         raise ValueError(f"Invalid subtype: '{components.subtype}'")
 
     try:
         lemmas: tuple[str, ...] = lemminflect.getLemma(adverb, "ADV")
-    except KeyError as e:  # pragma: no cover
+    except KeyError as e:
         raise InvalidWordError(f"Word '{adverb}' is not an adverb") from e
 
     inflections: set[str] = set()
@@ -88,7 +89,7 @@ def find_main_adverb_inflection(
 
     try:
         lemma: str = lemminflect.getLemma(adverb, "ADV")[0]
-    except KeyError as e:  # pragma: no cover
+    except KeyError as e:
         raise InvalidWordError(f"Word '{adverb}' is not an adverb") from e
 
     return _inflect_lemma(lemma, components.degree)[0]
@@ -98,17 +99,18 @@ def _inflect_lemma(lemma: str, degree: Degree) -> tuple[str, set[str]]:
     match degree:
         case Degree.POSITIVE:
             return (lemma, {lemma})
+
         case Degree.COMPARATIVE:
             return (f"more {lemma}", {f"more {lemma}"})
-        case Degree.SUPERLATIVE:  # pragma: no branch
-            return (
-                f"most {lemma}",
-                {
-                    f"most {lemma}",
-                    f"very {lemma}",
-                    f"extremely {lemma}",
-                    f"rather {lemma}",
-                    f"too {lemma}",
-                    f"quite {lemma}",
-                },
-            )
+
+    return (
+        f"most {lemma}",
+        {
+            f"most {lemma}",
+            f"very {lemma}",
+            f"extremely {lemma}",
+            f"rather {lemma}",
+            f"too {lemma}",
+            f"quite {lemma}",
+        },
+    )

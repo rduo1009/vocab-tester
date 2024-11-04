@@ -103,11 +103,12 @@ class Degree(
 
 
 """Mapping of person values to their more concise abbreviated forms."""
-PERSON_SHORTHAND: Final[dict[int, str]] = {
-    1: "1st person",
-    2: "2nd person",
-    3: "3rd person",
-}
+PERSON_SHORTHAND: Final[tuple[str, str, str, str]] = (
+    "",
+    "1st person",
+    "2nd person",
+    "3rd person",
+)
 
 
 class ComponentsType(StrEnum):
@@ -312,8 +313,10 @@ class EndingComponents:
 
         if set(attributes) == {"tense", "voice", "mood", "person", "number"}:
             return (ComponentsType.VERB, None)
+
         if set(attributes) == {"tense", "voice", "mood"}:
             return (ComponentsType.VERB, ComponentsSubtype.INFINITIVE)
+
         if set(attributes) == {
             "tense",
             "voice",
@@ -323,19 +326,20 @@ class EndingComponents:
             "case",
         }:
             return (ComponentsType.VERB, ComponentsSubtype.PARTICIPLE)
+
         if set(attributes) == {"degree"}:
             return (ComponentsType.ADJECTIVE, ComponentsSubtype.ADVERB)
+
         if set(attributes) == {"number", "gender", "case", "degree"}:
             return (ComponentsType.ADJECTIVE, None)
+
         if set(attributes) == {"number", "gender", "case"}:
             return (ComponentsType.PRONOUN, None)
+
         if set(attributes) == {"number", "case"}:
             return (ComponentsType.NOUN, None)
-        if not set(attributes):
-            return (ComponentsType.REGULARWORD, None)
-        raise ValueError(  # pragma: no cover
-            f"Invalid combination of attributes: {', '.join(attributes)}"
-        )
+
+        return (ComponentsType.REGULARWORD, None)
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, EndingComponents):
@@ -440,7 +444,7 @@ class MultipleEndings(SimpleNamespace):
         return self.__str__() + val2
 
     # Allows for a prefix to be added to all of the endings.
-    def __radd__(self, val2: str) -> MultipleEndings:  # pragma: no cover
+    def __radd__(self, val2: str) -> MultipleEndings:
         prefixed = {
             key: f"{val2}{value}" for key, value in self.__dict__.items()
         }

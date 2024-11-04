@@ -130,20 +130,19 @@ class Adjective(_Word):
         if self.mascnom in NO_ADVERB_ADJECTIVES:
             self.adverb_flag = False
 
-        match self.declension:
-            case "212":
-                self.endings = self._212_endings()
+        if self.declension == "212":
+            self.endings = self._212_endings()
+            return
 
-            case "3":  # pragma: no branch
-                match self.termination:
-                    case 1:
-                        self.endings = self._31_endings()
+        match self.termination:
+            case 1:
+                self.endings = self._31_endings()
 
-                    case 2:
-                        self.endings = self._32_endings()
+            case 2:
+                self.endings = self._32_endings()
 
-                    case 3:  # pragma: no branch
-                        self.endings = self._33_endings()
+            case _:
+                self.endings = self._33_endings()
 
     def _212_endings(self) -> Endings:
         if len(self._principal_parts) != 3:
@@ -163,7 +162,7 @@ class Adjective(_Word):
                 "er",
             ):
                 self._spr_stem = f"{self.mascnom}rim"  # miser- -> miserrim-
-            elif self.mascnom in LIS_ADJECTIVES:  # pragma: no cover
+            elif self.mascnom in LIS_ADJECTIVES:
                 self._spr_stem = f"{self._pos_stem}lim"  # facil- -> facillim-
             else:
                 self._spr_stem = f"{self._pos_stem}issim"  # car- -> carissim-
@@ -324,7 +323,7 @@ class Adjective(_Word):
             self._cmp_stem = f"{self._pos_stem}ior"  # ingent- > ingentior-
             if self.mascnom.endswith("er"):
                 self._spr_stem = f"{self.mascnom}rim"  # miser- -> miserrim-
-            elif self.mascnom in LIS_ADJECTIVES:  # pragma: no cover
+            elif self.mascnom in LIS_ADJECTIVES:
                 self._spr_stem = f"{self._pos_stem}lim"  # facil- -> facillim-
             else:
                 self._spr_stem = (
@@ -442,7 +441,7 @@ class Adjective(_Word):
             "Asprnablpl": f"{self._spr_stem}is",  # ingentissimis
         }
 
-        if self.adverb_flag:  # pragma: no cover
+        if self.adverb_flag:
             endings |= {
                 "Dpos": (
                     self._irregular_posadv
@@ -475,7 +474,7 @@ class Adjective(_Word):
         self._pos_stem = self.mascnom[:-2]  # fortis -> fort-
         if not self.irregular_flag:
             self._cmp_stem = f"{self._pos_stem}ior"  # fort- -> fortior-
-            if self.mascnom.endswith("er"):  # pragma: no cover
+            if self.mascnom.endswith("er"):
                 self._spr_stem = f"{self.mascnom}rim"  # miser- -> miserrim-
             elif self.mascnom in LIS_ADJECTIVES:
                 self._spr_stem = f"{self._pos_stem}lim"  # facil- -> facillim-
@@ -595,7 +594,7 @@ class Adjective(_Word):
             "Asprnablpl": f"{self._spr_stem}is",  # fortissimis
         }
 
-        if self.adverb_flag:  # pragma: no cover
+        if self.adverb_flag:
             endings |= {
                 "Dpos": (
                     self._irregular_posadv
@@ -632,9 +631,9 @@ class Adjective(_Word):
             self._cmp_stem = f"{self._pos_stem}ior"  # acr- -> acrior-
             if self.mascnom.endswith("er"):
                 self._spr_stem = f"{self.mascnom}rim"  # cer- -> acerrim-
-            elif self.mascnom in LIS_ADJECTIVES:  # pragma: no cover
+            elif self.mascnom in LIS_ADJECTIVES:
                 self._spr_stem = f"{self._pos_stem}lim"  # facil- -> facillim-
-            else:  # pragma: no cover
+            else:
                 self._spr_stem = f"{self._pos_stem}issim"  # levis -> levissim-
 
         endings: Endings = {
@@ -748,7 +747,7 @@ class Adjective(_Word):
             "Asprnablpl": f"{self._spr_stem}is",  # acerrimis
         }
 
-        if self.adverb_flag:  # pragma: no cover
+        if self.adverb_flag:
             endings |= {
                 "Dpos": (
                     self._irregular_posadv

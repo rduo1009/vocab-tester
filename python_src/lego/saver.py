@@ -66,7 +66,7 @@ def save_vocab_dump(
             f"The directory '{file_path.parent}' does not exist",
         )
 
-    if file_path.exists():  # pragma: no branch
+    if file_path.exists():
         warnings.warn(
             f"The file '{file_path}' already exists and has been overwritten",
             stacklevel=2,

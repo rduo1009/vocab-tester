@@ -40,6 +40,7 @@ def _regenerate_vocab_list(vocab_list: VocabList) -> VocabList:
                     meaning=word.meaning,
                 ),
             )
+
         elif isinstance(word, accido.endings.Verb):
             new_vocab.append(
                 accido.endings.Verb(
@@ -50,6 +51,7 @@ def _regenerate_vocab_list(vocab_list: VocabList) -> VocabList:
                     meaning=word.meaning,
                 ),
             )
+
         elif isinstance(word, accido.endings.Noun):
             new_vocab.append(
                 accido.endings.Noun(
@@ -59,27 +61,28 @@ def _regenerate_vocab_list(vocab_list: VocabList) -> VocabList:
                     gender=word.gender,
                 ),
             )
-        elif isinstance(word, accido.endings.Adjective):
-            match word.declension:
-                case "212":
-                    new_vocab.append(
-                        accido.endings.Adjective(
-                            *word._principal_parts,  # noqa: SLF001
-                            declension="212",
-                            meaning=word.meaning,
-                        ),
-                    )
-                case "3":  # pragma: no branch
-                    assert word.termination is not None
 
-                    new_vocab.append(
-                        accido.endings.Adjective(
-                            *word._principal_parts,  # noqa: SLF001
-                            termination=word.termination,
-                            declension="3",
-                            meaning=word.meaning,
-                        ),
-                    )
+        elif isinstance(word, accido.endings.Adjective):
+            if word.declension == "212":
+                new_vocab.append(
+                    accido.endings.Adjective(
+                        *word._principal_parts,  # noqa: SLF001
+                        declension="212",
+                        meaning=word.meaning,
+                    ),
+                )
+            else:
+                assert word.termination is not None
+
+                new_vocab.append(
+                    accido.endings.Adjective(
+                        *word._principal_parts,  # noqa: SLF001
+                        termination=word.termination,
+                        declension="3",
+                        meaning=word.meaning,
+                    ),
+                )
+
         elif isinstance(word, accido.endings.Pronoun):
             new_vocab.append(
                 accido.endings.Pronoun(
@@ -87,8 +90,6 @@ def _regenerate_vocab_list(vocab_list: VocabList) -> VocabList:
                     meaning=word.meaning,
                 ),
             )
-        else:  # pragma: no cover # this should never happen
-            raise TypeError(f"Unknown word type: {type(word)}")
 
     return VocabList(new_vocab)
 
@@ -134,11 +135,9 @@ def read_vocab_dump(filename: Path) -> VocabList:
             pickled_data = content[:-64]
             signature = content[-64:].decode()
 
-    if (
-        hmac.new(KEY, pickled_data, hashlib.sha256).hexdigest() != signature
-    ):  # pragma: no cover # this should never happen
+    if hmac.new(KEY, pickled_data, hashlib.sha256).hexdigest() != signature:
         raise InvalidVocabDumpError(
-            "Data integrity check failed for vocab dump.",
+            "Data integrity check failed for vocab dump."
         )
 
     raw_data = pickle.loads(pickled_data)
@@ -152,9 +151,7 @@ def read_vocab_dump(filename: Path) -> VocabList:
         )
         return _regenerate_vocab_list(raw_data)
 
-    raise InvalidVocabDumpError(
-        "Vocab dump is not valid.",
-    )  # pragma: no cover # this should never happen
+    raise InvalidVocabDumpError("Vocab dump is not valid.")
 
     # HACK: workaround for pydoclint
     raise FileNotFoundError  # pragma: no cover
@@ -370,8 +367,7 @@ def _parse_line(
                 meaning=meaning,
             )
 
-        case "Pronoun":  # pragma: no branch
-            return accido.endings.Pronoun(
-                meaning=meaning,
-                pronoun=latin_parts[0],
-            )
+    return accido.endings.Pronoun(
+        meaning=meaning,
+        pronoun=latin_parts[0],
+    )

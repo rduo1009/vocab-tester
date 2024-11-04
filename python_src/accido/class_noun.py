@@ -164,8 +164,6 @@ class Noun(_Word):
             )
 
     def _determine_endings(self) -> Endings:
-        assert self.declension != 0
-
         match self.declension:
             case 1:
                 return {
@@ -235,21 +233,20 @@ class Noun(_Word):
                     "Nablpl": f"{self._stem}ibus",  # manibus
                 }
 
-            case 5:  # pragma: no branch
-                return {
-                    "Nnomsg": self.nominative,  # res
-                    "Nvocsg": self.nominative,  # res
-                    "Naccsg": f"{self._stem}em",  # rem
-                    "Ngensg": f"{self._stem}ei",  # rei
-                    "Ndatsg": f"{self._stem}ei",  # rei
-                    "Nablsg": f"{self._stem}e",  # re
-                    "Nnompl": f"{self._stem}es",  # res
-                    "Nvocpl": f"{self._stem}es",  # res
-                    "Naccpl": f"{self._stem}es",  # res
-                    "Ngenpl": f"{self._stem}erum",  # rerum
-                    "Ndatpl": f"{self._stem}ebus",  # rebus
-                    "Nablpl": f"{self._stem}ebus",  # rebus
-                }
+        return {
+            "Nnomsg": self.nominative,  # res
+            "Nvocsg": self.nominative,  # res
+            "Naccsg": f"{self._stem}em",  # rem
+            "Ngensg": f"{self._stem}ei",  # rei
+            "Ndatsg": f"{self._stem}ei",  # rei
+            "Nablsg": f"{self._stem}e",  # re
+            "Nnompl": f"{self._stem}es",  # res
+            "Nvocpl": f"{self._stem}es",  # res
+            "Naccpl": f"{self._stem}es",  # res
+            "Ngenpl": f"{self._stem}erum",  # rerum
+            "Ndatpl": f"{self._stem}ebus",  # rebus
+            "Nablpl": f"{self._stem}ebus",  # rebus
+        }
 
     def _neuter_endings(self) -> None:
         self.endings["Naccsg"] = self.nominative  # templum
@@ -266,12 +263,12 @@ class Noun(_Word):
             self.endings["Naccpl"] = f"{self._stem}ua"  # cornua
             self.endings["Nvocpl"] = f"{self._stem}ua"  # cornua
             self.endings["Ndatsg"] = f"{self._stem}u"  # cornu
+            return
 
-        else:
-            # For the other declensions
-            self.endings["Nnompl"] = f"{self._stem}a"  # templa
-            self.endings["Naccpl"] = f"{self._stem}a"  # templa
-            self.endings["Nvocpl"] = f"{self._stem}a"  # templa
+        # For the other declensions
+        self.endings["Nnompl"] = f"{self._stem}a"  # templa
+        self.endings["Naccpl"] = f"{self._stem}a"  # templa
+        self.endings["Nvocpl"] = f"{self._stem}a"  # templa
 
     def get(self, *, case: Case, number: Number) -> Ending | None:
         """Return the ending of the noun.

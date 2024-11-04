@@ -99,5 +99,4 @@ def find_inflection(
                 else find_pronoun_inflections(word, components)
             )
 
-        case ComponentsType.REGULARWORD:  # pragma: no branch
-            return word if main else {word}
+    return word if main else {word}
