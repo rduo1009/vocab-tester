@@ -213,7 +213,7 @@ def _find_lemma(  # noqa: PLR0917
             )
 
 
-def _find_preactind_inflections(  # type: ignore[return] # mypy cannot manage tuple match
+def _find_preactind_inflections(  # mypy cannot manage tuple match
     lemma: str,
     number: Number,
     person: Person,
@@ -272,7 +272,7 @@ def _find_preactind_inflections(  # type: ignore[return] # mypy cannot manage tu
     )
 
 
-def _find_impactind_inflections(  # type: ignore[return] # mypy cannot manage tuple match
+def _find_impactind_inflections(  # mypy cannot manage tuple match
     lemma: str,
     number: Number,
     person: Person,
@@ -357,7 +357,7 @@ def _find_impactind_inflections(  # type: ignore[return] # mypy cannot manage tu
     )
 
 
-def _find_peractind_inflections(  # type: ignore[return] # mypy cannot manage tuple match
+def _find_peractind_inflections(  # mypy cannot manage tuple match
     lemma: str,
     number: Number,
     person: Person,
@@ -421,7 +421,7 @@ def _find_peractind_inflections(  # type: ignore[return] # mypy cannot manage tu
     )
 
 
-def _find_plpactind_inflections(  # type: ignore[return] # mypy cannot manage tuple match
+def _find_plpactind_inflections(  # mypy cannot manage tuple match
     lemma: str,
     number: Number,
     person: Person,
