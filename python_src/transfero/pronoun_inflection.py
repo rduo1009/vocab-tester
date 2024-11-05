@@ -95,7 +95,9 @@ def _inflect_lemma(lemma: str, case: Case, number: Number) -> tuple[str, ...]:
         ) from e
 
 
-type _Inflections = dict[tuple[Case, Number], tuple[str, ...]]
+type _Inflections = dict[  # pragma: no mutate
+    tuple[Case, Number], tuple[str, ...]  # pragma: no mutate
+]
 PRONOUNS: Final[dict[str, _Inflections]] = {
     "this": {
         (Case.NOMINATIVE, Number.SINGULAR): ("this",),

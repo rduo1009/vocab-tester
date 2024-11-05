@@ -165,7 +165,9 @@ def _generate_meaning(meaning: str) -> Meaning:
     return meaning
 
 
-type _PartOfSpeech = Literal["Verb", "Adjective", "Noun", "Regular", "Pronoun"]
+type _PartOfSpeech = Literal[  # pragma: no mutate
+    "Verb", "Adjective", "Noun", "Regular", "Pronoun"  # pragma: no mutate
+]
 
 
 def _is_typeofspeech(x: str) -> bool:

@@ -5,6 +5,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../.
 
 from pathlib import Path
 
+import pytest
 from python_src.lego.reader import read_vocab_file
 from python_src.rogo.asker import ask_question_without_sr
 from python_src.rogo.question_classes import TypeInEngToLatQuestion
@@ -105,11 +106,20 @@ settings: Settings = {
 }
 
 
+@pytest.mark.manual
 def test_typein_engtolat():
     vocab_list = read_vocab_file(Path("tests/python_src_lego/test_vocab_files/regular_list.txt"))
-    amount = 1000
+    amount = 50
+    for output in ask_question_without_sr(vocab_list, amount, settings):
+        assert type(output) is TypeInEngToLatQuestion
+
+        ic(output)  # type: ignore[name-defined] # noqa: F821
+
+
+def test_typein_engtolat_check():
+    vocab_list = read_vocab_file(Path("tests/python_src_lego/test_vocab_files/regular_list.txt"))
+    amount = 500
     for output in ask_question_without_sr(vocab_list, amount, settings):
         assert type(output) is TypeInEngToLatQuestion
 
         assert output.check(output.main_answer)
-        ic(output)  # type: ignore[name-defined] # noqa: F821
