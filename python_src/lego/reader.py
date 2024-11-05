@@ -159,9 +159,9 @@ def read_vocab_dump(filename: Path) -> VocabList:
 
 def _generate_meaning(meaning: str) -> Meaning:
     if "/" in meaning:
-        return accido.misc.MultipleMeanings([
-            x.strip() for x in meaning.split("/")
-        ])
+        return accido.misc.MultipleMeanings(
+            tuple(x.strip() for x in meaning.split("/"))
+        )
     return meaning
 
 

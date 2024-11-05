@@ -372,7 +372,7 @@ class MultipleMeanings:
 
     Attributes
     ----------
-    meanings : list[str]
+    meanings : tuple[str, ...]
         The meanings.
 
     Notes
@@ -383,15 +383,15 @@ class MultipleMeanings:
 
     Examples
     --------
-    >>> foo = MultipleMeanings(["hide", "conceal"])
+    >>> foo = MultipleMeanings(("hide", "conceal"))
     >>> foo.meanings
-    ['hide', 'conceal']
+    ('hide', 'conceal')
 
     >>> foo.__str__()
     'hide'
     """
 
-    meanings: list[str]
+    meanings: tuple[str, ...]
 
     def __str__(self) -> str:
         return self.meanings[0]
