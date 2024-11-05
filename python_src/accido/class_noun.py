@@ -48,6 +48,10 @@ class Noun(_Word):
 
     Note that all arguments of Noun are keyword-only.
 
+    >>> foo = Noun(nominative="ego", meaning="I")
+    >>> foo["Nnomsg"]
+    'ego'
+
     Notes
     -----
     Accido relies on the assumption that there are no neuter or plurale
