@@ -64,7 +64,7 @@ class RegularWord(_Word):
     @staticmethod
     def _create_components(
         key: str,  # noqa: ARG004
-    ) -> EndingComponents:  # pragma: no cover # this should never be ran
+    ) -> EndingComponents:
         return EndingComponents(string="")
 
     def __repr__(self) -> str:
