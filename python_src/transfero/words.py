@@ -62,7 +62,7 @@ def find_inflection(
         case ComponentsType.ADJECTIVE:
             if components.subtype == ComponentsSubtype.ADVERB:
                 return (
-                    find_main_adverb_inflection(word, components)
+                    find_main_adverb_inflection(adj_to_adv(word), components)
                     if main
                     else find_adverb_inflections(adj_to_adv(word), components)
                 )

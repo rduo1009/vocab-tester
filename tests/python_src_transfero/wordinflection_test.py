@@ -37,7 +37,7 @@ def test_mainwordinflection_adjective():
 
 
 def test_mainwordinflection_adverb():
-    assert find_inflection("sadly", accido.misc.EndingComponents(degree=Degree.POSITIVE), main=True) == "sadly"
+    assert find_inflection("sad", accido.misc.EndingComponents(degree=Degree.POSITIVE), main=True) == "sadly"
 
 
 def test_mainwordinflection_noun():
