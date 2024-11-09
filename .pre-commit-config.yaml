@@ -27,7 +27,7 @@ repos:
             "--with=dev",
           ]
 
-  # Format code
+  # Format and check code
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.7.2
     hooks:
@@ -48,7 +48,7 @@ repos:
       - id: rstfmt
         args: [-w, "79"]
 
-  # Format other files
+  # Format and check other files
   - repo: https://github.com/tox-dev/pyproject-fmt
     rev: "v2.5.0"
     hooks:
