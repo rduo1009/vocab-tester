@@ -1,6 +1,3 @@
 [submodule "python_src/_vendor/aenum"]
 	path = python_src/_vendor/aenum
 	url = https://github.com/rduo1009/aenum.git
-[submodule "python_src/_vendor/Obfuscate"]
-	path = python_src/_vendor/Obfuscate
-	url = https://github.com/adamyaxley/Obfuscate.git

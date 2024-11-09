@@ -26,11 +26,5 @@ Mypy would spot the issues, but this code will run without errors.
 
 -  Some code in this project (especially ``rogo.asker``) is a complete mess. I
    will have to fix things up at some point.
-
--  I encrypt the key in cpp for ``lego.misc`` to avoid users getting sent
-   pickle files to open using this project, and then getting their computer
-   bricked as a result. In hindsight writing the key in cpp was a bit
-   unnecessary, as pyarmor exists. I might fix this later.
-
 -  The type stubs provided by this project are not complete, rather they exist
    to help with type hinting and keep mypy happy.

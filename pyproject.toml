@@ -1,6 +1,6 @@
 [build-system]
 build-backend = "poetry.core.masonry.api"
-requires = [ "poetry-core", "setuptools" ]
+requires = [ "poetry-core" ]
 
 [tool.poetry]
 name = "vocab-tester"
@@ -9,11 +9,7 @@ description = "An application that tests Latin vocabulary and grammar."
 authors = [ "rduo1009 <robertduong09alt@gmail.com>" ]
 readme = "README.md"
 packages = [ { include = "python_src" } ]
-include = [ "nltk_data/**/*.zip", "python_src/lego/libkey.so" ]
-
-[tool.poetry.build]
-script = "build.py"
-generate-setup-file = true
+include = [ "nltk_data/**/*.zip" ]
 
 [tool.poetry.dependencies]
 python = ">=3.12,<4.0"
