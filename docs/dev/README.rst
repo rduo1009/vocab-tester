@@ -2,9 +2,9 @@
  Dev documentation for vocab-tester
 ####################################
 
-This is the development documentation for the core of vocab-tester. It is
-intended for anyone wanting to contribute to the project, or for anyone
-interested about the inner workings of vocab-tester.
+This is the development documentation for the core of vocab-tester (in
+``src.core``). It is intended for anyone wanting to contribute to the project,
+or for anyone interested about the inner workings of vocab-tester.
 
 Notes about the accido package (Latin word endings) are in the *accido* folder.
 Notes about the transfero package (inflecting English words) are in

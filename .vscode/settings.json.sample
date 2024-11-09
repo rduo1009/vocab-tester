@@ -56,7 +56,6 @@
         ".coveragerc": "ini"
     },
     "catppuccin-icons.associations.folders": { // or whatever icon extension you use
-        "python_src": "folder_src",
         "mypy_stubs": "folder_types"
     },
     "catppuccin-icons.associations.files": { // or whatever icon extension you use

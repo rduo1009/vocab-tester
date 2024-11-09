@@ -1,11 +1,7 @@
 [cosmic-ray]
 module-path = "python_src"
 timeout = 33.0
-excluded-modules = [
-    "python_src/_vendor/**",
-    "**/type_aliases.py",
-    "**/__init__.py",
-]
+excluded-modules = ["src/_vendor/**", "**/type_aliases.py", "**/__init__.py"]
 test-command = "pytest -m \"not manual\""
 
 [cosmic-ray.distributor]

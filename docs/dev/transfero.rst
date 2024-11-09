@@ -22,8 +22,8 @@ Note that the ``main`` parameter defaults to False.
 
 .. code:: python
 
-   >>> from python_src.transfero.words import find_inflection
-   >>> from python_src.accido.misc import (
+   >>> from src.core.transfero.words import find_inflection
+   >>> from src.core.accido.misc import (
    ...     Case,
    ...     Degree,
    ...     EndingComponents,

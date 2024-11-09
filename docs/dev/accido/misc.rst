@@ -21,7 +21,7 @@ For example:
 
 .. code:: python
 
-   >>> from python_src.accido.misc import Case
+   >>> from src.core.accido.misc import Case
    >>> Case.NOMINATIVE.regular
    'nominative'
    >>> Case.NOMINATIVE.shorthand

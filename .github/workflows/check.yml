@@ -38,7 +38,7 @@ jobs:
           python-version: ${{ matrix.py }}
 
       - name: Create testdump directory
-        run: mkdir tests/python_src_lego/test_vocab_files/testdump
+        run: mkdir tests/src_core_lego/test_vocab_files/testdump
 
       - name: Install tox
         run: python -m pip install tox-gh>=1.2

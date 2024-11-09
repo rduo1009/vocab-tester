@@ -8,7 +8,7 @@ version = "0.4.1-dev"
 description = "An application that tests Latin vocabulary and grammar."
 authors = [ "rduo1009 <robertduong09alt@gmail.com>" ]
 readme = "README.md"
-packages = [ { include = "python_src" } ]
+packages = [ { include = "src" } ]
 include = [ "nltk_data/**/*.zip" ]
 
 [tool.poetry.dependencies]

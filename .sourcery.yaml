@@ -8,7 +8,7 @@ ignore:
   - tests/
   - htmlcov/
   - test_*.py
-  - python_src/_vendor
+  - src/_vendor
 
 rule_settings:
   enable:

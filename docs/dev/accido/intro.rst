@@ -26,8 +26,8 @@ For example, with nouns:
 
 .. code:: python
 
-   >>> from python_src.accido.endings import Noun
-   >>> from python_src.accido.misc import Case, Gender, Number
+   >>> from src.core.accido.endings import Noun
+   >>> from src.core.accido.misc import Case, Gender, Number
    >>> noun = Noun(
    ...     "servus",
    ...     "servi",
@@ -51,7 +51,7 @@ For example with a ``MultipleMeanings``:
 
 .. code:: python
 
-   >>> from python_src.accido.misc import MultipleMeanings
+   >>> from src.core.accido.misc import MultipleMeanings
    >>> ending = MultipleMeanings(["happy", "joyful"])
    >>> str(ending)
    'happy'

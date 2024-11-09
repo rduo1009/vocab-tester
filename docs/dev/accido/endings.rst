@@ -48,8 +48,8 @@ feminine and neuter forms. For example:
 
 .. code:: python
 
-   >>> from python_src.accido.endings import Adjective
-   >>> from python_src.accido.misc import Case, Degree, Gender, Number
+   >>> from src.core.accido.endings import Adjective
+   >>> from src.core.accido.misc import Case, Degree, Gender, Number
    >>> adjective = Adjective(
    ...     "iratus", "irata", "iratum", declension="212", meaning="angry"
    ... )
@@ -75,8 +75,8 @@ is the same for all genders) and the genitive singular. For example:
 
 .. code:: python
 
-   >>> from python_src.accido.endings import Adjective
-   >>> from python_src.accido.misc import Case, Degree, Gender, Number
+   >>> from src.core.accido.endings import Adjective
+   >>> from src.core.accido.misc import Case, Degree, Gender, Number
    >>> adjective = Adjective(
    ...     "egens", "egentis", declension="3", termination=1, meaning="needy"
    ... )
@@ -96,8 +96,8 @@ the neuter masculine singular. For example:
 
 .. code:: python
 
-   >>> from python_src.accido.endings import Adjective
-   >>> from python_src.accido.misc import Case, Degree, Gender, Number
+   >>> from src.core.accido.endings import Adjective
+   >>> from src.core.accido.misc import Case, Degree, Gender, Number
    >>> adjective = Adjective(
    ...     "levis", "leve", declension="3", termination=2, meaning="light"
    ... )
@@ -117,8 +117,8 @@ feminine and neuter forms. For example:
 
 .. code:: python
 
-   >>> from python_src.accido.endings import Adjective
-   >>> from python_src.accido.misc import Case, Degree, Gender, Number
+   >>> from src.core.accido.endings import Adjective
+   >>> from src.core.accido.misc import Case, Degree, Gender, Number
    >>> adjective = Adjective(
    ...     "acer", "acris", "acre", declension="3", termination=3, meaning="keen"
    ... )
@@ -137,8 +137,8 @@ The ``endings`` of adjectives also include adverb forms. For example:
 
 .. code:: python
 
-   >>> from python_src.accido.endings import Adjective
-   >>> from python_src.accido.misc import Degree
+   >>> from src.core.accido.endings import Adjective
+   >>> from src.core.accido.misc import Degree
    >>> adjective = Adjective(
    ...     "prudens", "prudentis", declension="3", termination=1, meaning="wise"
    ... )
@@ -161,8 +161,8 @@ For example with irregular forms:
 
 .. code:: python
 
-   >>> from python_src.accido.endings import Adjective
-   >>> from python_src.accido.misc import Case, Degree, Gender, Number
+   >>> from src.core.accido.endings import Adjective
+   >>> from src.core.accido.misc import Case, Degree, Gender, Number
    >>> adjective = Adjective(
    ...     "bonus", "bona", "bonum", declension="212", meaning="good"
    ... )
@@ -189,8 +189,8 @@ and with no adverb form:
 
 .. code:: python
 
-   >>> from python_src.accido.endings import Adjective
-   >>> from python_src.accido.misc import Degree
+   >>> from src.core.accido.endings import Adjective
+   >>> from src.core.accido.misc import Degree
    >>> adjective = Adjective(
    ...     "dexter", "dextra", "dextrum", declension="212", meaning="skillful"
    ... )
@@ -213,8 +213,8 @@ Creating a Noun class
 
 .. code:: python
 
-   >>> from python_src.accido.endings import Noun
-   >>> from python_src.accido.misc import Case, Gender, Number
+   >>> from src.core.accido.endings import Noun
+   >>> from src.core.accido.misc import Case, Gender, Number
    >>> noun = Noun(
    ...     "porta", # servus, canis, manus, res
    ...     "portae", # servi, canis, manus, rei
@@ -229,8 +229,8 @@ Plurale tantum
 
 .. code:: python
 
-   >>> from python_src.accido.endings import Noun
-   >>> from python_src.accido.misc import Case, Gender, Number
+   >>> from src.core.accido.endings import Noun
+   >>> from src.core.accido.misc import Case, Gender, Number
    >>> noun = Noun(
    ...     "arma",
    ...     "armorum",
@@ -257,8 +257,8 @@ considered to be different.
 
 .. code:: python
 
-   >>> from python_src.accido.endings import Noun
-   >>> from python_src.accido.misc import Case, Gender, Number
+   >>> from src.core.accido.endings import Noun
+   >>> from src.core.accido.misc import Case, Gender, Number
    >>> noun = Noun(
    ...     "ego",
    ...     meaning="I"
@@ -280,8 +280,8 @@ For example:
 
 .. code:: python
 
-   >>> from python_src.accido.endings import Pronoun
-   >>> from python_src.accido.misc import Case, Gender, Number
+   >>> from src.core.accido.endings import Pronoun
+   >>> from src.core.accido.misc import Case, Gender, Number
    >>> pronoun = Pronoun(
    ...     "qui",
    ...     meaning="who"
@@ -300,7 +300,7 @@ by a ``RegularWord`` class. For example:
 
 .. code:: python
 
-   >>> from python_src.accido.endings import RegularWord
+   >>> from src.core.accido.endings import RegularWord
    >>> word = RegularWord(
    ...     "et",
    ...     meaning="and",
@@ -329,8 +329,8 @@ For example:
 
 .. code:: python
 
-   >>> from python_src.accido.endings import Verb
-   >>> from python_src.accido.misc import Mood, Number, Tense, Voice
+   >>> from src.core.accido.endings import Verb
+   >>> from src.core.accido.misc import Mood, Number, Tense, Voice
    >>> verb = Verb(
    ...     "amo",
    ...     "amare",
@@ -358,8 +358,8 @@ Third declension -io verbs
 
 .. code:: python
 
-   >>> from python_src.accido.endings import Verb
-   >>> from python_src.accido.misc import Mood, Number, Tense, Voice
+   >>> from src.core.accido.endings import Verb
+   >>> from src.core.accido.misc import Mood, Number, Tense, Voice
    >>> verb = Verb(
    ...     "capio",
    ...     "capere",
@@ -387,8 +387,8 @@ For example:
 
 .. code:: python
 
-   >>> from python_src.accido.endings import Verb
-   >>> from python_src.accido.misc import Case, Gender, Mood, Number, Tense, Voice
+   >>> from src.core.accido.endings import Verb
+   >>> from src.core.accido.misc import Case, Gender, Mood, Number, Tense, Voice
    >>> verb = Verb(
    ...     "amo",
    ...     "amare",
@@ -414,8 +414,8 @@ mean that there will be not participle endings.
 
 .. code:: python
 
-   >>> from python_src.accido.endings import Verb
-   >>> from python_src.accido.misc import Case, Gender, Mood, Number, Tense, Voice
+   >>> from src.core.accido.endings import Verb
+   >>> from src.core.accido.misc import Case, Gender, Mood, Number, Tense, Voice
    >>> verb = Verb(
    ...     "amo",
    ...     "amare",
@@ -441,8 +441,8 @@ Some irregular verbs are also supported by ``accido``.
 
 .. code:: python
 
-   >>> from python_src.accido.endings import Verb
-   >>> from python_src.accido.misc import Mood, Number, Tense, Voice
+   >>> from src.core.accido.endings import Verb
+   >>> from src.core.accido.misc import Mood, Number, Tense, Voice
    >>> verb = Verb(
    ...     "fero",
    ...     "ferre",
