@@ -921,13 +921,13 @@ files = [
 
 [[package]]
 name = "fsrs"
-version = "2.5.1"
+version = "3.1.0"
 description = "Free Spaced Repetition Scheduler"
 optional = false
 python-versions = ">=3.9"
 files = [
-    {file = "fsrs-2.5.1-py3-none-any.whl", hash = "sha256:2c6cbc4a759f6603bc6eeda663c5091a600333f1cde28025e893b8bbd293f879"},
-    {file = "fsrs-2.5.1.tar.gz", hash = "sha256:0a02fd3c1dede612272bcad32de4097b1a6e778d95b704531c40480de73f2977"},
+    {file = "fsrs-3.1.0-py3-none-any.whl", hash = "sha256:88c0043f79356b6267bb7f6b80eaa86137aae86ab4f370d963453c638957ddad"},
+    {file = "fsrs-3.1.0.tar.gz", hash = "sha256:3106a03f9abf4c76ad9482d237d0539ff701010d18e2cafd8dbb8d49e7fd1044"},
 ]
 
 [[package]]
@@ -3091,4 +3091,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.12,<4.0"
-content-hash = "d5b7653476a49a97db377625808f1d0ef48a7295f7f20a9abfada2b8bb41cf7d"
+content-hash = "f71c079ddb461bf51032b217a388131e817fa676c1a2aa41152ea17bd904331c"
