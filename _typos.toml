@@ -10,4 +10,4 @@ paret = "paret"
 Pn = "Pn"
 
 [files]
-extend-exclude = ["**/_vendor/**", "mypy_stubs/**"]
+extend-exclude = ["**/_vendor/**", "stubs/**"]
