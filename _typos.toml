@@ -7,3 +7,7 @@ abl = "abl"
 leve = "leve"
 fpr = "fpr"
 paret = "paret"
+Pn = "Pn"
+
+[files]
+extend-exclude = ["**/_vendor/**", "mypy_stubs/**"]
