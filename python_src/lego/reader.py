@@ -36,7 +36,7 @@ def _regenerate_vocab_list(vocab_list: VocabList) -> VocabList:
         if isinstance(word, accido.endings.RegularWord):
             new_vocab.append(
                 accido.endings.RegularWord(
-                    word=word.word,
+                    word.word,
                     meaning=word.meaning,
                 ),
             )
@@ -44,10 +44,10 @@ def _regenerate_vocab_list(vocab_list: VocabList) -> VocabList:
         elif isinstance(word, accido.endings.Verb):
             new_vocab.append(
                 accido.endings.Verb(
-                    present=word.present,
-                    infinitive=word.infinitive,
-                    perfect=word.perfect,
-                    ppp=word.ppp,
+                    word.present,
+                    word.infinitive,
+                    word.perfect,
+                    word.ppp,
                     meaning=word.meaning,
                 ),
             )
@@ -55,8 +55,8 @@ def _regenerate_vocab_list(vocab_list: VocabList) -> VocabList:
         elif isinstance(word, accido.endings.Noun):
             new_vocab.append(
                 accido.endings.Noun(
-                    nominative=word.nominative,
-                    genitive=word.genitive,
+                    word.nominative,
+                    word.genitive,
                     meaning=word.meaning,
                     gender=word.gender,
                 ),
@@ -86,7 +86,7 @@ def _regenerate_vocab_list(vocab_list: VocabList) -> VocabList:
         elif isinstance(word, accido.endings.Pronoun):
             new_vocab.append(
                 accido.endings.Pronoun(
-                    pronoun=word.pronoun,
+                    word.pronoun,
                     meaning=word.meaning,
                 ),
             )
@@ -294,18 +294,18 @@ def _parse_line(
             # Verb with ppp
             if len(latin_parts) > 3:
                 return accido.endings.Verb(
-                    present=latin_parts[0],
-                    infinitive=latin_parts[1],
-                    perfect=latin_parts[2],
-                    ppp=latin_parts[3],
+                    latin_parts[0],
+                    latin_parts[1],
+                    latin_parts[2],
+                    latin_parts[3],
                     meaning=meaning,
                 )
 
             # Verb without ppp
             return accido.endings.Verb(
-                present=latin_parts[0],
-                infinitive=latin_parts[1],
-                perfect=latin_parts[2],
+                latin_parts[0],
+                latin_parts[1],
+                latin_parts[2],
                 meaning=meaning,
             )
 
@@ -317,10 +317,10 @@ def _parse_line(
 
             try:
                 return accido.endings.Noun(
-                    meaning=meaning,
-                    nominative=latin_parts[0],
-                    genitive=latin_parts[1].split()[0],
+                    latin_parts[0],
+                    latin_parts[1].split()[0],
                     gender=Gender(latin_parts[2].split()[-1].strip("()")),
+                    meaning=meaning,
                 )
             except ValueError as e:
                 raise InvalidVocabFileFormatError(
@@ -365,11 +365,11 @@ def _parse_line(
 
         case "Regular":
             return accido.endings.RegularWord(
-                word=latin_parts[0],
+                latin_parts[0],
                 meaning=meaning,
             )
 
     return accido.endings.Pronoun(
+        latin_parts[0],
         meaning=meaning,
-        pronoun=latin_parts[0],
     )

@@ -123,12 +123,12 @@ def test_word_exclusion_adjective():
 
 def test_word_exclusion_noun():
     words: Sequence[Noun] = [
-        Noun(nominative="ancilla", genitive="ancillae", gender=Gender.FEMININE, meaning="slavegirl"),
-        Noun(nominative="servus", genitive="servi", gender=Gender.MASCULINE, meaning="slave"),
-        Noun(nominative="carcer", genitive="carceris", gender=Gender.MASCULINE, meaning="prison"),
-        Noun(nominative="manus", genitive="manus", gender=Gender.FEMININE, meaning="hand"),
-        Noun(nominative="res", genitive="rei", gender=Gender.FEMININE, meaning="thing"),
-        Noun(nominative="ego", meaning="I"),
+        Noun("ancilla", "ancillae", gender=Gender.FEMININE, meaning="slavegirl"),
+        Noun("servus", "servi", gender=Gender.MASCULINE, meaning="slave"),
+        Noun("carcer", "carceris", gender=Gender.MASCULINE, meaning="prison"),
+        Noun("manus", "manus", gender=Gender.FEMININE, meaning="hand"),
+        Noun("res", "rei", gender=Gender.FEMININE, meaning="thing"),
+        Noun("ego", meaning="I"),
     ]
     vocab_list = VocabList(words)  # type: ignore[arg-type]
 
@@ -161,12 +161,12 @@ def test_word_exclusion_noun():
 
 def test_word_exclusion_verb():
     words: Sequence[Verb] = [
-        Verb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide"),
-        Verb(present="pareo", infinitive="parere", perfect="parui", meaning="hide"),
-        Verb(present="desero", infinitive="deserere", perfect="deserui", ppp="desertus", meaning="desert"),
-        Verb(present="patefacio", infinitive="patefacere", perfect="patefeci", ppp="patefactus", meaning="reveal"),
-        Verb(present="aperio", infinitive="aperire", perfect="aperui", ppp="apertus", meaning="open"),
-        Verb(present="abeo", infinitive="abire", perfect="abii", ppp="abitum", meaning="depart"),
+        Verb("celo", "celare", "celavi", "celatus", meaning="hide"),
+        Verb("pareo", "parere", "parui", meaning="hide"),
+        Verb("desero", "deserere", "deserui", "desertus", meaning="desert"),
+        Verb("patefacio", "patefacere", "patefeci", "patefactus", meaning="reveal"),
+        Verb("aperio", "aperire", "aperui", "apertus", meaning="open"),
+        Verb("abeo", "abire", "abii", "abitum", meaning="depart"),
     ]
     vocab_list = VocabList(words)  # type: ignore[arg-type]
 

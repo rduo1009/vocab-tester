@@ -144,9 +144,9 @@ def test_multiplechoice_engtolat_adjective():
 
 
 def test_multiplechoice_engtolat_noun():
-    word1 = Noun(nominative="puella", genitive="puellae", gender=Gender.FEMININE, meaning="girl")
-    word2 = Noun(nominative="servus", genitive="servi", gender=Gender.MASCULINE, meaning="slave")
-    word3 = Noun(nominative="canis", genitive="canis", gender=Gender.MASCULINE, meaning="dog")
+    word1 = Noun("puella", "puellae", gender=Gender.FEMININE, meaning="girl")
+    word2 = Noun("servus", "servi", gender=Gender.MASCULINE, meaning="slave")
+    word3 = Noun("canis", "canis", gender=Gender.MASCULINE, meaning="dog")
     vocab_list = VocabList([word1, word2, word3])
     amount = 500
 
@@ -162,9 +162,9 @@ def test_multiplechoice_engtolat_noun():
 
 
 def test_multiplechoice_engtolat_pronoun():
-    word1 = Pronoun(pronoun="hic", meaning="this")
-    word2 = Pronoun(pronoun="ille", meaning="that")
-    word3 = Pronoun(pronoun="qui", meaning="who")
+    word1 = Pronoun("hic", meaning="this")
+    word2 = Pronoun("ille", meaning="that")
+    word3 = Pronoun("qui", meaning="who")
     vocab_list = VocabList([word1, word2, word3])
     amount = 500
 
@@ -180,9 +180,9 @@ def test_multiplechoice_engtolat_pronoun():
 
 
 def test_multiplechoice_engtolat_verb():
-    word1 = Verb(present="doceo", infinitive="docere", perfect="docui", ppp="doctus", meaning="teach")
-    word2 = Verb(present="traho", infinitive="trahere", perfect="traxi", ppp="tractus", meaning="drag")
-    word3 = Verb(present="audio", infinitive="audire", perfect="audivi", ppp="auditus", meaning="hear")
+    word1 = Verb("doceo", "docere", "docui", "doctus", meaning="teach")
+    word2 = Verb("traho", "trahere", "traxi", "tractus", meaning="drag")
+    word3 = Verb("audio", "audire", "audivi", "auditus", meaning="hear")
     vocab_list = VocabList([word1, word2, word3])
     amount = 500
 
@@ -198,9 +198,9 @@ def test_multiplechoice_engtolat_verb():
 
 
 def test_multiplechoice_engtolat_regularword():
-    word1 = RegularWord(word="in", meaning="in")
-    word2 = RegularWord(word="e", meaning="out of")
-    word3 = RegularWord(word="post", meaning="after")
+    word1 = RegularWord("in", meaning="in")
+    word2 = RegularWord("e", meaning="out of")
+    word3 = RegularWord("post", meaning="after")
     vocab_list = VocabList([word1, word2, word3])
     amount = 500
 

@@ -9,24 +9,24 @@ from python_src.accido.misc import Case, ComponentsSubtype, EndingComponents, Ge
 
 
 def test_eq():
-    word1 = Verb(present="test1o", infinitive="testare", perfect="test3i", ppp="test4", meaning="test5")
+    word1 = Verb("test1o", "testare", "test3i", "test4", meaning="test5")
     assert not word1 == "error"
 
 
 def test_lt():
-    foo = Verb(present="test1o", infinitive="testare", perfect="test3i", ppp="test4", meaning="test5")
+    foo = Verb("test1o", "testare", "test3i", "test4", meaning="test5")
     with pytest.raises(TypeError) as error:
         foo < "2"
     assert error
 
 
 def test_getitem():
-    word1 = Verb(present="test1o", infinitive="testare", perfect="test3i", ppp="test4", meaning="test5")
+    word1 = Verb("test1o", "testare", "test3i", "test4", meaning="test5")
     assert word1["Vpreactindsg1"] == "test1o"
 
 
 def test_find_same():
-    word = Pronoun(pronoun="ille", meaning="that")
+    word = Pronoun("ille", meaning="that")
     assert word.find("illa") == [
         EndingComponents(case=Case.NOMINATIVE, number=Number.SINGULAR, gender=Gender.FEMININE, string="nominative singular feminine"),
         EndingComponents(case=Case.ABLATIVE, number=Number.SINGULAR, gender=Gender.FEMININE, string="ablative singular feminine"),
@@ -36,7 +36,7 @@ def test_find_same():
 
 
 def test_find_multipleendings():
-    word = Noun(nominative="ego", meaning="I")
+    word = Noun("ego", meaning="I")
     a = EndingComponents(case=Case.GENITIVE, number=Number.PLURAL, string="genitive plural")
     a.subtype = ComponentsSubtype.PRONOUN
     assert word.find("nostrum") == [a]

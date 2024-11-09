@@ -189,7 +189,7 @@ def test_ending_exclusion_adjective():
 
 
 def test_ending_exclusion_noun():
-    word = Noun(nominative="puella", genitive="puellae", gender=Gender.FEMININE, meaning="girl")
+    word = Noun("puella", "puellae", gender=Gender.FEMININE, meaning="girl")
     vocab_list = VocabList([word])
     amount = 50
 
@@ -211,7 +211,7 @@ def test_ending_exclusion_noun():
 
 
 def test_ending_exclusion_pronoun():
-    word = Pronoun(pronoun="hic", meaning="this")
+    word = Pronoun("hic", meaning="this")
     vocab_list = VocabList([word])
     amount = 50
 
@@ -233,7 +233,7 @@ def test_ending_exclusion_pronoun():
 
 
 def test_ending_exclusion_verb():
-    word = Verb(present="doceo", infinitive="docere", perfect="docui", ppp="doctus", meaning="teach")
+    word = Verb("doceo", "docere", "docui", "doctus", meaning="teach")
     vocab_list = VocabList([word])
     amount = 50
 
@@ -257,7 +257,7 @@ def test_ending_exclusion_verb():
 
 # Just copying the above test, as regular words should not cause any issues
 def test_ending_exclusion_regularword():
-    word = RegularWord(word="sed", meaning="but")
+    word = RegularWord("sed", meaning="but")
     vocab_list = VocabList([word])
     amount = 50
 

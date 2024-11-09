@@ -216,8 +216,8 @@ Creating a Noun class
    >>> from python_src.accido.endings import Noun
    >>> from python_src.accido.misc import Case, Gender, Number
    >>> noun = Noun(
-   ...     nominative="porta", # servus, canis, manus, res
-   ...     genitive="portae", # servi, canis, manus, rei
+   ...     "porta", # servus, canis, manus, res
+   ...     "portae", # servi, canis, manus, rei
    ...     gender=Gender.FEMININE,
    ...     meaning="gate" # slave, dog, hand, thing
    ... )
@@ -232,8 +232,8 @@ Plurale tantum
    >>> from python_src.accido.endings import Noun
    >>> from python_src.accido.misc import Case, Gender, Number
    >>> noun = Noun(
-   ...     nominative="arma",
-   ...     genitive="armorum",
+   ...     "arma",
+   ...     "armorum",
    ...     gender=Gender.NEUTER,
    ...     meaning="arms"
    ... )
@@ -260,7 +260,7 @@ considered to be different.
    >>> from python_src.accido.endings import Noun
    >>> from python_src.accido.misc import Case, Gender, Number
    >>> noun = Noun(
-   ...     nominative="ego",
+   ...     "ego",
    ...     meaning="I"
    ... )
    >>> noun.get(case=Case.DATIVE, number=Number.PLURAL)
@@ -283,7 +283,7 @@ For example:
    >>> from python_src.accido.endings import Pronoun
    >>> from python_src.accido.misc import Case, Gender, Number
    >>> pronoun = Pronoun(
-   ...     pronoun="qui",
+   ...     "qui",
    ...     meaning="who"
    ... )
    >>> pronoun.get(
@@ -302,7 +302,7 @@ by a ``RegularWord`` class. For example:
 
    >>> from python_src.accido.endings import RegularWord
    >>> word = RegularWord(
-   ...     word="et",
+   ...     "et",
    ...     meaning="and",
    ... )
    >>> word.get()
@@ -332,10 +332,10 @@ For example:
    >>> from python_src.accido.endings import Verb
    >>> from python_src.accido.misc import Mood, Number, Tense, Voice
    >>> verb = Verb(
-   ...     present="amo",
-   ...     infinitive="amare",
-   ...     perfect="amavi",
-   ...     ppp="amatus",
+   ...     "amo",
+   ...     "amare",
+   ...     "amavi",
+   ...     "amatus",
    ...     meaning="love",
    ... )
    >>> verb.get(
@@ -361,10 +361,10 @@ Third declension -io verbs
    >>> from python_src.accido.endings import Verb
    >>> from python_src.accido.misc import Mood, Number, Tense, Voice
    >>> verb = Verb(
-   ...     present="capio",
-   ...     infinitive="capere",
-   ...     perfect="capivi",
-   ...     ppp="captus",
+   ...     "capio",
+   ...     "capere",
+   ...     "capivi",
+   ...     "captus",
    ...     meaning="take",
    ... )
    >>> verb.get(
@@ -390,10 +390,10 @@ For example:
    >>> from python_src.accido.endings import Verb
    >>> from python_src.accido.misc import Case, Gender, Mood, Number, Tense, Voice
    >>> verb = Verb(
-   ...     present="amo",
-   ...     infinitive="amare",
-   ...     perfect="amavi",
-   ...     ppp="amatus",
+   ...     "amo",
+   ...     "amare",
+   ...     "amavi",
+   ...     "amatus",
    ...     meaning="love",
    ... )
    >>> verb.get(
@@ -417,9 +417,9 @@ mean that there will be not participle endings.
    >>> from python_src.accido.endings import Verb
    >>> from python_src.accido.misc import Case, Gender, Mood, Number, Tense, Voice
    >>> verb = Verb(
-   ...     present="amo",
-   ...     infinitive="amare",
-   ...     perfect="amavi",
+   ...     "amo",
+   ...     "amare",
+   ...     "amavi",
    ...     meaning="love",
    ... )
    >>> verb.get(
@@ -444,10 +444,10 @@ Some irregular verbs are also supported by ``accido``.
    >>> from python_src.accido.endings import Verb
    >>> from python_src.accido.misc import Mood, Number, Tense, Voice
    >>> verb = Verb(
-   ...     present="fero",
-   ...     infinitive="ferre",
-   ...     perfect="tuli",
-   ...     ppp="latus",
+   ...     "fero",
+   ...     "ferre",
+   ...     "tuli",
+   ...     "latus",
    ...     meaning="carry",
    ... )
    >>> verb.get(

@@ -28,14 +28,14 @@ class Pronoun(_Word):
 
     Examples
     --------
-    >>> foo = Pronoun(pronoun="hic", meaning="this")
+    >>> foo = Pronoun("hic", meaning="this")
     >>> foo["Pmnomsg"]
     'hic'
 
     Note that the arguments of Pronoun are keyword-only.
     """
 
-    def __init__(self, *, pronoun: str, meaning: Meaning) -> None:
+    def __init__(self, pronoun: str, *, meaning: Meaning) -> None:
         """Initialise Pronoun and determines the endings.
 
         Parameters
@@ -98,7 +98,7 @@ class Pronoun(_Word):
 
         Examples
         --------
-        >>> foo = Pronoun(pronoun="hic", meaning="this")
+        >>> foo = Pronoun("hic", meaning="this")
         >>> foo.get(
         ...     gender=Gender.MASCULINE,
         ...     case=Case.NOMINATIVE,

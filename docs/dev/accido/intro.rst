@@ -29,8 +29,8 @@ For example, with nouns:
    >>> from python_src.accido.endings import Noun
    >>> from python_src.accido.misc import Case, Gender, Number
    >>> noun = Noun(
-   ...     nominative="servus",
-   ...     genitive="servi",
+   ...     "servus",
+   ...     "servi",
    ...     gender=Gender.MASCULINE,
    ...     meaning="slave",
    ... )

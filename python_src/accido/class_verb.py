@@ -48,10 +48,10 @@ class Verb(_Word):
     Examples
     --------
     >>> foo = Verb(
-    ...     present="celo",
-    ...     infinitive="celare",
-    ...     perfect="celavi",
-    ...     ppp="celatus",
+    ...     "celo",
+    ...     "celare",
+    ...     "celavi",
+    ...     "celatus",
     ...     meaning="hide",
     ... )
     >>> foo["Vpreactindsg1"]
@@ -62,11 +62,11 @@ class Verb(_Word):
 
     def __init__(
         self,
-        *,
         present: str,
         infinitive: str,
         perfect: str,
         ppp: str = "",
+        *,
         meaning: Meaning,
     ) -> None:
         """Initialise Verb and determines the conjugation and endings.
@@ -490,10 +490,10 @@ class Verb(_Word):
         Examples
         --------
         >>> foo = Verb(
-        ...     present="celo",
-        ...     infinitive="celare",
-        ...     perfect="celavi",
-        ...     ppp="celatus",
+        ...     "celo",
+        ...     "celare",
+        ...     "celavi",
+        ...     "celatus",
         ...     meaning="hide",
         ... )
         >>> foo.get(

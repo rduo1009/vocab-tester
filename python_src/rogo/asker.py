@@ -214,7 +214,7 @@ def _generate_typein_engtolat(  # noqa: PLR0914, PLR0915
     raw_meaning: str = str(chosen_word.meaning)
     inflected_meaning: str = set_choice(
         transfero.words.find_inflection(
-            word=raw_meaning, components=ending_components
+            raw_meaning, components=ending_components
         )
     )
 
@@ -412,14 +412,14 @@ def _generate_typein_lattoeng(
         for meaning in meanings:
             inflected_meanings.update(
                 transfero.words.find_inflection(
-                    word=meaning, components=ending_components
+                    meaning, components=ending_components
                 )
             )
 
         possible_main_answers.add(
             set_choice(
                 transfero.words.find_inflection(
-                    word=main_meaning, components=ending_components
+                    main_meaning, components=ending_components
                 )
             )
         )

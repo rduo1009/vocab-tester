@@ -32,7 +32,7 @@ def time_noun(run_times):
     from python_src.accido.misc import Gender
 
     for _ in range(run_times):
-        endings.Noun(nominative="ancilla", genitive="ancillae", gender=Gender.FEMININE, meaning="slavegirl")
+        endings.Noun("ancilla", "ancillae", gender=Gender.FEMININE, meaning="slavegirl")
 
 
 @Timer(name="verb", text="{name}: {seconds:.3f} s", logger=log_timing_data)
@@ -40,7 +40,7 @@ def time_verb(run_times):
     from python_src.accido import endings
 
     for _ in range(run_times):
-        endings.Verb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
+        endings.Verb("celo", "celare", "celavi", "celatus", meaning="hide")
 
 
 @Timer(name="pronoun", text="{name}: {seconds:.3f} s", logger=log_timing_data)
@@ -48,7 +48,7 @@ def time_pronoun(run_times):
     from python_src.accido import endings
 
     for _ in range(run_times):
-        endings.Pronoun(pronoun="hic", meaning="this")
+        endings.Pronoun("hic", meaning="this")
 
 
 if __name__ == "__main__":

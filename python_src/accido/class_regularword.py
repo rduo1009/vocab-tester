@@ -25,14 +25,14 @@ class RegularWord(_Word):
 
     Examples
     --------
-    >>> foo = RegularWord(word="sed", meaning="but")
+    >>> foo = RegularWord("sed", meaning="but")
     >>> foo.endings
     {'': 'sed'}
 
     Note that the arguments of RegularWord are keyword-only.
     """
 
-    def __init__(self, *, word: str, meaning: Meaning) -> None:
+    def __init__(self, word: str, *, meaning: Meaning) -> None:
         """Initialise RegularWord.
 
         Parameters
@@ -55,7 +55,7 @@ class RegularWord(_Word):
 
         Examples
         --------
-        >>> foo = RegularWord(word="sed", meaning="but")
+        >>> foo = RegularWord("sed", meaning="but")
         >>> foo.get()
         'sed'
         """

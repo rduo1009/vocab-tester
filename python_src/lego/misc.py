@@ -32,8 +32,8 @@ class VocabList:
     --------
     >>> foo = VocabList([
     ...     Noun(
-    ...         nominative="ancilla",
-    ...         genitive="ancillae",
+    ...         "ancilla",
+    ...         "ancillae",
     ...         gender="feminine",
     ...         meaning="slavegirl",
     ...     )

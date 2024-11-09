@@ -145,7 +145,7 @@ def test_principalparts_adjective():
 
 
 def test_principalparts_noun():
-    word = Noun(nominative="puella", genitive="puellae", gender=Gender.FEMININE, meaning="girl")
+    word = Noun("puella", "puellae", gender=Gender.FEMININE, meaning="girl")
     vocab_list = VocabList([word])
     amount = 500
 
@@ -158,7 +158,7 @@ def test_principalparts_noun():
 
 
 def test_principalparts_pronoun():
-    word = Pronoun(pronoun="hic", meaning="this")
+    word = Pronoun("hic", meaning="this")
     vocab_list = VocabList([word])
     amount = 500
 
@@ -171,7 +171,7 @@ def test_principalparts_pronoun():
 
 
 def test_principalparts_verb():
-    word = Verb(present="doceo", infinitive="docere", perfect="docui", ppp="doctus", meaning="teach")
+    word = Verb("doceo", "docere", "docui", "doctus", meaning="teach")
     vocab_list = VocabList([word])
     amount = 500
 
@@ -182,7 +182,7 @@ def test_principalparts_verb():
         assert output.prompt == "doceo"
         assert output.principal_parts == ("doceo", "docere", "docui", "doctus")
 
-    word = Verb(present="traho", infinitive="trahere", perfect="traxi", meaning="drag")
+    word = Verb("traho", "trahere", "traxi", meaning="drag")
     vocab_list = VocabList([word])
     amount = 500
 
@@ -195,7 +195,7 @@ def test_principalparts_verb():
 
 
 def test_principalparts_regularword():
-    word = RegularWord(word="in", meaning="in")
+    word = RegularWord("in", meaning="in")
     vocab_list = VocabList([word])
     amount = 500
 

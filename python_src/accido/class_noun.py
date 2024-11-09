@@ -38,8 +38,8 @@ class Noun(_Word):
     Examples
     --------
     >>> foo = Noun(
-    ...     nominative="ancilla",
-    ...     genitive="ancillae",
+    ...     "ancilla",
+    ...     "ancillae",
     ...     gender=Gender.FEMININE,
     ...     meaning="slavegirl",
     ... )
@@ -48,7 +48,7 @@ class Noun(_Word):
 
     Note that all arguments of Noun are keyword-only.
 
-    >>> foo = Noun(nominative="ego", meaning="I")
+    >>> foo = Noun("ego", meaning="I")
     >>> foo["Nnomsg"]
     'ego'
 
@@ -60,16 +60,16 @@ class Noun(_Word):
 
     # fmt: off
     @overload
-    def __init__(self, *, nominative: str, meaning: Meaning) -> None: ...
+    def __init__(self, nominative: str, *, meaning: Meaning) -> None: ...
     @overload
-    def __init__(self, *, nominative: str, genitive: str, gender: Gender, meaning: Meaning) -> None: ...
+    def __init__(self, nominative: str, genitive: str, *, gender: Gender, meaning: Meaning) -> None: ...
     # fmt: on
 
     def __init__(
         self,
-        *,
         nominative: str,
         genitive: str | None = None,
+        *,
         gender: Gender | None = None,
         meaning: Meaning,
     ) -> None:
@@ -294,8 +294,8 @@ class Noun(_Word):
         Examples
         --------
         >>> foo = Noun(
-        ...     nominative="ancilla",
-        ...     genitive="ancillae",
+        ...     "ancilla",
+        ...     "ancillae",
         ...     gender=Gender.FEMININE,
         ...     meaning="slavegirl",
         ... )

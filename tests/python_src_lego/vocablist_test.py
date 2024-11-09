@@ -11,11 +11,11 @@ from python_src.lego.misc import VocabList
 
 def test_vocablist():
     l = VocabList([
-        Verb(present="audio", infinitive="audire", perfect="audivi", ppp="auditus", meaning="hear"),
-        Noun(nominative="nomen", genitive="nominis", gender=Gender.NEUTER, meaning="name"),
+        Verb("audio", "audire", "audivi", "auditus", meaning="hear"),
+        Noun("nomen", "nominis", gender=Gender.NEUTER, meaning="name"),
         Adjective("bonus", "bona", "bonum", declension="212", meaning="good"),
-        RegularWord(word="e", meaning="from"),
-        Pronoun(pronoun="ille", meaning="that"),
+        RegularWord("e", meaning="from"),
+        Pronoun("ille", meaning="that"),
     ])
 
     assert l.__repr__() == f"VocabList([Verb(audio, audire, audivi, auditus, hear), Noun(nomen, nominis, neuter, name), Adjective(bonus, bona, bonum, None, 212, good), RegularWord(e, from), Pronoun(ille, that)], version={src.__version__})"

@@ -14,64 +14,64 @@ from python_src.utils import compare
 class TestVerbErrors:
     def test_errors_invalid_infinitive(self):
         with pytest.raises(InvalidInputError) as error:
-            Verb(present="celo", infinitive="error", perfect="celavi", ppp="celatus", meaning="hide")
+            Verb("celo", "error", "celavi", "celatus", meaning="hide")
         assert "Invalid infinitive form: 'error'" == str(error.value)
 
     def test_errors_invalid_present(self):
         with pytest.raises(InvalidInputError) as error:
-            Verb(present="error", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
+            Verb("error", "celare", "celavi", "celatus", meaning="hide")
         assert "Invalid present form: 'error' (must end in '-o')" == str(error.value)
 
     def test_errors_invalid_perfect(self):
         with pytest.raises(InvalidInputError) as error:
-            Verb(present="celo", infinitive="celare", perfect="error", ppp="celatus", meaning="hide")
+            Verb("celo", "celare", "error", "celatus", meaning="hide")
         assert "Invalid perfect form: 'error' (must end in '-i')" == str(error.value)
 
 
 class TestVerbDunder:
     def test_getnone(self):
-        word = Verb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
+        word = Verb("celo", "celare", "celavi", "celatus", meaning="hide")
         assert not word.get(tense=Tense.PERFECT, voice=Voice.PASSIVE, mood=Mood.INDICATIVE, person=2, number=Number.PLURAL)
 
     def test_repr(self):
-        word = Verb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
+        word = Verb("celo", "celare", "celavi", "celatus", meaning="hide")
         assert word.__repr__() == "Verb(celo, celare, celavi, celatus, hide)"
 
     def test_verb_str(self):
-        word = Verb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
+        word = Verb("celo", "celare", "celavi", "celatus", meaning="hide")
         assert str(word) == "hide: celo, celare, celavi, celatus"
 
     def test_verb_strnoppp(self):
-        word = Verb(present="celo", infinitive="celare", perfect="celavi", meaning="hide")
+        word = Verb("celo", "celare", "celavi", meaning="hide")
         assert str(word) == "hide: celo, celare, celavi"
 
     def test_eq(self):
-        word1 = Verb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
-        word2 = Verb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
+        word1 = Verb("celo", "celare", "celavi", "celatus", meaning="hide")
+        word2 = Verb("celo", "celare", "celavi", "celatus", meaning="hide")
         assert word1 == word2
 
     def test_lt(self):
-        word1 = Verb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
-        word2 = Verb(present="amo", infinitive="amare", perfect="amavi", ppp="amatus", meaning="love")
+        word1 = Verb("celo", "celare", "celavi", "celatus", meaning="hide")
+        word2 = Verb("amo", "amare", "amavi", "amatus", meaning="love")
         # word2 must be smaller than word1 as word1.first = "test1" and word2.first = "aaatest1"
         assert word1 > word2
 
     def test_find(self):
-        word = Verb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
+        word = Verb("celo", "celare", "celavi", "celatus", meaning="hide")
         assert compare(word.find("celabam"), [EndingComponents(tense=Tense.IMPERFECT, voice=Voice.ACTIVE, mood=Mood.INDICATIVE, number=Number.SINGULAR, person=1, string="imperfect active indicative singular 1st person")])
 
     def test_find_participle(self):
-        word = Verb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
+        word = Verb("celo", "celare", "celavi", "celatus", meaning="hide")
         assert compare(word.find("celatus"), [EndingComponents(tense=Tense.PERFECT, voice=Voice.PASSIVE, mood=Mood.PARTICIPLE, gender=Gender.MASCULINE, case=Case.NOMINATIVE, number=Number.SINGULAR, string="perfect passive participle masculine nominative singular")])
 
     def test_find_infinitive(self):
-        word = Verb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
+        word = Verb("celo", "celare", "celavi", "celatus", meaning="hide")
         assert compare(word.find("celare"), [EndingComponents(tense=Tense.PRESENT, voice=Voice.ACTIVE, mood=Mood.INFINITIVE, string="present active infinitive")])
 
 
 class TestVerbConjugation:
     def test_firstconjugation(self):
-        word = Verb(present="celo", infinitive="celare", perfect="celavi", ppp="celatus", meaning="hide")
+        word = Verb("celo", "celare", "celavi", "celatus", meaning="hide")
 
         assert word.get(person=1, number=Number.SINGULAR, tense=Tense.PRESENT, voice=Voice.ACTIVE, mood=Mood.INDICATIVE) == "celo"
         assert word.get(person=2, number=Number.SINGULAR, tense=Tense.PRESENT, voice=Voice.ACTIVE, mood=Mood.INDICATIVE) == "celas"
@@ -121,7 +121,7 @@ class TestVerbConjugation:
         assert word.get(person=3, number=Number.PLURAL, tense=Tense.PLUPERFECT, voice=Voice.ACTIVE, mood=Mood.SUBJUNCTIVE) == "celavissent"
 
     def test_secondconjugation(self):
-        word = Verb(present="pareo", infinitive="parere", perfect="parui", meaning="hide")
+        word = Verb("pareo", "parere", "parui", meaning="hide")
 
         assert word.get(person=1, number=Number.SINGULAR, tense=Tense.PRESENT, voice=Voice.ACTIVE, mood=Mood.INDICATIVE) == "pareo"
         assert word.get(person=2, number=Number.SINGULAR, tense=Tense.PRESENT, voice=Voice.ACTIVE, mood=Mood.INDICATIVE) == "pares"
@@ -171,7 +171,7 @@ class TestVerbConjugation:
         assert word.get(person=3, number=Number.PLURAL, tense=Tense.PLUPERFECT, voice=Voice.ACTIVE, mood=Mood.SUBJUNCTIVE) == "paruissent"
 
     def test_thirdconjugation(self):
-        word = Verb(present="desero", infinitive="deserere", perfect="deserui", ppp="desertus", meaning="desert")
+        word = Verb("desero", "deserere", "deserui", "desertus", meaning="desert")
 
         assert word.get(person=1, number=Number.SINGULAR, tense=Tense.PRESENT, voice=Voice.ACTIVE, mood=Mood.INDICATIVE) == "desero"
         assert word.get(person=2, number=Number.SINGULAR, tense=Tense.PRESENT, voice=Voice.ACTIVE, mood=Mood.INDICATIVE) == "deseris"
@@ -221,7 +221,7 @@ class TestVerbConjugation:
         assert word.get(person=3, number=Number.PLURAL, tense=Tense.PLUPERFECT, voice=Voice.ACTIVE, mood=Mood.SUBJUNCTIVE) == "deseruissent"
 
     def test_thirdioconjugation(self):
-        word = Verb(present="patefacio", infinitive="patefacere", perfect="patefeci", ppp="patefactus", meaning="reveal")
+        word = Verb("patefacio", "patefacere", "patefeci", "patefactus", meaning="reveal")
 
         assert word.get(person=1, number=Number.SINGULAR, tense=Tense.PRESENT, voice=Voice.ACTIVE, mood=Mood.INDICATIVE) == "patefacio"
         assert word.get(person=2, number=Number.SINGULAR, tense=Tense.PRESENT, voice=Voice.ACTIVE, mood=Mood.INDICATIVE) == "patefacis"
@@ -271,7 +271,7 @@ class TestVerbConjugation:
         assert word.get(person=3, number=Number.PLURAL, tense=Tense.PLUPERFECT, voice=Voice.ACTIVE, mood=Mood.SUBJUNCTIVE) == "patefecissent"
 
     def test_fourthconjugation(self):
-        word = Verb(present="aperio", infinitive="aperire", perfect="aperui", ppp="apertus", meaning="open")
+        word = Verb("aperio", "aperire", "aperui", "apertus", meaning="open")
 
         assert word.get(person=1, number=Number.SINGULAR, tense=Tense.PRESENT, voice=Voice.ACTIVE, mood=Mood.INDICATIVE) == "aperio"
         assert word.get(person=2, number=Number.SINGULAR, tense=Tense.PRESENT, voice=Voice.ACTIVE, mood=Mood.INDICATIVE) == "aperis"
@@ -321,7 +321,7 @@ class TestVerbConjugation:
         assert word.get(person=3, number=Number.PLURAL, tense=Tense.PLUPERFECT, voice=Voice.ACTIVE, mood=Mood.SUBJUNCTIVE) == "aperuissent"
 
     def test_irregularverb_eo(self):
-        word = Verb(present="abeo", infinitive="abire", perfect="abii", ppp="abitum", meaning="depart")
+        word = Verb("abeo", "abire", "abii", "abitum", meaning="depart")
 
         assert word.get(person=1, number=Number.SINGULAR, tense=Tense.PRESENT, voice=Voice.ACTIVE, mood=Mood.INDICATIVE) == "abeo"
         assert word.get(person=2, number=Number.SINGULAR, tense=Tense.PRESENT, voice=Voice.ACTIVE, mood=Mood.INDICATIVE) == "abis"
@@ -373,7 +373,7 @@ class TestVerbConjugation:
 
 class TestParticipleConjugation:
     def test_present_participle(self):
-        word = Verb(present="porto", infinitive="portare", perfect="portavi", ppp="portatus", meaning="carry")
+        word = Verb("porto", "portare", "portavi", "portatus", meaning="carry")
 
         assert word.get(number=Number.SINGULAR, tense=Tense.PRESENT, voice=Voice.ACTIVE, mood=Mood.PARTICIPLE, participle_gender=Gender.MASCULINE, participle_case=Case.NOMINATIVE) == "portans"
         assert word.get(number=Number.SINGULAR, tense=Tense.PRESENT, voice=Voice.ACTIVE, mood=Mood.PARTICIPLE, participle_gender=Gender.MASCULINE, participle_case=Case.VOCATIVE) == "portans"
@@ -418,7 +418,7 @@ class TestParticipleConjugation:
         assert word.get(number=Number.PLURAL, tense=Tense.PRESENT, voice=Voice.ACTIVE, mood=Mood.PARTICIPLE, participle_gender=Gender.NEUTER, participle_case=Case.ABLATIVE) == "portantibus"
 
     def test_ppp(self):
-        word = Verb(present="porto", infinitive="portare", perfect="portavi", ppp="portatus", meaning="carry")
+        word = Verb("porto", "portare", "portavi", "portatus", meaning="carry")
 
         assert word.get(number=Number.SINGULAR, tense=Tense.PERFECT, voice=Voice.PASSIVE, mood=Mood.PARTICIPLE, participle_gender=Gender.MASCULINE, participle_case=Case.NOMINATIVE) == "portatus"
         assert word.get(number=Number.SINGULAR, tense=Tense.PERFECT, voice=Voice.PASSIVE, mood=Mood.PARTICIPLE, participle_gender=Gender.MASCULINE, participle_case=Case.VOCATIVE) == "portate"
@@ -465,7 +465,7 @@ class TestParticipleConjugation:
 
 class TestIrregularVerbInflection:
     def test_irregular_verb_normal(self):
-        word = Verb(present="sum", infinitive="esse", perfect="fui", meaning="be")
+        word = Verb("sum", "esse", "fui", meaning="be")
 
         assert word.get(person=1, number=Number.SINGULAR, tense=Tense.PRESENT, voice=Voice.ACTIVE, mood=Mood.INDICATIVE) == "sum"
         assert word.get(person=2, number=Number.SINGULAR, tense=Tense.PRESENT, voice=Voice.ACTIVE, mood=Mood.INDICATIVE) == "es"
@@ -515,7 +515,7 @@ class TestIrregularVerbInflection:
         assert word.get(person=3, number=Number.PLURAL, tense=Tense.PLUPERFECT, voice=Voice.ACTIVE, mood=Mood.SUBJUNCTIVE) == "fuissent"
 
     def test_irregular_verb_derived(self):
-        word = Verb(present="adeo", infinitive="adire", perfect="adii", ppp="aditus", meaning="go to")
+        word = Verb("adeo", "adire", "adii", "aditus", meaning="go to")
 
         assert word.get(person=1, number=Number.SINGULAR, tense=Tense.PRESENT, voice=Voice.ACTIVE, mood=Mood.INDICATIVE) == "adeo"
         assert word.get(person=2, number=Number.SINGULAR, tense=Tense.PRESENT, voice=Voice.ACTIVE, mood=Mood.INDICATIVE) == "adis"

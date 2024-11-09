@@ -139,7 +139,7 @@ def test_parse_question_adjective():
 
 
 def test_parse_question_noun():
-    word = Noun(nominative="puella", genitive="puellae", gender=Gender.FEMININE, meaning="girl")
+    word = Noun("puella", "puellae", gender=Gender.FEMININE, meaning="girl")
     vocab_list = VocabList([word])
     amount = 500
 
@@ -154,7 +154,7 @@ def test_parse_question_noun():
 
 
 def test_parse_question_pronoun():
-    word = Pronoun(pronoun="hic", meaning="this")
+    word = Pronoun("hic", meaning="this")
     vocab_list = VocabList([word])
     amount = 500
 
@@ -169,7 +169,7 @@ def test_parse_question_pronoun():
 
 
 def test_parse_question_verb():
-    word = Verb(present="doceo", infinitive="docere", perfect="docui", ppp="doctus", meaning="teach")
+    word = Verb("doceo", "docere", "docui", "doctus", meaning="teach")
     vocab_list = VocabList([word])
     amount = 500
 
@@ -189,7 +189,7 @@ def test_parse_question_verb():
 
 
 def test_parse_question_regularword():
-    word = RegularWord(word="in", meaning="in")
+    word = RegularWord("in", meaning="in")
     vocab_list = VocabList([word])
     amount = 500
 
