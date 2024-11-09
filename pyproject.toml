@@ -40,6 +40,8 @@ pytest-testmon = "==2.1.1"
 pytest-watch = "==4.2.0"
 deptry = "==0.20.0"
 cosmic-ray = "==8.3.15"
+doc8 = "==1.1.2"
+rstfmt = "==0.0.14"
 interrogate = { extras = [ "png" ], version = "==1.7.0" }
 pydoclint = "==0.5.9"
 
