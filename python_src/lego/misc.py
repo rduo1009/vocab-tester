@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 """Contains miscellaneous constants and classes used by lego."""
 
 from __future__ import annotations

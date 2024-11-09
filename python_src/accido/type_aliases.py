@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 """Contains type aliases used by accido."""
 
 from typing import Literal, TypeIs

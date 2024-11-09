@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 """Contains custom exceptions used by accido."""
 
 

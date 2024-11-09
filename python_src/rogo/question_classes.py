@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 """Contains representations of questions about Latin vocabulary."""
 
 from __future__ import annotations

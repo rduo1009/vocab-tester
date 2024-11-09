@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 """Contains edge cases for English words."""
 
 from __future__ import annotations

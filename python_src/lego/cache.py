@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 """Contains a function for caching vocabulary files in a cache folder."""
 
 from __future__ import annotations

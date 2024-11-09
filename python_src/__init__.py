@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 """A wrapper for the Python packages used by vocab-tester."""
 
 from . import accido, lego, rogo, transfero

@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 """Contains functions for reading vocabulary files."""
 
 from __future__ import annotations

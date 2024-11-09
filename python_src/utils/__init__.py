@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 """General functions used by vocab-tester and its tests."""
 
 from .compare import compare as compare

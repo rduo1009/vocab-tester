@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 """Contains edge case endings."""
 
 from __future__ import annotations

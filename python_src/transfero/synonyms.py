@@ -1,5 +1,3 @@
-#!/usr/bin/python3
-
 """Contains a function that finds synonyms of English words."""
 
 from __future__ import annotations

@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 """Contains a function that converts an adjective to an adverb.
 
 Notes

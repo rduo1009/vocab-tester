@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 """Contains functions that generate questions and check answers."""
 
 from __future__ import annotations

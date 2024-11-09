@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 """Contains functions that deal with duplicates in tuples and lists."""
 
 from __future__ import annotations

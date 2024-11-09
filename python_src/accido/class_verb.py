@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 """Representation of a Latin verb with endings."""
 
 from __future__ import annotations

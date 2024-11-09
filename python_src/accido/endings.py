@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 """Representations of Latin words with their endings calculated.
 
 A wrapper for the classes.

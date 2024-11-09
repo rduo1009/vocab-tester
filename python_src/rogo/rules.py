@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 """Contains rules for filtering words and questions."""
 
 from __future__ import annotations

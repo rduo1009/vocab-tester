@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 """Contains functions that pick items from sets."""
 
 from __future__ import annotations

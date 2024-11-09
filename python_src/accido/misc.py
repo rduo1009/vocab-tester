@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 """Contains miscellaneous functions, classes and constants used by accido."""
 
 from __future__ import annotations

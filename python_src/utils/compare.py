@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 """Contains a function that compares sequences."""
 
 from __future__ import annotations

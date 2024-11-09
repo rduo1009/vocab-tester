@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 """Contains functions that inflect English adjectives."""
 
 from __future__ import annotations

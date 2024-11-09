@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 """Contains type aliases used by rogo."""
 
 from typing import ReadOnly, TypedDict

@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 """Representation of a Latin word that is undeclinable."""
 
 from __future__ import annotations
