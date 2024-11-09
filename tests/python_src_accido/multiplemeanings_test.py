@@ -7,5 +7,5 @@ from python_src.accido.misc import MultipleMeanings
 
 
 def test_repr():
-    multiple_endings = MultipleMeanings(["a", "b", "c"])
+    multiple_endings = MultipleMeanings(("a", "b", "c"))
     assert repr(multiple_endings) == "MultipleMeanings(a, b, c)"

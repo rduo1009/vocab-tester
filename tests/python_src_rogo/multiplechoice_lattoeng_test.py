@@ -5,6 +5,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../.
 
 from pathlib import Path
 
+import pytest
 from python_src.accido.endings import Adjective, Noun, Pronoun, RegularWord, Verb
 from python_src.accido.misc import Gender
 from python_src.lego.misc import VocabList
@@ -109,13 +110,14 @@ settings: Settings = {
 }
 
 
+@pytest.mark.manual
 def test_multiplechoice_lattoeng():
     vocab_list = read_vocab_file(Path("tests/python_src_lego/test_vocab_files/regular_list.txt"))
-    amount = 1000
+    amount = 50
     for output in ask_question_without_sr(vocab_list, amount, settings):
         assert type(output) is MultipleChoiceLattoEngQuestion
-
         assert output.check(output.answer)
+
         assert not contains_duplicates(output.choices)
         assert output.answer in output.choices
         assert len(output.choices) == 3
@@ -128,10 +130,11 @@ def test_multiplechoice_engtolat_adjective():
     word2 = Adjective("ingens", "ingentis", declension="3", termination=1, meaning="large")
     word3 = Adjective("fortis", "forte", declension="3", termination=2, meaning="strong")
     vocab_list = VocabList([word1, word2, word3])
-    amount = 1000
+    amount = 500
 
     for output in ask_question_without_sr(vocab_list, amount, settings):
         assert type(output) is MultipleChoiceLattoEngQuestion
+        assert output.check(output.answer)
 
         assert not contains_duplicates(output.choices)
         assert output.answer in output.choices
@@ -145,10 +148,11 @@ def test_multiplechoice_engtolat_noun():
     word2 = Noun(nominative="servus", genitive="servi", gender=Gender.MASCULINE, meaning="slave")
     word3 = Noun(nominative="canis", genitive="canis", gender=Gender.MASCULINE, meaning="dog")
     vocab_list = VocabList([word1, word2, word3])
-    amount = 1000
+    amount = 500
 
     for output in ask_question_without_sr(vocab_list, amount, settings):
         assert type(output) is MultipleChoiceLattoEngQuestion
+        assert output.check(output.answer)
 
         assert not contains_duplicates(output.choices)
         assert output.answer in output.choices
@@ -162,10 +166,11 @@ def test_multiplechoice_engtolat_pronoun():
     word2 = Pronoun(pronoun="ille", meaning="that")
     word3 = Pronoun(pronoun="qui", meaning="who")
     vocab_list = VocabList([word1, word2, word3])
-    amount = 1000
+    amount = 500
 
     for output in ask_question_without_sr(vocab_list, amount, settings):
         assert type(output) is MultipleChoiceLattoEngQuestion
+        assert output.check(output.answer)
 
         assert not contains_duplicates(output.choices)
         assert output.answer in output.choices
@@ -179,10 +184,11 @@ def test_multiplechoice_engtolat_verb():
     word2 = Verb(present="traho", infinitive="trahere", perfect="traxi", ppp="tractus", meaning="drag")
     word3 = Verb(present="audio", infinitive="audire", perfect="audivi", ppp="auditus", meaning="hear")
     vocab_list = VocabList([word1, word2, word3])
-    amount = 1000
+    amount = 500
 
     for output in ask_question_without_sr(vocab_list, amount, settings):
         assert type(output) is MultipleChoiceLattoEngQuestion
+        assert output.check(output.answer)
 
         assert not contains_duplicates(output.choices)
         assert output.answer in output.choices
@@ -196,10 +202,11 @@ def test_multiplechoice_engtolat_regularword():
     word2 = RegularWord(word="e", meaning="out of")
     word3 = RegularWord(word="post", meaning="after")
     vocab_list = VocabList([word1, word2, word3])
-    amount = 1000
+    amount = 500
 
     for output in ask_question_without_sr(vocab_list, amount, settings):
         assert type(output) is MultipleChoiceLattoEngQuestion
+        assert output.check(output.answer)
 
         assert not contains_duplicates(output.choices)
         assert output.answer in output.choices

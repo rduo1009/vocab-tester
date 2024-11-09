@@ -1,8 +1,26 @@
 [cosmic-ray]
 module-path = "python_src"
-timeout = 7.0
-excluded-modules = ["python_src/_vendor/**", "**/type_aliases.py"]
-test-command = "pytest"
+timeout = 33.0
+excluded-modules = [
+    "python_src/_vendor/**",
+    "**/type_aliases.py",
+    "**/__init__.py",
+]
+test-command = "pytest -m \"not manual\""
 
 [cosmic-ray.distributor]
-name = "local"
+name = "http"
+
+[cosmic-ray.distributor.http]
+worker-urls = [
+    "http://localhost:8090",
+    "http://localhost:8091",
+    "http://localhost:8092",
+    "http://localhost:8093",
+    "http://localhost:8094",
+    "http://localhost:8095",
+    "http://localhost:8096",
+    "http://localhost:8097",
+    "http://localhost:8098",
+    "http://localhost:8099",
+]

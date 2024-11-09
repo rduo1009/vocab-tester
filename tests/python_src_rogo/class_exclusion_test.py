@@ -104,6 +104,7 @@ default_settings: Settings = {
     "include-multiplechoice-lattoeng": False,
     "number-multiplechoice-options": 3,
 }
+
 exclude_classes = {
     "exclude-adjectives": Adjective,
     "exclude-nouns": Noun,

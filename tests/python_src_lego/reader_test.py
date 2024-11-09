@@ -63,8 +63,8 @@ def test_reader_with_s():
 def test_multiple_meanings():
     l = read_vocab_file(Path("tests/python_src_lego/test_vocab_files/multiple_meanings_list.txt"))
     assert l == VocabList([
-        Verb(present="peto", infinitive="petere", perfect="petivi", ppp="petitus", meaning=MultipleMeanings(["attack", "make for", "seek", "ask"])),
-        Noun(nominative="ancilla", genitive="ancillae", gender=Gender.FEMININE, meaning=MultipleMeanings(["slave-girl", "maid"])),
+        Verb(present="peto", infinitive="petere", perfect="petivi", ppp="petitus", meaning=MultipleMeanings(("attack", "make for", "seek", "ask"))),
+        Noun(nominative="ancilla", genitive="ancillae", gender=Gender.FEMININE, meaning=MultipleMeanings(("slave-girl", "maid"))),
     ])
 
 

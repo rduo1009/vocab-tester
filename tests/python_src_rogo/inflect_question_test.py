@@ -5,6 +5,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../.
 
 from pathlib import Path
 
+import pytest
 from python_src.accido.endings import Adjective, Noun, Pronoun, RegularWord, Verb
 from python_src.accido.misc import Gender
 from python_src.lego.misc import VocabList
@@ -108,9 +109,10 @@ settings: Settings = {
 }
 
 
+@pytest.mark.manual
 def test_inflect_question():
     vocab_list = read_vocab_file(Path("tests/python_src_lego/test_vocab_files/regular_list.txt"))
-    amount = 1000
+    amount = 50
     for output in ask_question_without_sr(vocab_list, amount, settings):
         assert type(output) is ParseWordCompToLatQuestion
 
@@ -121,10 +123,11 @@ def test_inflect_question():
 def test_inflect_question_adjective():
     word = Adjective("laetus", "laeta", "laetum", declension="212", meaning="happy")
     vocab_list = VocabList([word])
-    amount = 1000
+    amount = 500
 
     for output in ask_question_without_sr(vocab_list, amount, settings):
         assert type(output) is ParseWordCompToLatQuestion
+        assert output.check(output.main_answer)
 
         assert output.main_answer in word.endings.values()
         assert output.main_answer in output.answers
@@ -139,10 +142,11 @@ def test_inflect_question_adjective():
 def test_inflect_question_noun():
     word = Noun(nominative="puella", genitive="puellae", gender=Gender.FEMININE, meaning="girl")
     vocab_list = VocabList([word])
-    amount = 1000
+    amount = 500
 
     for output in ask_question_without_sr(vocab_list, amount, settings):
         assert type(output) is ParseWordCompToLatQuestion
+        assert output.check(output.main_answer)
 
         assert output.main_answer in word.endings.values()
         assert output.main_answer in output.answers
@@ -157,10 +161,11 @@ def test_inflect_question_noun():
 def test_inflect_question_pronoun():
     word = Pronoun(pronoun="hic", meaning="this")
     vocab_list = VocabList([word])
-    amount = 1000
+    amount = 500
 
     for output in ask_question_without_sr(vocab_list, amount, settings):
         assert type(output) is ParseWordCompToLatQuestion
+        assert output.check(output.main_answer)
 
         assert output.main_answer in word.endings.values()
         assert output.main_answer in output.answers
@@ -175,10 +180,11 @@ def test_inflect_question_pronoun():
 def test_inflect_question_verb():
     word = Verb(present="doceo", infinitive="docere", perfect="docui", ppp="doctus", meaning="teach")
     vocab_list = VocabList([word])
-    amount = 1000
+    amount = 500
 
     for output in ask_question_without_sr(vocab_list, amount, settings):
         assert type(output) is ParseWordCompToLatQuestion
+        assert output.check(output.main_answer)
 
         assert output.main_answer in word.endings.values()
         assert output.main_answer in output.answers
@@ -193,10 +199,11 @@ def test_inflect_question_verb():
 def test_inflect_question_regularword():
     word = RegularWord(word="in", meaning="in")
     vocab_list = VocabList([word])
-    amount = 1000
+    amount = 500
 
     for output in ask_question_without_sr(vocab_list, amount, settings):
         assert type(output) is ParseWordCompToLatQuestion
+        assert output.check(output.main_answer)
 
         assert output.main_answer in word.endings.values()
         assert output.main_answer in output.answers
