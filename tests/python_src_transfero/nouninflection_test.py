@@ -4,15 +4,16 @@ import sys  # noqa: E401
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 import pytest
 from python_src.accido.misc import Case, Degree, EndingComponents, Gender, Number
+from python_src.transfero.exceptions import InvalidComponentsError
 from python_src.transfero.noun_inflection import find_main_noun_inflection, find_noun_inflections
 
 
 def test_invalid_type():
-    with pytest.raises(ValueError) as error:
+    with pytest.raises(InvalidComponentsError) as error:
         find_noun_inflections("house", EndingComponents(case=Case.NOMINATIVE, number=Number.SINGULAR, gender=Gender.NEUTER, degree=Degree.POSITIVE))
     assert "Invalid type: 'adjective'" == str(error.value)
 
-    with pytest.raises(ValueError) as error:
+    with pytest.raises(InvalidComponentsError) as error:
         find_main_noun_inflection("house", EndingComponents(case=Case.NOMINATIVE, number=Number.SINGULAR, gender=Gender.NEUTER, degree=Degree.POSITIVE))
     assert "Invalid type: 'adjective'" == str(error.value)
 

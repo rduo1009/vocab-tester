@@ -10,7 +10,7 @@ import lemminflect
 from inflect import engine
 
 from ..accido.misc import Case, ComponentsType, Number
-from .exceptions import InvalidWordError
+from .exceptions import InvalidComponentsError, InvalidWordError
 
 if TYPE_CHECKING:
     from .. import accido
@@ -50,11 +50,11 @@ def find_noun_inflections(
     ------
     InvalidWordError
         If the word is not a valid English noun.
-    ValueError
-        If the input (other than the word itself) is invalid.
+    InvalidComponentsError
+        If the ending components are invalid.
     """
     if components.type != ComponentsType.NOUN:
-        raise ValueError(f"Invalid type: '{components.type}'")
+        raise InvalidComponentsError(f"Invalid type: '{components.type}'")
 
     try:
         lemmas: tuple[str, ...] = lemminflect.getLemma(noun, "NOUN")
@@ -92,11 +92,11 @@ def find_main_noun_inflection(
     ------
     InvalidWordError
         If the word is not a valid English noun.
-    ValueError
-        If the input (other than the word itself) is invalid.
+    InvalidComponentsError
+        If the ending components are invalid.
     """
     if components.type != ComponentsType.NOUN:
-        raise ValueError(f"Invalid type: '{components.type}'")
+        raise InvalidComponentsError(f"Invalid type: '{components.type}'")
 
     try:
         lemma: str = lemminflect.getLemma(noun, "NOUN")[0]

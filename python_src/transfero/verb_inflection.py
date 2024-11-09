@@ -10,7 +10,7 @@ import lemminflect
 
 from ..accido.misc import ComponentsType, Mood, Number, Tense, Voice
 from .edge_cases import STATIVE_VERBS
-from .exceptions import InvalidWordError
+from .exceptions import InvalidComponentsError, InvalidWordError
 
 if TYPE_CHECKING:
     from .. import accido
@@ -19,19 +19,23 @@ if TYPE_CHECKING:
 
 def _verify_verb_inflections(components: accido.misc.EndingComponents) -> None:
     if components.type is not ComponentsType.VERB:
-        raise ValueError(f"Invalid type: '{components.type}'")
+        raise InvalidComponentsError(f"Invalid type: '{components.type}'")
 
     if (
         components.mood == Mood.PARTICIPLE
         and components.subtype != "participle"
     ):
-        raise ValueError(f"Invalid subtype: '{components.subtype}'")
+        raise InvalidComponentsError(
+            f"Invalid subtype: '{components.subtype}'"
+        )
 
     if (
         components.mood == Mood.INFINITIVE
         and components.subtype != "infinitive"
     ):
-        raise ValueError(f"Invalid subtype: '{components.subtype}'")
+        raise InvalidComponentsError(
+            f"Invalid subtype: '{components.subtype}'"
+        )
 
 
 def find_verb_inflections(
@@ -117,8 +121,8 @@ def find_main_verb_inflection(
     ------
     InvalidWordError
         If the word is not a valid English verb.
-    ValueError
-        If the input (other than the word itself) is invalid.
+    InvalidComponentsError
+        If the ending components are invalid.
     """
     _verify_verb_inflections(components)
 
@@ -148,7 +152,7 @@ def find_main_verb_inflection(
     )[0]
 
     # HACK: workaround for pydoclint
-    raise ValueError  # pragma: no cover
+    raise InvalidComponentsError  # pragma: no cover
 
 
 def _find_lemma(  # noqa: PLR0917

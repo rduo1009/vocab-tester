@@ -9,7 +9,7 @@ from typing import TYPE_CHECKING
 import lemminflect
 
 from ..accido.misc import ComponentsSubtype, ComponentsType, Degree
-from .exceptions import InvalidWordError
+from .exceptions import InvalidComponentsError, InvalidWordError
 
 if TYPE_CHECKING:
     from .. import accido
@@ -37,14 +37,16 @@ def find_adverb_inflections(
     ------
     InvalidWordError
         If the word is not a valid English adverb.
-    ValueError
-        If the input (other than the word itself) is invalid.
+    InvalidComponentsError
+        If the ending components are invalid.
     """
     if components.type != ComponentsType.ADJECTIVE:
-        raise ValueError(f"Invalid type: '{components.type}'")
+        raise InvalidComponentsError(f"Invalid type: '{components.type}'")
 
     if components.subtype != ComponentsSubtype.ADVERB:
-        raise ValueError(f"Invalid subtype: '{components.subtype}'")
+        raise InvalidComponentsError(
+            f"Invalid subtype: '{components.subtype}'"
+        )
 
     try:
         lemmas: tuple[str, ...] = lemminflect.getLemma(adverb, "ADV")
@@ -79,13 +81,15 @@ def find_main_adverb_inflection(
     ------
     InvalidWordError
         If the word is not a valid English adverb.
-    ValueError
-        If the input (other than the word itself) is invalid.
+    InvalidComponentsError
+        If the ending components are invalid.
     """
     if components.type is not ComponentsType.ADJECTIVE:
-        raise ValueError(f"Invalid type: '{components.type}'")
+        raise InvalidComponentsError(f"Invalid type: '{components.type}'")
     if components.subtype != "adverb":
-        raise ValueError(f"Invalid subtype: '{components.subtype}'")
+        raise InvalidComponentsError(
+            f"Invalid subtype: '{components.subtype}'"
+        )
 
     try:
         lemma: str = lemminflect.getLemma(adverb, "ADV")[0]

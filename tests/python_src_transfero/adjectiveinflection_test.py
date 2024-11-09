@@ -5,24 +5,25 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../.
 import pytest
 from python_src.accido.misc import Case, Degree, EndingComponents, Gender, Number
 from python_src.transfero.adjective_inflection import find_adjective_inflections, find_main_adjective_inflection
+from python_src.transfero.exceptions import InvalidComponentsError
 
 
 def test_invalid_type():
-    with pytest.raises(ValueError) as error:
+    with pytest.raises(InvalidComponentsError) as error:
         find_adjective_inflections("happy", EndingComponents(case=Case.NOMINATIVE, number=Number.SINGULAR, gender=Gender.NEUTER))
     assert "Invalid type: 'pronoun'" == str(error.value)
 
-    with pytest.raises(ValueError) as error:
+    with pytest.raises(InvalidComponentsError) as error:
         find_main_adjective_inflection("happy", EndingComponents(case=Case.NOMINATIVE, number=Number.SINGULAR, gender=Gender.NEUTER))
     assert "Invalid type: 'pronoun'" == str(error.value)
 
 
 def test_invalid_subtype():
-    with pytest.raises(ValueError) as error:
+    with pytest.raises(InvalidComponentsError) as error:
         find_adjective_inflections("happy", EndingComponents(degree=Degree.POSITIVE))
     assert "Invalid subtype: 'adverb'" == str(error.value)
 
-    with pytest.raises(ValueError) as error:
+    with pytest.raises(InvalidComponentsError) as error:
         find_main_adjective_inflection("happy", EndingComponents(degree=Degree.POSITIVE))
     assert "Invalid subtype: 'adverb'" == str(error.value)
 

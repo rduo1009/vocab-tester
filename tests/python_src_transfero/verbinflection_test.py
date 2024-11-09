@@ -5,23 +5,24 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../.
 
 import pytest
 from python_src.accido.misc import Case, EndingComponents, Gender, Mood, Number, Tense, Voice
+from python_src.transfero.exceptions import InvalidComponentsError
 from python_src.transfero.verb_inflection import find_main_verb_inflection, find_verb_inflections
 
 
 def test_invalid_type():
-    with pytest.raises(ValueError) as error:
+    with pytest.raises(InvalidComponentsError) as error:
         find_verb_inflections("teach", EndingComponents(case=Case.NOMINATIVE, number=Number.SINGULAR, gender=Gender.NEUTER))
     assert "Invalid type: 'pronoun'" == str(error.value)
 
 
 def test_invalid_type_participle():
-    with pytest.raises(ValueError) as error:
+    with pytest.raises(InvalidComponentsError) as error:
         find_verb_inflections("teach", EndingComponents(tense=Tense.PRESENT, voice=Voice.PASSIVE, mood=Mood.PARTICIPLE))
     assert "Invalid subtype: 'infinitive'" == str(error.value)
 
 
 def test_invalid_type_infinitive():
-    with pytest.raises(ValueError) as error:
+    with pytest.raises(InvalidComponentsError) as error:
         find_verb_inflections("teach", EndingComponents(tense=Tense.PERFECT, voice=Voice.PASSIVE, mood=Mood.INFINITIVE, number=Number.SINGULAR, case=Case.NOMINATIVE, gender=Gender.MASCULINE))
     assert "Invalid subtype: 'participle'" == str(error.value)
 
