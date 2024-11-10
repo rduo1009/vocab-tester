@@ -1,0 +1,43 @@
+name: Collect and upload coverage
+on: push
+
+jobs:
+  coverage:
+    name: Collect and upload coverage
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        py:
+          - "3.13.0"
+        os:
+          - ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4.2.2
+        with:
+          fetch-depth: 0
+          submodules: "recursive"
+
+      - name: Setup python for test ${{ matrix.py }}
+        uses: actions/setup-python@v5.3.0
+        with:
+          python-version: ${{ matrix.py }}
+
+      - name: Create testdump directory
+        run: mkdir tests/src_core_lego/test_vocab_files/testdump
+
+      - name: Install project deps
+        run: python3 -m pip install -r requirements-dev.txt
+
+      - name: Run coverage for python
+        run: |
+          coverage run tests/run_all_tests.py 
+          mkdir -p reports/coverage 
+          coverage xml -o reports/coverage/coverage.xml
+
+      - name: Upload results to Codecov
+        uses: codecov/codecov-action@v4.6.0
+        with:
+          files: ./reports/coverage/coverage.xml
+          token: ${{ secrets.CODECOV_TOKEN }}
