@@ -152,7 +152,7 @@ def read_vocab_dump(filename: Path) -> VocabList:
     raise InvalidVocabDumpError("Vocab dump is not valid.")
 
     # HACK: workaround for pydoclint
-    raise FileNotFoundError  # pragma: no cover
+    raise FileNotFoundError  # pragma: no cover # sourcery skip: remove-unreachable-code
 
 
 def _generate_meaning(meaning: str) -> Meaning:
@@ -273,7 +273,7 @@ def read_vocab_file(file_path: Path) -> VocabList:
     return VocabList(vocab)
 
     # HACK: workaround for pydoclint
-    raise FileNotFoundError  # pragma: no cover
+    raise FileNotFoundError  # pragma: no cover # sourcery skip: remove-unreachable-code
 
 
 def _parse_line(

@@ -572,7 +572,7 @@ def _generate_multiplechoice_engtolat(
     chosen_word: accido.endings._Word,
     number_multiplechoice_options: int,
 ) -> MultipleChoiceEngToLatQuestion:
-    vocab_list = deepcopy(vocab_list)
+    vocab_list = deepcopy(vocab_list)  # sourcery skip: name-type-suffix
     vocab_list.remove(chosen_word)
 
     meaning: Meaning = chosen_word.meaning
