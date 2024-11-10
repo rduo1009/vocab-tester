@@ -37,8 +37,9 @@ deptry = "==0.20.0"
 cosmic-ray = "==8.3.15"
 doc8 = "==1.1.2"
 rstfmt = "==0.0.14"
-interrogate = { extras = [ "png" ], version = "==1.7.0" }
+interrogate = "==1.7.0"
 pydoclint = "==0.5.9"
+genbadge = { extras = [ "coverage" ], version = "==1.1.1" }
 
 [tool.poetry.group.types.dependencies]
 types-regex = "==2024.9.11.20240912"
