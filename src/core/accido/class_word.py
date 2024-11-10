@@ -69,18 +69,14 @@ class _Word(ABC):  # noqa: PLW1641
         ]
 
     # Force implementation of these methods
-    # docstr-coverage:excused `abstract method`
     @abstractmethod
     def get(
         self,
         *args: Any,
         **kwargs: Any,
-    ) -> (
-        Ending | None
-    ):  # pragma: no cover # sourcery skip: docstrings-for-functions
+    ) -> Ending | None:  # sourcery skip: docstrings-for-functions
         ...
 
     @staticmethod
     @abstractmethod
-    def _create_components(key: str) -> EndingComponents:  # pragma: no cover
-        ...
+    def _create_components(key: str) -> EndingComponents: ...
