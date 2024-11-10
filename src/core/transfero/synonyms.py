@@ -14,16 +14,9 @@ _nltk_data_path: Path = _project_root / "nltk_data"
 _nltk_data_path.mkdir(parents=True, exist_ok=True)
 path.append(str(_nltk_data_path))
 
-if not _nltk_data_path.exists():
-    _nltk_data_path.mkdir(parents=True, exist_ok=True)
-    warnings.warn(
-        f"The directory {_nltk_data_path} did not exist and has been created",
-        stacklevel=2,
-    )
-
 try:
     find("corpora/wordnet.zip")
-except LookupError:  # pragma: no cover
+except LookupError:
     download("wordnet", download_dir=str(_nltk_data_path))
     warnings.warn(
         f"The wordnet dataset was not found in {_nltk_data_path} and has "
