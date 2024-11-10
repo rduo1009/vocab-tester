@@ -1,4 +1,4 @@
-name: Collect and upload coverage
+name: coverage
 on: push
 
 jobs:
