@@ -58,6 +58,19 @@ class Verb(_Word):
     Note that all arguments of Verb are keyword-only.
     """
 
+    __slots__ = (
+        "_inf_stem",
+        "_per_stem",
+        "_ppp_stem",
+        "_pre_stem",
+        "_preptc_stem",
+        "conjugation",
+        "infinitive",
+        "perfect",
+        "ppp",
+        "present",
+    )
+
     def __init__(
         self,
         present: str,

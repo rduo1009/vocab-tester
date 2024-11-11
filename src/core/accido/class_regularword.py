@@ -30,6 +30,8 @@ class RegularWord(_Word):
     Note that the arguments of RegularWord are keyword-only.
     """
 
+    __slots__ = ("word",)
+
     def __init__(self, word: str, *, meaning: Meaning) -> None:
         """Initialise RegularWord.
 

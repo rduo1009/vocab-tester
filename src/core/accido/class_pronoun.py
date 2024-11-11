@@ -33,6 +33,13 @@ class Pronoun(_Word):
     Note that the arguments of Pronoun are keyword-only.
     """
 
+    __slots__ = (
+        "femnom",
+        "mascnom",
+        "neutnom",
+        "pronoun",
+    )
+
     def __init__(self, pronoun: str, *, meaning: Meaning) -> None:
         """Initialise Pronoun and determines the endings.
 

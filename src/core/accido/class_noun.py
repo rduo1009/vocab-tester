@@ -56,6 +56,15 @@ class Noun(_Word):
     tantum fifth declension nouns (there doesn't seem to be any).
     """
 
+    __slots__ = (
+        "_stem",
+        "declension",
+        "gender",
+        "genitive",
+        "nominative",
+        "plurale_tantum",
+    )
+
     # fmt: off
     @overload
     def __init__(self, nominative: str, *, meaning: Meaning) -> None: ...

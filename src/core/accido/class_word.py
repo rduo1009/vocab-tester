@@ -30,6 +30,8 @@ class _Word(ABC):  # noqa: PLW1641
         The meaning of the word.
     """
 
+    __slots__ = ("_first", "endings", "meaning")
+
     endings: Endings
     _first: str
     meaning: Meaning

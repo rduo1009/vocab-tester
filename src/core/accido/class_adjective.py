@@ -61,6 +61,24 @@ class Adjective(_Word):
     adjectives.
     """
 
+    __slots__ = (
+        "_cmp_stem",
+        "_irregular_cmpadv",
+        "_irregular_posadv",
+        "_irregular_spradv",
+        "_pos_stem",
+        "_principal_parts",
+        "_spr_stem",
+        "adverb_flag",
+        "declension",
+        "femnom",
+        "irregular_flag",
+        "mascgen",
+        "mascnom",
+        "neutnom",
+        "termination",
+    )
+
     # fmt: off
     @overload
     def __init__(self, *principal_parts: str, declension: Literal["212"], meaning: Meaning) -> None: ...
@@ -95,6 +113,7 @@ class Adjective(_Word):
         self.mascnom: str = self._principal_parts[0]
         self.femnom: str
         self.neutnom: str
+        self.mascgen: str
 
         self._first = self._principal_parts[0]
         self.meaning: Meaning = meaning
@@ -308,7 +327,7 @@ class Adjective(_Word):
                 f"(adjective '{self._first}' given)",
             )
 
-        self.mascgen: str = self._principal_parts[1]
+        self.mascgen = self._principal_parts[1]
 
         if not self.mascgen.endswith("is"):
             raise InvalidInputError(
