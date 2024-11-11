@@ -423,13 +423,13 @@ files = [
 
 [[package]]
 name = "cosmic-ray"
-version = "8.3.15"
+version = "8.4.1"
 description = "Mutation testing"
 optional = false
-python-versions = ">=3.8"
+python-versions = ">=3.9"
 files = [
-    {file = "cosmic_ray-8.3.15-py3-none-any.whl", hash = "sha256:b3994060e71f7edb0eae3217aa43dc181e889052355fa35e66668ea573a7659d"},
-    {file = "cosmic_ray-8.3.15.tar.gz", hash = "sha256:e9b9887a52689bc6d322e91766c1827cc559ddb25b80a6fe68bb1ce6cca4ea5a"},
+    {file = "cosmic_ray-8.4.1-py3-none-any.whl", hash = "sha256:1394b4ea4618353f1381843d34f8e722f5f03b79d5c4575d7969a2ad5f96cfa9"},
+    {file = "cosmic_ray-8.4.1.tar.gz", hash = "sha256:a2b17b882724e091316e8161f4fed7da7b206de2c77e07da1abbd756ece97d1d"},
 ]
 
 [package.dependencies]
@@ -446,11 +446,6 @@ sqlalchemy = "*"
 stevedore = "*"
 toml = "*"
 yattag = "*"
-
-[package.extras]
-dev = ["bump-my-version", "flake8", "flake8-pyproject", "nox", "ruff"]
-docs = ["sphinx", "sphinx-rtd-theme"]
-test = ["hypothesis", "pytest", "pytest-mock"]
 
 [[package]]
 name = "coverage"
@@ -2924,4 +2919,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.12,<4.0"
-content-hash = "2791c36d263eb569477a8b563a5316f9294911e0a4a6db512b95c5b4aa47587a"
+content-hash = "f257432e27a55c9babc6c31b5494df014fc865d7ba677a3a590dd564d17e63bd"
