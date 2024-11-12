@@ -19,23 +19,14 @@ else:
     from ..._vendor.aenum import Enum
 
 
-class _EndingComponentEnum(Enum):
-    regular: str
-    shorthand: str
-
-
-class Number(
-    _EndingComponentEnum, settings=MultiValue, init="regular shorthand"
-):
+class Number(Enum, settings=MultiValue, init="regular shorthand"):
     """Represents the grammatical number."""
 
     SINGULAR = "singular", "sg"
     PLURAL = "plural", "pl"
 
 
-class Tense(
-    _EndingComponentEnum, settings=MultiValue, init="regular shorthand"
-):
+class Tense(Enum, settings=MultiValue, init="regular shorthand"):
     """Represents the tense of a verb."""
 
     PRESENT = "present", "pre"
@@ -46,18 +37,14 @@ class Tense(
     # FUTURE_PERFECT = "future perfect", "fpr"
 
 
-class Voice(
-    _EndingComponentEnum, settings=MultiValue, init="regular shorthand"
-):
+class Voice(Enum, settings=MultiValue, init="regular shorthand"):
     """Represents the voice of a verb."""
 
     ACTIVE = "active", "act"
     PASSIVE = "passive", "pas"
 
 
-class Mood(
-    _EndingComponentEnum, settings=MultiValue, init="regular shorthand"
-):
+class Mood(Enum, settings=MultiValue, init="regular shorthand"):
     """Represents the mood of a verb."""
 
     INDICATIVE = "indicative", "ind"
@@ -67,9 +54,7 @@ class Mood(
     PARTICIPLE = "participle", "ptc"
 
 
-class Case(
-    _EndingComponentEnum, settings=MultiValue, init="regular shorthand"
-):
+class Case(Enum, settings=MultiValue, init="regular shorthand"):
     """Represents the case of a noun."""
 
     NOMINATIVE = "nominative", "nom"
@@ -80,9 +65,7 @@ class Case(
     ABLATIVE = "ablative", "abl"
 
 
-class Gender(
-    _EndingComponentEnum, settings=MultiValue, init="regular shorthand"
-):
+class Gender(Enum, settings=MultiValue, init="regular shorthand"):
     """Represents the gender of a noun or adjective."""
 
     MASCULINE = "masculine", "m"
@@ -90,9 +73,7 @@ class Gender(
     NEUTER = "neuter", "n"
 
 
-class Degree(
-    _EndingComponentEnum, settings=MultiValue, init="regular shorthand"
-):
+class Degree(Enum, settings=MultiValue, init="regular shorthand"):
     """Represents the degree of an adjective."""
 
     POSITIVE = "positive", "pos"
