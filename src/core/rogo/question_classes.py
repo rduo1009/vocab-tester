@@ -169,7 +169,15 @@ class ParseWordLatToCompQuestion(
 
 @dataclass
 class PrincipalPartsQuestion:
-    """A question that asks for the principal parts of a Latin verb."""
+    """A question that asks for the principal parts of a Latin verb.
+
+    Attributes
+    ----------
+    prompt : str
+        The prompt of the question.
+    principal_parts : tuple[str, ...]
+        The answer of the question (the principal parts).
+    """
 
     prompt: str
     principal_parts: tuple[str, ...]
@@ -192,9 +200,29 @@ class PrincipalPartsQuestion:
 
 @dataclass
 class MultipleChoiceEngToLatQuestion(_MultipleChoiceQuestion):
-    """An English to Latin multiple choice question."""
+    """An English to Latin multiple choice question.
+
+    Attributes
+    ----------
+    prompt : str
+        The prompt of the question (in English).
+    answer : str
+        The answer of the question (in Latin).
+    choices : tuple[str, ...]
+        The choices of the question (including the answer).
+    """
 
 
 @dataclass
 class MultipleChoiceLattoEngQuestion(_MultipleChoiceQuestion):
-    """A Latin to English multiple choice question."""
+    """A Latin to English multiple choice question.
+
+    Attributes
+    ----------
+    prompt : str
+        The prompt of the question (in Latin).
+    answer : str
+        The answer of the question (in English).
+    choices : tuple[str, ...]
+        The choices of the question (including the answer).
+    """
