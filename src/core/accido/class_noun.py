@@ -129,7 +129,7 @@ class Noun(_Word):
             }
 
         # HACK: workaround for pydoclint
-        if False:  # pragma: no cover # sourcery skip:remove-redundant-if
+        if False:  # pragma: no cover # sourcery skip: remove-redundant-if
             raise InvalidInputError
 
     def _find_declension(self) -> None:

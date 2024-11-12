@@ -64,7 +64,23 @@ def cache_vocab_file(
     Warnings
     --------
     UserWarning
-        If the cache folder did not exist and had to be created.
+        If the cache folder did not exist and had to be created, or if the
+        vocab dump file already exists and has been overwritten.
+    MisleadingFilenameWarning
+        If the file path does not end in .lz4 and the file is being
+        compressed, or if the file path ends in .lz4 and the file is not
+        being compressed.
+
+    Raises
+    ------
+    InvalidVocabFileFormatError
+        If the file provided is not a valid vocabulary file, or if the
+        formatting is incorrect.
+    InvalidVocabDumpError
+        If the file in the cache is not a valid vocabulary dump, or if the data
+        has been tampered with.
+    FileNotFoundError
+        If the vocab file or dump does not exist.
     """
     if not cache_folder.exists():
         cache_folder.mkdir(parents=True, exist_ok=True)
@@ -84,3 +100,12 @@ def cache_vocab_file(
     )  # sourcery skip: name-type-suffix
     save_vocab_dump(cache_path, vocab_list)
     return (vocab_list, False)
+
+    # HACK: workaround for pydoclint
+    (  # pragma: no cover  # sourcery skip: remove-unreachable-code # mypy: ignore[unreachable]
+        InvalidVocabDumpError,  # noqa: N806
+        InvalidVocabFileFormatError,  # noqa: N806
+    ) = None
+    raise InvalidVocabDumpError
+    raise InvalidVocabFileFormatError
+    raise FileNotFoundError
