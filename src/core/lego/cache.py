@@ -102,7 +102,7 @@ def cache_vocab_file(
     return (vocab_list, False)
 
     # HACK: workaround for pydoclint
-    (  # pragma: no cover  # sourcery skip: remove-unreachable-code # mypy: ignore[unreachable]
+    (  # type: ignore[unreachable] # pragma: no cover  # sourcery skip: remove-unreachable-code
         InvalidVocabDumpError,  # noqa: N806
         InvalidVocabFileFormatError,  # noqa: N806
     ) = None
