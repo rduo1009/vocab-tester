@@ -12,7 +12,7 @@ from ..accido.misc import Case, Gender, Mood, Number
 from .exceptions import InvalidSettingsError
 from .question_classes import (
     MultipleChoiceEngToLatQuestion,
-    MultipleChoiceLattoEngQuestion,
+    MultipleChoiceLatToEngQuestion,
     ParseWordCompToLatQuestion,
     ParseWordLatToCompQuestion,
     PrincipalPartsQuestion,
@@ -603,7 +603,7 @@ def _generate_multiplechoice_lattoeng(
     vocab_list: Vocab,
     chosen_word: accido.endings._Word,
     number_multiplechoice_options: int,
-) -> MultipleChoiceLattoEngQuestion:
+) -> MultipleChoiceLatToEngQuestion:
     prompt: str = chosen_word._first  # noqa: SLF001
 
     chosen_word_meanings: tuple[str, ...]
@@ -636,7 +636,7 @@ def _generate_multiplechoice_lattoeng(
     ]
     random.shuffle(choices)
 
-    return MultipleChoiceLattoEngQuestion(
+    return MultipleChoiceLatToEngQuestion(
         prompt=prompt,
         answer=answer,
         choices=tuple(choices),

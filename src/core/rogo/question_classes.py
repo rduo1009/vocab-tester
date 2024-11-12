@@ -18,7 +18,7 @@ class QuestionClasses(Enum):
     PARSEWORD_COMPTOLAT = "ParseWordComptoLatQuestion"
     PRINCIPAL_PARTS = "PrincipalPartsQuestion"
     MULTIPLECHOICE_ENGTOLAT = "MultipleChoiceEngtoLatQuestion"
-    MULTIPLECHOICE_LATTOENG = "MultipleChoiceLattoEngQuestion"
+    MULTIPLECHOICE_LATTOENG = "MultipleChoiceLatToEngQuestion"
 
 
 class Question(Protocol):
@@ -214,7 +214,7 @@ class MultipleChoiceEngToLatQuestion(_MultipleChoiceQuestion):
 
 
 @dataclass
-class MultipleChoiceLattoEngQuestion(_MultipleChoiceQuestion):
+class MultipleChoiceLatToEngQuestion(_MultipleChoiceQuestion):
     """A Latin to English multiple choice question.
 
     Attributes

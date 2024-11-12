@@ -11,7 +11,7 @@ from src.core.accido.misc import Gender
 from src.core.lego.misc import VocabList
 from src.core.lego.reader import read_vocab_file
 from src.core.rogo.asker import ask_question_without_sr
-from src.core.rogo.question_classes import MultipleChoiceLattoEngQuestion
+from src.core.rogo.question_classes import MultipleChoiceLatToEngQuestion
 from src.core.rogo.type_aliases import Settings
 from src.utils import contains_duplicates
 
@@ -115,7 +115,7 @@ def test_multiplechoice_lattoeng():
     vocab_list = read_vocab_file(Path("tests/src_core_lego/test_vocab_files/regular_list.txt"))
     amount = 50
     for output in ask_question_without_sr(vocab_list, amount, settings):
-        assert type(output) is MultipleChoiceLattoEngQuestion
+        assert type(output) is MultipleChoiceLatToEngQuestion
         assert output.check(output.answer)
 
         assert not contains_duplicates(output.choices)
@@ -133,7 +133,7 @@ def test_multiplechoice_engtolat_adjective():
     amount = 500
 
     for output in ask_question_without_sr(vocab_list, amount, settings):
-        assert type(output) is MultipleChoiceLattoEngQuestion
+        assert type(output) is MultipleChoiceLatToEngQuestion
         assert output.check(output.answer)
 
         assert not contains_duplicates(output.choices)
@@ -151,7 +151,7 @@ def test_multiplechoice_engtolat_noun():
     amount = 500
 
     for output in ask_question_without_sr(vocab_list, amount, settings):
-        assert type(output) is MultipleChoiceLattoEngQuestion
+        assert type(output) is MultipleChoiceLatToEngQuestion
         assert output.check(output.answer)
 
         assert not contains_duplicates(output.choices)
@@ -169,7 +169,7 @@ def test_multiplechoice_engtolat_pronoun():
     amount = 500
 
     for output in ask_question_without_sr(vocab_list, amount, settings):
-        assert type(output) is MultipleChoiceLattoEngQuestion
+        assert type(output) is MultipleChoiceLatToEngQuestion
         assert output.check(output.answer)
 
         assert not contains_duplicates(output.choices)
@@ -187,7 +187,7 @@ def test_multiplechoice_engtolat_verb():
     amount = 500
 
     for output in ask_question_without_sr(vocab_list, amount, settings):
-        assert type(output) is MultipleChoiceLattoEngQuestion
+        assert type(output) is MultipleChoiceLatToEngQuestion
         assert output.check(output.answer)
 
         assert not contains_duplicates(output.choices)
@@ -205,7 +205,7 @@ def test_multiplechoice_engtolat_regularword():
     amount = 500
 
     for output in ask_question_without_sr(vocab_list, amount, settings):
-        assert type(output) is MultipleChoiceLattoEngQuestion
+        assert type(output) is MultipleChoiceLatToEngQuestion
         assert output.check(output.answer)
 
         assert not contains_duplicates(output.choices)
