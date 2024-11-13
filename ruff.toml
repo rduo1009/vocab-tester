@@ -39,7 +39,6 @@ ignore = [
     "FIX002",
 ]
 extend-select = ["W505"]
-exclude = ["build.py"]
 
 [lint.pydocstyle]
 convention = "numpy"
