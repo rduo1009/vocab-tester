@@ -13,6 +13,19 @@ def test_eq():
     assert not word1 == "error"
 
 
+def test_eq_different_meaning():
+    word1 = Verb("test1o", "testare", "test3i", "test4", meaning="test5")
+    word2 = Verb("test1o", "testare", "test3i", "test4", meaning="something else")
+    assert not word1 == word2
+
+
+def test_eq_different_endings():
+    word1 = Verb("test1o", "testare", "test3i", "test4", meaning="test5")
+    word2 = Verb("test1o", "testare", "test3i", "test4", meaning="test5")
+    word2.endings["Vpreactindsg1"] = "error"
+    assert not word1 == word2
+
+
 def test_lt():
     foo = Verb("test1o", "testare", "test3i", "test4", meaning="test5")
     with pytest.raises(TypeError) as error:
