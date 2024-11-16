@@ -69,3 +69,6 @@ class RegularWord(_Word):
 
     def __repr__(self) -> str:
         return f"RegularWord({self.word}, {self.meaning})"
+
+    def __str__(self) -> str:
+        return f"{self.meaning}: {self.word}"
