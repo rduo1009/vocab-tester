@@ -39,7 +39,7 @@ class _Word(ABC):  # noqa: PLW1641
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, _Word):
             return NotImplemented
-        return self.endings == other.endings
+        return self.endings == other.endings and self.meaning == other.meaning
 
     def __lt__(self, other: object) -> bool:
         if not isinstance(other, _Word):
