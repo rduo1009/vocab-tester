@@ -7,6 +7,9 @@ from typing import TYPE_CHECKING, Final
 
 import src
 
+from ...utils import contains_duplicates
+from .exceptions import InvalidVocabListError
+
 if TYPE_CHECKING:
     from .. import accido
 
@@ -42,6 +45,11 @@ class VocabList:
     vocab: list[accido.endings._Word]
 
     def __post_init__(self) -> None:
+        if contains_duplicates(self.vocab):
+            raise InvalidVocabListError(
+                "The vocabulary list contains duplicate items."
+            )
+
         # Set the version using the package version.
         self.version: str = src.__version__
 
