@@ -61,7 +61,7 @@ src/core/lego/misc.py
 --------------------
 src/core/lego/reader.py
     DOC503: Function `read_vocab_dump` exceptions in the "Raises" section in the docstring do not match those in the function body Raises values in the docstring: ['FileNotFoundError', 'InvalidVocabDumpError']. Raised exceptions in the body: ['InvalidVocabDumpError'].
-    DOC503: Function `read_vocab_file` exceptions in the "Raises" section in the docstring do not match those in the function body Raises values in the docstring: ['FileNotFoundError', 'InvalidVocabFileFormatError']. Raised exceptions in the body: ['InvalidVocabFileFormatError'].
+    DOC503: Function `read_vocab_file` exceptions in the "Raises" section in the docstring do not match those in the function body Raises values in the docstring: ['FileNotFoundError', 'InvalidVocabFileFormatError', 'InvalidVocabListError']. Raised exceptions in the body: ['InvalidVocabFileFormatError'].
 --------------------
 src/core/rogo/question_classes.py
     DOC602: Class `TypeInEngToLatQuestion`: Class docstring contains more class attributes than in actual class attributes.  (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
