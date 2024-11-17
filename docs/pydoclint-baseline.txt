@@ -14,6 +14,7 @@ src/core/accido/class_noun.py
     DOC103: Method `Noun.__init__`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [meaning: Meaning, nominative: str].
     DOC101: Method `Noun.__init__`: Docstring contains fewer arguments than in function signature.
     DOC103: Method `Noun.__init__`: Docstring arguments are different from function arguments. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the function signature but not in the docstring: [gender: Gender, genitive: str, meaning: Meaning, nominative: str].
+    DOC502: Method `Noun.__init__` has a "Raises" section in the docstring, but there are not "raise" statements in the body
 --------------------
 src/core/accido/class_pronoun.py
     DOC602: Class `Pronoun`: Class docstring contains more class attributes than in actual class attributes.  (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
@@ -51,9 +52,16 @@ src/core/accido/misc.py
     DOC602: Class `MultipleEndings`: Class docstring contains more class attributes than in actual class attributes.  (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
     DOC603: Class `MultipleEndings`: Class docstring attributes are different from actual class attributes. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the docstring but not in the actual class attributes: [etc.: , value: str]. (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
 --------------------
+src/core/lego/cache.py
+    DOC502: Function `cache_vocab_file` has a "Raises" section in the docstring, but there are not "raise" statements in the body
+--------------------
 src/core/lego/misc.py
     DOC602: Class `VocabList`: Class docstring contains more class attributes than in actual class attributes.  (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
     DOC603: Class `VocabList`: Class docstring attributes are different from actual class attributes. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the docstring but not in the actual class attributes: [version: str]. (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
+--------------------
+src/core/lego/reader.py
+    DOC503: Function `read_vocab_dump` exceptions in the "Raises" section in the docstring do not match those in the function body Raises values in the docstring: ['FileNotFoundError', 'InvalidVocabDumpError']. Raised exceptions in the body: ['InvalidVocabDumpError'].
+    DOC503: Function `read_vocab_file` exceptions in the "Raises" section in the docstring do not match those in the function body Raises values in the docstring: ['FileNotFoundError', 'InvalidVocabFileFormatError']. Raised exceptions in the body: ['InvalidVocabFileFormatError'].
 --------------------
 src/core/rogo/question_classes.py
     DOC602: Class `TypeInEngToLatQuestion`: Class docstring contains more class attributes than in actual class attributes.  (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
@@ -68,4 +76,11 @@ src/core/rogo/question_classes.py
     DOC603: Class `MultipleChoiceEngToLatQuestion`: Class docstring attributes are different from actual class attributes. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the docstring but not in the actual class attributes: [answer: str, choices: tuple[str, ...], prompt: str]. (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
     DOC602: Class `MultipleChoiceLatToEngQuestion`: Class docstring contains more class attributes than in actual class attributes.  (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
     DOC603: Class `MultipleChoiceLatToEngQuestion`: Class docstring attributes are different from actual class attributes. (Or could be other formatting issues: https://jsh9.github.io/pydoclint/violation_codes.html#notes-on-doc103 ). Arguments in the docstring but not in the actual class attributes: [answer: str, choices: tuple[str, ...], prompt: str]. (Please read https://jsh9.github.io/pydoclint/checking_class_attributes.html on how to correctly document class attributes.)
+--------------------
+src/core/transfero/pronoun_inflection.py
+    DOC503: Function `find_pronoun_inflections` exceptions in the "Raises" section in the docstring do not match those in the function body Raises values in the docstring: ['InvalidComponentsError', 'NotImplementedError']. Raised exceptions in the body: ['InvalidComponentsError'].
+    DOC503: Function `find_main_pronoun_inflection` exceptions in the "Raises" section in the docstring do not match those in the function body Raises values in the docstring: ['InvalidComponentsError', 'NotImplementedError']. Raised exceptions in the body: ['InvalidComponentsError'].
+--------------------
+src/core/transfero/verb_inflection.py
+    DOC503: Function `find_main_verb_inflection` exceptions in the "Raises" section in the docstring do not match those in the function body Raises values in the docstring: ['InvalidComponentsError', 'InvalidWordError']. Raised exceptions in the body: ['InvalidWordError'].
 --------------------

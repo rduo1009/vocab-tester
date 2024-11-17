@@ -44,9 +44,6 @@ def find_pronoun_inflections(
 
     return set(_inflect_lemma(pronoun, components.case, components.number))
 
-    # HACK: workaround for pydoclint
-    raise NotImplementedError  # pragma: no cover # sourcery skip: remove-unreachable-code
-
 
 def find_main_pronoun_inflection(
     pronoun: str,
@@ -80,9 +77,6 @@ def find_main_pronoun_inflection(
         raise InvalidComponentsError(f"Invalid type: '{components.type}'")
 
     return _inflect_lemma(pronoun, components.case, components.number)[0]
-
-    # HACK: workaround for pydoclint
-    raise NotImplementedError  # pragma: no cover # sourcery skip: remove-unreachable-code
 
 
 def _inflect_lemma(lemma: str, case: Case, number: Number) -> tuple[str, ...]:

@@ -100,12 +100,3 @@ def cache_vocab_file(
     )  # sourcery skip: name-type-suffix
     save_vocab_dump(cache_path, vocab_list)
     return (vocab_list, False)
-
-    # HACK: workaround for pydoclint
-    (  # type: ignore[unreachable] # pragma: no cover  # sourcery skip: remove-unreachable-code
-        InvalidVocabDumpError,  # noqa: N806
-        InvalidVocabFileFormatError,  # noqa: N806
-    ) = None
-    raise InvalidVocabDumpError
-    raise InvalidVocabFileFormatError
-    raise FileNotFoundError

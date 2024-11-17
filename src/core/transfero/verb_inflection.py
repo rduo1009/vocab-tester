@@ -149,9 +149,6 @@ def find_main_verb_inflection(
         components.mood,
     )[0]
 
-    # HACK: workaround for pydoclint
-    raise InvalidComponentsError  # pragma: no cover # sourcery skip: remove-unreachable-code
-
 
 def _find_lemma(  # noqa: PLR0917
     lemma: str,

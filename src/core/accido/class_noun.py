@@ -128,10 +128,6 @@ class Noun(_Word):
                 k: v for k, v in self.endings.items() if not k.endswith("sg")
             }
 
-        # HACK: workaround for pydoclint
-        if False:  # pragma: no cover # sourcery skip: remove-redundant-if
-            raise InvalidInputError
-
     def _find_declension(self) -> None:
         # The ordering of this is strange because
         # e.g. ending -ei ends in 'i' as well as 'ei'
