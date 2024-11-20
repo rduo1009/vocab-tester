@@ -41,4 +41,4 @@ pydoclint = "0.5.9"
 
 [tool.poetry.group.types.dependencies]
 types-regex = "2024.11.6.20241108"
-optype = "0.6.1"
+optype = "0.7.1"
