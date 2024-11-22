@@ -55,9 +55,9 @@ feminine and neuter forms. For example:
    ... )
    >>> adjective.get(
    ...     degree=Degree.POSITIVE,
-   ...     gender=Gender.FEMININE,
    ...     case=Case.ACCUSATIVE,
    ...     number=Number.PLURAL,
+   ...     gender=Gender.FEMININE,
    ... )
    'iratas'
 
@@ -82,9 +82,9 @@ is the same for all genders) and the genitive singular. For example:
    ... )
    >>> adjective.get(
    ...     degree=Degree.POSITIVE,
-   ...     gender=Gender.NEUTER,
    ...     case=Case.ACCUSATIVE,
    ...     number=Number.PLURAL,
+   ...     gender=Gender.NEUTER,
    ... )
    'egentia'
 
@@ -103,9 +103,9 @@ the neuter masculine singular. For example:
    ... )
    >>> adjective.get(
    ...     degree=Degree.POSITIVE,
-   ...     gender=Gender.NEUTER,
    ...     case=Case.ACCUSATIVE,
    ...     number=Number.SINGULAR,
+   ...     gender=Gender.NEUTER,
    ... )
    'leve'
 
@@ -124,9 +124,9 @@ feminine and neuter forms. For example:
    ... )
    >>> adjective.get(
    ...     degree=Degree.POSITIVE,
-   ...     gender=Gender.FEMININE,
    ...     case=Case.DATIVE,
    ...     number=Number.PLURAL,
+   ...     gender=Gender.FEMININE,
    ... )
    'acribus'
 
@@ -259,10 +259,7 @@ considered to be different.
 
    >>> from src.core.accido.endings import Noun
    >>> from src.core.accido.misc import Case, Gender, Number
-   >>> noun = Noun(
-   ...     "ego",
-   ...     meaning="I"
-   ... )
+   >>> noun = Noun("ego", meaning="I")
    >>> noun.get(case=Case.DATIVE, number=Number.PLURAL)
    'nobis'
 
@@ -282,10 +279,7 @@ For example:
 
    >>> from src.core.accido.endings import Pronoun
    >>> from src.core.accido.misc import Case, Gender, Number
-   >>> pronoun = Pronoun(
-   ...     "qui",
-   ...     meaning="who"
-   ... )
+   >>> pronoun = Pronoun("qui", meaning="who")
    >>> pronoun.get(
    ...     case=Case.NOMINATIVE, number=Number.PLURAL, gender=Gender.FEMININE
    ... )
@@ -301,10 +295,7 @@ by a ``RegularWord`` class. For example:
 .. code:: python
 
    >>> from src.core.accido.endings import RegularWord
-   >>> word = RegularWord(
-   ...     "et",
-   ...     meaning="and",
-   ... )
+   >>> word = RegularWord("et", meaning="and")
    >>> word.get()
    'et'
 
@@ -331,19 +322,13 @@ For example:
 
    >>> from src.core.accido.endings import Verb
    >>> from src.core.accido.misc import Mood, Number, Tense, Voice
-   >>> verb = Verb(
-   ...     "amo",
-   ...     "amare",
-   ...     "amavi",
-   ...     "amatus",
-   ...     meaning="love",
-   ... )
+   >>> verb = Verb("amo", "amare", "amavi", "amatus", meaning="love")
    >>> verb.get(
    ...     tense=Tense.IMPERFECT,
    ...     voice=Voice.ACTIVE,
    ...     mood=Mood.INDICATIVE,
-   ...     number=Number.PLURAL,
    ...     person=2,
+   ...     number=Number.PLURAL,
    ... )
    'amabatis'
 
@@ -360,13 +345,7 @@ Third declension -io verbs
 
    >>> from src.core.accido.endings import Verb
    >>> from src.core.accido.misc import Mood, Number, Tense, Voice
-   >>> verb = Verb(
-   ...     "capio",
-   ...     "capere",
-   ...     "capivi",
-   ...     "captus",
-   ...     meaning="take",
-   ... )
+   >>> verb = Verb("capio", "capere", "capivi", "captus", meaning="take")
    >>> verb.get(
    ...     tense=Tense.PRESENT,
    ...     voice=Voice.ACTIVE,
@@ -389,13 +368,7 @@ For example:
 
    >>> from src.core.accido.endings import Verb
    >>> from src.core.accido.misc import Case, Gender, Mood, Number, Tense, Voice
-   >>> verb = Verb(
-   ...     "amo",
-   ...     "amare",
-   ...     "amavi",
-   ...     "amatus",
-   ...     meaning="love",
-   ... )
+   >>> verb = Verb("amo", "amare", "amavi", "amatus", meaning="love")
    >>> verb.get(
    ...     tense=Tense.PERFECT,
    ...     voice=Voice.PASSIVE,
@@ -416,12 +389,7 @@ mean that there will be not participle endings.
 
    >>> from src.core.accido.endings import Verb
    >>> from src.core.accido.misc import Case, Gender, Mood, Number, Tense, Voice
-   >>> verb = Verb(
-   ...     "amo",
-   ...     "amare",
-   ...     "amavi",
-   ...     meaning="love",
-   ... )
+   >>> verb = Verb("amo", "amare", "amavi", meaning="love")
    >>> verb.get(
    ...     tense=Tense.PERFECT,
    ...     voice=Voice.PASSIVE,
@@ -443,13 +411,7 @@ Some irregular verbs are also supported by ``accido``.
 
    >>> from src.core.accido.endings import Verb
    >>> from src.core.accido.misc import Mood, Number, Tense, Voice
-   >>> verb = Verb(
-   ...     "fero",
-   ...     "ferre",
-   ...     "tuli",
-   ...     "latus",
-   ...     meaning="carry",
-   ... )
+   >>> verb = Verb("fero", "ferre", "tuli", "latus", meaning="carry")
    >>> verb.get(
    ...     tense=Tense.PRESENT,
    ...     voice=Voice.ACTIVE,

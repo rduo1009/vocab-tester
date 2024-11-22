@@ -796,9 +796,9 @@ class Adjective(_Word):
         self,
         *,
         degree: Degree,
-        gender: Gender | None = None,
         case: Case | None = None,
         number: Number | None = None,
+        gender: Gender | None = None,
         adverb: bool = False,
     ) -> Ending | None:
         """Return the ending of the adjective.
@@ -809,14 +809,14 @@ class Adjective(_Word):
         ----------
         degree : Degree
             The degree of the adjective.
-        gender : Gender | None
-            The gender of the ending, if applicable (not an adverb).
-            Default is None.
         case : Case | None
             The case of the ending, if applicable (not an adverb).
             Default is None.
         number : Number | None
             The number of the ending, if applicable (not an adverb).
+            Default is None.
+        gender : Gender | None
+            The gender of the ending, if applicable (not an adverb).
             Default is None.
         adverb : bool
             Whether the queried ending is an adverb or not. Defaults to
@@ -834,9 +834,9 @@ class Adjective(_Word):
         ... )
         >>> foo.get(
         ...     degree=Degree.POSITIVE,
-        ...     gender=Gender.MASCULINE,
         ...     case=Case.NOMINATIVE,
         ...     number=Number.SINGULAR,
+        ...     gender=Gender.MASCULINE,
         ... )
         'egens'
 

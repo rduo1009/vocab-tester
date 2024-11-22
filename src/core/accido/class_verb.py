@@ -45,13 +45,7 @@ class Verb(_Word):
 
     Examples
     --------
-    >>> foo = Verb(
-    ...     "celo",
-    ...     "celare",
-    ...     "celavi",
-    ...     "celatus",
-    ...     meaning="hide",
-    ... )
+    >>> foo = Verb("celo", "celare", "celavi", "celatus", meaning="hide")
     >>> foo["Vpreactindsg1"]
     'celo'
 
@@ -464,11 +458,11 @@ class Verb(_Word):
     def get(
         self,
         *,
-        person: Person | None = None,
-        number: Number | None = None,
         tense: Tense,
         voice: Voice,
         mood: Mood,
+        person: Person | None = None,
+        number: Number | None = None,
         participle_gender: Gender | None = None,
         participle_case: Case | None = None,
     ) -> Ending | None:
@@ -478,16 +472,16 @@ class Verb(_Word):
 
         Parameters
         ----------
-        person : Person | None
-            The person of the ending, if applicable (not participle).
-        number : Number | None
-            The number of the ending, if applicable (not participle).
         tense : Tense
             The tense of the ending.
         voice : Voice
             The voice of the ending.
         mood : Mood
             The mood of the ending.
+        person : Person | None
+            The person of the ending, if applicable (not participle).
+        number : Number | None
+            The number of the ending, if applicable (not participle).
         participle_gender : Gender | None
             The gender of the participle, if applicable.
         participle_case : Case | None
@@ -500,41 +494,31 @@ class Verb(_Word):
 
         Examples
         --------
-        >>> foo = Verb(
-        ...     "celo",
-        ...     "celare",
-        ...     "celavi",
-        ...     "celatus",
-        ...     meaning="hide",
-        ... )
+        >>> foo = Verb("celo", "celare", "celavi", "celatus", meaning="hide")
         >>> foo.get(
-        ...     person=1,
-        ...     number=Number.SINGULAR,
         ...     tense=Tense.PRESENT,
         ...     voice=Voice.ACTIVE,
         ...     mood=Mood.INDICATIVE,
+        ...     person=1,
+        ...     number=Number.SINGULAR,
         ... )
         'celo'
 
         Note that all arguments of get are keyword-only.
 
         >>> foo.get(
-        ...     number=Number.SINGULAR,
         ...     tense=Tense.PERFECT,
         ...     voice=Voice.PASSIVE,
         ...     mood=Mood.PARTICIPLE,
-        ...     participle_gender=Gender.MASCULINE,
         ...     participle_case=Case.NOMINATIVE,
+        ...     number=Number.SINGULAR,
+        ...     participle_gender=Gender.MASCULINE,
         ... )
         'celatus'
 
         Similar with participle endings.
 
-        >>> foo.get(
-        ...     tense=Tense.PRESENT,
-        ...     voice=Voice.ACTIVE,
-        ...     mood=Mood.INFINITIVE,
-        ... )
+        >>> foo.get(tense=Tense.PRESENT, voice=Voice.ACTIVE, mood=Mood.INFINITIVE)
         'celare'
 
         Infinitives.
