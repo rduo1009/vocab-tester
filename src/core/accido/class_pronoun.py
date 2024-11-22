@@ -8,7 +8,7 @@ from typing import TYPE_CHECKING
 from .class_word import _Word
 from .edge_cases import PRONOUNS
 from .exceptions import InvalidInputError
-from .misc import Case, EndingComponents, Gender, Number
+from .misc import Case, EndingComponents, Gender, MultipleMeanings, Number
 
 if TYPE_CHECKING:
     from .type_aliases import Ending, Meaning
@@ -137,3 +137,20 @@ class Pronoun(_Word):
 
     def __str__(self) -> str:
         return f"{self.meaning}: {self.mascnom}, {self.femnom}, {self.neutnom}"
+
+    def __add__(self, other: object) -> Pronoun:
+        if not isinstance(other, Pronoun) or self.endings != other.endings:
+            return NotImplemented
+
+        if self.meaning == other.meaning:
+            return Pronoun(self.pronoun, meaning=self.meaning)
+
+        new_meaning: Meaning
+        if isinstance(self.meaning, MultipleMeanings) or isinstance(
+            other.meaning, MultipleMeanings
+        ):
+            new_meaning = self.meaning + other.meaning
+        else:
+            new_meaning = MultipleMeanings((self.meaning, other.meaning))
+
+        return Pronoun(self.pronoun, meaning=new_meaning)

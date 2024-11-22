@@ -8,7 +8,14 @@ from typing import TYPE_CHECKING, overload
 from .class_word import _Word
 from .edge_cases import IRREGULAR_NOUNS
 from .exceptions import InvalidInputError
-from .misc import Case, ComponentsSubtype, EndingComponents, Gender, Number
+from .misc import (
+    Case,
+    ComponentsSubtype,
+    EndingComponents,
+    Gender,
+    MultipleMeanings,
+    Number,
+)
 
 if TYPE_CHECKING:
     from .type_aliases import Ending, Endings, Meaning, NounDeclension
@@ -332,4 +339,45 @@ class Noun(_Word):
         return (
             f"{self.meaning}: {self.nominative}, "
             f"{self.genitive}, ({Gender(self.gender).shorthand})"
+        )
+
+    def __add__(self, other: object) -> Noun:
+        def _create_noun(
+            nominative: str,
+            genitive: str | None,
+            gender: Gender | None,
+            meaning: Meaning,
+        ) -> Noun:
+            if genitive is not None:  # implies `gender` is not None as well
+                assert gender is not None
+
+                return Noun(
+                    nominative, genitive, gender=gender, meaning=meaning
+                )
+
+            return Noun(nominative, meaning=meaning)
+
+        if not isinstance(other, Noun) or not (
+            self.endings == other.endings
+            and self.declension == other.declension
+            and self.gender == other.gender
+            and self.plurale_tantum == other.plurale_tantum
+        ):
+            return NotImplemented
+
+        if self.meaning == other.meaning:
+            return _create_noun(
+                self.nominative, self.genitive, self.gender, self.meaning
+            )
+
+        new_meaning: Meaning
+        if isinstance(self.meaning, MultipleMeanings) or isinstance(
+            other.meaning, MultipleMeanings
+        ):
+            new_meaning = self.meaning + other.meaning
+        else:
+            new_meaning = MultipleMeanings((self.meaning, other.meaning))
+
+        return _create_noun(
+            self.nominative, self.genitive, self.gender, new_meaning
         )

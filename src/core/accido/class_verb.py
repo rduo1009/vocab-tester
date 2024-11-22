@@ -14,6 +14,7 @@ from .misc import (
     EndingComponents,
     Gender,
     Mood,
+    MultipleMeanings,
     Number,
     Tense,
     Voice,
@@ -635,4 +636,36 @@ class Verb(_Word):
         return (
             f"{self.meaning}: {self.present}, "
             f"{self.infinitive}, {self.perfect}"
+        )
+
+    def __add__(self, other: object) -> Verb:
+        if not isinstance(other, Verb) or not (
+            self.endings == other.endings
+            and self.conjugation == other.conjugation
+        ):
+            return NotImplemented
+
+        if self.meaning == other.meaning:
+            return Verb(
+                self.present,
+                self.infinitive,
+                self.perfect,
+                self.ppp,
+                meaning=self.meaning,
+            )
+
+        new_meaning: Meaning
+        if isinstance(self.meaning, MultipleMeanings) or isinstance(
+            other.meaning, MultipleMeanings
+        ):
+            new_meaning = self.meaning + other.meaning
+        else:
+            new_meaning = MultipleMeanings((self.meaning, other.meaning))
+
+        return Verb(
+            self.present,
+            self.infinitive,
+            self.perfect,
+            self.ppp,
+            meaning=new_meaning,
         )

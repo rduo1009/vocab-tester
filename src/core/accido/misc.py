@@ -397,6 +397,17 @@ class MultipleMeanings:
     def __repr__(self) -> str:
         return f"MultipleMeanings({', '.join(self.meanings)})"
 
+    def __add__(self, other: object) -> MultipleMeanings:
+        if isinstance(other, MultipleMeanings):
+            return MultipleMeanings(self.meanings + other.meanings)
+        if isinstance(other, str):
+            return MultipleMeanings((*self.meanings, other))
+
+        return NotImplemented
+
+    def __radd__(self, other: object) -> MultipleMeanings:
+        return self.__add__(other)
+
 
 class MultipleEndings(SimpleNamespace):
     """Represents multiple endings for a word.

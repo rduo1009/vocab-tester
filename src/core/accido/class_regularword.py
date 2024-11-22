@@ -6,7 +6,7 @@ from functools import total_ordering
 from typing import TYPE_CHECKING
 
 from .class_word import _Word
-from .misc import EndingComponents
+from .misc import EndingComponents, MultipleMeanings
 
 if TYPE_CHECKING:
     from .type_aliases import Meaning
@@ -72,3 +72,20 @@ class RegularWord(_Word):
 
     def __str__(self) -> str:
         return f"{self.meaning}: {self.word}"
+
+    def __add__(self, other: object) -> RegularWord:
+        if not isinstance(other, RegularWord):
+            return NotImplemented
+
+        if self.meaning == other.meaning:
+            return RegularWord(self.word, meaning=self.meaning)
+
+        new_meaning: Meaning
+        if isinstance(self.meaning, MultipleMeanings) or isinstance(
+            other.meaning, MultipleMeanings
+        ):
+            new_meaning = self.meaning + other.meaning
+        else:
+            new_meaning = MultipleMeanings((self.meaning, other.meaning))
+
+        return RegularWord(self.word, meaning=new_meaning)

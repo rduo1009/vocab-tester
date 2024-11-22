@@ -12,7 +12,14 @@ from .edge_cases import (
     NO_ADVERB_ADJECTIVES,
 )
 from .exceptions import InvalidInputError
-from .misc import Case, Degree, EndingComponents, Gender, Number
+from .misc import (
+    Case,
+    Degree,
+    EndingComponents,
+    Gender,
+    MultipleMeanings,
+    Number,
+)
 
 if TYPE_CHECKING:
     from .type_aliases import (
@@ -898,4 +905,59 @@ class Adjective(_Word):
         return (
             f"Adjective({', '.join(self._principal_parts)}, "
             f"{self.termination}, {self.declension}, {self.meaning})"
+        )
+
+    def __add__(self, other: object) -> Adjective:
+        def _create_adjective(
+            principal_parts: tuple[str, ...],
+            declension: AdjectiveDeclension,
+            termination: Termination | None,
+            meaning: Meaning,
+        ) -> Adjective:
+            if declension == "212":
+                return Adjective(
+                    *principal_parts,
+                    declension="212",
+                    meaning=meaning,
+                )
+
+            assert termination is not None
+
+            return Adjective(
+                *self._principal_parts,
+                termination=termination,
+                declension="3",
+                meaning=meaning,
+            )
+
+        if not isinstance(other, Adjective) or not (
+            self.endings == other.endings
+            and self.termination == other.termination
+            and self.irregular_flag == other.irregular_flag
+            and self.declension == other.declension
+            and self._principal_parts == other._principal_parts
+        ):
+            return NotImplemented
+
+        if self.meaning == other.meaning:
+            return _create_adjective(
+                self._principal_parts,
+                self.declension,
+                self.termination,
+                self.meaning,
+            )
+
+        new_meaning: Meaning
+        if isinstance(self.meaning, MultipleMeanings) or isinstance(
+            other.meaning, MultipleMeanings
+        ):
+            new_meaning = self.meaning + other.meaning
+        else:
+            new_meaning = MultipleMeanings((self.meaning, other.meaning))
+
+        return _create_adjective(
+            self._principal_parts,
+            self.declension,
+            self.termination,
+            new_meaning,
         )
