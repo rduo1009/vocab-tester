@@ -30,7 +30,7 @@ repos:
   - repo: local
     hooks:
       - id: generate-version
-        name: Generate the version in pyproject.toml.
+        name: generate the version in pyproject.toml.
         entry: bash -c 'poetry version $(dunamai from any)'
         language: system
         always_run: true
@@ -92,3 +92,12 @@ repos:
       - id: rst-directive-colons
       - id: rst-inline-touching-normal
       - id: text-unicode-replacement-char
+
+  - repo: local
+    hooks:
+      - id: interrogate-badge
+        name: update interrogate badge.
+        entry: bash -c 'source .venv/bin/activate; interrogate src -c setup.cfg --generate-badge docs/assets'
+        language: system
+        always_run: true
+        pass_filenames: false
