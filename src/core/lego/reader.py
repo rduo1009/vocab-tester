@@ -11,7 +11,7 @@ from typing import TYPE_CHECKING, Literal, cast
 import dill as pickle
 import lz4.frame  # type: ignore[import-untyped]
 
-import src as src
+import src
 
 from .. import accido
 from ..accido.misc import Gender
