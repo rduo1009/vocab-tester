@@ -17,6 +17,9 @@ jobs:
         os:
           - ubuntu-latest
 
+    permissions:
+      contents: write
+
     steps:
       - uses: actions/checkout@v4.2.2
         with:
@@ -33,6 +36,7 @@ jobs:
         with:
           path: "src"
           badge-location: "docs/assets/interrogate_badge.svg"
+        continue-on-error: true
 
       - name: Setup git
         uses: qoomon/actions--setup-git@v1.1.1
