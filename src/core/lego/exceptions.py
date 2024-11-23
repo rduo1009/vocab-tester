@@ -13,10 +13,6 @@ class InvalidVocabDumpError(Exception):
     """
 
 
-class InvalidVocabListError(Exception):
-    """An error that is raised when a vocab list is invalid."""
-
-
 class MisleadingFilenameWarning(
     UserWarning
 ):  # sourcery skip: errors-named-error

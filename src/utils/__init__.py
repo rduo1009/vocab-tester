@@ -1,5 +1,6 @@
 """General functions used by vocab-tester and its tests."""
 
+from .compact import compact as compact
 from .compare import compare as compare
 from .duplicates import contains_duplicates as contains_duplicates
 from .duplicates import remove_duplicates as remove_duplicates
