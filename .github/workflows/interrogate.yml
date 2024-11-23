@@ -1,0 +1,41 @@
+name: interrogate
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  coverage:
+    name: Test docstring coverage
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        py:
+          - "3.13.0"
+        os:
+          - ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4.2.2
+        with:
+          fetch-depth: 0
+          submodules: "recursive"
+
+      - name: Run interrogate
+        uses: JackMcKew/python-interrogate-check@main
+        with:
+          path: "src"
+          badge-location: "docs/assets/interrogate_badge.svg"
+
+      - name: Setup git
+        uses: qoomon/actions--setup-git@v1.1.1
+        with:
+          user: bot
+          
+      - name: Commit files
+        run: |
+          git add docs/assets/interrogate_badge.svg
+          git diff --exit-code || git commit -m "🧹 chore: update interrogate badge" -a
+          git push
