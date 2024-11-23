@@ -13,7 +13,7 @@ def compact[T](sequence: list[T]) -> list[T]:
 
     Returns
     -------
-    T
+    list[T]
         The compacted list.
     """
     if not sequence:
