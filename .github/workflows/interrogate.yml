@@ -29,7 +29,7 @@ jobs:
           python-version: ${{ matrix.py }}
 
       - name: Run interrogate
-        uses: JackMcKew/python-interrogate-check@main
+        uses: rduo1009/python-interrogate-check@main
         with:
           path: "src"
           badge-location: "docs/assets/interrogate_badge.svg"
