@@ -23,6 +23,11 @@ jobs:
           fetch-depth: 0
           submodules: "recursive"
 
+      - name: Setup python for test ${{ matrix.py }}
+        uses: actions/setup-python@v5.3.0
+        with:
+          python-version: ${{ matrix.py }}
+
       - name: Run interrogate
         uses: JackMcKew/python-interrogate-check@main
         with:
@@ -33,7 +38,7 @@ jobs:
         uses: qoomon/actions--setup-git@v1.1.1
         with:
           user: bot
-          
+
       - name: Commit files
         run: |
           git add docs/assets/interrogate_badge.svg
