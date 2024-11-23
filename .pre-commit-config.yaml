@@ -1,5 +1,5 @@
 ci:
-  skip: [poetry-lock, poetry-export]
+  skip: [poetry-lock, poetry-export, interrogate-badge]
   autofix_commit_msg: "🔨 refactor: [pre-commit.ci] auto fixes from pre-commit.com hooks"
   autoupdate_commit_msg: "🤖 ci(pre-commit): pre-commit autoupdate"
 
@@ -26,15 +26,6 @@ repos:
             "--without-urls",
             "--with=dev",
           ]
-
-  - repo: local
-    hooks:
-      - id: generate-version
-        name: generate the version in pyproject.toml.
-        entry: bash -c 'poetry version $(dunamai from any)'
-        language: system
-        always_run: true
-        pass_filenames: false
 
   # Format and check code
   - repo: https://github.com/astral-sh/ruff-pre-commit
@@ -93,11 +84,10 @@ repos:
       - id: rst-inline-touching-normal
       - id: text-unicode-replacement-char
 
-  - repo: local
+  - repo: https://github.com/econchick/interrogate
+    rev: 1.7.0
     hooks:
-      - id: interrogate-badge
-        name: update interrogate badge.
-        entry: bash -c 'source .venv/bin/activate; interrogate src -c setup.cfg --generate-badge docs/assets'
-        language: system
-        always_run: true
+      - id: interrogate
+        args:
+          [--quiet, --fail-under=0, -c=setup.cfg, --generate-badge=docs/assets]
         pass_filenames: false
