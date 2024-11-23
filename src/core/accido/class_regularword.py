@@ -74,7 +74,7 @@ class RegularWord(_Word):
         return f"{self.meaning}: {self.word}"
 
     def __add__(self, other: object) -> RegularWord:
-        if not isinstance(other, RegularWord):
+        if not isinstance(other, RegularWord) or self.word != other.word:
             return NotImplemented
 
         if self.meaning == other.meaning:
