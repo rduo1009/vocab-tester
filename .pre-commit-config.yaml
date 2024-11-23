@@ -83,3 +83,8 @@ repos:
       - id: rst-directive-colons
       - id: rst-inline-touching-normal
       - id: text-unicode-replacement-char
+
+  - repo: https://github.com/executablebooks/mdformat
+    rev: "0.7.19"
+    hooks:
+      - id: mdformat
