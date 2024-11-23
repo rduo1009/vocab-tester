@@ -7,8 +7,8 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../.
 import pytest
 
 from src.core.accido.exceptions import InvalidInputError  # isort: skip
-from src.core.accido.endings import Adjective
-from src.core.accido.misc import Case, Degree, EndingComponents, Gender, Number
+from src.core.accido.endings import Adjective, Noun
+from src.core.accido.misc import Case, Degree, EndingComponents, Gender, MultipleMeanings, Number
 from src.utils import compare
 
 
@@ -86,6 +86,23 @@ class TestAdjectiveDunder:
     def test_str_33(self):
         word = Adjective("celer", "celeris", "celere", termination=3, declension="3", meaning="quick")
         assert word.__str__() == "quick: celer, celeris, celere, (3-3)"
+
+    def test_add_different_word(self):
+        word1 = Adjective("celer", "celeris", "celere", termination=3, declension="3", meaning="quick")
+        word2 = Adjective("ingens", "ingentis", termination=1, declension="3", meaning="huge")
+        with pytest.raises(TypeError):
+            word1 + word2
+
+    def test_add_different_pos(self):
+        word1 = Adjective("celer", "celeris", "celere", termination=3, declension="3", meaning="quick")
+        word2 = Noun("puella", "puellae", gender=Gender.FEMININE, meaning="girl")
+        with pytest.raises(TypeError):
+            word1 + word2
+
+    def test_add(self):
+        word1 = Adjective("celer", "celeris", "celere", termination=3, declension="3", meaning="quick")
+        word2 = Adjective("celer", "celeris", "celere", termination=3, declension="3", meaning="fast")
+        assert word1 + word2 == Adjective("celer", "celeris", "celere", termination=3, declension="3", meaning=MultipleMeanings(("quick", "fast")))
 
 
 class TestAdjectiveDeclension:

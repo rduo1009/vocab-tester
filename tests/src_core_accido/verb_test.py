@@ -6,8 +6,8 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../.
 import pytest
 
 from src.core.accido.exceptions import InvalidInputError  # isort: skip
-from src.core.accido.endings import Verb
-from src.core.accido.misc import Case, EndingComponents, Gender, Mood, Number, Tense, Voice
+from src.core.accido.endings import Noun, Verb
+from src.core.accido.misc import Case, EndingComponents, Gender, Mood, MultipleMeanings, Number, Tense, Voice
 from src.utils import compare
 
 
@@ -67,6 +67,23 @@ class TestVerbDunder:
     def test_find_infinitive(self):
         word = Verb("celo", "celare", "celavi", "celatus", meaning="hide")
         assert compare(word.find("celare"), [EndingComponents(tense=Tense.PRESENT, voice=Voice.ACTIVE, mood=Mood.INFINITIVE, string="present active infinitive")])
+
+    def test_add_different_word(self):
+        word1 = Verb("celo", "celare", "celavi", "celatus", meaning="hide")
+        word2 = Verb("amo", "amare", "amavi", "amatus", meaning="love")
+        with pytest.raises(TypeError):
+            word1 + word2
+
+    def test_add_different_pos(self):
+        word1 = Verb("celo", "celare", "celavi", "celatus", meaning="hide")
+        word2 = Noun("puella", "puellae", gender=Gender.FEMININE, meaning="girl")
+        with pytest.raises(TypeError):
+            word1 + word2
+
+    def test_add(self):
+        word1 = Verb("celo", "celare", "celavi", "celatus", meaning="hide")
+        word2 = Verb("celo", "celare", "celavi", "celatus", meaning="conceal")
+        assert word1 + word2 == Verb("celo", "celare", "celavi", "celatus", meaning=MultipleMeanings(("hide", "conceal")))
 
 
 class TestVerbConjugation:

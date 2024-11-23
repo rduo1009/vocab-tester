@@ -7,8 +7,8 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../.
 import pytest
 
 from src.core.accido.exceptions import InvalidInputError  # isort: skip
-from src.core.accido.endings import Noun
-from src.core.accido.misc import Case, EndingComponents, Gender, Number
+from src.core.accido.endings import Adjective, Noun
+from src.core.accido.misc import Case, EndingComponents, Gender, MultipleMeanings, Number
 from src.utils import compare
 
 
@@ -58,6 +58,23 @@ class TestNounDunder:
     def test_str_neuter(self):
         word = Noun("templum", "templi", gender=Gender.NEUTER, meaning="temple")
         assert word.__str__() == "temple: templum, templi, (n)"
+
+    def test_add_different_word(self):
+        word1 = Noun("puella", "puellae", gender=Gender.FEMININE, meaning="girl")
+        word2 = Noun("puer", "pueri", gender=Gender.MASCULINE, meaning="boy")
+        with pytest.raises(TypeError):
+            word1 + word2
+
+    def test_add_different_pos(self):
+        word1 = Noun("puella", "puellae", gender=Gender.FEMININE, meaning="girl")
+        word2 = Adjective("celer", "celeris", "celere", termination=3, declension="3", meaning="quick")
+        with pytest.raises(TypeError):
+            word1 + word2
+
+    def test_add(self):
+        word1 = Noun("puella", "puellae", gender=Gender.FEMININE, meaning="girl")
+        word2 = Noun("puella", "puellae", gender=Gender.FEMININE, meaning="maiden")
+        assert word1 + word2 == Noun("puella", "puellae", gender=Gender.FEMININE, meaning=MultipleMeanings(("girl", "maiden")))
 
 
 class TestNounDeclension:
