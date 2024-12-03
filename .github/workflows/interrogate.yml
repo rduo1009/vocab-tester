@@ -2,8 +2,6 @@ name: interrogate
 on:
   push:
     branches: [main]
-  pull_request:
-    branches: [main]
 
 jobs:
   coverage:
