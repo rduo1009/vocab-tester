@@ -231,7 +231,7 @@ def read_vocab_file(file_path: Path) -> VocabList:
                             | "Pronoun"
                         ):
                             assert _is_typeofspeech(line[1:].strip())
-                            current = cast(_PartOfSpeech, line[1:].strip())
+                            current = cast("_PartOfSpeech", line[1:].strip())
 
                         case (
                             "Verbs"
@@ -241,7 +241,7 @@ def read_vocab_file(file_path: Path) -> VocabList:
                             | "Pronouns"
                         ):
                             assert _is_typeofspeech(line[1:-1].strip())
-                            current = cast(_PartOfSpeech, line[1:-1].strip())
+                            current = cast("_PartOfSpeech", line[1:-1].strip())
 
                         case _:
                             raise InvalidVocabFileFormatError(
