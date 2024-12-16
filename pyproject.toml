@@ -38,7 +38,7 @@ cosmic-ray = "8.4.1"
 doc8 = "1.1.2"
 rstfmt = "0.0.14"
 interrogate = "1.7.0"
-pydoclint = "0.5.9"
+pydoclint = "0.5.12"
 
 [tool.poetry.group.types.dependencies]
 types-regex = "2024.11.6.20241108"
