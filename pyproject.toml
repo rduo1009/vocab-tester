@@ -26,7 +26,7 @@ mypy = { version = "1.14.1", extras = [ "faster-cache" ] }
 ruff = "0.8.4"
 pytest = "8.3.4"
 monkeytype = "23.3.0"
-coverage = "7.6.9"
+coverage = "7.6.10"
 pytest-cov = "6.0.0"
 pytest-sugar = "1.0.0"
 codetiming = "1.4.0"
