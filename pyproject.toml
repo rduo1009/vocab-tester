@@ -16,7 +16,7 @@ python = ">=3.12,<4.0"
 dill = "0.3.9"
 nltk = "3.9.1"
 lemminflect = "0.2.3"
-inflect = "7.4.0"
+inflect = "7.5.0"
 lz4 = "4.3.3"
 dunamai = "1.23.0"
 
