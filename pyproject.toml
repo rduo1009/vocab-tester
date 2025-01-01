@@ -41,7 +41,7 @@ interrogate = "1.7.0"
 pydoclint = "0.5.14"
 
 [tool.poetry.group.types.dependencies]
-types-regex = "2024.11.6.20241108"
+types-regex = "2024.11.6.20241221"
 optype = "0.7.3"
 
 [tool.poetry-dynamic-versioning]
