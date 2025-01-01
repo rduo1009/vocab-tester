@@ -32,10 +32,7 @@ def _sha256sum(filename: Path) -> str:
     Code taken from https://stackoverflow.com/a/44873382
     """
     with open(filename, "rb", buffering=0) as file:
-        return hashlib.file_digest(
-            file,  # type: ignore[arg-type] # mypy cannot handle this
-            "sha256",
-        ).hexdigest()
+        return hashlib.file_digest(file, "sha256").hexdigest()
 
 
 def cache_vocab_file(
