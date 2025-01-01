@@ -42,7 +42,7 @@ pydoclint = "0.5.14"
 
 [tool.poetry.group.types.dependencies]
 types-regex = "2024.11.6.20241108"
-optype = "0.7.3"
+optype = "0.8.0"
 
 [tool.poetry-dynamic-versioning]
 enable = true
