@@ -932,17 +932,17 @@ files = [
 
 [[package]]
 name = "inflect"
-version = "7.4.0"
+version = "7.5.0"
 description = "Correctly generate plurals, singular nouns, ordinals, indefinite articles"
 optional = false
-python-versions = ">=3.8"
+python-versions = ">=3.9"
 files = [
-    {file = "inflect-7.4.0-py3-none-any.whl", hash = "sha256:85af0997ee2bda942b1c1eed8c8a827abda91aa3e22d1efaa0eea817f9350ce7"},
-    {file = "inflect-7.4.0.tar.gz", hash = "sha256:904baa17cc2cb74827a6c27b95692e95670dadc72b208b3e8c1c05aeed47026b"},
+    {file = "inflect-7.5.0-py3-none-any.whl", hash = "sha256:2aea70e5e70c35d8350b8097396ec155ffd68def678c7ff97f51aa69c1d92344"},
+    {file = "inflect-7.5.0.tar.gz", hash = "sha256:faf19801c3742ed5a05a8ce388e0d8fe1a07f8d095c82201eb904f5d27ad571f"},
 ]
 
 [package.dependencies]
-more-itertools = ">=8.5.0"
+more_itertools = ">=8.5.0"
 typeguard = ">=4.0.1"
 
 [package.extras]
@@ -2809,4 +2809,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.12,<4.0"
-content-hash = "d0e5ac7565926851fc4a75ba9da9d87829dd3ff25beb0a32b1b8cfade324a292"
+content-hash = "8c87a27407cd1219ac2e9ecc99b0b7c6d42f55eec9bd8152f9d5a3696d9eea83"
