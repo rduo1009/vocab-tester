@@ -2610,13 +2610,13 @@ test = ["coverage[toml] (>=7)", "mypy (>=1.2.0)", "pytest (>=7)"]
 
 [[package]]
 name = "types-regex"
-version = "2024.11.6.20241108"
+version = "2024.11.6.20241221"
 description = "Typing stubs for regex"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "types-regex-2024.11.6.20241108.tar.gz", hash = "sha256:a774e307b99b3df49481b29e8b4962f021693052a8d8a2b9e6792fcec896cf5e"},
-    {file = "types_regex-2024.11.6.20241108-py3-none-any.whl", hash = "sha256:adec2ff2dfed00855551057334466fde923606599d01e7440556d53a3ef20835"},
+    {file = "types_regex-2024.11.6.20241221-py3-none-any.whl", hash = "sha256:9d29ab639df22a86e15e2cc037e92ad100a4e8f4ecd2ad261d6f0c6d8d87f54e"},
+    {file = "types_regex-2024.11.6.20241221.tar.gz", hash = "sha256:903c7b557d935363ba01f07a75981c78ada7df66623e415f32bda2afecfa5cca"},
 ]
 
 [[package]]
@@ -2809,4 +2809,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.12,<4.0"
-content-hash = "d0e5ac7565926851fc4a75ba9da9d87829dd3ff25beb0a32b1b8cfade324a292"
+content-hash = "878faee6d4e5704232097cf610d63c72df24da5772912e1d6fc84440d91dd6d9"
