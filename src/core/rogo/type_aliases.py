@@ -4,7 +4,7 @@ from typing import ReadOnly, TypedDict
 
 from .. import accido
 
-type Vocab = list[accido.endings._Word]  # noqa: SLF001
+type Vocab = list[accido.endings._Word]  # ruff: ignore[private-member-access]
 
 Settings = TypedDict(
     "Settings",
