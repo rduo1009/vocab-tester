@@ -11,8 +11,8 @@ from typing import (
 )
 
 from _typeshed import Incomplete
-
 from nltk.collections import *  # type: ignore[import-untyped]
+
 from nltk.internals import (
     deprecated as deprecated,
 )
