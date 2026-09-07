@@ -67,7 +67,7 @@ def _regenerate_vocab_list(vocab_list: VocabList) -> VocabList:
             if word.declension == "212":
                 new_vocab.append(
                     accido.endings.Adjective(
-                        *word._principal_parts,  # noqa: SLF001
+                        *word._principal_parts,  # ruff: ignore[private-member-access]
                         declension="212",
                         meaning=word.meaning,
                     ),
@@ -77,7 +77,7 @@ def _regenerate_vocab_list(vocab_list: VocabList) -> VocabList:
 
                 new_vocab.append(
                     accido.endings.Adjective(
-                        *word._principal_parts,  # noqa: SLF001
+                        *word._principal_parts,  # ruff: ignore[private-member-access]
                         termination=word.termination,
                         declension="3",
                         meaning=word.meaning,
@@ -208,7 +208,7 @@ def read_vocab_file(file_path: Path) -> VocabList:
     vocab: list[accido.endings._Word] = []
     file: TextIOWrapper
 
-    with file_path.open("r") as file:
+    with file_path.open("r", encoding="utf-8") as file:
         line: str
         current: _PartOfSpeech | Literal[""] = ""
 
