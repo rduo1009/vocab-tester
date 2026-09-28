@@ -63,7 +63,7 @@ class RegularWord(_Word):
 
     @staticmethod
     def _create_components(
-        key: str,  # noqa: ARG004
+        key: str,  # ruff: ignore[unused-static-method-argument]
     ) -> EndingComponents:
         return EndingComponents(string="")
 
