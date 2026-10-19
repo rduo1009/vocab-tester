@@ -142,7 +142,7 @@ def _pick_ending_from_multipleendings(ending: Ending) -> str:
     return ending
 
 
-def _generate_typein_engtolat(  # noqa: PLR0914, PLR0915
+def _generate_typein_engtolat(  # ruff: ignore[too-many-locals, too-many-statements]
     chosen_word: accido.endings._Word, filtered_endings: Endings
 ) -> TypeInEngToLatQuestion | None:
     ending_components_key: str
@@ -153,7 +153,7 @@ def _generate_typein_engtolat(  # noqa: PLR0914, PLR0915
 
     # HACK: Uses a private method but there's no alternative
     ending_components: accido.misc.EndingComponents = (
-        chosen_word._create_components(ending_components_key)  # noqa: SLF001
+        chosen_word._create_components(ending_components_key)  # ruff: ignore[private-member-access]
     )
 
     verb_subjunctive: bool = (  # not supported with this question
@@ -198,7 +198,7 @@ def _generate_typein_engtolat(  # noqa: PLR0914, PLR0915
     )
 
     if (
-        verb_subjunctive  # noqa: PLR0916
+        verb_subjunctive  # ruff: ignore[too-many-boolean-expressions]
         or noun_accusative_vocative
         or adjective_nominative
         or participle_nominative
@@ -447,7 +447,7 @@ def _generate_parse(
     ending_components_key, chosen_ending = _pick_ending(filtered_endings)
 
     main_ending_components: accido.misc.EndingComponents = (
-        chosen_word._create_components(ending_components_key)  # noqa: SLF001
+        chosen_word._create_components(ending_components_key)  # ruff: ignore[private-member-access]
     )
 
     chosen_ending = _pick_ending_from_multipleendings(chosen_ending)
@@ -476,7 +476,7 @@ def _generate_inflect(
     ending_components_key, chosen_ending = _pick_ending(filtered_endings)
 
     ending_components: accido.misc.EndingComponents = (
-        chosen_word._create_components(ending_components_key)  # noqa: SLF001
+        chosen_word._create_components(ending_components_key)  # ruff: ignore[private-member-access]
     )
 
     main_answer: str
@@ -580,10 +580,10 @@ def _generate_multiplechoice_engtolat(
         meaning = random.choice(meaning.meanings)
     assert type(meaning) is str
 
-    answer: str = chosen_word._first  # noqa: SLF001
+    answer: str = chosen_word._first  # ruff: ignore[private-member-access]
 
     other_choices = tuple(
-        vocab._first  # noqa: SLF001
+        vocab._first  # ruff: ignore[private-member-access]
         for vocab in random.sample(
             vocab_list,
             # minus one as the chosen word is already in the question
@@ -604,7 +604,7 @@ def _generate_multiplechoice_lattoeng(
     chosen_word: accido.endings._Word,
     number_multiplechoice_options: int,
 ) -> MultipleChoiceLatToEngQuestion:
-    prompt: str = chosen_word._first  # noqa: SLF001
+    prompt: str = chosen_word._first  # ruff: ignore[private-member-access]
 
     chosen_word_meanings: tuple[str, ...]
     if type(chosen_word.meaning) is accido.misc.MultipleMeanings:
