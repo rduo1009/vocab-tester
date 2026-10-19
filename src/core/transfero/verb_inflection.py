@@ -150,7 +150,7 @@ def find_main_verb_inflection(
     )[0]
 
 
-def _find_lemma(  # noqa: PLR0917
+def _find_lemma(  # ruff: ignore[too-many-positional-arguments]
     lemma: str,
     tense: Tense,
     voice: Voice,
