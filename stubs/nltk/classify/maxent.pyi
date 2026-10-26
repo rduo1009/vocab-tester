@@ -8,7 +8,6 @@ from typing import (
 )
 
 from _typeshed import Incomplete
-
 from nltk.collections import OrderedDict  # type: ignore[import-untyped]
 
 def train_maxent_classifier_with_megam(

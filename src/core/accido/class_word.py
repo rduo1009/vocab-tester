@@ -14,7 +14,7 @@ if TYPE_CHECKING:
 
 
 @total_ordering
-class _Word(ABC):  # noqa: PLW1641
+class _Word(ABC):  # ruff: ignore[eq-without-hash]
     """Representation of an word.
 
     This class is not intended to be used by the user. Rather, all of the

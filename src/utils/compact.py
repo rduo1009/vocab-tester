@@ -24,7 +24,7 @@ def compact[T](sequence: list[T]) -> list[T]:
         for i in range(len(add_groups)):
             try:
                 add_groups[i] += element  # type: ignore[operator]
-            except TypeError:  # noqa: PERF203
+            except TypeError:
                 continue
             else:
                 break

@@ -4,45 +4,39 @@ requires = [ "poetry-core>=1.0.0", "poetry-dynamic-versioning>=1.0.0,<2.0.0" ]
 
 [tool.poetry]
 name = "vocab-tester"
-version = "0.0.0"                                                       # placeholder
+version = "0.0.0"  # placeholder
 description = "An application that tests Latin vocabulary and grammar."
 authors = [ "rduo1009 <robertduong09alt@gmail.com>" ]
 readme = "README.md"
 packages = [ { include = "src" } ]
 include = [ "nltk_data/**/*.zip" ]
-
-[tool.poetry.dependencies]
-python = ">=3.12,<4.0"
-dill = "0.3.9"
-nltk = "3.9.1"
-lemminflect = "0.2.3"
-inflect = "7.4.0"
-lz4 = "4.3.3"
-dunamai = "1.23.0"
-
-[tool.poetry.group.dev.dependencies]
-icecream = "2.1.3"
-mypy = { version = "1.14.1", extras = [ "faster-cache" ] }
-ruff = "0.8.4"
-pytest = "8.3.4"
-monkeytype = "23.3.0"
-coverage = "7.6.9"
-pytest-cov = "6.0.0"
-pytest-sugar = "1.0.0"
-codetiming = "1.4.0"
-pytest-xdist = "3.6.1"
-pytest-testmon = "2.1.1"
-pytest-watch = "4.2.0"
-deptry = "0.21.2"
-cosmic-ray = "8.4.1"
-doc8 = "1.1.2"
-rstfmt = "0.0.14"
-interrogate = "1.7.0"
-pydoclint = "0.5.14"
-
-[tool.poetry.group.types.dependencies]
-types-regex = "2024.11.6.20241108"
-optype = "0.7.3"
+dependencies.python = ">=3.12,<4.0"
+dependencies.dill = "0.3.9"
+dependencies.dunamai = "1.23.0"
+dependencies.inflect = "7.4.0"
+dependencies.lemminflect = "0.2.3"
+dependencies.lz4 = "4.3.3"
+dependencies.nltk = "3.9.1"
+group.dev.dependencies.codetiming = "1.4.0"
+group.dev.dependencies.cosmic-ray = "8.4.1"
+group.dev.dependencies.coverage = "7.6.9"
+group.dev.dependencies.deptry = "0.21.2"
+group.dev.dependencies.doc8 = "1.1.2"
+group.dev.dependencies.icecream = "2.1.3"
+group.dev.dependencies.interrogate = "1.7.0"
+group.dev.dependencies.monkeytype = "23.3.0"
+group.dev.dependencies.mypy = { version = "1.14.1", extras = [ "faster-cache" ] }
+group.dev.dependencies.pydoclint = "0.5.14"
+group.dev.dependencies.pytest = "8.3.4"
+group.dev.dependencies.pytest-cov = "6.0.0"
+group.dev.dependencies.pytest-sugar = "1.0.0"
+group.dev.dependencies.pytest-testmon = "2.1.1"
+group.dev.dependencies.pytest-watch = "4.2.0"
+group.dev.dependencies.pytest-xdist = "3.6.1"
+group.dev.dependencies.rstfmt = "0.0.14"
+group.dev.dependencies.ruff = "0.8.4"
+group.types.dependencies.optype = "0.7.3"
+group.types.dependencies.types-regex = "2024.11.6.20241108"
 
 [tool.poetry-dynamic-versioning]
 enable = true
