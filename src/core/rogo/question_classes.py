@@ -134,7 +134,7 @@ class ParseWordCompToLatQuestion(_MultiAnswerQuestion[str]):
         The best answer to the question.
     answers : set[str]
         The possible answers to the question.
-    """  # noqa: D205
+    """  # ruff: ignore[missing-blank-line-after-summary]
 
     prompt: str
     components: accido.misc.EndingComponents
@@ -161,7 +161,7 @@ class ParseWordLatToCompQuestion(
         The best answer to the question.
     answers : set[accido.misc.EndingComponents]
         The possible answers to the question.
-    """  # noqa: D205
+    """  # ruff: ignore[missing-blank-line-after-summary]
 
     prompt: str
     dictionary_entry: str
